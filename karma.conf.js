@@ -1,5 +1,7 @@
 // Karma configuration
 // Generated on Fri Jan 11 2019 22:44:00 GMT+0300 (RTZ 2 (зима))
+const webpackConfig = require('./webpack.config.js');
+webpackConfig.mode = "development";
 
 module.exports = function(config) {
   config.set({
@@ -29,7 +31,9 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'src/components/**/*.js': 'coverage'
+      'src/components/**/*.js': ['webpack', 'babel', 'sourcemap', 'coverage'],
+      'src/test/**/*.js': ['webpack', 'babel', 'sourcemap', 'coverage'],
+      'karma.conf.js': ['webpack', 'babel', 'sourcemap', 'coverage']
     },
 
 
@@ -70,6 +74,7 @@ module.exports = function(config) {
 
     // Concurrency level
     // how many browser should be started simultaneous
-    concurrency: Infinity
+    concurrency: Infinity,
+    webpack: webpackConfig
   })
 }

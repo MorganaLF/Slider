@@ -1,0 +1,103 @@
+/* Colors */
+
+secondary-color = #4eb7a8
+dark-grey-text = #888888
+grey-text = #9d9d9d
+light-grey-text = #d1d1d1
+dark-primary-color = #bf3e1f
+darker-secondary-color = #46ab9d
+dark-secondary-color = #28a290
+light-grey = #e5e5e5
+darker-primary-color = #d54c2c
+light-shadow = #fafafa
+dark-grey = #4f4f4f
+primary-color = #e75735
+grey = #747474
+
+/* Font-size */
+root-font-size = 14px
+
+/* Media */
+
+$md = 1024px
+$sm = 800px
+$xs = 620px
+$xxs = 420px
+
+/* Mixins */
+
+/* Px to Rem */
+
+rem(size)
+  return 1rem * size / root-font-size
+
+/* Media mixin */
+
+md()
+  @media screen and (max-width: $md)
+    {block}
+
+sm()
+  @media screen and (max-width: $sm)
+    {block}
+
+xs()
+  @media screen and (max-width: $xs)
+    {block}
+
+xxs()
+  @media screen and (max-width: $xxs)
+    {block}
+
+/* Font-Face */
+
+fontUrl(file)
+  return 'fonts/' + file
+
+fontFace(family, style, weight, file)
+  @font-face
+    font-family family
+    font-style style
+    font-weight weight
+    src url(fontUrl(file + '.svg')) format('svg'),
+        url(fontUrl(file + '.woff')) format('woff'),
+        url(fontUrl(file + '.ttf')) format('ttf')
+
+/* Placeholder */
+
+placeholder()
+  &::-webkit-input-placeholder
+    {block}
+  &:-moz-placeholder
+    {block}
+  &::-moz-placeholder
+    {block}
+  &:-ms-input-placeholder
+    {block}
+
+placeholder-focus()
+  &:focus::-webkit-input-placeholder
+    {block}
+  &:focus:-moz-placeholder
+    {block}
+  &:focus::-moz-placeholder
+    {block}
+  &:focus:-ms-input-placeholder
+    {block}
+
+/* input */
+
+input()
+  padding: 6px 12px
+  border: none
+  background-color light-grey
+  font-size 14px
+  font-family: Source Sans Pro
+  font-weight: 400
+  letter-spacing 0.14px
+  border-radius: 3px
+  +placeholder()
+    color dark-grey-text
+    transition color 0.3s ease
+  +placeholder-focus()
+    color: transparent

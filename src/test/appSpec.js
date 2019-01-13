@@ -1,7 +1,9 @@
-describe('app', function () {
+import drawSlider from '../components/slider/slider';
 
-  it('list', function () {
-    expect(1).toEqual(2)
+describe('Функция должна рисовать слайдер', function () {
+
+  it('Функция должна создавать элемент slider', function () {
+    expect(drawSlider()).toEqual(2)
   })
 });
 
