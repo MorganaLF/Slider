@@ -1,9 +1,15 @@
 .slider
-  &.ui-slider
+  position: relative
+  margin: 20px 50px;
+  &__progress
     height: rem(5px)
     background-color light-grey
-    border: none
-  .ui-slider-handle
+  &__progress-full
+    width: 50%
+    height: 100%
+    background-color primary-color
+  &__runner
+    position: absolute
     top: rem(-7.5px)
     width: rem(20px)
     height: rem(20px)

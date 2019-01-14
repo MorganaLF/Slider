@@ -1,2 +1,0 @@
-var scope = {};
-scope.list = [];
