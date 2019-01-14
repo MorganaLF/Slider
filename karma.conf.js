@@ -43,7 +43,14 @@ module.exports = function(config) {
     reporters: ['progress', 'coverage'],
 
     coverageReporter: {
-      type : 'text'
+      dir:'tmp/coverage/',
+      reporters: [
+        { type:'html', subdir: 'report-html' },
+        { type:'lcov', subdir: 'report-lcov' }
+      ],
+      instrumenterOptions: {
+        istanbul: { noCompact:true }
+      }
     },
 
     // web server port

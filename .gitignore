@@ -2,3 +2,4 @@ $ cat .gitignore
 npm-debug.log
 .idea/
 node_modules
+tmp
