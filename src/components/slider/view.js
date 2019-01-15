@@ -33,5 +33,10 @@ export default class SliderView {
 
 }
 
+window.addEventListener('load', function () {
+  let element = document.getElementsByClassName('slider')[0];
+  let slider = new SliderView({el: element});
+  slider.drawSlider();
+})
 
 
