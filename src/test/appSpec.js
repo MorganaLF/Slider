@@ -1,5 +1,4 @@
-import SliderView from '../components/slider/slider';
-
+import SliderView from '../components/slider/view';
 import $ from 'jquery';
 
 describe('Функция должна рисовать слайдер', function () {
