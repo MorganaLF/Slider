@@ -2,15 +2,13 @@ import SliderView from '../components/slider/view';
 import SliderModel from '../components/slider/model';
 import $ from 'jquery';
 
-
-
 describe('Функция должна рисовать слайдер', function () {
   let element,
       slider;
 
   beforeEach(function() {
-    setFixtures('<div class="slider">X</div>');
-    element = $('.slider');
+    setFixtures('<div class="slider"></div>');
+    element = document.getElementsByClassName('slider')[0];
     slider = new SliderView({el: element});
     slider.drawSlider();
   });
@@ -32,20 +30,37 @@ describe('Функция должна рисовать слайдер', function
   });
 
   it('Функция должна рисовать слайдер только один раз', function () {
-    //slider.drawSlider();
+    slider.drawSlider();
     expect($('.slider .slider__progress').length).toEqual(1);
   });
 });
 
-// describe('Ползунок слайдера должен реагировать на действия пользователя', function () {
-//   let element,
-//       slider;
-//
-//   beforeEach(function() {
-//     setFixtures('<div class="slider">X</div>');
-//     element = $('.slider');
-//     slider = new SliderView({el: element});
-//     slider.drawSlider();
-//   });
-// });
+describe('Тестирование ползунка слайдера', function () {
+  let element,
+      slider,
+      runner,
+      sliderModel;
 
+  beforeEach(function() {
+    setFixtures('<div class="slider"></div>');
+    element = document.getElementsByClassName('slider')[0];
+    slider = new SliderView({el: element});
+    slider.drawSlider();
+    runner = document.querySelector('.slider .slider__runner');
+    sliderModel = new SliderModel({el: element, runner: runner});
+    sliderModel.addHandlers();
+  });
+
+  it('Ползунок слайдера должен переходить в положение absolute', function () {
+    spyOnEvent(runner, 'mousedown');
+    $(runner).mousedown();
+    //expect('mousedown').toHaveBeenTriggeredOn($(runner));
+    expect($(runner).css('position')).toEqual('absolute');
+  });
+
+  it('Центр ползунка слайдера должен располагаться под курсором мыши', function () {
+    spyOnEvent(runner, 'mousedown');
+    $(runner).mousedown();
+    expect($(runner).css('left')).toEqual('0px');
+  });
+});
