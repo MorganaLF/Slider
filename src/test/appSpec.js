@@ -1,5 +1,8 @@
 import SliderView from '../components/slider/view';
+import SliderModel from '../components/slider/model';
 import $ from 'jquery';
+
+
 
 describe('Функция должна рисовать слайдер', function () {
   let element,
@@ -29,8 +32,20 @@ describe('Функция должна рисовать слайдер', function
   });
 
   it('Функция должна рисовать слайдер только один раз', function () {
-    slider.drawSlider();
+    //slider.drawSlider();
     expect($('.slider .slider__progress').length).toEqual(1);
   });
 });
+
+// describe('Ползунок слайдера должен реагировать на действия пользователя', function () {
+//   let element,
+//       slider;
+//
+//   beforeEach(function() {
+//     setFixtures('<div class="slider">X</div>');
+//     element = $('.slider');
+//     slider = new SliderView({el: element});
+//     slider.drawSlider();
+//   });
+// });
 

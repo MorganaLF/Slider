@@ -6,6 +6,8 @@ export default class SliderView {
   }
 
   drawSliderProgress () {
+    this.el.style.position = 'relative';
+
     let sliderProgress = document.createElement('div');
     sliderProgress.classList.add('slider__progress');
     this.el.append(sliderProgress);
@@ -31,7 +33,5 @@ export default class SliderView {
 
 }
 
-let element = document.getElementsByClassName('slider')[0];
-let slider = new SliderView({el: element});
-slider.drawSlider();
+
 
