@@ -31,10 +31,7 @@ export default class SliderView {
 
 }
 
-let element = document.createElement('div');
-element.classList.add('slider');
-document.body.appendChild(element);
-
+let element = document.getElementsByClassName('slider')[0];
 let slider = new SliderView({el: element});
 slider.drawSlider();
 
