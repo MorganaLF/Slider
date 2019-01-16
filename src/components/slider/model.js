@@ -8,14 +8,15 @@ export default class SliderModel {
   }
 
   prepareRunner (e) {
+    let shiftX = e.pageX - this.runner.getBoundingClientRect().left;
+
     this.runner.style.position = 'absolute';
-    this.runner.style.left = e.pageX - this.leftOffset + 'px';
+    this.runner.style.left = e.pageX - shiftX - this.leftOffset + 'px';
   }
 
   addHandlers () {
     this.runner.onmousedown = (e) => {
-      let event = e;
-      this.prepareRunner(event);
+      this.prepareRunner(e);
       return false;
     };
   }
