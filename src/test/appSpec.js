@@ -74,32 +74,32 @@ describe('SliderModel', function () {
   });
 
   it('По умолчанию объект хранит значение value равное 0', function () {
-    expect(sliderModel.getValue()).toEqual(0);
+    expect(sliderModel.currentValue).toEqual(0);
   });
 
   it('Позволяет установить текущее значение value', function () {
-    sliderModel.setValue(10);
-    expect(sliderModel.getValue()).toEqual(10);
+    sliderModel.currentValue = 10;
+    expect(sliderModel.currentValue).toEqual(10);
   });
 
   it('Метод setExtremeValues позволяет задать максимальное и минимальное значение', function () {
-    sliderModel.setExtremeValues(50, 5000);
-    expect(sliderModel.getExtremeValues().min).toEqual(50);
-    expect(sliderModel.getExtremeValues().max).toEqual(5000);
+    sliderModel.extremeValues = {min: 50, max: 5000};
+    expect(sliderModel.extremeValues.min).toEqual(50);
+    expect(sliderModel.extremeValues.max).toEqual(5000);
   });
 
   it('Метод getSliderType позволяет получить тип слайдера', function () {
-    expect(sliderModel.getSliderType()).toEqual('single');
+    expect(sliderModel.sliderType).toEqual('single');
   });
 
   it('Метод setSliderType позволяет установить тип слайдера', function () {
-    sliderModel.setSliderType('interval');
-    expect(sliderModel.getSliderType()).toEqual('interval');
+    sliderModel.sliderType = 'interval';
+    expect(sliderModel.sliderType).toEqual('interval');
   });
 
   it('Метод setSliderType не позволяет установить не предусмотренный тип', function () {
-    sliderModel.setSliderType('123');
-    expect(sliderModel.getSliderType()).toEqual('single');
+    sliderModel.sliderType = '123';
+    expect(sliderModel.sliderType).toEqual('single');
   });
 
   // beforeEach(function() {

@@ -1,38 +1,38 @@
 export default class SliderModel {
-  constructor (options) {
-    this.val = 0;
-    this.minVal = 0;
-    this.maxVal = 100;
-    this.sliderType = 'single';
+  constructor (val = 0, minVal = 0, maxVal = 100, sliderType = 'single') {
+    this.val = val;
+    this.minVal = minVal;
+    this.maxVal = maxVal;
+    this.type = sliderType;
   }
 
-  getValue () {
+  get currentValue () {
     return this.val;
   }
 
-  getExtremeValues () {
+  get extremeValues () {
     return {
       min: this.minVal,
       max: this.maxVal
     }
   }
 
-  getSliderType () {
-    return this.sliderType;
+  get sliderType () {
+    return this.type;
   }
 
-  setValue (val) {
+  set currentValue (val) {
     this.val = val;
   }
 
-  setExtremeValues(min, max) {
-    this.minVal = min;
-    this.maxVal = max;
+  set extremeValues (values) {
+    this.minVal = values.min;
+    this.maxVal = values.max;
   }
 
-  setSliderType (type) {
+  set sliderType (type) {
     if (type === 'interval') {
-      this.sliderType = 'interval'
+      this.type = 'interval'
     }
   }
 
