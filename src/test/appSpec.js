@@ -15,6 +15,10 @@ describe('Функция drawSlider должна рисовать слайдер
     slider.drawSlider();
   });
 
+  it('Создает экземпляр класса SliderView', function () {
+    expect(slider).toBeDefined();
+  });
+
   it('подгружает fixtures', function () {
     expect($('.slider')).toExist();
   });
@@ -59,8 +63,44 @@ describe('Функция moveRunner должна двигать ползунок
 /* MODEL */
 
 describe('SliderModel', function () {
-  let element,
-      sliderModel;
+  let sliderModel;
+
+  beforeEach(function() {
+    sliderModel = new SliderModel();
+  });
+
+  it('Создает экземпляр класса', function () {
+    expect(sliderModel).toBeDefined();
+  });
+
+  it('По умолчанию объект хранит значение value равное 0', function () {
+    expect(sliderModel.getValue()).toEqual(0);
+  });
+
+  it('Позволяет установить текущее значение value', function () {
+    sliderModel.setValue(10);
+    expect(sliderModel.getValue()).toEqual(10);
+  });
+
+  it('Метод setExtremeValues позволяет задать максимальное и минимальное значение', function () {
+    sliderModel.setExtremeValues(50, 5000);
+    expect(sliderModel.getExtremeValues().min).toEqual(50);
+    expect(sliderModel.getExtremeValues().max).toEqual(5000);
+  });
+
+  it('Метод getSliderType позволяет получить тип слайдера', function () {
+    expect(sliderModel.getSliderType()).toEqual('single');
+  });
+
+  it('Метод setSliderType позволяет установить тип слайдера', function () {
+    sliderModel.setSliderType('interval');
+    expect(sliderModel.getSliderType()).toEqual('interval');
+  });
+
+  it('Метод setSliderType не позволяет установить не предусмотренный тип', function () {
+    sliderModel.setSliderType('123');
+    expect(sliderModel.getSliderType()).toEqual('single');
+  });
 
   // beforeEach(function() {
   //   setFixtures('<div class="slider"></div>');
@@ -95,3 +135,16 @@ describe('SliderModel', function () {
   //   expect($(runner).css('left')).toEqual(e.pageX - sliderOffset + 'px');
   // });
 });
+
+// describe('Метод getValue', function () {
+//   let sliderModel;
+//
+//   beforeEach(function() {
+//     sliderModel = new SliderModel();
+//   });
+//
+//   // it('Позволяет получить value объекта', function () {
+//   //   expect(sliderModel.getValue()).toEqual(0);
+//   // });
+//
+// });
