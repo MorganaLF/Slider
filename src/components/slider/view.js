@@ -2,6 +2,8 @@ export default class SliderView {
 
   constructor (options) {
     this.el = options.el;
+    this.runner = null;
+    this.leftOffset = this.el.getBoundingClientRect().left + pageXOffset;
     this.isGenerated = false;
   }
 
@@ -18,9 +20,11 @@ export default class SliderView {
   }
 
   drawSliderRunner () {
-    let sliderRunner = document.createElement('div');
-    sliderRunner.classList.add('slider__runner');
-    this.el.append(sliderRunner);
+    this.runner = document.createElement('div');
+    this.runner.classList.add('slider__runner');
+    this.runner.style.position = 'absolute';
+    this.runner.style.left = '0px';
+    this.el.append(this.runner);
   }
 
   drawSlider () {
@@ -31,12 +35,36 @@ export default class SliderView {
     }
   }
 
+  moveRunner (e) {
+    if (e.coordX) {
+      this.runner.style.left = e.coordX + 'px';
+      return;
+    }
+
+    let buttonOffset = e.pageX;
+
+    if (buttonOffset < this.leftOffset) {
+      buttonOffset = 0;
+    } else if (buttonOffset > this.leftOffset + this.el.offsetWidth - this.runner.offsetWidth) {
+      buttonOffset = this.el.offsetWidth - this.runner.offsetWidth;
+    } else {
+      buttonOffset = e.pageX - this.leftOffset;
+    }
+
+    this.runner.style.left = buttonOffset + 'px';
+  }
+
+  addHandlers () {
+    this.runner.onmousedown = (e) => {
+      document.onmousemove = (e) => {
+        this.moveRunner(e);
+      };
+      return false;
+    };
+  }
+
 }
 
-window.addEventListener('load', function () {
-  let element = document.getElementsByClassName('slider')[0];
-  let slider = new SliderView({el: element});
-  slider.drawSlider();
-})
+
 
 
