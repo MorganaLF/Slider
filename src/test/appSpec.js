@@ -2,7 +2,9 @@ import SliderView from '../components/slider/view';
 import SliderModel from '../components/slider/model';
 import $ from 'jquery';
 
-describe('Функция должна рисовать слайдер', function () {
+/* VIEW */
+
+describe('Функция drawSlider должна рисовать слайдер', function () {
   let element,
       slider;
 
@@ -35,32 +37,61 @@ describe('Функция должна рисовать слайдер', function
   });
 });
 
-describe('Тестирование ползунка слайдера', function () {
+describe('Функция moveRunner должна двигать ползунок слайдера', function () {
   let element,
       slider,
-      runner,
-      sliderModel;
+      runner;
 
   beforeEach(function() {
     setFixtures('<div class="slider"></div>');
     element = document.getElementsByClassName('slider')[0];
     slider = new SliderView({el: element});
     slider.drawSlider();
-    runner = document.querySelector('.slider .slider__runner');
-    sliderModel = new SliderModel({el: element, runner: runner});
-    sliderModel.addHandlers();
+    runner = element.getElementsByClassName('slider__runner')[0];
   });
 
-  it('Ползунок слайдера должен переходить в положение absolute', function () {
-    spyOnEvent(runner, 'mousedown');
-    $(runner).mousedown();
-    //expect('mousedown').toHaveBeenTriggeredOn($(runner));
-    expect($(runner).css('position')).toEqual('absolute');
+  it('Ползунок двигается на указанные координаты', function () {
+    slider.moveRunner({coordX: 10});
+    expect(runner.style.left).toEqual('10px');
   });
+});
 
-  it('Центр ползунка слайдера должен располагаться под курсором мыши', function () {
-    spyOnEvent(runner, 'mousedown');
-    $(runner).mousedown();
-    expect($(runner).css('left')).toEqual('0px');
-  });
+/* MODEL */
+
+describe('SliderModel', function () {
+  let element,
+      sliderModel;
+
+  // beforeEach(function() {
+  //   setFixtures('<div class="slider"></div>');
+  //   element = document.getElementsByClassName('slider')[0];
+  //   sliderModel = new SliderModel({el: element});
+  // });
+  //
+  // it('Функция prepareRunner переводит ползунок в положение absolute', function () {
+  //   sliderModel.prepareRunner();
+  //   expect(sliderModel.pos).toEqual('absolute');
+  // });
+
+  // it('Центр ползунка слайдера должен располагаться под курсором мыши', function () {
+  //   spyOnEvent(runner, 'mousedown');
+  //   $(runner).mousedown();
+  //   expect($(runner).css('left')).toEqual('0px');
+  // });
+  //
+  // it('Ползунок слайдера должен двигаться при зажатой над ним клавиши мыши', function () {
+  //   spyOnEvent(runner, 'mousedown');
+  //   $(runner).mousedown();
+  //
+  //   spyOnEvent($(document), 'mousemove');
+  //   let e = new jQuery.Event("mousemove");
+  //   e.pageX = 10;
+  //   $(document).trigger(e);
+  //   let sliderOffset = element.getBoundingClientRect().left + pageXOffset;
+  //   expect($(runner).css('left')).toEqual(e.pageX - sliderOffset + 'px');
+  //
+  //   e.pageX = 40;
+  //   $(document).trigger(e);
+  //   expect($(runner).css('left')).toEqual(e.pageX - sliderOffset + 'px');
+  // });
 });
