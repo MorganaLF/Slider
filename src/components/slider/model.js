@@ -36,4 +36,9 @@ export default class SliderModel {
     }
   }
 
+  calculateValue (elem, coordX) {
+    let stepWidth = elem.offsetWidth / (this.maxVal - this.minVal);
+    this.currentValue = coordX / stepWidth;
+  }
+
 }

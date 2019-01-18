@@ -68,9 +68,12 @@ describe('Движение ползунка слайдера', function () {
 /* MODEL */
 
 describe('SliderModel', function () {
-  let sliderModel;
+  let sliderModel,
+      element;
 
   beforeEach(function() {
+    setFixtures('<div class="slider"></div>');
+    element = document.getElementsByClassName('slider')[0];
     sliderModel = new SliderModel();
   });
 
@@ -107,38 +110,12 @@ describe('SliderModel', function () {
     expect(sliderModel.sliderType).toEqual('single');
   });
 
-  // beforeEach(function() {
-  //   setFixtures('<div class="slider"></div>');
-  //   element = document.getElementsByClassName('slider')[0];
-  //   sliderModel = new SliderModel({el: element});
-  // });
-  //
-  // it('Функция prepareRunner переводит ползунок в положение absolute', function () {
-  //   sliderModel.prepareRunner();
-  //   expect(sliderModel.pos).toEqual('absolute');
-  // });
+  it('Метод calculateValue считает текущее значение слайдера', function () {
+    element.style.width = '300px';
+    sliderModel.calculateValue(element, 150);
+    expect(sliderModel.currentValue).toEqual(50);
+  });
 
-  // it('Центр ползунка слайдера должен располагаться под курсором мыши', function () {
-  //   spyOnEvent(runner, 'mousedown');
-  //   $(runner).mousedown();
-  //   expect($(runner).css('left')).toEqual('0px');
-  // });
-  //
-  // it('Ползунок слайдера должен двигаться при зажатой над ним клавиши мыши', function () {
-  //   spyOnEvent(runner, 'mousedown');
-  //   $(runner).mousedown();
-  //
-  //   spyOnEvent($(document), 'mousemove');
-  //   let e = new jQuery.Event("mousemove");
-  //   e.pageX = 10;
-  //   $(document).trigger(e);
-  //   let sliderOffset = element.getBoundingClientRect().left + pageXOffset;
-  //   expect($(runner).css('left')).toEqual(e.pageX - sliderOffset + 'px');
-  //
-  //   e.pageX = 40;
-  //   $(document).trigger(e);
-  //   expect($(runner).css('left')).toEqual(e.pageX - sliderOffset + 'px');
-  // });
 });
 
 /* CONTROLLER */

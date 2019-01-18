@@ -11,6 +11,8 @@ export default class SliderController {
 
       document.onmousemove = (e) => {
         this.view.moveRunner(e);
+        this.model.calculateValue(this.view.el, e.pageX); /* ИСПРАВИТЬ */
+        this.view._updateSliderTip(this.model.currentValue);
       };
 
       document.onmouseup = (e) => {

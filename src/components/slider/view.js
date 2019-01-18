@@ -2,6 +2,7 @@ export default class SliderView {
   constructor (options) {
     this.el = options.el;
     this.runner = null;
+    this.tip = null;
     this.shiftX = null;
     this.isGenerated = false;
   }
@@ -31,7 +32,11 @@ export default class SliderView {
   }
 
   _drawSliderTip () {
-    this._createElem('div', 'slider__tip', this.runner);
+    this.tip = this._createElem('div', 'slider__tip', this.runner);
+  }
+
+  _updateSliderTip (val) {
+    this.tip.innerHTML = val;
   }
 
   drawSlider () {
