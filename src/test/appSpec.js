@@ -1,6 +1,7 @@
 import SliderView from '../components/slider/view';
 import SliderModel from '../components/slider/model';
 import $ from 'jquery';
+import SliderController from "../components/slider/controller";
 
 /* VIEW */
 
@@ -136,15 +137,37 @@ describe('SliderModel', function () {
   // });
 });
 
-// describe('Метод getValue', function () {
-//   let sliderModel;
-//
-//   beforeEach(function() {
-//     sliderModel = new SliderModel();
-//   });
-//
-//   // it('Позволяет получить value объекта', function () {
-//   //   expect(sliderModel.getValue()).toEqual(0);
-//   // });
-//
-// });
+/* CONTROLLER */
+
+describe('Controller', function () {
+  let element,
+      slider,
+      runner,
+      sliderModel,
+      sliderController;
+
+  beforeEach(function () {
+    setFixtures('<div class="slider"></div>');
+    element = document.getElementsByClassName('slider')[0];
+    slider = new SliderView({el: element});
+    slider.drawSlider();
+    runner = element.getElementsByClassName('slider__runner')[0];
+
+    sliderModel = new SliderModel();
+    sliderController = new SliderController(slider, sliderModel);
+    sliderController.addHandlers();
+    spyOn(slider, 'moveRunner');
+    spyOn(sliderController, 'removeHandlers');
+    $(runner).mousedown();
+    $(document).mousemove();
+  });
+
+  it('Метод moveRunner запускается при клике на runner', function () {
+    expect(slider.moveRunner).toHaveBeenCalled();
+  });
+
+  it('При отпускании клавиши мыши все события прекращаются', function () {
+    $(document).mouseup();
+    expect(sliderController.removeHandlers).toHaveBeenCalled();
+  });
+});
