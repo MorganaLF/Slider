@@ -36,13 +36,17 @@ describe('Функция drawSlider должна рисовать слайдер
     expect($('.slider .slider__runner')).toExist();
   });
 
+  it('Функция по умолчанию должна создавать элемент slider__tip внутри элемента slider__runner', function () {
+    expect($('.slider .slider__runner .slider__tip')).toExist();
+  });
+
   it('Функция должна рисовать слайдер только один раз', function () {
     slider.drawSlider();
     expect($('.slider .slider__progress').length).toEqual(1);
   });
 });
 
-describe('Функция moveRunner должна двигать ползунок слайдера', function () {
+describe('Движение ползунка слайдера', function () {
   let element,
       slider,
       runner;
@@ -55,8 +59,8 @@ describe('Функция moveRunner должна двигать ползунок
     runner = element.getElementsByClassName('slider__runner')[0];
   });
 
-  it('Ползунок двигается на указанные координаты', function () {
-    slider.moveRunner({coordX: 10});
+  it('Ползунку можно задать положение', function () {
+    slider.setRunnerPosition(10);
     expect(runner.style.left).toEqual('10px');
   });
 });

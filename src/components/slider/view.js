@@ -1,57 +1,69 @@
 export default class SliderView {
-
   constructor (options) {
     this.el = options.el;
     this.runner = null;
-    this.leftOffset = this.el.getBoundingClientRect().left + pageXOffset;
+    this.shiftX = null;
     this.isGenerated = false;
   }
 
-  drawSliderProgress () {
-    this.el.style.position = 'relative';
-
-    let sliderProgress = document.createElement('div');
-    sliderProgress.classList.add('slider__progress');
-    this.el.append(sliderProgress);
-
-    let sliderProgressFull = document.createElement('div');
-    sliderProgressFull.classList.add('slider__progress-full');
-    sliderProgress.append(sliderProgressFull);
+  get _sliderLeftPoint () {
+    return this.el.getBoundingClientRect().left + pageXOffset;
   }
 
-  drawSliderRunner () {
-    this.runner = document.createElement('div');
-    this.runner.classList.add('slider__runner');
-    this.runner.style.position = 'absolute';
-    this.runner.style.left = '0px';
-    this.el.append(this.runner);
+  get _sliderRightPoint () {
+    return this._sliderLeftPoint + this.el.offsetWidth - this.runner.offsetWidth;
+  }
+
+  _createElem (el, elclass, parent) {
+    let elem = document.createElement(el);
+    elem.classList.add(elclass);
+    parent.appendChild(elem);
+    return elem;
+  }
+
+  _drawSliderProgress () {
+    let sliderProgress = this._createElem('div', 'slider__progress', this.el);
+    this._createElem('div', 'slider__progress-full', sliderProgress);
+  }
+
+  _drawSliderRunner () {
+    this.runner = this._createElem('div', 'slider__runner', this.el);
+  }
+
+  _drawSliderTip () {
+    this._createElem('div', 'slider__tip', this.runner);
   }
 
   drawSlider () {
     if (!this.isGenerated) {
-      this.drawSliderProgress();
-      this.drawSliderRunner();
+      this._drawSliderProgress();
+      this._drawSliderRunner();
+      this._drawSliderTip();
       this.isGenerated = true;
     }
   }
 
+  setRunnerPosition (pos) {
+    this.runner.style.left = pos + 'px';
+  }
+
+  setRunnerShiftX (e) {
+    this.shiftX = e.pageX - this.runner.getBoundingClientRect().left + pageXOffset;
+  }
+
   moveRunner (e) {
-    if (e.coordX) {
-      this.runner.style.left = e.coordX + 'px';
-      return;
-    }
+    let runnerLeftIndent;
+    let coordX = e.pageX;
 
-    let buttonOffset = e.pageX;
-
-    if (buttonOffset < this.leftOffset) {
-      buttonOffset = 0;
-    } else if (buttonOffset > this.leftOffset + this.el.offsetWidth - this.runner.offsetWidth) {
-      buttonOffset = this.el.offsetWidth - this.runner.offsetWidth;
+    if (coordX < this._sliderLeftPoint + this.runner.offsetWidth) {
+      runnerLeftIndent = 0;
+    } else if (coordX > this._sliderRightPoint) {
+      runnerLeftIndent = this.el.offsetWidth - this.runner.offsetWidth;
     } else {
-      buttonOffset = e.pageX - this.leftOffset;
+      runnerLeftIndent = coordX - this._sliderLeftPoint - this.shiftX;
     }
 
-    this.runner.style.left = buttonOffset + 'px';
+    this.setRunnerPosition(runnerLeftIndent);
   }
 
 }

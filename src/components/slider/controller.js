@@ -7,6 +7,7 @@ export default class SliderController {
 
   addHandlers () {
     this.runner.onmousedown = (e) => {
+      this.view.setRunnerShiftX(e);
 
       document.onmousemove = (e) => {
         this.view.moveRunner(e);
