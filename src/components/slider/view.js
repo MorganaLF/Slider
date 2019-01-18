@@ -54,15 +54,6 @@ export default class SliderView {
     this.runner.style.left = buttonOffset + 'px';
   }
 
-  addHandlers () {
-    this.runner.onmousedown = (e) => {
-      document.onmousemove = (e) => {
-        this.moveRunner(e);
-      };
-      return false;
-    };
-  }
-
 }
 
 
