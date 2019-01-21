@@ -5,7 +5,7 @@ import SliderController from "../components/slider/controller";
 
 /* VIEW */
 
-describe('Функция drawSlider должна рисовать слайдер', function () {
+describe('01 Функция drawSlider должна рисовать слайдер', function () {
   let element,
       slider;
 
@@ -46,10 +46,11 @@ describe('Функция drawSlider должна рисовать слайдер
   });
 });
 
-describe('Движение ползунка слайдера', function () {
+describe('02 Движение ползунка слайдера', function () {
   let element,
       slider,
-      runner;
+      runner,
+      progress;
 
   beforeEach(function() {
     setFixtures('<div class="slider"></div>');
@@ -57,17 +58,23 @@ describe('Движение ползунка слайдера', function () {
     slider = new SliderView({el: element});
     slider.drawSlider();
     runner = element.getElementsByClassName('slider__runner')[0];
+    progress = element.getElementsByClassName('slider__progress-full')[0];
   });
 
   it('Ползунку можно задать положение', function () {
     slider.setRunnerPosition(10);
     expect(runner.style.left).toEqual('10px');
   });
+
+  it('Линии прогресса можно задать длину', function () {
+    slider.setProgressWidth(10);
+    expect(progress.style.width).toEqual('10px');
+  })
 });
 
 /* MODEL */
 
-describe('SliderModel', function () {
+describe('03 SliderModel', function () {
   let slider,
       runner,
       sliderModel,
@@ -128,7 +135,7 @@ describe('SliderModel', function () {
 
 /* CONTROLLER */
 
-describe('Controller', function () {
+describe('04 Controller', function () {
   let element,
       slider,
       runner,
