@@ -4,6 +4,7 @@ export default class SliderModel {
     this.minVal = minVal;
     this.maxVal = maxVal;
     this.type = sliderType;
+    this.shiftX = 0;
   }
 
   get currentValue () {
@@ -36,9 +37,28 @@ export default class SliderModel {
     }
   }
 
+  setRunnerShiftX (e, el) {
+    let runner = el.querySelector('.slider__runner');
+    this.shiftX = e.pageX - runner.getBoundingClientRect().left + pageXOffset;
+  }
+
   calculateValue (elem, coordX) {
-    let stepWidth = elem.offsetWidth / (this.maxVal - this.minVal);
-    this.currentValue = coordX / stepWidth;
+    let curX;
+    let runner = elem.querySelector('.slider__runner');
+    let sliderLeftPoint = elem.getBoundingClientRect().left + pageXOffset;
+    let sliderRightPoint = sliderLeftPoint + elem.clientWidth - runner.clientWidth;
+
+    if (coordX < sliderLeftPoint + this.shiftX) {
+      curX = 0;
+    } else if (coordX > sliderRightPoint + this.shiftX) {
+      curX = sliderRightPoint - elem.getBoundingClientRect().left;
+    } else {
+      curX = coordX - elem.getBoundingClientRect().left + pageXOffset - this.shiftX;
+    }
+
+    let stepWidth = (elem.clientWidth - runner.clientWidth) / (this.maxVal - this.minVal);
+    this.currentValue = Math.floor(curX / stepWidth);
+
   }
 
 }

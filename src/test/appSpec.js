@@ -68,12 +68,17 @@ describe('Движение ползунка слайдера', function () {
 /* MODEL */
 
 describe('SliderModel', function () {
-  let sliderModel,
+  let slider,
+      runner,
+      sliderModel,
       element;
 
   beforeEach(function() {
     setFixtures('<div class="slider"></div>');
     element = document.getElementsByClassName('slider')[0];
+    slider = new SliderView({el: element});
+    slider.drawSlider();
+    runner = element.querySelector('.slider__runner');
     sliderModel = new SliderModel();
   });
 
@@ -111,8 +116,11 @@ describe('SliderModel', function () {
   });
 
   it('Метод calculateValue считает текущее значение слайдера', function () {
-    element.style.width = '300px';
-    sliderModel.calculateValue(element, 150);
+    let leftOffset = element.getBoundingClientRect().left + pageXOffset;
+    element.style.width = '350px';
+    runner.style.width = '50px';
+    sliderModel.calculateValue(element, 150 + leftOffset);
+
     expect(sliderModel.currentValue).toEqual(50);
   });
 
