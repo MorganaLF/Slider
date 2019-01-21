@@ -60,10 +60,10 @@ export default class SliderView {
     let runnerLeftIndent;
     let coordX = e.pageX;
 
-    if (coordX < this._sliderLeftPoint + this.runner.offsetWidth) {
+    if (coordX < this._sliderLeftPoint + this.shiftX) {
       runnerLeftIndent = 0;
-    } else if (coordX > this._sliderRightPoint) {
-      runnerLeftIndent = this.el.offsetWidth - this.runner.offsetWidth;
+    } else if (coordX > this._sliderRightPoint + this.shiftX) {
+      runnerLeftIndent = this.el.offsetWidth - this.runner.offsetWidth ;
     } else {
       runnerLeftIndent = coordX - this._sliderLeftPoint - this.shiftX;
     }
