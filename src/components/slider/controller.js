@@ -2,34 +2,47 @@ export default class SliderController {
   constructor (view, model) {
     this.view = view;
     this.model = model;
-    this.runner = view.runner;
+    this.runner1 = view.runner1;
+    this.runner2 = view.runner2;
   }
 
-  addHandlers () {
-    this.runner.onmousedown = (e) => {
-      this.view.setRunnerShiftX(e);
-      this.model.setRunnerShiftX(e, this.view.el);
+  onmousedown = (runner) => {
+    return (e) => {
+      this.view.setRunnerShiftX(e, runner);
+      this.model.setRunnerShiftX(e, runner.el);
+      e.preventDefault();
 
-      document.onmousemove = (e) => {
-        this.view.moveRunner(e);
-        this.view.animateProgress(e);
-        this.model.calculateValue(this.view.el, e.pageX); /* ИСПРАВИТЬ */
-        this.view._updateSliderTip(this.model.currentValue);
-      };
+      let mousemove = this.onmousemove(runner);
+      let mouseup = this.onmouseup(mousemove);
 
-      document.onmouseup = (e) => {
-        this.removeHandlers();
-      };
+      window.addEventListener('mousemove', mousemove);
+      window.addEventListener('mouseup', mouseup);
+    }
+  };
 
-      return false;
-    };
+  onmousemove = ( runner ) => {
+    return (e) => {
+      this.view.moveRunner(e, runner);
+      this.view.animateProgress(e);
+      this.model.calculateValue(this.view.el, e.pageX); /* ИСПРАВИТЬ */
+      this.view._updateSliderTip(runner, this.model.currentValue);
+    }
+  };
 
-    this.runner.ondragstart = function() {
-      return false;
-    };
+  onmouseup = (handler) => {
+    return (e) => {
+      window.removeEventListener( 'mousemove', handler );
+      window.removeEventListener( 'mouseup', this.onmouseup );
+    }
+  };
+
+  addHandlers (runner) {
+    let onmousedown = this.onmousedown(runner);
+    runner.el.addEventListener( 'mousedown', onmousedown );
   }
 
-  removeHandlers () {
-    document.onmousemove = document.onmouseup = null;
+  init () {
+    this.addHandlers(this.runner1);
+    this.addHandlers(this.runner2);
   }
 }
