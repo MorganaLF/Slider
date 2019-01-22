@@ -36,6 +36,10 @@ describe('01 Функция drawSlider должна рисовать слайд�
     expect($('.slider .slider__runner')).toExist();
   });
 
+  it('Функция создает два элемента slider__runner, если тип слайдера "interval"', function () {
+    expect($('.slider .slider__runner').length).toEqual(2);
+  });
+
   it('Функция по умолчанию должна создавать элемент slider__tip внутри элемента slider__runner', function () {
     expect($('.slider .slider__runner .slider__tip')).toExist();
   });
