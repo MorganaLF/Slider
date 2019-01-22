@@ -1,5 +1,5 @@
 export default class SliderModel {
-  constructor (val = 0, minVal = 0, maxVal = 100, sliderType = 'single') {
+  constructor (val = 0, minVal = 0, maxVal = 100, sliderType = 'interval') {
     this.val = val;
     this.minVal = minVal;
     this.maxVal = maxVal;
@@ -37,8 +37,7 @@ export default class SliderModel {
     }
   }
 
-  setRunnerShiftX (e, el) {
-    let runner = el.querySelector('.slider__runner');
+  setRunnerShiftX (e, runner) {
     this.shiftX = e.pageX - runner.getBoundingClientRect().left + pageXOffset;
   }
 
