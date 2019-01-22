@@ -1,11 +1,14 @@
 export default class SliderView {
   constructor (options) {
     this.el = options.el;
-    this.runner = null;
+    this.runner1 = {};
+    this.runner2 = {};
     this.progressFull = null;
-    this.tip = null;
+    this.tip1 = null;
+    this.tip2 = null;
     this.shiftX = null;
     this.isGenerated = false;
+    this.type = 'interval';
   }
 
   get _sliderLeftPoint () {
@@ -13,7 +16,11 @@ export default class SliderView {
   }
 
   get _sliderRightPoint () {
-    return this._sliderLeftPoint + this.el.offsetWidth - this.runner.offsetWidth;
+    return this._sliderLeftPoint + this.el.offsetWidth - this.runner1.el.offsetWidth;
+  }
+
+  get sliderType () {
+    return this.type;
   }
 
   _createElem (el, elclass, parent) {
@@ -23,57 +30,71 @@ export default class SliderView {
     return elem;
   }
 
+  createRunner (runner) {
+    this[runner].el = this._createElem('div', 'slider__runner', this.el);
+    this[runner].tip = this._createElem('div', 'slider__tip', this[runner].el);
+    this[runner].shiftX = 0;
+  }
+
   _drawSliderProgress () {
     let sliderProgress = this._createElem('div', 'slider__progress', this.el);
     this.progressFull = this._createElem('div', 'slider__progress-full', sliderProgress);
   }
 
   _drawSliderRunner () {
-    this.runner = this._createElem('div', 'slider__runner', this.el);
+    this.runner1 = this._createElem('div', 'slider__runner', this.el);
+    if (this.type === 'interval') {
+      this.runner2 = this._createElem('div', 'slider__runner', this.el);
+    }
   }
 
   _drawSliderTip () {
-    this.tip = this._createElem('div', 'slider__tip', this.runner);
+    this.tip1 = this._createElem('div', 'slider__tip', this.runner1);
+    if (this.type === 'interval') {
+      this.tip2 = this._createElem('div', 'slider__tip', this.runner2);
+    }
   }
 
-  _updateSliderTip (val) {
-    this.tip.innerHTML = val;
+  _updateSliderTip (runner, val) {
+    runner.tip.innerHTML = val;
   }
 
   drawSlider () {
     if (!this.isGenerated) {
       this._drawSliderProgress();
-      this._drawSliderRunner();
-      this._drawSliderTip();
+      this.createRunner('runner1');
+      this.createRunner('runner2');
+      //this._drawSliderRunner();
+      //this._drawSliderTip();
       this.isGenerated = true;
     }
   }
 
-  setRunnerPosition (pos) {
-    this.runner.style.left = pos + 'px';
+  setRunnerPosition (runner, pos) {
+    runner.el.style.left = pos + 'px';
   }
 
-  setRunnerShiftX (e) {
-    this.shiftX = e.pageX - this.runner.getBoundingClientRect().left + pageXOffset;
+  setRunnerShiftX (e, runner) {
+    runner.shiftX = e.pageX - runner.el.getBoundingClientRect().left + pageXOffset;
   }
 
   setProgressWidth (width) {
     this.progressFull.style.width = width + 'px';
   }
 
-  moveRunner (e) {
+  moveRunner (e, runner) {
     let runnerLeftIndent;
     let coordX = e.pageX;
 
-    if (coordX < this._sliderLeftPoint + this.shiftX) {
+    if (coordX < this._sliderLeftPoint + runner.shiftX) {
       runnerLeftIndent = 0;
-    } else if (coordX > this._sliderRightPoint + this.shiftX) {
-      runnerLeftIndent = this.el.offsetWidth - this.runner.offsetWidth ;
+    } else if (coordX > this._sliderRightPoint + runner.shiftX) {
+      runnerLeftIndent = this.el.offsetWidth - runner.el.offsetWidth ;
     } else {
-      runnerLeftIndent = coordX - this._sliderLeftPoint - this.shiftX;
+      runnerLeftIndent = coordX - this._sliderLeftPoint - runner.shiftX;
     }
 
-    this.setRunnerPosition(runnerLeftIndent);
+    this.setRunnerPosition(runner, runnerLeftIndent);
   }
 
   animateProgress (e) {
