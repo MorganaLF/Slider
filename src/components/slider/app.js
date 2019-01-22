@@ -9,6 +9,6 @@ window.addEventListener('load', function () {
 
   let sliderModel = new SliderModel();
   let sliderController = new SliderController(slider, sliderModel);
-  sliderController.addHandlers();
+  sliderController.init();
 
 });
