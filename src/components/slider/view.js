@@ -82,6 +82,12 @@ export default class SliderView {
     this.progressFull.style.width = width + 'px';
   }
 
+  setIntervalProgress (left, width) {
+    this.progressFull.style.position = 'absolute';
+    this.progressFull.style.width = width;
+    this.progressFull.style.left = left;
+  }
+
   moveRunner (e, runner) {
     let runnerLeftIndent;
     let coordX = e.pageX;
@@ -94,22 +100,54 @@ export default class SliderView {
       runnerLeftIndent = coordX - this._sliderLeftPoint - runner.shiftX;
     }
 
+    let firstRunnerLeftOffset = parseInt(this.el.querySelectorAll('.slider__runner')[0].style.left);
+    let lastRunnerLeftOffset = parseInt(this.el.querySelectorAll('.slider__runner')[1].style.left);
+
+    this.el.querySelectorAll('.slider__runner')[0].style.zIndex = '1';
+    this.el.querySelectorAll('.slider__runner')[1].style.zIndex = '1';
+
+    runner.el.style.zIndex = '99999';
+
+    if(
+        coordX > this._sliderLeftPoint + lastRunnerLeftOffset + runner.shiftX
+        && this.el.querySelectorAll('.slider__runner')[0] === runner.el
+        ) {
+      return false;
+    }
+
+    else if(
+        coordX < this._sliderLeftPoint + firstRunnerLeftOffset + runner.shiftX
+        && this.el.querySelectorAll('.slider__runner')[1] === runner.el
+    ) {
+      return false;
+    }
+
     this.setRunnerPosition(runner, runnerLeftIndent);
+
   }
 
   animateProgress (e) {
-    let progressWidth;
-    let coordX = e.pageX;
+    if (this.type === 'interval') {
 
-    if (coordX < this._sliderLeftPoint + this.shiftX) {
-      progressWidth = 0;
-    } else if (coordX > this._sliderRightPoint + this.shiftX) {
-      progressWidth  = this._sliderRightPoint - this.el.getBoundingClientRect().left;
+      let leftPoint = this.el.querySelectorAll('.slider__runner')[0].style.left;
+      let progressWidth = parseInt(this.el.querySelectorAll('.slider__runner')[1].style.left) - parseInt(this.el.querySelectorAll('.slider__runner')[0].style.left) + 'px';
+      this.setIntervalProgress(leftPoint, progressWidth);
+
     } else {
-      progressWidth  = coordX - this.el.getBoundingClientRect().left + pageXOffset - this.shiftX;
+      let progressWidth;
+      let coordX = e.pageX;
+
+      if (coordX < this._sliderLeftPoint + this.shiftX) {
+        progressWidth = 0;
+      } else if (coordX > this._sliderRightPoint + this.shiftX) {
+        progressWidth  = this._sliderRightPoint - this.el.getBoundingClientRect().left;
+      } else {
+        progressWidth  = coordX - this.el.getBoundingClientRect().left + pageXOffset - this.shiftX;
+      }
+
+      this.setProgressWidth(progressWidth);
     }
 
-    this.setProgressWidth(progressWidth);
   }
 
 }

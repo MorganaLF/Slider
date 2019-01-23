@@ -22,10 +22,11 @@ export default class SliderController {
 
   onmousemove = ( runner ) => {
     return (e) => {
+      let runnerType = this.runner1 ? 'startValue' : 'endValue';
       this.view.moveRunner(e, runner);
       this.view.animateProgress(e);
-      this.model.calculateValue(this.view.el, e.pageX); /* ИСПРАВИТЬ */
-      this.view._updateSliderTip(runner, this.model.currentValue);
+      let curVal = this.model.calculateValue(this.view.el, e.pageX, runner.el, runnerType); /* ИСПРАВИТЬ */
+      this.view._updateSliderTip(runner, curVal);
     }
   };
 
