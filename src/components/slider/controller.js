@@ -5,9 +5,12 @@ export default class SliderController {
     this.runner1 = view.runner1;
     this.runner2 = view.runner2;
     this.curVal = 0;
+    this.onmousedown = this.onmousedown.bind(this);
+    this.onmousemove = this.onmousemove.bind(this);
+    this.onmouseup = this.onmouseup.bind(this);
   }
 
-  onmousedown = (runner) => {
+  onmousedown (runner) {
     return (e) => {
       let runnerType = runner === this.runner1 ? 'startValue' : 'endValue';
 
@@ -27,7 +30,7 @@ export default class SliderController {
     }
   };
 
-  onmousemove = ( runner ) => {
+  onmousemove (runner) {
     return (e) => {
 
       this.view.moveRunner(e, runner);
@@ -38,7 +41,7 @@ export default class SliderController {
     }
   };
 
-  onmouseup = (handler) => {
+  onmouseup (handler) {
     return (e) => {
       window.removeEventListener( 'mousemove', handler );
       window.removeEventListener( 'mouseup', this.onmouseup );
