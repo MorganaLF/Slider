@@ -4,7 +4,6 @@ export default class SliderView {
     this.runner1 = {};
     this.runner2 = {};
     this.progressFull = null;
-    this.shiftX = null;
     this.isGenerated = false;
     this.type = 'single';
   }
@@ -19,6 +18,14 @@ export default class SliderView {
 
   get sliderType () {
     return this.type;
+  }
+
+  get firstRunnerIndent () {
+    return parseInt(this.runner1.el.style.left);
+  }
+
+  get lastRunnerIndent () {
+    return parseInt(this.runner2.el.style.left);
   }
 
   _createElem (el, elclass, parent) {
@@ -44,14 +51,15 @@ export default class SliderView {
   }
 
   drawSlider () {
-    if (!this.isGenerated) {
-      this._drawSliderProgress();
-      this.createRunner('runner1');
-      if (this.type === 'interval') {
-        this.createRunner('runner2');
-      }
-      this.isGenerated = true;
+    if (this.isGenerated) {
+      return;
     }
+    this._drawSliderProgress();
+    this.createRunner('runner1');
+    if (this.type === 'interval') {
+      this.createRunner('runner2');
+    }
+    this.isGenerated = true;
   }
 
   setRunnerPosition (runner, pos) {
@@ -68,53 +76,52 @@ export default class SliderView {
 
   setIntervalProgress (left, width) {
     this.progressFull.style.position = 'absolute';
-    this.progressFull.style.width = width;
-    this.progressFull.style.left = left;
+    this.progressFull.style.width = width + 'px';
+    this.progressFull.style.left = left + 'px';
   }
 
   calculateMousePosition(coord) {
     return (this.el.clientWidth - this.runner1.el.clientWidth) / coord;
   }
 
-  moveRunner (e, runner) {
-    let runnerLeftIndent;
-    let coordX = e.pageX;
+  checkMovingIntervalRunners (coordX, runner) {
+    let firstRunnerCheckout =
+        coordX > this._sliderLeftPoint + this.lastRunnerIndent + runner.shiftX
+        && this.runner1.el === runner.el;
 
+    let secondRunnerCheckout =
+        coordX < this._sliderLeftPoint + this.firstRunnerIndent + runner.shiftX
+        && this.runner2.el === runner.el;
+
+    this.runner1.el.style.zIndex = '1';
+    this.runner2.el.style.zIndex = '1';
+    runner.el.style.zIndex = '99999';
+
+    return !(firstRunnerCheckout || secondRunnerCheckout);
+  }
+
+  _checkCursorPosition (coordX, runner) {
+    let runnerLeftIndent;
     if (coordX < this._sliderLeftPoint + runner.shiftX) {
       runnerLeftIndent = 0;
     } else if (coordX > this._sliderRightPoint + runner.shiftX) {
-      runnerLeftIndent = this.el.offsetWidth - runner.el.offsetWidth ;
+      runnerLeftIndent = this.el.offsetWidth - runner.el.offsetWidth;
     } else {
       runnerLeftIndent = coordX - this._sliderLeftPoint - runner.shiftX;
     }
+    return runnerLeftIndent;
+  }
 
-    if (this.type === 'interval') {
-      let firstRunnerLeftOffset = parseInt(this.el.querySelectorAll('.slider__runner')[0].style.left);
-      let lastRunnerLeftOffset = parseInt(this.el.querySelectorAll('.slider__runner')[1].style.left);
+  moveRunner (e, runner) {
+    let coordX = e.pageX;
+    let runnerLeftIndent = this._checkCursorPosition(coordX, runner);
+    let ratio = this.calculateMousePosition(runnerLeftIndent);
 
-      this.el.querySelectorAll('.slider__runner')[0].style.zIndex = '1';
-      this.el.querySelectorAll('.slider__runner')[1].style.zIndex = '1';
-
-      runner.el.style.zIndex = '99999';
-
-      if(
-          coordX > this._sliderLeftPoint + lastRunnerLeftOffset + runner.shiftX
-          && this.el.querySelectorAll('.slider__runner')[0] === runner.el
-      ) {
-        return false;
-      }
-
-      else if(
-          coordX < this._sliderLeftPoint + firstRunnerLeftOffset + runner.shiftX
-          && this.el.querySelectorAll('.slider__runner')[1] === runner.el
-      ) {
-        return false;
-      }
+    if (this.type === 'interval' && !this.checkMovingIntervalRunners(coordX, runner)) {
+      return false;
     }
 
     this.setRunnerPosition(runner, runnerLeftIndent);
-
-    let ratio = this.calculateMousePosition(runnerLeftIndent);
 
     this.el.dispatchEvent(new CustomEvent('move', {
       bubbles: true,
@@ -122,32 +129,22 @@ export default class SliderView {
     }));
   }
 
-  animateProgress (e, runner) {
-    if (this.type === 'interval') {
-
-      let leftPoint = this.el.querySelectorAll('.slider__runner')[0].style.left;
-      let progressWidth = parseInt(this.el.querySelectorAll('.slider__runner')[1].style.left) - parseInt(this.el.querySelectorAll('.slider__runner')[0].style.left) + 'px';
-      this.setIntervalProgress(leftPoint, progressWidth);
-
-    } else {
-      let progressWidth;
-      let coordX = e.pageX;
-
-      if (coordX < this._sliderLeftPoint + runner.shiftX) {
-        progressWidth = 0;
-      } else if (coordX > this._sliderRightPoint + runner.shiftX) {
-        progressWidth  = this._sliderRightPoint - this.el.getBoundingClientRect().left;
-      } else {
-        progressWidth  = coordX - this.el.getBoundingClientRect().left + pageXOffset - runner.shiftX;
-      }
-
-      this.setProgressWidth(progressWidth);
-    }
-
+  _animateIntervalProgress () {
+    let progressWidth = this.lastRunnerIndent - this.firstRunnerIndent;
+    this.setIntervalProgress(this.firstRunnerIndent, progressWidth);
   }
 
+  _animateSingleProgress (e, runner) {
+    let coordX = e.pageX;
+    let progressWidth = this._checkCursorPosition (coordX, runner);
+    this.setProgressWidth(progressWidth);
+  }
+
+  animateProgress (e, runner) {
+    if (this.type === 'interval') {
+      this._animateIntervalProgress();
+    } else {
+      this._animateSingleProgress(e, runner);
+    }
+  }
 }
-
-
-
-
