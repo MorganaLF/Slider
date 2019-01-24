@@ -1,5 +1,5 @@
 export default class SliderModel {
-  constructor (val = 0, minVal = 0, maxVal = 100, sliderType = 'interval') {
+  constructor (val = 0, minVal = 0, maxVal = 100, sliderType = 'single') {
     this.val = val;
     this.startVal = minVal;
     this.endVal = maxVal;

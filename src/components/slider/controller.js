@@ -5,6 +5,7 @@ export default class SliderController {
     this.runner1 = view.runner1;
     this.runner2 = view.runner2;
     this.curVal = 0;
+    this.type = view.type;
     this.onmousedown = this.onmousedown.bind(this);
     this.onmousemove = this.onmousemove.bind(this);
     this.onmouseup = this.onmouseup.bind(this);
@@ -32,11 +33,8 @@ export default class SliderController {
 
   onmousemove (runner) {
     return (e) => {
-
       this.view.moveRunner(e, runner);
-      this.view.animateProgress(e);
-
-      //let curVal = this.model.calculateValue(this.view.el, e.pageX, runner.el, runnerType); /* ИСПРАВИТЬ */
+      this.view.animateProgress(e, runner);
       this.view._updateSliderTip(runner, this.curVal);
     }
   };
@@ -55,6 +53,8 @@ export default class SliderController {
 
   init () {
     this.addHandlers(this.runner1);
-    this.addHandlers(this.runner2);
+    if (this.type === 'interval') {
+      this.addHandlers(this.runner2);
+    }
   }
 }
