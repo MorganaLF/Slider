@@ -43,54 +43,12 @@ export default class SliderModel {
     runner.shiftX = e.pageX - runner.getBoundingClientRect().left + pageXOffset;
   }
 
-  calculateValue (elem, coordX, runner, runnerType) {
-    let curX;
-    //let runner = elem.querySelector('.slider__runner');
-    let sliderLeftPoint = elem.getBoundingClientRect().left + pageXOffset;
-    let sliderRightPoint = sliderLeftPoint + elem.clientWidth - runner.clientWidth;
-
-    let firstRunnerLeftOffset = parseInt(elem.querySelectorAll('.slider__runner')[0].style.left);
-    let lastRunnerLeftOffset = parseInt(elem.querySelectorAll('.slider__runner')[1].style.left);
-
-    if(
-        coordX > sliderLeftPoint + lastRunnerLeftOffset + runner.shiftX
-        && elem.querySelectorAll('.slider__runner')[0] === runner
-    ) {
-      if(runnerType === 'startValue') {
-        return this.startVal;
-      } else {
-        return this.endVal;
-      }
-    }
-
-    else if(
-        coordX < sliderLeftPoint + firstRunnerLeftOffset + runner.shiftX
-        && elem.querySelectorAll('.slider__runner')[1] === runner
-    ) {
-      if(runnerType === 'startValue') {
-        return this.startVal;
-      } else {
-        return this.endVal;
-      }
-    }
-
-    if (coordX < sliderLeftPoint + runner.shiftX) {
-      curX = 0;
-    } else if (coordX > sliderRightPoint + runner.shiftX) {
-      curX = sliderRightPoint - elem.getBoundingClientRect().left;
-    } else {
-      curX = coordX - elem.getBoundingClientRect().left + pageXOffset - runner.shiftX;
-    }
-
-    let stepWidth = (elem.clientWidth - runner.clientWidth) / (this.maxVal - this.minVal);
-
+  calculateValue (val, runnerType) {
     if(runnerType === 'startValue') {
-      return this.startVal = Math.floor(curX / stepWidth);
+      return this.startVal = Math.floor(this.maxVal / val);
     } else {
-      return this.endVal = Math.floor(curX / stepWidth);
+      return this.endVal = Math.floor(this.maxVal / val);
     }
-    //this.currentValue = Math.floor(curX / stepWidth);
-
   }
 
 }

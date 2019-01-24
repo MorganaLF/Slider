@@ -4,10 +4,13 @@ export default class SliderController {
     this.model = model;
     this.runner1 = view.runner1;
     this.runner2 = view.runner2;
+    this.curVal = 0;
   }
 
   onmousedown = (runner) => {
     return (e) => {
+      let runnerType = runner === this.runner1 ? 'startValue' : 'endValue';
+
       this.view.setRunnerShiftX(e, runner);
       this.model.setRunnerShiftX(e, runner.el);
       e.preventDefault();
@@ -17,16 +20,21 @@ export default class SliderController {
 
       window.addEventListener('mousemove', mousemove);
       window.addEventListener('mouseup', mouseup);
+
+      this.view.el.addEventListener('move', (e) => {
+        this.curVal = this.model.calculateValue(e.detail, runnerType); /* ИСПРАВИТЬ */
+      });
     }
   };
 
   onmousemove = ( runner ) => {
     return (e) => {
-      let runnerType = this.runner1 ? 'startValue' : 'endValue';
+
       this.view.moveRunner(e, runner);
       this.view.animateProgress(e);
-      let curVal = this.model.calculateValue(this.view.el, e.pageX, runner.el, runnerType); /* ИСПРАВИТЬ */
-      this.view._updateSliderTip(runner, curVal);
+
+      //let curVal = this.model.calculateValue(this.view.el, e.pageX, runner.el, runnerType); /* ИСПРАВИТЬ */
+      this.view._updateSliderTip(runner, this.curVal);
     }
   };
 

@@ -88,9 +88,14 @@ export default class SliderView {
     this.progressFull.style.left = left;
   }
 
+  calculateMousePosition(coord) {
+    return (this.el.clientWidth - this.runner1.el.clientWidth) / coord;
+  }
+
   moveRunner (e, runner) {
     let runnerLeftIndent;
     let coordX = e.pageX;
+    let ratio = 0;
 
     if (coordX < this._sliderLeftPoint + runner.shiftX) {
       runnerLeftIndent = 0;
@@ -123,7 +128,12 @@ export default class SliderView {
     }
 
     this.setRunnerPosition(runner, runnerLeftIndent);
+    ratio = this.calculateMousePosition(runnerLeftIndent);
 
+    this.el.dispatchEvent(new CustomEvent('move', {
+      bubbles: true,
+      detail: ratio
+    }));
   }
 
   animateProgress (e) {
