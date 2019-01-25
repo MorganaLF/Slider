@@ -13,6 +13,7 @@ describe('01 Функция drawSlider должна рисовать слайд�
     setFixtures('<div class="slider"></div>');
     element = document.getElementsByClassName('slider')[0];
     slider = new SliderView({el: element});
+    slider.type = 'interval';
     slider.drawSlider();
   });
 
@@ -34,6 +35,11 @@ describe('01 Функция drawSlider должна рисовать слайд�
 
   it('Функция должна создавать элемент slider__runner внутри элемента slider', function () {
     expect($('.slider .slider__runner')).toExist();
+  });
+
+  it('Класс позволяет задать тип слайдера "interval"', function () {
+    slider.type = 'interval';
+    expect(slider.type).toEqual('interval');
   });
 
   it('Функция создает два элемента slider__runner, если тип слайдера "interval"', function () {
@@ -66,7 +72,7 @@ describe('02 Движение ползунка слайдера', function () {
   });
 
   it('Ползунку можно задать положение', function () {
-    slider.setRunnerPosition(10);
+    slider.setRunnerPosition(this.runner1, 10);
     expect(runner.style.left).toEqual('10px');
   });
 
@@ -79,17 +85,9 @@ describe('02 Движение ползунка слайдера', function () {
 /* MODEL */
 
 describe('03 SliderModel', function () {
-  let slider,
-      runner,
-      sliderModel,
-      element;
+  let sliderModel;
 
   beforeEach(function() {
-    setFixtures('<div class="slider"></div>');
-    element = document.getElementsByClassName('slider')[0];
-    slider = new SliderView({el: element});
-    slider.drawSlider();
-    runner = element.querySelector('.slider__runner');
     sliderModel = new SliderModel();
   });
 
@@ -126,13 +124,12 @@ describe('03 SliderModel', function () {
     expect(sliderModel.sliderType).toEqual('single');
   });
 
-  it('Метод calculateValue считает текущее значение слайдера', function () {
-    let leftOffset = element.getBoundingClientRect().left + pageXOffset;
-    element.style.width = '350px';
-    runner.style.width = '50px';
-    sliderModel.calculateValue(element, 150 + leftOffset);
+  it('Метод calculateValue считает текущее значение слайдера в зависимости от позиции курсора', function () {
+    sliderModel.calculateValue(2, 'startValue');
+    expect(sliderModel.startValue).toEqual(50);
 
-    expect(sliderModel.currentValue).toEqual(50);
+    sliderModel.calculateValue(1, 'endValue');
+    expect(sliderModel.endValue).toEqual(100);
   });
 
 });
@@ -155,11 +152,12 @@ describe('04 Controller', function () {
 
     sliderModel = new SliderModel();
     sliderController = new SliderController(slider, sliderModel);
-    sliderController.addHandlers();
+    sliderController.init();
     spyOn(slider, 'moveRunner');
-    spyOn(sliderController, 'removeHandlers');
+    spyOn(sliderController, 'onmouseup');
     $(runner).mousedown();
-    $(document).mousemove();
+    $(window).mousemove();
+    $(window).mouseup();
   });
 
   it('Метод moveRunner запускается при клике на runner', function () {
@@ -167,7 +165,7 @@ describe('04 Controller', function () {
   });
 
   it('При отпускании клавиши мыши все события прекращаются', function () {
-    $(document).mouseup();
-    expect(sliderController.removeHandlers).toHaveBeenCalled();
+    $(window).mouseup();
+    expect(sliderController.onmouseup).toHaveBeenCalled();
   });
 });
