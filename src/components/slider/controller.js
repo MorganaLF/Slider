@@ -16,6 +16,7 @@ export default class SliderController {
       let runnerType = runner === this.runner1 ? 'startValue' : 'endValue';
 
       this.view.setRunnerShiftX(e, runner);
+      this.view.setRunnerShiftY(e, runner);
       e.preventDefault();
 
       let mousemove = this.onmousemove(runner, runnerType);

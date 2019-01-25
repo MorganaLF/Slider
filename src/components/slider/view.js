@@ -6,14 +6,23 @@ export default class SliderView {
     this.progressFull = null;
     this.isGenerated = false;
     this.type = 'single';
+    this.orientation = 'vertical';
   }
 
   get _sliderLeftPoint () {
     return this.el.getBoundingClientRect().left + pageXOffset;
   }
 
+  get _sliderTopPoint () {
+    return this.el.getBoundingClientRect().top + pageYOffset;
+  }
+
   get _sliderRightPoint () {
     return this._sliderLeftPoint + this.el.offsetWidth - this.runner1.el.offsetWidth;
+  }
+
+  get _sliderBottomPoint () {
+    return this._sliderTopPoint + this.el.offsetHeight - this.runner1.el.offsetHeight;
   }
 
   get sliderType () {
@@ -28,9 +37,15 @@ export default class SliderView {
     return parseInt(this.runner2.el.style.left);
   }
 
+  set sliderOrientation (orientation) {
+    if(orientation === 'vertical') {
+      this.orientation = 'vertical';
+    }
+  }
+
   _createElem (el, elclass, parent) {
     let elem = document.createElement(el);
-    elem.classList.add(elclass);
+    elem.className = elclass;
     parent.appendChild(elem);
     return elem;
   }
@@ -42,8 +57,13 @@ export default class SliderView {
   }
 
   _drawSliderProgress () {
-    let sliderProgress = this._createElem('div', 'slider__progress', this.el);
-    this.progressFull = this._createElem('div', 'slider__progress-full', sliderProgress);
+    let progressClass =
+        this.orientation === 'horizontal' ? '' : ' slider__progress_vertical';
+    let progressFullClass =
+        this.orientation === 'horizontal' ? '' : ' slider__progress-full_vertical';
+
+    let sliderProgress = this._createElem('div', 'slider__progress' + progressClass, this.el);
+    this.progressFull = this._createElem('div', 'slider__progress-full' + progressFullClass, sliderProgress);
   }
 
   _updateSliderTip (runner, val) {
@@ -62,12 +82,16 @@ export default class SliderView {
     this.isGenerated = true;
   }
 
-  setRunnerPosition (runner, pos) {
-    runner.el.style.left = pos + 'px';
+  setRunnerPosition (runner, pos, direction) {
+    runner.el.style[direction] = pos + 'px';
   }
 
   setRunnerShiftX (e, runner) {
     runner.shiftX = e.pageX - runner.el.getBoundingClientRect().left + pageXOffset;
+  }
+
+  setRunnerShiftY (e, runner) {
+    runner.shiftY = e.pageY - runner.el.getBoundingClientRect().left + pageXOffset;
   }
 
   setProgressWidth (width) {
@@ -100,33 +124,40 @@ export default class SliderView {
     return !(firstRunnerCheckout || secondRunnerCheckout);
   }
 
-  _checkCursorPosition (coordX, runner) {
+  _checkCursorPosition (coord, runner, startPoint, endPoint) {
     let runnerLeftIndent;
-    if (coordX < this._sliderLeftPoint + runner.shiftX) {
-      runnerLeftIndent = 0;
-    } else if (coordX > this._sliderRightPoint + runner.shiftX) {
-      runnerLeftIndent = this.el.offsetWidth - runner.el.offsetWidth;
-    } else {
-      runnerLeftIndent = coordX - this._sliderLeftPoint - runner.shiftX;
+     if (coord < startPoint + runner.shiftX) {
+       runnerLeftIndent = 0;
+     } else if (coord > endPoint + runner.shiftX) {
+       runnerLeftIndent = this.el.offsetWidth - runner.el.offsetWidth;
+     } else {
+      runnerLeftIndent = coord - startPoint - runner.shiftX;
     }
     return runnerLeftIndent;
   }
 
-  moveRunner (e, runner) {
-    let coordX = e.pageX;
-    let runnerLeftIndent = this._checkCursorPosition(coordX, runner);
-    let ratio = this.calculateMousePosition(runnerLeftIndent);
+  moveRunnerOrientation (runner, coord, startPoint, endPoint, direction) {
+    let runnerIndent = this._checkCursorPosition(coord, runner, startPoint, endPoint);
+    let ratio = this.calculateMousePosition(runnerIndent);
 
-    if (this.type === 'interval' && !this.checkMovingIntervalRunners(coordX, runner)) {
+    if (this.type === 'interval' && !this.checkMovingIntervalRunners(coord, runner)) {
       return false;
     }
 
-    this.setRunnerPosition(runner, runnerLeftIndent);
+    this.setRunnerPosition(runner, runnerIndent, direction);
 
     this.el.dispatchEvent(new CustomEvent('move', {
       bubbles: true,
       detail: ratio
     }));
+  }
+
+  moveRunner (e, runner) {
+    if (this.orientation === 'horizontal') {
+      this.moveRunnerOrientation(runner, e.pageX, this._sliderLeftPoint, this._sliderRightPoint, 'left');
+    } else {
+      this.moveRunnerOrientation(runner, e.pageY, this._sliderTopPoint, this._sliderBottomPoint, 'top');
+    }
   }
 
   _animateIntervalProgress () {
