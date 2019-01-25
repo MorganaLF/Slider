@@ -5,7 +5,7 @@ export default class SliderView {
     this.runner2 = {};
     this.progressFull = null;
     this.isGenerated = false;
-    this.type = 'single';
+    this.type = 'interval';
     this.orientation = 'vertical';
   }
 
@@ -29,12 +29,20 @@ export default class SliderView {
     return this.type;
   }
 
-  get firstRunnerIndent () {
+  get firstRunnerLeftIndent () {
     return parseInt(this.runner1.el.style.left);
   }
 
-  get lastRunnerIndent () {
+  get lastRunnerLeftIndent () {
     return parseInt(this.runner2.el.style.left);
+  }
+
+  get firstRunnerTopIndent () {
+    return parseInt(this.runner1.el.style.top);
+  }
+
+  get lastRunnerTopIndent () {
+    return parseInt(this.runner2.el.style.top);
   }
 
   set sliderOrientation (orientation) {
@@ -103,23 +111,23 @@ export default class SliderView {
     this.progressFull.style.width = width + 'px';
   }
 
-  setIntervalProgress (left, width) {
+  setIntervalProgress (indent, length, gabarite, direction) {
     this.progressFull.style.position = 'absolute';
-    this.progressFull.style.width = width + 'px';
-    this.progressFull.style.left = left + 'px';
+    this.progressFull.style[gabarite] = length + 'px';
+    this.progressFull.style[direction] = indent + 'px';
   }
 
   calculateMousePosition(coord) {
     return (this.el.clientWidth - this.runner1.el.clientWidth) / coord;
   }
 
-  checkMovingIntervalRunners (coordX, runner) {
+  checkMovingIntervalRunners (coordX, runner, startPoint, firstIndent, lastIndent) {
     let firstRunnerCheckout =
-        coordX > this._sliderLeftPoint + this.lastRunnerIndent + runner.shiftX
+        coordX > startPoint + lastIndent + runner.shiftX
         && this.runner1.el === runner.el;
 
     let secondRunnerCheckout =
-        coordX < this._sliderLeftPoint + this.firstRunnerIndent + runner.shiftX
+        coordX < startPoint + firstIndent + runner.shiftX
         && this.runner2.el === runner.el;
 
     this.runner1.el.style.zIndex = '1';
@@ -141,11 +149,11 @@ export default class SliderView {
     return runnerLeftIndent;
   }
 
-  moveRunnerOrientation (runner, coord, startPoint, endPoint, direction) {
+  moveRunnerOrientation (runner, coord, startPoint, endPoint, direction, firstIndent, lastIndent) {
     let runnerIndent = this._checkCursorPosition(coord, runner, startPoint, endPoint);
     let ratio = this.calculateMousePosition(runnerIndent);
 
-    if (this.type === 'interval' && !this.checkMovingIntervalRunners(coord, runner)) {
+    if (this.type === 'interval' && !this.checkMovingIntervalRunners(coord, runner, startPoint, firstIndent, lastIndent)) {
       return false;
     }
 
@@ -159,15 +167,15 @@ export default class SliderView {
 
   moveRunner (e, runner) {
     if (this.orientation === 'horizontal') {
-      this.moveRunnerOrientation(runner, e.pageX, this._sliderLeftPoint, this._sliderRightPoint, 'left');
+      this.moveRunnerOrientation(runner, e.pageX, this._sliderLeftPoint, this._sliderRightPoint, 'left', this.firstRunnerLeftIndent, this.lastRunnerLeftIndent);
     } else {
-      this.moveRunnerOrientation(runner, e.pageY, this._sliderTopPoint, this._sliderBottomPoint, 'top');
+      this.moveRunnerOrientation(runner, e.pageY, this._sliderTopPoint, this._sliderBottomPoint, 'top', this.firstRunnerTopIndent, this.lastRunnerTopIndent);
     }
   }
 
-  _animateIntervalProgress () {
-    let progressWidth = this.lastRunnerIndent - this.firstRunnerIndent;
-    this.setIntervalProgress(this.firstRunnerIndent, progressWidth);
+  _animateIntervalProgress (firstIndent, lastIndent, gabarite, direction) {
+    let progressLength = lastIndent - firstIndent;
+    this.setIntervalProgress(firstIndent, progressLength, gabarite, direction);
   }
 
   _animateSingleProgress (e, runner) {
@@ -178,7 +186,11 @@ export default class SliderView {
 
   animateProgress (e, runner) {
     if (this.type === 'interval') {
-      this._animateIntervalProgress();
+      if (this.orientation === 'horizontal') {
+        this._animateIntervalProgress(this.firstRunnerLeftIndent, this.lastRunnerLeftIndent, 'width', 'left');
+      } else {
+        this._animateIntervalProgress(this.firstRunnerTopIndent, this.lastRunnerTopIndent, 'height', 'top');
+      }
     } else {
       this._animateSingleProgress(e, runner);
     }
