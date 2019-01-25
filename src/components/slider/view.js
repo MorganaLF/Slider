@@ -51,8 +51,13 @@ export default class SliderView {
   }
 
   createRunner (runner) {
-    this[runner].el = this._createElem('div', 'slider__runner', this.el);
-    this[runner].tip = this._createElem('div', 'slider__tip', this[runner].el);
+    let runnerClass =
+        this.orientation === 'horizontal' ? '' : ' slider__runner_vertical';
+    let tipClass =
+        this.orientation === 'horizontal' ? '' : ' slider__tip_vertical';
+
+    this[runner].el = this._createElem('div', 'slider__runner' + runnerClass, this.el);
+    this[runner].tip = this._createElem('div', 'slider__tip' + tipClass, this[runner].el);
     this[runner].shiftX = 0;
   }
 
