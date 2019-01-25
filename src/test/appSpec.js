@@ -169,3 +169,35 @@ describe('04 Controller', function () {
     expect(sliderController.onmouseup).toHaveBeenCalled();
   });
 });
+
+/* VERTICAL SLIDER */
+
+describe('05 Вертикальный слайдер', function () {
+  let element,
+      slider,
+      runner,
+      progress;
+
+  beforeEach(function() {
+    setFixtures('<div class="slider"></div>');
+    element = document.getElementsByClassName('slider')[0];
+    slider = new SliderView({el: element});
+    slider.drawSlider();
+    runner = element.getElementsByClassName('slider__runner')[0];
+    progress = element.getElementsByClassName('slider__progress-full')[0];
+  });
+
+  it('По умолчанию слайдер имеет горизонтальную ориентацию', function () {
+    expect(slider.orientation).toEqual('horizontal');
+  });
+
+  it('Слайдеру можно изменить ориентацию', function () {
+    slider.sliderOrientation = 'vertical';
+    expect(slider.orientation).toEqual('vertical');
+  });
+
+  it('При вертикальной ориентации создается прогресс-бар с классом slider__progress_vertical', function () {
+    slider.sliderOrientation = 'vertical';
+    expect($('.slider .slider__progress.slider__progress_vertical')).toExist();
+  });
+});
