@@ -1,8 +1,8 @@
 export default class SliderModel {
   constructor (val = 0, minVal = 0, maxVal = 100, sliderType = 'single') {
     this.val = val;
-    this.startVal = minVal;
-    this.endVal = maxVal;
+    this.startValue = minVal;
+    this.endValue = maxVal;
     this.minVal = minVal;
     this.maxVal = maxVal;
     this.type = sliderType;
@@ -39,15 +39,11 @@ export default class SliderModel {
     }
   }
 
-  setRunnerShiftX (e, runner) {
-    runner.shiftX = e.pageX - runner.getBoundingClientRect().left + pageXOffset;
-  }
-
   calculateValue (val, runnerType) {
     if(runnerType === 'startValue') {
-      return this.startVal = Math.floor(this.maxVal / val);
+      return this.startValue = Math.floor(this.maxVal / val);
     } else {
-      return this.endVal = Math.floor(this.maxVal / val);
+      return this.endValue = Math.floor(this.maxVal / val);
     }
   }
 
