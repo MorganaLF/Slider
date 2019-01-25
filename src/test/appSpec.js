@@ -200,4 +200,14 @@ describe('05 Вертикальный слайдер', function () {
     slider.sliderOrientation = 'vertical';
     expect($('.slider .slider__progress.slider__progress_vertical')).toExist();
   });
+
+  it('При вертикальной ориентации создается элемент с классом slider__progress-full_vertical', function () {
+    slider.sliderOrientation = 'vertical';
+    expect($('.slider .slider__progress-full.slider__progress-full_vertical')).toExist();
+  });
+
+  it('При вертикальной ориентации создается элемент с классом slider__tip_vertical', function () {
+    slider.sliderOrientation = 'vertical';
+    expect($('.slider .slider__tip.slider__tip_vertical')).toExist();
+  });
 });
