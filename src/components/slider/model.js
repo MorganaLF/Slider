@@ -6,7 +6,6 @@ export default class SliderModel {
     this.minVal = minVal;
     this.maxVal = maxVal;
     this.type = sliderType;
-    this.shiftX = 0;
   }
 
   get currentValue () {

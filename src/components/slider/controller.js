@@ -4,8 +4,8 @@ export default class SliderController {
     this.model = model;
     this.runner1 = view.runner1;
     this.runner2 = view.runner2;
-    this.curVal = 0;
     this.type = view.type;
+    this.onmove = this.onmove.bind(this);
     this.onmousedown = this.onmousedown.bind(this);
     this.onmousemove = this.onmousemove.bind(this);
     this.onmouseup = this.onmouseup.bind(this);
@@ -16,26 +16,29 @@ export default class SliderController {
       let runnerType = runner === this.runner1 ? 'startValue' : 'endValue';
 
       this.view.setRunnerShiftX(e, runner);
-      this.model.setRunnerShiftX(e, runner.el);
       e.preventDefault();
 
-      let mousemove = this.onmousemove(runner);
+      let mousemove = this.onmousemove(runner, runnerType);
       let mouseup = this.onmouseup(mousemove);
+      let onmove = this.onmove(runnerType);
 
       window.addEventListener('mousemove', mousemove);
       window.addEventListener('mouseup', mouseup);
-
-      this.view.el.addEventListener('move', (e) => {
-        this.curVal = this.model.calculateValue(e.detail, runnerType); /* ИСПРАВИТЬ */
-      });
+      this.view.el.addEventListener('move', onmove);
     }
   };
 
-  onmousemove (runner) {
+  onmove (runnerType) {
+    return (e) => {
+      this.model.calculateValue(e.detail, runnerType);
+    }
+  }
+
+  onmousemove (runner, runnerType) {
     return (e) => {
       this.view.moveRunner(e, runner);
       this.view.animateProgress(e, runner);
-      this.view._updateSliderTip(runner, this.curVal);
+      this.view._updateSliderTip(runner, this.model[runnerType]);
     }
   };
 
