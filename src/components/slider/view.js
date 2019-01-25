@@ -6,7 +6,7 @@ export default class SliderView {
     this.progressFull = null;
     this.isGenerated = false;
     this.type = 'interval';
-    this.orientation = 'vertical';
+    this.orientation = 'horizontal';
   }
 
   get _sliderLeftPoint () {
@@ -34,7 +34,9 @@ export default class SliderView {
   }
 
   get lastRunnerLeftIndent () {
-    return parseInt(this.runner2.el.style.left);
+    if (this.runner2.el) {
+      return parseInt(this.runner2.el.style.left);
+    }
   }
 
   get firstRunnerTopIndent () {
@@ -42,7 +44,9 @@ export default class SliderView {
   }
 
   get lastRunnerTopIndent () {
-    return parseInt(this.runner2.el.style.top);
+    if (this.runner2.el) {
+      return parseInt(this.runner2.el.style.top);
+    }
   }
 
   set sliderOrientation (orientation) {
@@ -107,8 +111,8 @@ export default class SliderView {
     runner.shiftY = e.pageY - runner.el.getBoundingClientRect().left + pageXOffset;
   }
 
-  setProgressWidth (width) {
-    this.progressFull.style.width = width + 'px';
+  setProgressLength (length, gabarite) {
+    this.progressFull.style[gabarite] = length + 'px';
   }
 
   setIntervalProgress (indent, length, gabarite, direction) {
@@ -176,12 +180,18 @@ export default class SliderView {
   _animateIntervalProgress (firstIndent, lastIndent, gabarite, direction) {
     let progressLength = lastIndent - firstIndent;
     this.setIntervalProgress(firstIndent, progressLength, gabarite, direction);
+    console.log(progressLength)
   }
 
   _animateSingleProgress (e, runner) {
-    let coordX = e.pageX;
-    let progressWidth = this._checkCursorPosition (coordX, runner);
-    this.setProgressWidth(progressWidth);
+    let progressLength;
+    if (this.orientation === 'horizontal') {
+      progressLength = this._checkCursorPosition (e.pageX, runner, this._sliderLeftPoint, this._sliderRightPoint);
+      this.setProgressLength(progressLength, 'width');
+    } else {
+      progressLength = this._checkCursorPosition (e.pageY, runner, this._sliderTopPoint, this._sliderBottomPoint);
+      this.setProgressLength(progressLength, 'height');
+    }
   }
 
   animateProgress (e, runner) {
@@ -192,7 +202,11 @@ export default class SliderView {
         this._animateIntervalProgress(this.firstRunnerTopIndent, this.lastRunnerTopIndent, 'height', 'top');
       }
     } else {
-      this._animateSingleProgress(e, runner);
+      if (this.orientation === 'horizontal') {
+        this._animateSingleProgress(e, runner);
+      } else {
+        this._animateSingleProgress(e, runner);
+      }
     }
   }
 }
