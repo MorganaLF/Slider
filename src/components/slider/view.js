@@ -5,16 +5,16 @@ export default class SliderView {
     this.runner2 = {};
     this.progressFull = null;
     this.isGenerated = false;
-    this.type = 'single';
+    this.type = 'interval';
     this.orientation = 'vertical';
   }
 
   get _sliderLeftPoint () {
-    return this.el.getBoundingClientRect().left + pageXOffset;
+    return this.el.getBoundingClientRect().left;
   }
 
   get _sliderTopPoint () {
-    return this.el.getBoundingClientRect().top + pageYOffset;
+    return this.el.getBoundingClientRect().top;
   }
 
   get _sliderRightPoint () {
@@ -105,11 +105,11 @@ export default class SliderView {
   }
 
   setRunnerShiftX (e, runner) {
-    runner.shiftX = e.pageX - runner.el.getBoundingClientRect().left + pageXOffset;
+    runner.shiftX = e.pageX - runner.el.getBoundingClientRect().left;
   }
 
   setRunnerShiftY (e, runner) {
-    runner.shiftY = e.pageY - runner.el.getBoundingClientRect().top + pageYOffset;
+    runner.shiftY = e.pageY - runner.el.getBoundingClientRect().top;
   }
 
   setProgressLength (length, gabarite) {
@@ -181,7 +181,6 @@ export default class SliderView {
   _animateIntervalProgress (firstIndent, lastIndent, gabarite, direction) {
     let progressLength = lastIndent - firstIndent;
     this.setIntervalProgress(firstIndent, progressLength, gabarite, direction);
-    console.log(progressLength)
   }
 
   _animateSingleProgress (e, runner) {
