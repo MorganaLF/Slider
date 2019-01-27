@@ -6,6 +6,7 @@ export default class SliderModel {
     this.minVal = minVal;
     this.maxVal = maxVal;
     this.type = sliderType;
+    this.step = 20;
   }
 
   get currentValue () {
@@ -38,11 +39,29 @@ export default class SliderModel {
     }
   }
 
+  set stepSize (size) {
+    this.step = size;
+  }
+
+  calculateStepValue (val) {
+    return (Math.round(this.maxVal / val / this.step)) * this.step;
+  }
+
+  calculateCoefficient (point) {
+    return this.maxVal / point;
+  }
+
   calculateValue (val, runnerType) {
-    if(runnerType === 'startValue') {
-      return this.startValue = Math.floor(this.maxVal / val);
+    let value;
+    if (this.step === 1) {
+      value = Math.floor(this.maxVal / val);
     } else {
-      return this.endValue = Math.floor(this.maxVal / val);
+      value = this.calculateStepValue(val);
+    }
+    if(runnerType === 'startValue') {
+      return this.startValue = value;
+    } else {
+      return this.endValue = value;
     }
   }
 

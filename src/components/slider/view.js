@@ -100,9 +100,15 @@ export default class SliderView {
     this.isGenerated = true;
   }
 
-  setRunnerPosition (runner, pos, direction) {
-    runner.el.style[direction] = pos + 'px';
+  setRunnerPosition (runner, pos) {
+    let direction = this.orientation === 'horizontal' ? 'left' : 'top';
+    let gabarite = this.orientation === 'horizontal' ? 'clientWidth' : 'clientHeight';
+    runner.el.style[direction] = (this.el[gabarite] - runner.el[gabarite]) / pos + 'px';
   }
+
+  // setRunnerPosition (runner, pos, direction) {
+  //   runner.el.style[direction] = pos + 'px';
+  // }
 
   setRunnerShiftX (e, runner) {
     runner.shiftX = e.pageX - runner.el.getBoundingClientRect().left;
@@ -162,7 +168,7 @@ export default class SliderView {
       return false;
     }
 
-    this.setRunnerPosition(runner, runnerIndent, direction);
+    //this.setRunnerPosition(runner, runnerIndent, direction);
 
     this.el.dispatchEvent(new CustomEvent('move', {
       bubbles: true,
