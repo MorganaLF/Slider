@@ -211,3 +211,25 @@ describe('05 Вертикальный слайдер', function () {
     expect($('.slider .slider__tip.slider__tip_vertical')).toExist();
   });
 });
+
+/* STEP MODEL */
+
+describe('06 SliderModel', function () {
+  let sliderModel;
+
+  beforeEach(function () {
+    sliderModel = new SliderModel();
+  });
+
+  it('Позволяет задать свойство stepSize', function () {
+    sliderModel.stepSize = 5;
+    expect(sliderModel.step).toEqual(5);
+  });
+
+  it('Метод calculateStepValue позволяет посчитать текущее значение с учетом размера шага', function () {
+    sliderModel.stepSize = 20;
+    expect(sliderModel.calculateStepValue(2)).toEqual(60);
+  });
+});
+
+
