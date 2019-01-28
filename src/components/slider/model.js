@@ -6,7 +6,7 @@ export default class SliderModel {
     this.minVal = minVal;
     this.maxVal = maxVal;
     this.type = sliderType;
-    this.step = 20;
+    this.step = 0;
   }
 
   get currentValue () {
@@ -53,16 +53,19 @@ export default class SliderModel {
 
   calculateValue (val, runnerType) {
     let value;
-    if (this.step === 1) {
+    let coefficient;
+
+    if (this.step === 0) {
       value = Math.floor(this.maxVal / val);
+      coefficient = val;
     } else {
       value = this.calculateStepValue(val);
+      coefficient = this.calculateCoefficient(this[runnerType]);
     }
-    if(runnerType === 'startValue') {
-      return this.startValue = value;
-    } else {
-      return this.endValue = value;
-    }
+
+    this[runnerType] = value;
+
+    return coefficient;
   }
 
 }

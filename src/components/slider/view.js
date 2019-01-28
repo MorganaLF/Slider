@@ -5,7 +5,7 @@ export default class SliderView {
     this.runner2 = {};
     this.progressFull = null;
     this.isGenerated = false;
-    this.type = 'interval';
+    this.type = 'single';
     this.orientation = 'vertical';
   }
 
@@ -149,28 +149,27 @@ export default class SliderView {
   }
 
   _checkCursorPosition (coord, runner, startPoint, endPoint, shift, gabarite) {
-    let runnerLeftIndent;
+    let runnerIndent;
      if (coord < startPoint + shift) {
-       runnerLeftIndent = 0;
+       runnerIndent = 0;
      } else if (coord > endPoint + shift) {
-       runnerLeftIndent = this.el[gabarite] - runner.el[gabarite];
+       runnerIndent = this.el[gabarite] - runner.el[gabarite];
      } else {
-      runnerLeftIndent = coord - startPoint - shift;
+      runnerIndent = coord - startPoint - shift;
     }
-    return runnerLeftIndent;
+    return runnerIndent;
   }
 
   moveRunnerOrientation (runner, coord, startPoint, endPoint, direction, firstIndent, lastIndent, shift, gabarite) {
-    let runnerIndent = this._checkCursorPosition(coord, runner, startPoint, endPoint, shift);
+
+    let runnerIndent = this._checkCursorPosition(coord, runner, startPoint, endPoint, shift, gabarite);
     let ratio = this.calculateMousePosition(runnerIndent, gabarite);
 
     if (this.type === 'interval' && !this.checkMovingIntervalRunners(coord, runner, startPoint, firstIndent, lastIndent, shift)) {
       return false;
     }
 
-    //this.setRunnerPosition(runner, runnerIndent, direction);
-
-    this.el.dispatchEvent(new CustomEvent('move', {
+    runner.el.dispatchEvent(new CustomEvent('move', {
       bubbles: true,
       detail: ratio
     }));

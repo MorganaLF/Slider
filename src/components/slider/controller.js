@@ -21,26 +21,24 @@ export default class SliderController {
 
       let mousemove = this.onmousemove(runner, runnerType);
       let mouseup = this.onmouseup(mousemove);
-      let onmove = this.onmove(runnerType);
+      let onmove = this.onmove(runner, runnerType);
 
       window.addEventListener('mousemove', mousemove);
       window.addEventListener('mouseup', mouseup);
-      this.view.el.addEventListener('move', onmove);
+      runner.el.addEventListener('move', onmove);
     }
   };
 
-  onmove (runnerType) {
+  onmove (runner, runnerType) {
     return (e) => {
-      this.model.calculateValue(e.detail, runnerType);
+      let coefficient = this.model.calculateValue(e.detail, runnerType);
+      this.view.setRunnerPosition(runner, coefficient);
     }
   }
 
   onmousemove (runner, runnerType) {
     return (e) => {
-      let coefficient = this.model.calculateCoefficient(this.model[runnerType]);
-
       this.view.moveRunner(e, runner);
-      this.view.setRunnerPosition(runner, coefficient);
       this.view.animateProgress(e, runner);
       this.view._updateSliderTip(runner, this.model[runnerType]);
     }
