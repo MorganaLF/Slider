@@ -33,13 +33,13 @@ export default class SliderController {
     return (e) => {
       let coefficient = this.model.calculateValue(e.detail, runnerType);
       this.view.setRunnerPosition(runner, coefficient);
+      this.view.animateProgress(coefficient);
     }
   }
 
   onmousemove (runner, runnerType) {
     return (e) => {
       this.view.moveRunner(e, runner);
-      this.view.animateProgress(e, runner);
       this.view._updateSliderTip(runner, this.model[runnerType]);
     }
   };
