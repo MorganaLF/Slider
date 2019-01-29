@@ -1,12 +1,12 @@
 export default class SliderModel {
-  constructor (val = 0, minVal = 0, maxVal = 100, sliderType = 'single') {
-    this.val = val;
-    this.startValue = minVal;
-    this.endValue = maxVal;
-    this.minVal = minVal;
-    this.maxVal = maxVal;
-    this.type = sliderType;
-    this.step = 0;
+  constructor (options) {
+    this.val = options.val || 0;
+    this.startValue = options.startValue || 0;
+    this.endValue = options.endValue || 100;
+    this.minVal = options.minVal || 0;
+    this.maxVal = options.maxVal || 100;
+    this.type = options.sliderType || 'single';
+    this.step = options.step || 0;
   }
 
   get currentValue () {
@@ -44,11 +44,11 @@ export default class SliderModel {
   }
 
   calculateStepValue (val) {
-    return (Math.round(this.maxVal / val / this.step)) * this.step;
+    return (Math.round((this.maxVal - this.minVal) / val / this.step)) * this.step;
   }
 
   calculateCoefficient (point) {
-    return this.maxVal / point;
+    return (this.maxVal - this.minVal) / (point - this.minVal);
   }
 
   calculateValue (val, runnerType) {
@@ -56,10 +56,10 @@ export default class SliderModel {
     let coefficient;
 
     if (this.step === 0) {
-      value = Math.floor(this.maxVal / val);
+      value = Math.floor((this.maxVal - this.minVal) / val) + this.minVal;
       coefficient = val;
     } else {
-      value = this.calculateStepValue(val);
+      value = this.calculateStepValue(val) + this.minVal;
       coefficient = this.calculateCoefficient(this[runnerType]);
     }
 

@@ -5,8 +5,10 @@ export default class SliderView {
     this.runner2 = {};
     this.progressFull = null;
     this.isGenerated = false;
-    this.type = 'interval';
-    this.orientation = 'horizontal';
+    this.type = options.type || 'single';
+    this.orientation = options.orientation || 'horizontal';
+    this.isTip = options.isTip || false;
+    this.model = options.model;
   }
 
   get _sliderLeftPoint () {
@@ -40,12 +42,12 @@ export default class SliderView {
   }
 
   get firstRunnerTopIndent () {
-    return parseInt(this.runner1.el.style.top);
+    return this.runner1.el.getBoundingClientRect().top - this.el.getBoundingClientRect().top;
   }
 
   get lastRunnerTopIndent () {
     if (this.runner2.el) {
-      return parseInt(this.runner2.el.style.top);
+      return this.runner2.el.getBoundingClientRect().top - this.el.getBoundingClientRect().top;
     }
   }
 
@@ -69,7 +71,9 @@ export default class SliderView {
         this.orientation === 'horizontal' ? '' : ' slider__tip_vertical';
 
     this[runner].el = this._createElem('div', 'slider__runner' + runnerClass, this.el);
-    this[runner].tip = this._createElem('div', 'slider__tip' + tipClass, this[runner].el);
+    if (this.isTip) {
+      this[runner].tip = this._createElem('div', 'slider__tip' + tipClass, this[runner].el);
+    }
     this[runner].shiftX = 0;
     this[runner].shiftY = 0;
   }
@@ -85,7 +89,9 @@ export default class SliderView {
   }
 
   _updateSliderTip (runner, val) {
-    runner.tip.innerHTML = val;
+    if (this.isTip) {
+      runner.tip.innerHTML = val;
+    }
   }
 
   drawSlider () {
@@ -94,9 +100,15 @@ export default class SliderView {
     }
     this._drawSliderProgress();
     this.createRunner('runner1');
+    this.setRunnerPosition(this.runner1, this.model.maxVal / this.model.startValue );
+    this._updateSliderTip(this.runner1, this.model.startValue);
     if (this.type === 'interval') {
       this.createRunner('runner2');
+
+      this.setRunnerPosition(this.runner2, this.model.maxVal / this.model.endValue);
+      this._updateSliderTip(this.runner2, this.model.endValue);
     }
+    this.animateProgress(this.model.maxVal / this.model.startValue);
     this.isGenerated = true;
   }
 
@@ -119,7 +131,12 @@ export default class SliderView {
   }
 
   setSingleProgressLength (pos, property, gabarite) {
-    this.progressFull.style[property] = (this.el[gabarite] - this.runner1.el[gabarite]) / pos + this.runner1.el[gabarite]/2 + 'px';
+    console.log(pos);
+    if (pos !== 0) {
+      this.progressFull.style[property] = (this.el[gabarite] - this.runner1.el[gabarite]) / pos + this.runner1.el[gabarite]/2 + 'px';
+    } else {
+      this.progressFull.style[property] = '0px';
+    }
   }
 
   setIntervalProgress (indent, length, propGabarite, direction, gabarite) {
