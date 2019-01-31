@@ -2,6 +2,7 @@ import SliderView from '../components/slider/view';
 import SliderModel from '../components/slider/model';
 import $ from 'jquery';
 import SliderController from "../components/slider/controller";
+import RunnerView from '../components/slider/runner/RunnerView';
 
 /* VIEW */
 
@@ -238,6 +239,47 @@ describe('06 SliderModel', function () {
     sliderModel.stepSize = 20;
     expect(sliderModel.calculateStepValue(2)).toEqual(60);
   });
+});
+
+/* RUNNER VIEW */
+
+describe('07 RunnerView', function () {
+  let runnerView,
+      parent;
+
+  beforeEach(function () {
+    setFixtures('<div class="slider"></div>');
+    parent = document.getElementsByClassName('slider')[0];
+    runnerView = new RunnerView();
+  });
+
+  it('Создается экземпляр класса RunnerView', function () {
+    expect(runnerView).toBeDefined();
+  });
+
+});
+
+describe('08 RunnerView', function () {
+  let runnerView,
+      parent;
+
+  beforeEach(function () {
+    setFixtures('<div class="slider"></div>');
+    parent = document.getElementsByClassName('slider')[0];
+    runnerView = new RunnerView();
+    runnerView.drawRunner(parent);
+  });
+
+  it('Функция Create Runner должна создавать элемент slider__runner внутри элемента slider', function () {
+    expect($('.slider .slider__runner')).toExist();
+  });
+
+  it('Функция Create Runner создает подсказку, если isTip = true', function () {
+    runnerView.isTip = true;
+    runnerView.drawRunner(parent);
+    expect($('.slider .slider__runner .slider__tip')).toExist();
+  });
+
 });
 
 
