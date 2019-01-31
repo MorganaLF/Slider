@@ -7,12 +7,14 @@ import SliderController from "../components/slider/controller";
 
 describe('01 Функция drawSlider должна рисовать слайдер', function () {
   let element,
-      slider;
+      slider,
+      sliderModel;
 
   beforeEach(function() {
     setFixtures('<div class="slider"></div>');
     element = document.getElementsByClassName('slider')[0];
-    slider = new SliderView({el: element});
+    sliderModel = new SliderModel();
+    slider = new SliderView({el: element, model: sliderModel});
     slider.type = 'interval';
     slider.drawSlider();
   });
@@ -60,12 +62,14 @@ describe('02 Движение ползунка слайдера', function () {
   let element,
       slider,
       runner,
-      progress;
+      progress,
+      sliderModel;
 
   beforeEach(function() {
     setFixtures('<div class="slider"></div>');
     element = document.getElementsByClassName('slider')[0];
-    slider = new SliderView({el: element});
+    sliderModel = new SliderModel();
+    slider = new SliderView({el: element, model: sliderModel});
     slider.drawSlider();
     runner = element.getElementsByClassName('slider__runner')[0];
     progress = element.getElementsByClassName('slider__progress-full')[0];
@@ -146,11 +150,13 @@ describe('04 Controller', function () {
   beforeEach(function () {
     setFixtures('<div class="slider"></div>');
     element = document.getElementsByClassName('slider')[0];
-    slider = new SliderView({el: element});
+
+    sliderModel = new SliderModel();
+
+    slider = new SliderView({el: element, model: sliderModel});
     slider.drawSlider();
     runner = element.getElementsByClassName('slider__runner')[0];
 
-    sliderModel = new SliderModel();
     sliderController = new SliderController(slider, sliderModel);
     sliderController.init();
     spyOn(slider, 'moveRunner');
@@ -176,12 +182,14 @@ describe('05 Вертикальный слайдер', function () {
   let element,
       slider,
       runner,
-      progress;
+      progress,
+      sliderModel;
 
   beforeEach(function() {
     setFixtures('<div class="slider"></div>');
     element = document.getElementsByClassName('slider')[0];
-    slider = new SliderView({el: element});
+    sliderModel = new SliderModel();
+    slider = new SliderView({el: element, model: sliderModel});
     slider.drawSlider();
     runner = element.getElementsByClassName('slider__runner')[0];
     progress = element.getElementsByClassName('slider__progress-full')[0];
