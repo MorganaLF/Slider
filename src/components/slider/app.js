@@ -40,8 +40,8 @@ window.addEventListener('load', function () {
     maxVal: 150,
     element,
     type: 'interval',
-    orientation: 'vertical',
-    step: 15,
+    orientation: 'horizontal',
+    step: 0,
     isTip: true
   });
 });

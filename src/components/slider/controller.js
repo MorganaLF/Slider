@@ -15,8 +15,8 @@ export default class SliderController {
     return (e) => {
       let runnerType = runner === this.runner1 ? 'startValue' : 'endValue';
 
-      this.view.setRunnerShiftX(e, runner);
-      this.view.setRunnerShiftY(e, runner);
+      runner.setRunnerShiftX(e);
+      runner.setRunnerShiftY(e);
       e.preventDefault();
 
       let mousemove = this.onmousemove(runner, runnerType);
@@ -32,15 +32,15 @@ export default class SliderController {
   onmove (runner, runnerType) {
     return (e) => {
       let coefficient = this.model.calculateValue(e.detail, runnerType);
-      this.view.setRunnerPosition(runner, coefficient);
+      runner.setRunnerPosition(coefficient);
       this.view.animateProgress(coefficient);
     }
   }
 
   onmousemove (runner, runnerType) {
     return (e) => {
-      this.view.moveRunner(e, runner);
-      this.view._updateSliderTip(runner, this.model[runnerType]);
+      runner.moveRunner(e);
+      //this.view._updateSliderTip(runner, this.model[runnerType]);
     }
   };
 
