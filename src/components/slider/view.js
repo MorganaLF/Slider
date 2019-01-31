@@ -1,14 +1,16 @@
 export default class SliderView {
-  constructor (options) {
-    this.el = options.el;
-    this.runner1 = {};
-    this.runner2 = {};
-    this.progressFull = null;
-    this.isGenerated = false;
-    this.type = options.type || 'single';
-    this.orientation = options.orientation || 'horizontal';
-    this.isTip = options.isTip || false;
-    this.model = options.model;
+  constructor (options = {}) {
+    Object.assign(this, {
+      el: options.el,
+      runner1: {},
+      runner2: {},
+      progressFull: null,
+      isGenerated: false,
+      type: 'single',
+      orientation: 'horizontal',
+      isTip: false,
+      model: options.model
+    }, options);
   }
 
   get _sliderLeftPoint () {

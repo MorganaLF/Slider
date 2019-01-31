@@ -1,12 +1,14 @@
 export default class SliderModel {
-  constructor (options) {
-    this.val = options.val || 0;
-    this.startValue = options.startValue || 0;
-    this.endValue = options.endValue || 100;
-    this.minVal = options.minVal || 0;
-    this.maxVal = options.maxVal || 100;
-    this.type = options.sliderType || 'single';
-    this.step = options.step || 0;
+  constructor (options = {}) {
+    Object.assign(this, {
+      val: 0,
+      startValue: 0,
+      endValue: 100,
+      minVal: 0,
+      maxVal: 100,
+      type: 'single',
+      step: 0
+    }, options);
   }
 
   get currentValue () {
