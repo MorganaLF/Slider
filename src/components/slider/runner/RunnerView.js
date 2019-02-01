@@ -6,7 +6,7 @@ export default class RunnerView {
       el: null,
       isGenerated: false,
       type: 'single',
-      orientation: 'horizontal',
+      orientation: 'vertical',
       isTip: false,
       shiftX: 0,
       shiftY: 0,
@@ -62,22 +62,6 @@ export default class RunnerView {
 
   }
 
-  // checkMovingIntervalRunners (coordX, runner, startPoint, firstIndent, lastIndent, shift) {
-  //   let firstRunnerCheckout =
-  //       coordX > startPoint + lastIndent + shift
-  //       && this.runner1.el === runner.el;
-  //
-  //   let secondRunnerCheckout =
-  //       coordX < startPoint + firstIndent + shift
-  //       && this.runner2.el === runner.el;
-  //
-  //   this.runner1.el.style.zIndex = '1';
-  //   this.runner2.el.style.zIndex = '1';
-  //   runner.el.style.zIndex = '99999';
-  //
-  //   return !(firstRunnerCheckout || secondRunnerCheckout);
-  // }
-
   _checkCursorPosition (coord, startPoint, endPoint, shift, gabarite) {
     let runnerIndent;
     if (coord < startPoint + shift) {
@@ -94,10 +78,6 @@ export default class RunnerView {
 
     let runnerIndent = this._checkCursorPosition(coord, startPoint, endPoint, shift, gabarite);
     let ratio = this.calculateMousePosition(runnerIndent, gabarite);
-
-    // if (this.type === 'interval' && !this.checkMovingIntervalRunners(coord, runner, startPoint, firstIndent, lastIndent, shift)) {
-    //   return false;
-    // }
 
     this.el.dispatchEvent(new CustomEvent('move', {
       bubbles: true,

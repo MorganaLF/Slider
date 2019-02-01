@@ -58,7 +58,7 @@ export default class SliderModel {
     let coefficient;
 
     if (this.step === 0) {
-      value = Math.floor((this.maxVal - this.minVal) / val) + this.minVal;
+      value = (this.maxVal - this.minVal) / val + this.minVal;
       coefficient = val;
     } else {
       value = this.calculateStepValue(val) + this.minVal;
@@ -66,6 +66,18 @@ export default class SliderModel {
     }
 
     this[runnerType] = value;
+
+    if (this.startValue > this.endValue && this[runnerType] === this.startValue) {
+      this.startValue = this.endValue;
+      return false;
+    }
+
+    if (this.endValue < this.startValue && this[runnerType] === this.endValue) {
+      this.endValue = this.startValue;
+      return false;
+    }
+
+    console.log(this.endValue, this.startValue);
 
     return coefficient;
   }
