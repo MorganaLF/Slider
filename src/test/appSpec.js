@@ -3,6 +3,7 @@ import SliderModel from '../components/slider/model';
 import $ from 'jquery';
 import SliderController from "../components/slider/controller";
 import RunnerView from '../components/slider/runner/RunnerView';
+import TipView from '../components/slider/tip/TipView';
 
 // /* VIEW */
 //
@@ -280,11 +281,11 @@ describe('08 Функция drawRunner', function () {
     expect($('.slider .slider__runner')).toExist();
   });
 
-  it('Создает подсказку, если isTip = true', function () {
-    runnerView.isTip = true;
-    runnerView.drawRunner(parent);
-    expect($('.slider .slider__runner .slider__tip')).toExist();
-  });
+  // it('Создает подсказку, если isTip = true', function () {
+  //   runnerView.isTip = true;
+  //   runnerView.drawRunner(parent);
+  //   expect($('.slider .slider__runner .slider__tip')).toExist();
+  // });
 
 });
 
@@ -402,6 +403,73 @@ describe('12 Функция moveRunner', function () {
   it('Генерирует событие, отправляя коэффициент и тип ползунка', function () {
     runnerView.moveRunner({pageX: 30});
     expect().toEqual(30);
+  });
+
+});
+
+describe('13 TipView', function () {
+  let tipView,
+      parent;
+
+  beforeEach(function () {
+    setFixtures('<div class="slider"></div>');
+    parent = document.getElementsByClassName('slider')[0];
+    tipView = new TipView();
+  });
+
+  it('Создается экземпляр класса RunnerView', function () {
+    expect(tipView).toBeDefined();
+  });
+
+});
+
+describe('14 Функция drawTip', function () {
+  let tipView,
+      element,
+      parent,
+      slider,
+      sliderModel;
+
+  beforeEach(function () {
+    setFixtures('<div class="slider"></div>');
+    element = document.getElementsByClassName('slider')[0];
+    sliderModel = new SliderModel();
+    slider = new SliderView({el: element, model: sliderModel});
+    slider.type = 'interval';
+    slider.drawSlider();
+    parent = document.getElementsByClassName('slider__runner')[0];
+    tipView = new TipView();
+    tipView.drawTip(parent);
+  });
+
+  it('Должна создавать элемент slider__runner внутри элемента slider', function () {
+    expect($('.slider .slider__runner .slider__tip')).toExist();
+  });
+
+});
+
+describe('14 Функция updateTip', function () {
+  let tipView,
+      element,
+      parent,
+      slider,
+      sliderModel;
+
+  beforeEach(function () {
+    setFixtures('<div class="slider"></div>');
+    element = document.getElementsByClassName('slider')[0];
+    sliderModel = new SliderModel();
+    slider = new SliderView({el: element, model: sliderModel});
+    slider.type = 'interval';
+    slider.drawSlider();
+    parent = document.getElementsByClassName('slider__runner')[0];
+    tipView = new TipView();
+    tipView.drawTip(parent);
+  });
+
+  it('Должна обновлять значение внутри подсказки', function () {
+    tipView.updateTip(15);
+    expect($('.slider .slider__runner .slider__tip').text()).toEqual('15');
   });
 
 });
