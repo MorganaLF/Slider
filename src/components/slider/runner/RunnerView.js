@@ -6,16 +6,12 @@ export default class RunnerView {
       el: null,
       isGenerated: false,
       type: 'single',
-      orientation: 'vertical',
+      orientation: 'horizontal',
       isTip: false,
       shiftX: 0,
       shiftY: 0,
       parent: null
     }, options);
-  }
-
-  get parentGabarites () {
-    return this.parent.sliderGabarites
   }
 
   _createElem (el, elclass, parent) {
@@ -25,7 +21,7 @@ export default class RunnerView {
     return elem;
   }
 
-  drawRunner (parent, coefficient, parentGabarite) {
+  drawRunner (parent, coefficient) {
     let runnerClass =
         this.orientation === 'horizontal' ? '' : ' slider__runner_vertical';
     let tipClass =
@@ -36,7 +32,7 @@ export default class RunnerView {
       this.tip = this._createElem('div', 'slider__tip' + tipClass, this.el);
     }
 
-    this.setRunnerPosition(coefficient, parentGabarite);
+    this.setRunnerPosition(coefficient);
   }
 
   setRunnerPosition (coefficient) {
@@ -57,9 +53,8 @@ export default class RunnerView {
     this.shiftY = e.pageY - this.el.getBoundingClientRect().top;
   }
 
-  calculateMousePosition(coord, gabarite) {
+  _calculateMousePosition(coord, gabarite) {
     return (this.parent.el[gabarite] - this.el[gabarite]) / coord;
-
   }
 
   _checkCursorPosition (coord, startPoint, endPoint, shift, gabarite) {
@@ -74,10 +69,10 @@ export default class RunnerView {
     return runnerIndent;
   }
 
-  moveRunnerOrientation (coord, startPoint, endPoint, direction, shift, gabarite) {
+  _moveRunnerOrientation (coord, startPoint, endPoint, direction, shift, gabarite) {
 
     let runnerIndent = this._checkCursorPosition(coord, startPoint, endPoint, shift, gabarite);
-    let ratio = this.calculateMousePosition(runnerIndent, gabarite);
+    let ratio = this._calculateMousePosition(runnerIndent, gabarite);
 
     this.el.dispatchEvent(new CustomEvent('move', {
       bubbles: true,
@@ -87,9 +82,9 @@ export default class RunnerView {
 
   moveRunner (e) {
     if (this.orientation === 'horizontal') {
-      this.moveRunnerOrientation(e.pageX, this.parent._sliderLeftPoint, this.parent._sliderRightPoint, 'left', this.shiftX, 'offsetWidth');
+      this._moveRunnerOrientation(e.pageX, this.parent._sliderLeftPoint, this.parent._sliderRightPoint, 'left', this.shiftX, 'offsetWidth');
     } else {
-      this.moveRunnerOrientation(e.pageY, this.parent._sliderTopPoint, this.parent._sliderBottomPoint, 'top', this.shiftY, 'offsetHeight');
+      this._moveRunnerOrientation(e.pageY, this.parent._sliderTopPoint, this.parent._sliderBottomPoint, 'top', this.shiftY, 'offsetHeight');
     }
   }
 }
