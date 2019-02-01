@@ -4,8 +4,12 @@ export default class SliderController {
     this.model = model;
     this.runner1 = view.runner1;
     this.runner2 = view.runner2;
+    this.tip1 = view.tip1;
+    this.tip2 = view.tip2;
     this.type = view.type;
     this.onmove = this.onmove.bind(this);
+    this.onchangestartvalue = this.onchangestartvalue.bind(this);
+    this.onchangeendvalue = this.onchangeendvalue.bind(this);
     this.onmousedown = this.onmousedown.bind(this);
     this.onmousemove = this.onmousemove.bind(this);
     this.onmouseup = this.onmouseup.bind(this);
@@ -26,6 +30,8 @@ export default class SliderController {
       window.addEventListener('mousemove', mousemove);
       window.addEventListener('mouseup', mouseup);
       runner.el.addEventListener('move', onmove);
+      document.body.addEventListener('changestartvalue', this.onchangestartvalue);
+      document.body.addEventListener('changeendvalue', this.onchangeendvalue);
     }
   };
 
@@ -37,10 +43,17 @@ export default class SliderController {
     }
   }
 
-  onmousemove (runner, runnerType) {
+  onchangestartvalue(e) {
+    this.tip1.updateTip(e.detail);
+  }
+
+  onchangeendvalue(e) {
+    this.tip2.updateTip(e.detail);
+  }
+
+  onmousemove (runner) {
     return (e) => {
       runner.moveRunner(e);
-      //this.view._updateSliderTip(runner, this.model[runnerType]);
     }
   };
 

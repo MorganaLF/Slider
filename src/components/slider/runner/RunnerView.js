@@ -24,13 +24,8 @@ export default class RunnerView {
   drawRunner (parent, coefficient) {
     let runnerClass =
         this.orientation === 'horizontal' ? '' : ' slider__runner_vertical';
-    let tipClass =
-        this.orientation === 'horizontal' ? '' : ' slider__tip_vertical';
 
     this.el = this._createElem('div', 'slider__runner' + runnerClass, parent);
-    if (this.isTip) {
-      this.tip = this._createElem('div', 'slider__tip' + tipClass, this.el);
-    }
 
     this.setRunnerPosition(coefficient);
   }

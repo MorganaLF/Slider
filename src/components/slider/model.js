@@ -22,6 +22,10 @@ export default class SliderModel {
     }
   }
 
+  calculateRoundValue (val) {
+    return Math.round(val);
+  }
+
   get sliderType () {
     return this.type;
   }
@@ -67,17 +71,41 @@ export default class SliderModel {
 
     this[runnerType] = value;
 
+    if (this[runnerType] === this.startValue) {
+      document.body.dispatchEvent(new CustomEvent('changestartvalue', {
+        bubbles: true,
+        detail: this.calculateRoundValue(value)
+      }));
+    }
+
+    if (this[runnerType] === this.endValue) {
+      document.body.dispatchEvent(new CustomEvent('changeendvalue', {
+        bubbles: true,
+        detail: this.calculateRoundValue(value)
+      }));
+    }
+
     if (this.startValue > this.endValue && this[runnerType] === this.startValue) {
       this.startValue = this.endValue;
+
+      document.body.dispatchEvent(new CustomEvent('changestartvalue', {
+        bubbles: true,
+        detail: this.calculateRoundValue(value)
+      }));
+
       return false;
     }
 
     if (this.endValue < this.startValue && this[runnerType] === this.endValue) {
       this.endValue = this.startValue;
+
+      document.body.dispatchEvent(new CustomEvent('changeendvalue', {
+        bubbles: true,
+        detail: this.calculateRoundValue(value)
+      }));
+
       return false;
     }
-
-    console.log(this.endValue, this.startValue);
 
     return coefficient;
   }
