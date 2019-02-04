@@ -4,6 +4,7 @@ import $ from 'jquery';
 import SliderController from "../components/slider/controller";
 import RunnerView from '../components/slider/runner/RunnerView';
 import TipView from '../components/slider/tip/TipView';
+import TrackView from '../components/slider/track/TrackView';
 
 // /* VIEW */
 //
@@ -407,6 +408,8 @@ describe('12 Функция moveRunner', function () {
 
 });
 
+/* TIP VIEW */
+
 describe('13 TipView', function () {
   let tipView,
       parent;
@@ -474,3 +477,69 @@ describe('14 Функция updateTip', function () {
 
 });
 
+
+/* TRACK VIEW */
+
+describe('15 TrackView', function () {
+  let trackView;
+
+  beforeEach(function () {
+    trackView = new TrackView();
+  });
+
+  it('Создается экземпляр класса TrackView', function () {
+    expect(trackView).toBeDefined();
+  });
+
+});
+
+describe('16 TrackView', function () {
+  let trackView,
+      parent;
+
+  beforeEach(function () {
+    setFixtures('<div class="slider"></div>');
+    parent = document.getElementsByClassName('slider')[0];
+    trackView = new TrackView();
+    trackView.drawTrack(parent);
+  });
+
+  it('Функция drawTrack создает элемент slider__track внутри указанного родителя', function () {
+    expect($('.slider .slider__track')).toExist();
+  });
+
+});
+
+describe('17 Функция animateTrack', function () {
+  let trackView,
+      parent,
+      slider,
+      sliderModel;
+
+  beforeEach(function () {
+    setFixtures('<div class="slider"></div>');
+    parent = document.getElementsByClassName('slider')[0];
+    parent.style.width = '300px';
+
+    sliderModel = new SliderModel();
+    slider = new SliderView({el: parent, model: sliderModel});
+    slider.drawSlider();
+
+    trackView = new TrackView({parent: slider});
+    trackView.drawTrack(parent);
+
+  });
+
+  it('Функция animateTrack устанавливает ширину дорожки, если тип слайдера single', function () {
+    trackView.animateProgress(2);
+    expect(trackView.trackFull.style.width).toEqual('150px');
+  });
+
+  it('Функция animateTrack устанавливает ширину и отступ дорожки, если тип слайдера interval', function () {
+    trackView.type = 'interval';
+    trackView.animateProgress();
+    expect(trackView.trackFull.style.left).toEqual('');
+    expect(trackView.trackFull.style.width).toEqual('150px');
+  });
+
+});
