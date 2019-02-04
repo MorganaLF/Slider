@@ -6,6 +6,7 @@ export default class SliderController {
     this.runner2 = view.runner2;
     this.tip1 = view.tip1;
     this.tip2 = view.tip2;
+    this.track = view.track;
     this.type = view.type;
     this.onmove = this.onmove.bind(this);
     this.onchangestartvalue = this.onchangestartvalue.bind(this);
@@ -37,18 +38,22 @@ export default class SliderController {
 
   onmove (runner, runnerType) {
     return (e) => {
-      let coefficient = this.model.calculateValue(e.detail, runnerType);
-      runner.setRunnerPosition(coefficient);
-      this.view.animateProgress(coefficient);
+      this.model.calculateValue(e.detail, runnerType);
+      //runner.setRunnerPosition(coefficient);
+      //this.track.animateProgress(coefficient);
     }
   }
 
   onchangestartvalue(e) {
-    this.tip1.updateTip(e.detail);
+    this.runner1.setRunnerPosition(e.detail.coefficient);
+    this.tip1.updateTip(e.detail.value);
+    this.track.animateProgress(e.detail.coefficient);
   }
 
   onchangeendvalue(e) {
-    this.tip2.updateTip(e.detail);
+    this.runner2.setRunnerPosition(e.detail.coefficient);
+    this.tip2.updateTip(e.detail.value);
+    this.track.animateProgress(e.detail.coefficient);
   }
 
   onmousemove (runner) {
