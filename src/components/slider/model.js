@@ -10,16 +10,16 @@ export default class SliderModel {
       step: 0
     }, options);
 
-    if (options.minVal % options.step !== 0) {
+    if (options.step && options.minVal % options.step !== 0) {
       this.minVal = Math.round(options.minVal / options.step) * options.step
     }
-    if (options.maxVal % options.step !== 0) {
+    if (options.step && options.maxVal % options.step !== 0) {
       this.maxVal = Math.round(options.maxVal / options.step) * options.step
     }
-    if (options.startValue % options.step !== 0) {
+    if (options.step && options.startValue % options.step !== 0) {
       this.startValue = Math.round(options.startValue / options.step) * options.step
     }
-    if (options.endValue % options.step !== 0) {
+    if (options.step && options.endValue % options.step !== 0) {
       this.endValue = Math.round(options.endValue / options.step) * options.step
     }
   }
