@@ -74,37 +74,51 @@ export default class SliderModel {
     if (this[runnerType] === this.startValue) {
       document.body.dispatchEvent(new CustomEvent('changestartvalue', {
         bubbles: true,
-        detail: this.calculateRoundValue(value)
+        detail: {
+          value: this.calculateRoundValue(this.startValue),
+          coefficient: coefficient
+        }
       }));
     }
 
     if (this[runnerType] === this.endValue) {
       document.body.dispatchEvent(new CustomEvent('changeendvalue', {
         bubbles: true,
-        detail: this.calculateRoundValue(value)
+        detail: {
+          value: this.calculateRoundValue(this.endValue),
+          coefficient: coefficient
+        }
       }));
     }
 
-    if (this.startValue > this.endValue && this[runnerType] === this.startValue) {
-      this.startValue = this.endValue;
+    if (this.type === 'interval') {
+      if (this.startValue > this.endValue && this[runnerType] === this.startValue) {
+        this.startValue = this.endValue;
 
-      document.body.dispatchEvent(new CustomEvent('changestartvalue', {
-        bubbles: true,
-        detail: this.calculateRoundValue(value)
-      }));
+        document.body.dispatchEvent(new CustomEvent('changestartvalue', {
+          bubbles: true,
+          detail: {
+            value: this.calculateRoundValue(this.startValue),
+            coefficient: coefficient
+          }
+        }));
 
-      return false;
-    }
+        return false;
+      }
 
-    if (this.endValue < this.startValue && this[runnerType] === this.endValue) {
-      this.endValue = this.startValue;
+      if (this.endValue < this.startValue && this[runnerType] === this.endValue) {
+        this.endValue = this.startValue;
 
-      document.body.dispatchEvent(new CustomEvent('changeendvalue', {
-        bubbles: true,
-        detail: this.calculateRoundValue(value)
-      }));
+        document.body.dispatchEvent(new CustomEvent('changeendvalue', {
+          bubbles: true,
+          detail: {
+            value: this.calculateRoundValue(this.endValue),
+            coefficient: coefficient
+          }
+        }));
 
-      return false;
+        return false;
+      }
     }
 
     return coefficient;
