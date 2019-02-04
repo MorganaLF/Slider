@@ -1,5 +1,6 @@
 import RunnerView from './runner/RunnerView';
 import TipView from './tip/TipView';
+import TrackView from './track/TrackView';
 
 export default class SliderView {
   constructor (options = {}) {
@@ -9,6 +10,7 @@ export default class SliderView {
       runner2: null,
       tip1: null,
       tip2: null,
+      track: null,
       progressFull: null,
       isGenerated: false,
       type: 'single',
@@ -78,25 +80,13 @@ export default class SliderView {
     return elem;
   }
 
-  _drawSliderProgress () {
-    let progressClass =
-        this.orientation === 'horizontal' ? '' : ' slider__progress_vertical';
-    let progressFullClass =
-        this.orientation === 'horizontal' ? '' : ' slider__progress-full_vertical';
-
-    let sliderProgress = this._createElem('div', 'slider__progress' + progressClass, this.el);
-    this.progressFull = this._createElem('div', 'slider__progress-full' + progressFullClass, sliderProgress);
-  }
-
   drawSlider () {
     if (this.isGenerated) {
       return;
     }
 
-    this._drawSliderProgress();
-
     this.runner1 = new RunnerView({parent: this});
-    this.runner1.drawRunner(this.el, this.model.maxVal / this.model.startValue);
+    this.runner1.drawRunner(this.el, this.model.maxVal / this.model.startValue + this.model.minVal);
 
     if (this.isTip) {
       this.tip1 = new TipView();
@@ -107,7 +97,7 @@ export default class SliderView {
     if (this.type === 'interval') {
 
       this.runner2 = new RunnerView({parent: this});
-      this.runner2.drawRunner(this.el, this.model.maxVal / this.model.endValue);
+      this.runner2.drawRunner(this.el, this.model.maxVal / this.model.endValue + this.model.minVal);
 
       if (this.isTip) {
         this.tip2 = new TipView();
@@ -115,47 +105,11 @@ export default class SliderView {
       }
       //this._updateSliderTip(this.runner2, this.model.endValue);
     }
-    this.animateProgress(this.model.maxVal / this.model.startValue);
+
+    this.track = new TrackView({parent: this});
+    this.track.drawTrack(this.el, this.model.maxVal / this.model.startValue + this.model.minVal);
+    //this.animateProgress(this.model.maxVal / this.model.startValue);
     this.isGenerated = true;
   }
 
-  setSingleProgressLength (pos, property, gabarite) {
-    console.log(pos);
-    if (pos !== 0) {
-      this.progressFull.style[property] = (this.el[gabarite] - this.runner1.el[gabarite]) / pos + this.runner1.el[gabarite]/2 + 'px';
-    } else {
-      this.progressFull.style[property] = '0px';
-    }
-  }
-
-  setIntervalProgress (indent, length, propGabarite, direction, gabarite) {
-    this.progressFull.style.position = 'absolute';
-    this.progressFull.style[propGabarite] = length + 'px';
-    this.progressFull.style[direction] = indent + this.runner1.el[gabarite]/2 + 'px';
-  }
-
-  _animateIntervalProgress (firstIndent, lastIndent, propGabarite, direction, gabarite) {
-    let progressLength = lastIndent - firstIndent;
-    this.setIntervalProgress(firstIndent, progressLength, propGabarite, direction, gabarite);
-  }
-
-  _animateSingleProgress (coefficient) {
-    if (this.orientation === 'horizontal') {
-      this.setSingleProgressLength(coefficient, 'width', 'clientWidth');
-    } else {
-      this.setSingleProgressLength(coefficient, 'height', 'clientHeight');
-    }
-  }
-
-  animateProgress (coefficient) {
-    if (this.type === 'interval') {
-      if (this.orientation === 'horizontal') {
-        this._animateIntervalProgress(this.firstRunnerLeftIndent, this.lastRunnerLeftIndent, 'width', 'left', 'clientWidth');
-      } else {
-        this._animateIntervalProgress(this.firstRunnerTopIndent, this.lastRunnerTopIndent, 'height', 'top', 'clientHeight');
-      }
-    } else {
-        this._animateSingleProgress(coefficient);
-    }
-  }
 }
