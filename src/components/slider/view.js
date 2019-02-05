@@ -112,11 +112,13 @@ export default class SliderView {
     this.runner1.drawRunner(this.el, this.model.maxVal / this.model.startValue + this.model.minVal);
 
     if (this.isTip) {
-      this.tip1 = new TipView();
+      this.tip1 = new TipView({
+        type: this.type,
+        orientation: this.orientation
+      });
       this.tip1.drawTip(this.runner1.el, this.model.startValue);
     }
 
-    //this._updateSliderTip(this.runner1, this.model.startValue);
     if (this.type === 'interval') {
 
       this.runner2 = new RunnerView({
@@ -130,7 +132,10 @@ export default class SliderView {
       this.runner2.drawRunner(this.el, this.model.maxVal / this.model.endValue + this.model.minVal);
 
       if (this.isTip) {
-        this.tip2 = new TipView();
+        this.tip2 = new TipView({
+          type: this.type,
+          orientation: this.orientation
+        });
         this.tip2.drawTip(this.runner2.el, this.model.endValue);
       }
     }

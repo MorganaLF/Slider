@@ -1,12 +1,9 @@
-import SliderView from '../view';
-
 export default class TipView {
   constructor (options = {}) {
     Object.assign(this, {
       el: null,
-      isGenerated: false,
-      type: 'single',
-      orientation: 'horizontal',
+      type: options.type,
+      orientation: options.orientation,
       parent: null
     }, options);
   }
