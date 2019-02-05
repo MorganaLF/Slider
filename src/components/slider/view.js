@@ -29,11 +29,11 @@ export default class SliderView {
   }
 
   get _sliderRightPoint () {
-    return this._sliderLeftPoint + this.el.offsetWidth - this.runner1.el.offsetWidth;
+    return this._sliderLeftPoint + this.el.offsetWidth /*- this.runner1.el.offsetWidth*/;
   }
 
   get _sliderBottomPoint () {
-    return this._sliderTopPoint + this.el.offsetHeight - this.runner1.el.offsetHeight;
+    return this._sliderTopPoint + this.el.offsetHeight /*- this.runner1.el.offsetHeight*/;
   }
 
   get sliderGabarites () {
@@ -101,7 +101,14 @@ export default class SliderView {
       return;
     }
 
-    this.runner1 = new RunnerView({parent: this});
+    this.runner1 = new RunnerView({
+      type: this.type,
+      orientation: this.orientation,
+      parentLeftPoint: this._sliderLeftPoint,
+      parentRightPoint: this._sliderRightPoint,
+      parentTopPoint: this._sliderTopPoint,
+      parentBottomPoint: this._sliderBottomPoint
+    });
     this.runner1.drawRunner(this.el, this.model.maxVal / this.model.startValue + this.model.minVal);
 
     if (this.isTip) {
@@ -112,14 +119,20 @@ export default class SliderView {
     //this._updateSliderTip(this.runner1, this.model.startValue);
     if (this.type === 'interval') {
 
-      this.runner2 = new RunnerView({parent: this});
+      this.runner2 = new RunnerView({
+        type: this.type,
+        orientation: this.orientation,
+        parentLeftPoint: this._sliderLeftPoint,
+        parentRightPoint: this._sliderRightPoint,
+        parentTopPoint: this._sliderTopPoint,
+        parentBottomPoint: this._sliderBottomPoint
+      });
       this.runner2.drawRunner(this.el, this.model.maxVal / this.model.endValue + this.model.minVal);
 
       if (this.isTip) {
         this.tip2 = new TipView();
         this.tip2.drawTip(this.runner2.el, this.model.endValue);
       }
-      //this._updateSliderTip(this.runner2, this.model.endValue);
     }
 
     this.track = new TrackView({
@@ -131,7 +144,7 @@ export default class SliderView {
       runnerHeight: this._runnerHeight
     });
     this.track.drawTrack(this.el, this.model.maxVal / this.model.startValue + this.model.minVal, this.model.maxVal / this.model.endValue + this.model.minVal);
-    //this.animateProgress(this.model.maxVal / this.model.startValue);
+
     this.isGenerated = true;
   }
 

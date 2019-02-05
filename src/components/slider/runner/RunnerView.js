@@ -4,14 +4,23 @@ export default class RunnerView {
   constructor (options = {}) {
     Object.assign(this, {
       el: null,
-      isGenerated: false,
-      type: 'single',
-      orientation: 'horizontal',
-      isTip: false,
       shiftX: 0,
       shiftY: 0,
-      parent: null
+      type: options.type,
+      orientation: options.orientation,
+      parentLeftPoint: options.parentLeftPoint,
+      parentRightPoint: options.parentRightPoint,
+      parentTopPoint: options.parentTopPoint,
+      parentBottomPoint: options.parentBottomPoint
     }, options);
+  }
+
+  get parentWidth () {
+    return this.parentRightPoint - this.parentLeftPoint;
+  }
+
+  get parentHeight () {
+    return this.parentBottomPoint - this.parentTopPoint;
   }
 
   _createElem (el, elclass, parent) {
@@ -31,13 +40,12 @@ export default class RunnerView {
   }
 
   setRunnerPosition (coefficient) {
-
     let direction = this.orientation === 'horizontal' ? 'left' : 'top';
+    let parentGabarite  = this.orientation === 'horizontal' ? this.parentWidth : this.parentHeight;
     let gabarite = this.orientation === 'horizontal' ? 'clientWidth' : 'clientHeight';
     if (coefficient !== 0) {
-      this.el.style[direction] = (this.parent.el[gabarite] - this.el[gabarite]) / coefficient + 'px';
+      this.el.style[direction] = (parentGabarite - this.el[gabarite]) / coefficient + 'px';
     }
-
   }
 
   setRunnerShiftX (e) {
@@ -48,26 +56,20 @@ export default class RunnerView {
     this.shiftY = e.pageY - this.el.getBoundingClientRect().top;
   }
 
-  _calculateMousePosition(coord, gabarite) {
-    return (this.parent.el[gabarite] - this.el[gabarite]) / coord;
-  }
-
   _checkCursorPosition (coord, startPoint, endPoint, shift, gabarite) {
-    let runnerIndent;
     if (coord < startPoint + shift) {
-      runnerIndent = 0;
-    } else if (coord > endPoint + shift) {
-      runnerIndent = this.parent.el[gabarite] - this.el[gabarite];
+      coord = 0;
+    } else if (coord > endPoint - this.el[gabarite] + shift) {
+      coord = endPoint - startPoint - this.el[gabarite];
     } else {
-      runnerIndent = coord - startPoint - shift;
+      coord = coord - startPoint - shift;
     }
-    return runnerIndent;
+    return coord;
   }
 
-  _moveRunnerOrientation (coord, startPoint, endPoint, direction, shift, gabarite) {
-
-    let runnerIndent = this._checkCursorPosition(coord, startPoint, endPoint, shift, gabarite);
-    let ratio = this._calculateMousePosition(runnerIndent, gabarite);
+  _dispatchMoveRunner (coord, startPoint, endPoint, shift, gabarite) {
+    coord = this._checkCursorPosition(coord, startPoint, endPoint, shift, gabarite);
+    let ratio = (endPoint - startPoint - this.el[gabarite]) / coord;
 
     this.el.dispatchEvent(new CustomEvent('move', {
       bubbles: true,
@@ -77,9 +79,9 @@ export default class RunnerView {
 
   moveRunner (e) {
     if (this.orientation === 'horizontal') {
-      this._moveRunnerOrientation(e.pageX, this.parent._sliderLeftPoint, this.parent._sliderRightPoint, 'left', this.shiftX, 'offsetWidth');
+      this._dispatchMoveRunner(e.pageX, this.parentLeftPoint, this.parentRightPoint, this.shiftX, 'offsetWidth');
     } else {
-      this._moveRunnerOrientation(e.pageY, this.parent._sliderTopPoint, this.parent._sliderBottomPoint, 'top', this.shiftY, 'offsetHeight');
+      this._dispatchMoveRunner(e.pageY, this.parentTopPoint, this.parentBottomPoint, this.shiftY, 'offsetHeight');
     }
   }
 }
