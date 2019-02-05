@@ -47,13 +47,13 @@ export default class SliderController {
   onchangestartvalue(e) {
     this.runner1.setRunnerPosition(e.detail.coefficient);
     this.tip1.updateTip(e.detail.value);
-    this.track.animateProgress(e.detail.coefficient);
+    this.track.animateTrack(e.detail.coefficient, 'paddingLeft', 'paddingTop');
   }
 
   onchangeendvalue(e) {
     this.runner2.setRunnerPosition(e.detail.coefficient);
     this.tip2.updateTip(e.detail.value);
-    this.track.animateProgress(e.detail.coefficient);
+    this.track.animateTrack(e.detail.coefficient, 'paddingRight', 'paddingBottom');
   }
 
   onmousemove (runner) {

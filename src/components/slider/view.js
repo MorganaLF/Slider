@@ -67,6 +67,22 @@ export default class SliderView {
     }
   }
 
+  get _innerWidth () {
+    return this.el.clientWidth - this.runner1.el.clientWidth;
+  }
+
+  get _innerHeight () {
+    return this.el.clientHeight - this.runner1.el.clientHeight;
+  }
+
+  get _runnerWidth () {
+    return this.runner1.el.clientWidth;
+  }
+
+  get _runnerHeight () {
+    return this.runner1.el.clientHeight;
+  }
+
   set sliderOrientation (orientation) {
     if(orientation === 'vertical') {
       this.orientation = 'vertical';
@@ -106,8 +122,15 @@ export default class SliderView {
       //this._updateSliderTip(this.runner2, this.model.endValue);
     }
 
-    this.track = new TrackView({parent: this});
-    this.track.drawTrack(this.el, this.model.maxVal / this.model.startValue + this.model.minVal);
+    this.track = new TrackView({
+      type: this.type,
+      orientation: this.orientation,
+      parentWidth: this._innerWidth,
+      parentHeight: this._innerHeight,
+      runnerWidth: this._runnerWidth,
+      runnerHeight: this._runnerHeight
+    });
+    this.track.drawTrack(this.el, this.model.maxVal / this.model.startValue + this.model.minVal, this.model.maxVal / this.model.endValue + this.model.minVal);
     //this.animateProgress(this.model.maxVal / this.model.startValue);
     this.isGenerated = true;
   }

@@ -1,13 +1,15 @@
 export default class TrackView {
   constructor (options = {}) {
     Object.assign(this, {
-      el: options.el,
+      el: null,
       trackFull: null,
-      isGenerated: false,
-      type: 'single',
-      orientation: 'horizontal',
-      model: options.model,
-      parent: options.parent
+      parentWidth: options.parentWidth,
+      parentHeight: options.parentHeight,
+      runnerWidth: options.runnerWidth,
+      runnerHeight: options.runnerHeight,
+      type: options.type,
+      orientation: options.orientation,
+      model: options.model
     }, options);
   }
 
@@ -18,7 +20,7 @@ export default class TrackView {
     return elem;
   }
 
-  drawTrack (parent, coefficient) {
+  drawTrack (parent, coefficient, coefficientTwo) {
     let trackClass =
         this.orientation === 'horizontal' ? '' : ' slider__track_vertical';
     let trackFullClass =
@@ -27,41 +29,39 @@ export default class TrackView {
     this.el = this._createElem('div', 'slider__track' + trackClass, parent);
     this.trackFull = this._createElem('div', 'slider__track-full' + trackFullClass, this.el);
 
-    this.animateProgress(coefficient);
+    this.animateTrack(coefficient, 'paddingLeft', 'paddingTop');
+    this.animateTrack(coefficientTwo, 'paddingRight', 'paddingBottom');
   }
 
-  setSingleProgressLength (pos, property, gabarite) {
-    console.log(pos);
+  _setSingleTrackLength (pos, property, gabarite, runnerGabarite) {
     if (pos !== 0) {
-      this.trackFull.style[property] = (this.parent.el[gabarite] - this.parent.runner1.el[gabarite]) / pos + this.parent.runner1.el[gabarite]/2 + 'px';
+      this.trackFull.style[property] = this[gabarite] / pos + this[runnerGabarite]/2 + 'px';
     } else {
       this.trackFull.style[property] = '0px';
     }
   }
 
-  setIntervalProgress (indent, length, propGabarite, direction, gabarite) {
-    this.trackFull.style.position = 'absolute';
-    this.trackFull.style[propGabarite] = length + 'px';
-    this.trackFull.style[direction] = indent + this.parent.runner1.el[gabarite]/2 + 'px';
+  _setIntervalTrack (coefficient, cssProperty, gabarite) {
+
+    if (cssProperty === 'paddingLeft' || cssProperty === 'paddingTop') {
+      this.el.style[cssProperty] = this[gabarite] / coefficient  + 'px';
+    } else {
+      this.el.style[cssProperty] = this[gabarite] - (this[gabarite] / coefficient) + 'px';
+    }
   }
 
-  _animateIntervalProgress (firstIndent, lastIndent, propGabarite, direction, gabarite) {
-    let progressLength = lastIndent - firstIndent;
-    this.setIntervalProgress(firstIndent, progressLength, propGabarite, direction, gabarite);
-  }
-
-  animateProgress (coefficient) {
+  animateTrack (coefficient, horizontalProperty, verticalProperty) {
     if (this.type === 'interval') {
       if (this.orientation === 'horizontal') {
-        this._animateIntervalProgress(this.parent.firstRunnerLeftIndent, this.parent.lastRunnerLeftIndent, 'width', 'left', 'clientWidth');
+        this._setIntervalTrack(coefficient, horizontalProperty, 'parentWidth');
       } else {
-        this._animateIntervalProgress(this.parent.firstRunnerTopIndent, this.parent.lastRunnerTopIndent, 'height', 'top', 'clientHeight');
+        this._setIntervalTrack(coefficient, verticalProperty, 'parentHeight');
       }
     } else {
       if (this.orientation === 'horizontal') {
-        this.setSingleProgressLength(coefficient, 'width', 'clientWidth');
+        this._setSingleTrackLength(coefficient, 'width', 'parentWidth', 'runnerWidth');
       } else {
-        this.setSingleProgressLength(coefficient, 'height', 'clientHeight');
+        this._setSingleTrackLength(coefficient, 'height', 'parentHeight', 'runnerHeight');
       }
     }
   }
