@@ -6,7 +6,7 @@ export default class SliderModel {
       endValue: 100,
       minVal: 0,
       maxVal: 100,
-      type: 'single',
+      type: 'interval',
       step: 0
     }, options);
 
@@ -84,6 +84,19 @@ export default class SliderModel {
 
     this[runnerType] = value;
 
+    if (this.type === 'interval') {
+
+      if (this.startValue > this.endValue && this[runnerType] === this.startValue) {
+        this.startValue = this.endValue;
+        return false;
+      }
+
+      if (this.endValue < this.startValue && this[runnerType] === this.endValue) {
+        this.endValue = this.startValue;
+        return false;
+      }
+    }
+
     if (this[runnerType] === this.startValue) {
       document.body.dispatchEvent(new CustomEvent('changestartvalue', {
         bubbles: true,
@@ -102,36 +115,6 @@ export default class SliderModel {
           coefficient: coefficient
         }
       }));
-    }
-
-    if (this.type === 'interval') {
-      if (this.startValue > this.endValue && this[runnerType] === this.startValue) {
-        this.startValue = this.endValue;
-
-        document.body.dispatchEvent(new CustomEvent('changestartvalue', {
-          bubbles: true,
-          detail: {
-            value: this.calculateRoundValue(this.startValue),
-            coefficient: coefficient
-          }
-        }));
-
-        return false;
-      }
-
-      if (this.endValue < this.startValue && this[runnerType] === this.endValue) {
-        this.endValue = this.startValue;
-
-        document.body.dispatchEvent(new CustomEvent('changeendvalue', {
-          bubbles: true,
-          detail: {
-            value: this.calculateRoundValue(this.endValue),
-            coefficient: coefficient
-          }
-        }));
-
-        return false;
-      }
     }
 
     return coefficient;
