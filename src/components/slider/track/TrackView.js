@@ -24,46 +24,23 @@ export default class TrackView {
     return elem;
   }
 
-  get trackFullLeftIndent () {
-    return parseInt(this.trackFull.style.left);
+  get _trackPoints () {
+    return {
+      left: this.el.getBoundingClientRect().left,
+      top: this.el.getBoundingClientRect().top,
+      right: this.el.getBoundingClientRect().right,
+      bottom: this.el.getBoundingClientRect().bottom
+    }
   }
 
-  get trackFullTopIndent () {
-    return parseInt(this.trackFull.style.top);
+  get _trackFullPoints () {
+    return {
+      left: this.trackFull.getBoundingClientRect().left,
+      top: this.trackFull.getBoundingClientRect().top,
+      right: this.trackFull.getBoundingClientRect().right,
+      bottom: this.trackFull.getBoundingClientRect().bottom
+    }
   }
-
-  get _trackLeftPoint () {
-    return this.el.getBoundingClientRect().left;
-  }
-
-  get _trackTopPoint () {
-    return this.el.getBoundingClientRect().top;
-  }
-
-  get _trackRightPoint () {
-    return this.el.getBoundingClientRect().right;
-  }
-
-  get _trackBottomPoint () {
-    return this.el.getBoundingClientRect().bottom;
-  }
-
-  get _trackFullLeftPoint () {
-    return this.trackFull.getBoundingClientRect().left;
-  }
-
-  get _trackFullTopPoint () {
-    return this.trackFull.getBoundingClientRect().top;
-  }
-
-  get _trackFullRightPoint () {
-    return this.trackFull.getBoundingClientRect().right;
-  }
-
-  get _trackFullBottomPoint () {
-    return this.trackFull.getBoundingClientRect().bottom;
-  }
-
 
   drawTrack (parent, coefficient, coefficientTwo) {
     console.log(this.type)
@@ -91,16 +68,16 @@ export default class TrackView {
     }
   }
 
-  _setIntervalTrack (coefficient, indentProperty, gabariteProperty, gabarite, point, trackEndPoint, trackFullEndPoint, trackStartPoint, trackFullStartPoint) {
+  _setIntervalTrack (coefficient, startPoint, endPoint, gabariteProperty, gabarite, point) {
     let startIndent,
         endIndent;
 
     if (point === 'start') {
       startIndent = this.el[gabarite] / coefficient;
-      endIndent = trackEndPoint - trackFullEndPoint;
-      this.trackFull.style[indentProperty] = this.el[gabarite] / coefficient  + 'px';
+      endIndent = this._trackPoints[endPoint] - this._trackFullPoints[endPoint];
+      this.trackFull.style[startPoint] = this.el[gabarite] / coefficient  + 'px';
     } else {
-      startIndent = trackFullStartPoint - trackStartPoint;
+      startIndent = this._trackFullPoints[startPoint] - this._trackPoints[startPoint];
       endIndent = this.el[gabarite] - this.el[gabarite] / coefficient;
     }
 
@@ -110,9 +87,9 @@ export default class TrackView {
   animateTrack (coefficient, point) {
     if (this.type === 'interval') {
       if (this.orientation === 'horizontal') {
-        this._setIntervalTrack(coefficient, 'left', 'width', 'clientWidth', point, this._trackRightPoint, this._trackFullRightPoint, this._trackLeftPoint, this._trackFullLeftPoint);
+        this._setIntervalTrack(coefficient, 'left', 'right', 'width', 'clientWidth', point);
       } else {
-        this._setIntervalTrack(coefficient, 'top', 'height', 'clientHeight', point, this._trackBottomPoint, this._trackFullBottomPoint, this._trackTopPoint, this._trackFullTopPoint);
+        this._setIntervalTrack(coefficient, 'top', 'bottom', 'height', 'clientHeight', point);
       }
     } else {
       if (this.orientation === 'horizontal') {

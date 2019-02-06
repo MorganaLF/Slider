@@ -129,7 +129,7 @@ export default class SliderView {
         parentTopPoint: this._sliderTopPoint,
         parentBottomPoint: this._sliderBottomPoint
       });
-      this.runner2.drawRunner(this.el, this.model.maxVal / this.model.endValue + this.model.minVal);
+      this.runner2.drawRunner(this.el, this.model.maxVal / this.model.endValue);
 
       if (this.isTip) {
         this.tip2 = new TipView({
@@ -146,9 +146,13 @@ export default class SliderView {
       parentWidth: this._innerWidth,
       parentHeight: this._innerHeight,
       runnerWidth: this._runnerWidth,
-      runnerHeight: this._runnerHeight
+      runnerHeight: this._runnerHeight,
+      parentLeftPoint: this._sliderLeftPoint,
+      parentRightPoint: this._sliderRightPoint,
+      parentTopPoint: this._sliderTopPoint,
+      parentBottomPoint: this._sliderBottomPoint
     });
-    this.track.drawTrack(this.el, this.model.maxVal / this.model.startValue + this.model.minVal, this.model.maxVal / this.model.endValue + this.model.minVal);
+    this.track.drawTrack(this.el, this.model.maxVal / this.model.startValue, this.model.maxVal / this.model.endValue);
 
     this.isGenerated = true;
   }
