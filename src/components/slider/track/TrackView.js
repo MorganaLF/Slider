@@ -7,6 +7,10 @@ export default class TrackView {
       parentHeight: options.parentHeight,
       runnerWidth: options.runnerWidth,
       runnerHeight: options.runnerHeight,
+      parentLeftPoint: options.parentLeftPoint,
+      parentRightPoint: options.parentRightPoint,
+      parentTopPoint: options.parentTopPoint,
+      parentBottomPoint: options.parentBottomPoint,
       type: options.type,
       orientation: options.orientation,
       model: options.model
@@ -20,7 +24,49 @@ export default class TrackView {
     return elem;
   }
 
+  get trackFullLeftIndent () {
+    return parseInt(this.trackFull.style.left);
+  }
+
+  get trackFullTopIndent () {
+    return parseInt(this.trackFull.style.top);
+  }
+
+  get _trackLeftPoint () {
+    return this.el.getBoundingClientRect().left;
+  }
+
+  get _trackTopPoint () {
+    return this.el.getBoundingClientRect().top;
+  }
+
+  get _trackRightPoint () {
+    return this.el.getBoundingClientRect().right;
+  }
+
+  get _trackBottomPoint () {
+    return this.el.getBoundingClientRect().bottom;
+  }
+
+  get _trackFullLeftPoint () {
+    return this.trackFull.getBoundingClientRect().left;
+  }
+
+  get _trackFullTopPoint () {
+    return this.trackFull.getBoundingClientRect().top;
+  }
+
+  get _trackFullRightPoint () {
+    return this.trackFull.getBoundingClientRect().right;
+  }
+
+  get _trackFullBottomPoint () {
+    return this.trackFull.getBoundingClientRect().bottom;
+  }
+
+
   drawTrack (parent, coefficient, coefficientTwo) {
+    console.log(this.type)
     let trackClass =
         this.orientation === 'horizontal' ? '' : ' slider__track_vertical';
     let trackFullClass =
@@ -28,9 +74,13 @@ export default class TrackView {
 
     this.el = this._createElem('div', 'slider__track' + trackClass, parent);
     this.trackFull = this._createElem('div', 'slider__track-full' + trackFullClass, this.el);
+    this.trackFull.style.left = '0';
 
-    this.animateTrack(coefficient, 'paddingLeft', 'paddingTop');
-    this.animateTrack(coefficientTwo, 'paddingRight', 'paddingBottom');
+    this.animateTrack(coefficient, 'start');
+
+    if (this.type === 'interval') {
+      this.animateTrack(coefficientTwo, 'end');
+    }
   }
 
   _setSingleTrackLength (pos, property, gabarite, runnerGabarite) {
@@ -41,21 +91,28 @@ export default class TrackView {
     }
   }
 
-  _setIntervalTrack (coefficient, cssProperty, gabarite) {
+  _setIntervalTrack (coefficient, indentProperty, gabariteProperty, gabarite, point, trackEndPoint, trackFullEndPoint, trackStartPoint, trackFullStartPoint) {
+    let startIndent,
+        endIndent;
 
-    if (cssProperty === 'paddingLeft' || cssProperty === 'paddingTop') {
-      this.el.style[cssProperty] = this[gabarite] / coefficient  + 'px';
+    if (point === 'start') {
+      startIndent = this.el[gabarite] / coefficient;
+      endIndent = trackEndPoint - trackFullEndPoint;
+      this.trackFull.style[indentProperty] = this.el[gabarite] / coefficient  + 'px';
     } else {
-      this.el.style[cssProperty] = this[gabarite] - (this[gabarite] / coefficient) + 'px';
+      startIndent = trackFullStartPoint - trackStartPoint;
+      endIndent = this.el[gabarite] - this.el[gabarite] / coefficient;
     }
+
+    this.trackFull.style[gabariteProperty] = this.el[gabarite] - startIndent - endIndent + 'px';
   }
 
-  animateTrack (coefficient, horizontalProperty, verticalProperty) {
+  animateTrack (coefficient, point) {
     if (this.type === 'interval') {
       if (this.orientation === 'horizontal') {
-        this._setIntervalTrack(coefficient, horizontalProperty, 'parentWidth');
+        this._setIntervalTrack(coefficient, 'left', 'width', 'clientWidth', point, this._trackRightPoint, this._trackFullRightPoint, this._trackLeftPoint, this._trackFullLeftPoint);
       } else {
-        this._setIntervalTrack(coefficient, verticalProperty, 'parentHeight');
+        this._setIntervalTrack(coefficient, 'top', 'height', 'clientHeight', point, this._trackBottomPoint, this._trackFullBottomPoint, this._trackTopPoint, this._trackFullTopPoint);
       }
     } else {
       if (this.orientation === 'horizontal') {
