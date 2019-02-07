@@ -2,6 +2,7 @@ import $ from 'jquery';
 import RunnerView from './runner/RunnerView';
 import TipView from './tip/TipView';
 import TrackView from './track/TrackView';
+import ScaleView from './scale/ScaleView';
 
 export default class SliderView {
   constructor (options = {}) {
@@ -12,11 +13,14 @@ export default class SliderView {
       tip1: null,
       tip2: null,
       track: null,
+      trackStep: 10,
       progressFull: null,
+      scale: null,
       isGenerated: false,
       type: 'single',
       orientation: 'horizontal',
       isTip: false,
+      isScale: false,
       model: options.model
     }, options);
   }
@@ -120,6 +124,16 @@ export default class SliderView {
       parentBottomPoint: this._sliderBottomPoint
     });
     this.track.drawTrack(this.el, this.model.maxVal / this.model.startValue, this.model.maxVal / this.model.endValue);
+
+    if (this.isScale) {
+      this.scale = new ScaleView({
+        parentWidth: this._innerWidth,
+        parentHeight: this._innerHeight,
+        type: this.type,
+        orientation: this.orientation
+      });
+      this.scale.drawScale(this.el, this.model.minVal, this.model.maxVal, this.trackStep);
+    }
 
     this.isGenerated = true;
   }

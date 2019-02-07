@@ -17,7 +17,8 @@ import SliderController from './controller';
         type: e.data('type'),
         orientation: e.data('orientation'),
         step: e.data('step'),
-        isTip: e.data('tip')
+        isTip: e.data('tip'),
+        isScale: e.data('scale')
       };
 
       let config = $.extend({}, {
@@ -28,7 +29,8 @@ import SliderController from './controller';
         type: 'single',
         orientation: 'horizontal',
         step: 0,
-        isTip: true
+        isTip: true,
+        isScale: true
       }, options, dataConfig);
 
       let sliderModel = new SliderModel({
@@ -45,7 +47,8 @@ import SliderController from './controller';
         type: config.type,
         orientation: config.orientation,
         model: sliderModel,
-        isTip: config.isTip
+        isTip: config.isTip,
+        isScale: config.isScale
       });
       sliderView.drawSlider();
 
@@ -64,6 +67,6 @@ import SliderController from './controller';
     //type: 'interval',
     //orientation: 'vertical',
     //step: 17,
-    isTip: true
+    //isTip: true
   });
 })(jQuery);
