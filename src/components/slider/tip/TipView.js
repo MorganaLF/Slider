@@ -1,6 +1,8 @@
+import $ from "jquery";
+
 export default class TipView {
   constructor (options = {}) {
-    Object.assign(this, {
+    $.extend(this, {
       el: null,
       type: options.type,
       orientation: options.orientation,
@@ -8,23 +10,19 @@ export default class TipView {
     }, options);
   }
 
-  _createElem (el, elclass, parent) {
-    let elem = document.createElement(el);
-    elem.className = elclass;
-    parent.appendChild(elem);
-    return elem;
-  }
-
   drawTip (parent, val) {
     let tipClass =
         this.orientation === 'horizontal' ? '' : ' slider__tip_vertical';
-    this.el = this._createElem('div', 'slider__tip' + tipClass, parent);
+
+    this.el = $('<div/>', {
+      class: 'slider__tip' + tipClass,
+    }).appendTo(parent);
 
     this.updateTip(val);
   }
 
   updateTip (val) {
-    this.el.innerHTML = val;
+    this.el.html(val);
   }
 
 }
