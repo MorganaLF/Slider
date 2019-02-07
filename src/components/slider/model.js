@@ -1,12 +1,14 @@
+import $ from 'jquery';
+
 export default class SliderModel {
   constructor (options = {}) {
-    Object.assign(this, {
+    $.extend(this, {
       val: 0,
       startValue: 0,
       endValue: 100,
       minVal: 0,
       maxVal: 100,
-      type: 'interval',
+      type: 'single',
       step: 0
     }, options);
 
@@ -98,23 +100,19 @@ export default class SliderModel {
     }
 
     if (this[runnerType] === this.startValue) {
-      document.body.dispatchEvent(new CustomEvent('changestartvalue', {
-        bubbles: true,
-        detail: {
-          value: this.calculateRoundValue(this.startValue),
-          coefficient: coefficient
-        }
-      }));
+      $(document.body).trigger({
+        type: 'changestartvalue',
+        value: this.calculateRoundValue(this.startValue),
+        coefficient: coefficient
+      });
     }
 
     if (this[runnerType] === this.endValue) {
-      document.body.dispatchEvent(new CustomEvent('changeendvalue', {
-        bubbles: true,
-        detail: {
-          value: this.calculateRoundValue(this.endValue),
-          coefficient: coefficient
-        }
-      }));
+      $(document.body).trigger({
+        type: 'changeendvalue',
+        value: this.calculateRoundValue(this.endValue),
+        coefficient: coefficient
+      });
     }
 
     return coefficient;
