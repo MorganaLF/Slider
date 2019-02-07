@@ -1,47 +1,69 @@
+import jQuery from 'jquery';
 import SliderView from './view';
 import SliderModel from './model';
 import SliderController from './controller';
 
-window.addEventListener('load', function () {
-  let element = document.getElementsByClassName('slider')[0];
-  // let slider = new SliderView({el: element});
-  // slider.drawSlider();
-  //
-  // let sliderModel = new SliderModel();
-  // let sliderController = new SliderController(slider, sliderModel);
-  // sliderController.init();
+(function($) {
 
-  function initPlugin (options) {
-    let sliderModel = new SliderModel({
-      startValue: options.startValue,
-      endValue: options.endValue,
-      minVal: options.minVal,
-      maxVal: options.maxVal,
-      step: options.step
-    });
+  $.fn.customSlider = function(options) {
 
-    let sliderView = new SliderView({
-      el: options.element,
-      type: options.type,
-      orientation: options.orientation,
-      model: sliderModel,
-      isTip: options.isTip
-    });
-    sliderView.drawSlider();
+    function init(e) {
 
-    let sliderController = new SliderController(sliderView, sliderModel);
-    sliderController.init();
-  }
+      let dataConfig = {
+        startValue: e.data('start-value'),
+        endValue: e.data('end-value'),
+        minVal: e.data('min-value'),
+        maxVal: e.data('max-value'),
+        type: e.data('type'),
+        orientation: e.data('orientation'),
+        step: e.data('step'),
+        isTip: e.data('tip')
+      };
 
-  initPlugin({
-    startValue: 10,
-    endValue: 80,
-    minVal: 5,
-    maxVal: 150,
-    element,
-    type: 'interval',
-    orientation: 'horizontal',
-    step: 0,
+      let config = $.extend({}, {
+        startValue: 0,
+        endValue: 100,
+        minVal: 0,
+        maxVal: 100,
+        type: 'single',
+        orientation: 'horizontal',
+        step: 0,
+        isTip: true
+      }, options, dataConfig);
+
+      let sliderModel = new SliderModel({
+        startValue: config.startValue,
+        endValue: config.endValue,
+        minVal: config.minVal,
+        maxVal: config.maxVal,
+        step: config.step,
+        type: config.type
+      });
+
+      let sliderView = new SliderView({
+        el: e,
+        type: config.type,
+        orientation: config.orientation,
+        model: sliderModel,
+        isTip: config.isTip
+      });
+      sliderView.drawSlider();
+
+      let sliderController = new SliderController(sliderView, sliderModel);
+      sliderController.init();
+    }
+    this.each(function() { init($(this)); });
+    return this;
+  };
+
+  $('.slider').customSlider({
+    //startValue: 10,
+    //endValue: 80,
+    //minVal: 5,
+    //maxVal: 150,
+    //type: 'interval',
+    //orientation: 'vertical',
+    //step: 17,
     isTip: true
   });
-});
+})(jQuery);
