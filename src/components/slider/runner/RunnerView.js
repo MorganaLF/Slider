@@ -1,8 +1,8 @@
-import SliderView from '../view';
+import $ from 'jquery';
 
 export default class RunnerView {
   constructor (options = {}) {
-    Object.assign(this, {
+    $.extend(this, {
       el: null,
       shiftX: 0,
       shiftY: 0,
@@ -23,18 +23,13 @@ export default class RunnerView {
     return this.parentBottomPoint - this.parentTopPoint;
   }
 
-  _createElem (el, elclass, parent) {
-    let elem = document.createElement(el);
-    elem.className = elclass;
-    parent.appendChild(elem);
-    return elem;
-  }
-
   drawRunner (parent, coefficient) {
     let runnerClass =
         this.orientation === 'horizontal' ? '' : ' slider__runner_vertical';
 
-    this.el = this._createElem('div', 'slider__runner' + runnerClass, parent);
+    this.el = $('<div/>', {
+      class: 'slider__runner' + runnerClass,
+    }).appendTo(parent);
 
     this.setRunnerPosition(coefficient);
   }
@@ -42,25 +37,25 @@ export default class RunnerView {
   setRunnerPosition (coefficient) {
     let direction = this.orientation === 'horizontal' ? 'left' : 'top';
     let parentGabarite  = this.orientation === 'horizontal' ? this.parentWidth : this.parentHeight;
-    let gabarite = this.orientation === 'horizontal' ? 'clientWidth' : 'clientHeight';
+    let gabarite = this.orientation === 'horizontal' ? this.el.innerWidth() : this.el.innerHeight();
     if (coefficient !== 0) {
-      this.el.style[direction] = (parentGabarite - this.el[gabarite]) / coefficient + 'px';
+      this.el.css(direction, (parentGabarite - gabarite) / coefficient + 'px');
     }
   }
 
   setRunnerShiftX (e) {
-    this.shiftX = e.pageX - this.el.getBoundingClientRect().left;
+    this.shiftX = e.pageX - this.el.offset().left;
   }
 
   setRunnerShiftY (e) {
-    this.shiftY = e.pageY - this.el.getBoundingClientRect().top;
+    this.shiftY = e.pageY - this.el.offset().top;
   }
 
   _checkCursorPosition (coord, startPoint, endPoint, shift, gabarite) {
     if (coord < startPoint + shift) {
       coord = 0;
-    } else if (coord > endPoint - this.el[gabarite] + shift) {
-      coord = endPoint - startPoint - this.el[gabarite];
+    } else if (coord > endPoint - gabarite + shift) {
+      coord = endPoint - startPoint - gabarite;
     } else {
       coord = coord - startPoint - shift;
     }
@@ -69,19 +64,19 @@ export default class RunnerView {
 
   _dispatchMoveRunner (coord, startPoint, endPoint, shift, gabarite) {
     coord = this._checkCursorPosition(coord, startPoint, endPoint, shift, gabarite);
-    let ratio = (endPoint - startPoint - this.el[gabarite]) / coord;
+    let ratio = (endPoint - startPoint - gabarite) / coord;
 
-    this.el.dispatchEvent(new CustomEvent('move', {
-      bubbles: true,
+    this.el.trigger({
+      type: 'move',
       detail: ratio
-    }));
+    });
   }
 
   moveRunner (e) {
     if (this.orientation === 'horizontal') {
-      this._dispatchMoveRunner(e.pageX, this.parentLeftPoint, this.parentRightPoint, this.shiftX, 'offsetWidth');
+      this._dispatchMoveRunner(e.pageX, this.parentLeftPoint, this.parentRightPoint, this.shiftX, this.el.innerWidth());
     } else {
-      this._dispatchMoveRunner(e.pageY, this.parentTopPoint, this.parentBottomPoint, this.shiftY, 'offsetHeight');
+      this._dispatchMoveRunner(e.pageY, this.parentTopPoint, this.parentBottomPoint, this.shiftY, this.el.innerHeight());
     }
   }
 }
