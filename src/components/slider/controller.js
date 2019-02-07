@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 export default class SliderController {
   constructor (view, model) {
     this.view = view;
@@ -18,42 +20,42 @@ export default class SliderController {
 
   onmousedown (runner) {
     return (e) => {
+      e.preventDefault();
+
       let runnerType = runner === this.runner1 ? 'startValue' : 'endValue';
 
       runner.setRunnerShiftX(e);
       runner.setRunnerShiftY(e);
-      e.preventDefault();
 
-      let mousemove = this.onmousemove(runner, runnerType);
+      let mousemove = this.onmousemove(runner);
       let mouseup = this.onmouseup(mousemove);
       let onmove = this.onmove(runner, runnerType);
 
-      window.addEventListener('mousemove', mousemove);
-      window.addEventListener('mouseup', mouseup);
-      runner.el.addEventListener('move', onmove);
-      document.body.addEventListener('changestartvalue', this.onchangestartvalue);
-      document.body.addEventListener('changeendvalue', this.onchangeendvalue);
+      $(window).on('mousemove', mousemove);
+      $(window).on('mouseup', mouseup);
+      runner.el.on('move', onmove);
+      $('body').on('changestartvalue', this.onchangestartvalue);
+      $('body').on('changeendvalue', this.onchangeendvalue);
+
     }
   };
 
   onmove (runner, runnerType) {
     return (e) => {
       this.model.calculateValue(e.detail, runnerType);
-      //runner.setRunnerPosition(coefficient);
-      //this.track.animateProgress(coefficient);
     }
   }
 
   onchangestartvalue(e) {
-    this.runner1.setRunnerPosition(e.detail.coefficient);
-    this.tip1.updateTip(e.detail.value);
-    this.track.animateTrack(e.detail.coefficient, 'start');
+    this.runner1.setRunnerPosition(e.coefficient);
+    this.tip1.updateTip(e.value);
+    this.track.animateTrack(e.coefficient, 'start');
   }
 
   onchangeendvalue(e) {
-    this.runner2.setRunnerPosition(e.detail.coefficient);
-    this.tip2.updateTip(e.detail.value);
-    this.track.animateTrack(e.detail.coefficient, 'end');
+    this.runner2.setRunnerPosition(e.coefficient);
+    this.tip2.updateTip(e.value);
+    this.track.animateTrack(e.coefficient, 'end');
   }
 
   onmousemove (runner) {
@@ -64,14 +66,14 @@ export default class SliderController {
 
   onmouseup (handler) {
     return (e) => {
-      window.removeEventListener( 'mousemove', handler );
-      window.removeEventListener( 'mouseup', this.onmouseup );
+      $(window).off( 'mousemove', handler );
+      $(window).off( 'mouseup', this.onmouseup );
     }
   };
 
   addHandlers (runner) {
     let onmousedown = this.onmousedown(runner);
-    runner.el.addEventListener( 'mousedown', onmousedown );
+    runner.el.on( 'mousedown', onmousedown );
   }
 
   init () {
