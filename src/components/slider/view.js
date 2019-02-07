@@ -1,10 +1,11 @@
+import $ from 'jquery';
 import RunnerView from './runner/RunnerView';
 import TipView from './tip/TipView';
 import TrackView from './track/TrackView';
 
 export default class SliderView {
   constructor (options = {}) {
-    Object.assign(this, {
+    $.extend(this, {
       el: options.el,
       runner1: null,
       runner2: null,
@@ -21,79 +22,45 @@ export default class SliderView {
   }
 
   get _sliderLeftPoint () {
-    return this.el.getBoundingClientRect().left;
+    return this.el.offset().left;
   }
 
   get _sliderTopPoint () {
-    return this.el.getBoundingClientRect().top;
+    return this.el.offset().top;
   }
 
   get _sliderRightPoint () {
-    return this._sliderLeftPoint + this.el.offsetWidth /*- this.runner1.el.offsetWidth*/;
+    return this.el.offset().left + this.el.innerWidth();
   }
 
   get _sliderBottomPoint () {
-    return this._sliderTopPoint + this.el.offsetHeight /*- this.runner1.el.offsetHeight*/;
-  }
-
-  get sliderGabarites () {
-    return {
-      width: this.el.clientWidth,
-      height: this.el.clientHeight
-    }
+    return this.el.offset().top + this.el.innerHeight();
   }
 
   get sliderType () {
     return this.type;
   }
 
-  get firstRunnerLeftIndent () {
-    return parseInt(this.runner1.el.style.left);
-  }
-
-  get lastRunnerLeftIndent () {
-    if (this.runner2.el) {
-      return parseInt(this.runner2.el.style.left);
-    }
-  }
-
-  get firstRunnerTopIndent () {
-    return this.runner1.el.getBoundingClientRect().top - this.el.getBoundingClientRect().top;
-  }
-
-  get lastRunnerTopIndent () {
-    if (this.runner2.el) {
-      return this.runner2.el.getBoundingClientRect().top - this.el.getBoundingClientRect().top;
-    }
-  }
-
   get _innerWidth () {
-    return this.el.clientWidth - this.runner1.el.clientWidth;
+    return this.el.innerWidth() - this.runner1.el.innerWidth();
   }
 
   get _innerHeight () {
-    return this.el.clientHeight - this.runner1.el.clientHeight;
+    return this.el.innerHeight() - this.runner1.el.innerHeight();
   }
 
   get _runnerWidth () {
-    return this.runner1.el.clientWidth;
+    return this.runner1.el.innerWidth();
   }
 
   get _runnerHeight () {
-    return this.runner1.el.clientHeight;
+    return this.runner1.el.innerHeight();
   }
 
   set sliderOrientation (orientation) {
     if(orientation === 'vertical') {
       this.orientation = 'vertical';
     }
-  }
-
-  _createElem (el, elclass, parent) {
-    let elem = document.createElement(el);
-    elem.className = elclass;
-    parent.appendChild(elem);
-    return elem;
   }
 
   drawSlider () {
