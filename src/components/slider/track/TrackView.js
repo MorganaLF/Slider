@@ -1,6 +1,8 @@
+import $ from "jquery";
+
 export default class TrackView {
   constructor (options = {}) {
-    Object.assign(this, {
+    $.extend(this, {
       el: null,
       trackFull: null,
       parentWidth: options.parentWidth,
@@ -17,41 +19,40 @@ export default class TrackView {
     }, options);
   }
 
-  _createElem (el, elclass, parent) {
-    let elem = document.createElement(el);
-    elem.className = elclass;
-    parent.prepend(elem);
-    return elem;
-  }
-
   get _trackPoints () {
     return {
-      left: this.el.getBoundingClientRect().left,
-      top: this.el.getBoundingClientRect().top,
-      right: this.el.getBoundingClientRect().right,
-      bottom: this.el.getBoundingClientRect().bottom
+      left: this.el.offset().left,
+      top: this.el.offset().top,
+      right: this.el.offset().left + this.el.innerWidth(),
+      bottom: this.el.offset().top + this.el.innerHeight()
     }
   }
 
   get _trackFullPoints () {
     return {
-      left: this.trackFull.getBoundingClientRect().left,
-      top: this.trackFull.getBoundingClientRect().top,
-      right: this.trackFull.getBoundingClientRect().right,
-      bottom: this.trackFull.getBoundingClientRect().bottom
+      left: this.trackFull.offset().left,
+      top: this.trackFull.offset().top,
+      right: this.trackFull.offset().left + this.trackFull.innerWidth(),
+      bottom: this.trackFull.offset().top + this.trackFull.innerHeight()
     }
   }
 
   drawTrack (parent, coefficient, coefficientTwo) {
-    console.log(this.type)
+
     let trackClass =
         this.orientation === 'horizontal' ? '' : ' slider__track_vertical';
     let trackFullClass =
         this.orientation === 'horizontal' ? '' : ' slider__track-full_vertical';
 
-    this.el = this._createElem('div', 'slider__track' + trackClass, parent);
-    this.trackFull = this._createElem('div', 'slider__track-full' + trackFullClass, this.el);
-    this.trackFull.style.left = '0';
+    this.el = $('<div/>', {
+      class: 'slider__track' + trackClass,
+    }).prependTo(parent);
+
+    this.trackFull = $('<div/>', {
+      class: 'slider__track-full' + trackFullClass,
+    }).appendTo(this.el);
+
+    this.trackFull.css('left', '0');
 
     this.animateTrack(coefficient, 'start');
 
@@ -62,9 +63,9 @@ export default class TrackView {
 
   _setSingleTrackLength (pos, property, gabarite, runnerGabarite) {
     if (pos !== 0) {
-      this.trackFull.style[property] = this[gabarite] / pos + this[runnerGabarite]/2 + 'px';
+      this.trackFull.css(property, this[gabarite] / pos + this[runnerGabarite]/2 + 'px');
     } else {
-      this.trackFull.style[property] = '0px';
+      this.trackFull.css(property, '0px');
     }
   }
 
@@ -73,23 +74,23 @@ export default class TrackView {
         endIndent;
 
     if (point === 'start') {
-      startIndent = this.el[gabarite] / coefficient;
+      startIndent = gabarite / coefficient;
       endIndent = this._trackPoints[endPoint] - this._trackFullPoints[endPoint];
-      this.trackFull.style[startPoint] = this.el[gabarite] / coefficient  + 'px';
+      this.trackFull.css(startPoint, gabarite / coefficient  + 'px');
     } else {
       startIndent = this._trackFullPoints[startPoint] - this._trackPoints[startPoint];
-      endIndent = this.el[gabarite] - this.el[gabarite] / coefficient;
+      endIndent = gabarite - gabarite / coefficient;
     }
 
-    this.trackFull.style[gabariteProperty] = this.el[gabarite] - startIndent - endIndent + 'px';
+    this.trackFull.css(gabariteProperty, gabarite - startIndent - endIndent + 'px');
   }
 
   animateTrack (coefficient, point) {
     if (this.type === 'interval') {
       if (this.orientation === 'horizontal') {
-        this._setIntervalTrack(coefficient, 'left', 'right', 'width', 'clientWidth', point);
+        this._setIntervalTrack(coefficient, 'left', 'right', 'width', this.el.innerWidth(), point);
       } else {
-        this._setIntervalTrack(coefficient, 'top', 'bottom', 'height', 'clientHeight', point);
+        this._setIntervalTrack(coefficient, 'top', 'bottom', 'height', this.el.innerHeight(), point);
       }
     } else {
       if (this.orientation === 'horizontal') {
