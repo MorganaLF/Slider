@@ -4,6 +4,7 @@ export default class SliderController {
   constructor (view, model) {
     this.view = view;
     this.model = model;
+    this.isTip = view.isTip;
     this.runner1 = view.runner1;
     this.runner2 = view.runner2;
     this.tip1 = view.tip1;
@@ -28,8 +29,8 @@ export default class SliderController {
       runner.setRunnerShiftY(e);
 
       let mousemove = this.onmousemove(runner);
-      let mouseup = this.onmouseup(mousemove);
       let onmove = this.onmove(runner, runnerType);
+      let mouseup = this.onmouseup(mousemove, onmove, runner);
 
       $(window).on('mousemove', mousemove);
       $(window).on('mouseup', mouseup);
@@ -48,13 +49,17 @@ export default class SliderController {
 
   onchangestartvalue(e) {
     this.runner1.setRunnerPosition(e.coefficient);
-    this.tip1.updateTip(e.value);
+    if (this.isTip) {
+      this.tip1.updateTip(e.value);
+    }
     this.track.animateTrack(e.coefficient, 'start');
   }
 
   onchangeendvalue(e) {
     this.runner2.setRunnerPosition(e.coefficient);
-    this.tip2.updateTip(e.value);
+    if (this.isTip) {
+      this.tip2.updateTip(e.value);
+    }
     this.track.animateTrack(e.coefficient, 'end');
   }
 
@@ -64,10 +69,13 @@ export default class SliderController {
     }
   };
 
-  onmouseup (handler) {
+  onmouseup (mousemovehandler, onmovehandler, runner) {
     return (e) => {
-      $(window).off( 'mousemove', handler );
+      $(window).off( 'mousemove', mousemovehandler );
       $(window).off( 'mouseup', this.onmouseup );
+      runner.el.off('move', onmovehandler);
+      $('body').off('changestartvalue', this.onchangestartvalue);
+      $('body').off('changeendvalue', this.onchangeendvalue);
     }
   };
 
