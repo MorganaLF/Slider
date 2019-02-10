@@ -39,6 +39,10 @@ class SliderApp {
     return this.sliderModel.maxVal;
   }
 
+  stepSize () {
+    return this.sliderModel.step;
+  }
+
   setMinValue (val) {
     this.minVal = parseInt(val);
     this.init();
@@ -55,6 +59,11 @@ class SliderApp {
 
   setCurrentMaxValue (val) {
     this.sliderModel.setCurrentMaxValue(val);
+  }
+
+  setStepSize (val) {
+    this.step = val;
+    this.init();
   }
 
   showTip () {

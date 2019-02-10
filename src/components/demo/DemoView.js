@@ -103,6 +103,40 @@ export default class DemoView {
               </form>
             </div>
           </div>
+          <div class="page__row">
+            <div class="page__col">
+              <form class="options">
+                <div class="options__row">
+                  <div class="options__col">
+                    <label for="">Min value</label>
+                    <input type="text" name="min-value">
+                    <label for="">Max value</label>
+                    <input type="text" name="max-value">
+                  </div>
+                  <div class="options__col">
+                    <label for="">Current min value</label>
+                    <input type="text" name="current-value">
+                    <label for="">Current max value</label>
+                    <input type="text" name="current-max-value">
+                  </div>
+                  <div class="options__col">
+                    <label for="">Step size</label>
+                    <input type="text" name="step-size">
+                    <label for="">Show tip</label>
+                    <input type="checkbox" name="tip" id="" checked>
+                    <label for="">Show scale</label>
+                    <input type="checkbox" name="scale" id="">
+                    <label for="">Horizontal / vertical</label>
+                    <input type="radio" name="orientation" value="horizontal" id="" checked>
+                    <input type="radio" name="orientation" value="vertical" id="">
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="page__col">
+              <div class="slider slider_step"></div>
+            </div>
+          </div>
          </div>`
     );
 
@@ -122,6 +156,13 @@ export default class DemoView {
       type: 'interval',
       startValue: 20,
       endValue: 80
+    });
+    $('.slider_step').customSlider({
+      type: 'single',
+      //minVal: 20,
+      startValue: 20,
+      endValue: 80,
+      step: 20
     });
 
     this.updateValToInput();
@@ -156,6 +197,9 @@ export default class DemoView {
     });
     $('input[name="current-max-value"]').on('change', (e) => {
       this.updateSlider($(e.target), 'setCurrentMaxValue');
+    });
+    $('input[name="step-size"]').on('change', (e) => {
+      this.updateSlider($(e.target), 'setStepSize');
     });
   }
 
@@ -193,6 +237,15 @@ export default class DemoView {
               .closest('.page__row')
               .find('.slider')
               .customSlider('maxValue');
+      $(this).val(currentValue);
+    })
+
+    $('input[name="step-size"]').each(function () {
+      let currentValue =
+          $(this)
+              .closest('.page__row')
+              .find('.slider')
+              .customSlider('stepSize');
       $(this).val(currentValue);
     })
 
