@@ -67,6 +67,11 @@ export default class SliderView {
     }
   }
 
+  updateSlider () {
+    this.el.html('');
+    this.drawSlider();
+  }
+
   drawSlider () {
     if (this.isGenerated) {
       return;
@@ -87,7 +92,7 @@ export default class SliderView {
         type: this.type,
         orientation: this.orientation
       });
-      this.tip1.drawTip(this.runner1.el, this.model.startValue);
+      this.tip1.drawTip(this.runner1.el, this.model.startValue + this.model.minVal);
     }
 
     if (this.type === 'interval') {
@@ -107,7 +112,7 @@ export default class SliderView {
           type: this.type,
           orientation: this.orientation
         });
-        this.tip2.drawTip(this.runner2.el, this.model.endValue);
+        this.tip2.drawTip(this.runner2.el, this.model.endValue + this.model.minVal);
       }
     }
 

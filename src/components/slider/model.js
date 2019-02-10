@@ -55,6 +55,16 @@ export default class SliderModel {
     });
   }
 
+  setCurrentMaxValue (val) {
+    this.endValue = val;
+    $(document.body).trigger({
+      model: this,
+      type: 'changeendvalue',
+      value: this.calculateRoundValue(this.endValue),
+      coefficient: this.calculateCoefficient(this.endValue)
+    });
+  }
+
   set extremeValues (values) {
     this.minVal = values.min;
     this.maxVal = values.max;

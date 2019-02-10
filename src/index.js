@@ -5,3 +5,4 @@ import './components/slider/model';
 import './components/slider/controller';
 import './components/slider/app';
 import './components/slider/runner/RunnerView';
+import './components/demo/DemoView';
