@@ -35,8 +35,8 @@ export default class SliderController {
       $(window).on('mousemove', mousemove);
       $(window).on('mouseup', mouseup);
       runner.el.on('move', onmove);
-      $('body').on('changestartvalue', this.onchangestartvalue);
-      $('body').on('changeendvalue', this.onchangeendvalue);
+      // $('body').on('changestartvalue', this.onchangestartvalue);
+      // $('body').on('changeendvalue', this.onchangeendvalue);
 
     }
   };
@@ -48,6 +48,9 @@ export default class SliderController {
   }
 
   onchangestartvalue(e) {
+    if (e.model !== this.model) {
+      return;
+    }
     this.runner1.setRunnerPosition(e.coefficient);
     if (this.isTip) {
       this.tip1.updateTip(e.value);
@@ -56,6 +59,9 @@ export default class SliderController {
   }
 
   onchangeendvalue(e) {
+    if (e.model !== this.model) {
+      return;
+    }
     this.runner2.setRunnerPosition(e.coefficient);
     if (this.isTip) {
       this.tip2.updateTip(e.value);
@@ -74,14 +80,16 @@ export default class SliderController {
       $(window).off( 'mousemove', mousemovehandler );
       $(window).off( 'mouseup', this.onmouseup );
       runner.el.off('move', onmovehandler);
-      $('body').off('changestartvalue', this.onchangestartvalue);
-      $('body').off('changeendvalue', this.onchangeendvalue);
+      // $('body').off('changestartvalue', this.onchangestartvalue);
+      // $('body').off('changeendvalue', this.onchangeendvalue);
     }
   };
 
   addHandlers (runner) {
     let onmousedown = this.onmousedown(runner);
     runner.el.on( 'mousedown', onmousedown );
+    $('body').on('changestartvalue', this.onchangestartvalue);
+    $('body').on('changeendvalue', this.onchangeendvalue);
   }
 
   init () {

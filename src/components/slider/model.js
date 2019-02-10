@@ -45,8 +45,14 @@ export default class SliderModel {
     return this.type;
   }
 
-  set currentValue (val) {
-    this.val = val;
+  setCurrentValue (val) {
+    this.startValue = val;
+    $(document.body).trigger({
+      model: this,
+      type: 'changestartvalue',
+      value: this.calculateRoundValue(this.startValue),
+      coefficient: this.calculateCoefficient(this.startValue)
+    });
   }
 
   set extremeValues (values) {
@@ -101,6 +107,7 @@ export default class SliderModel {
 
     if (this[runnerType] === this.startValue) {
       $(document.body).trigger({
+        model: this,
         type: 'changestartvalue',
         value: this.calculateRoundValue(this.startValue),
         coefficient: coefficient
@@ -109,6 +116,7 @@ export default class SliderModel {
 
     if (this[runnerType] === this.endValue) {
       $(document.body).trigger({
+        model: this,
         type: 'changeendvalue',
         value: this.calculateRoundValue(this.endValue),
         coefficient: coefficient
