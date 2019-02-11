@@ -20,7 +20,7 @@ module.exports = function(config) {
       'src/components/**/*.js',
       'src/pages/**/*.js',
       'src/test/**/*Spec.js',
-      'src/test/fixtures/slider.html'
+      //'src/test/fixtures/slider.html'
     ],
 
 
