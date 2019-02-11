@@ -4,11 +4,10 @@ import $ from "jquery";
 export default class DemoView {
   constructor (options = {}) {
     $.extend(this, {
-      el: options.el
     }, options);
   }
 
-  createDemoPage () {
+  _createDemoPage () {
     let demoTemplate = $(
         `<div class="page">
           <div class="page__row">
@@ -144,8 +143,7 @@ export default class DemoView {
   }
 
   init () {
-
-    this.createDemoPage();
+    this._createDemoPage();
 
     $('.slider_simple').customSlider();
     $('.slider_istip').customSlider({
@@ -165,130 +163,98 @@ export default class DemoView {
       step: 20
     });
 
-    this.updateValToInput();
-    this.addHandlers();
-
+    this._updateInputValues();
+    this._addHandlers();
   }
 
-  addHandlers () {
+  _addBodyHandlers () {
     $('body').on('changestartvalue', () => {
-      this.updateValToInput();
+      this._updateInputValues();
     });
     $('body').on('changeendvalue', () => {
-      this.updateValToInput();
+      this._updateInputValues();
     });
-    $('input[name="tip"]').on('change', (e) => {
-      this.updateCheckboxes($(e.target), 'showTip', 'hideTip');
+  }
+
+  _addTextInputHandlers (name, method) {
+    $(`input[name="${name}"]`).on('change', (e) => {
+      this._updateSlider($(e.target), method);
     });
-    $('input[name="scale"]').on('change', (e) => {
-      this.updateCheckboxes($(e.target), 'showScale', 'hideScale');
+  }
+
+  _addCheckboxHandlers (name, on, off) {
+    $(`input[name="${name}"]`).on('change', (e) => {
+      this._updateCheckboxes($(e.target), on, off);
     });
+  }
+
+  _addRadioHandlers () {
     $('input[name="orientation"]').on('change', (e) => {
-      this.updateRadio($(e.target), 'setHorisontalOrientation', 'setVeticalOrientation');
-    });
-    $('input[name="min-value"]').on('change', (e) => {
-      this.updateSlider($(e.target), 'setMinValue');
-    });
-    $('input[name="max-value"]').on('change', (e) => {
-      this.updateSlider($(e.target), 'setMaxValue');
-    });
-    $('input[name="current-value"]').on('change', (e) => {
-      this.updateSlider($(e.target), 'setCurrentValue');
-    });
-    $('input[name="current-max-value"]').on('change', (e) => {
-      this.updateSlider($(e.target), 'setCurrentMaxValue');
-    });
-    $('input[name="step-size"]').on('change', (e) => {
-      this.updateSlider($(e.target), 'setStepSize');
+      this._updateRadio($(e.target), 'setHorisontalOrientation', 'setVeticalOrientation');
     });
   }
 
-  updateValToInput () {
-    $('input[name="current-value"]').each(function () {
-      let currentValue =
-          $(this)
-              .closest('.page__row')
-              .find('.slider')
-              .customSlider('currentValue');
-      $(this).val(currentValue);
-    });
-
-    $('input[name="current-max-value"]').each(function () {
-      let currentValue =
-          $(this)
-              .closest('.page__row')
-              .find('.slider')
-              .customSlider('currentMaxValue');
-      $(this).val(currentValue);
-    });
-
-    $('input[name="min-value"]').each(function () {
-      let currentValue =
-          $(this)
-              .closest('.page__row')
-              .find('.slider')
-              .customSlider('minValue');
-      $(this).val(currentValue);
-    });
-
-    $('input[name="max-value"]').each(function () {
-      let currentValue =
-          $(this)
-              .closest('.page__row')
-              .find('.slider')
-              .customSlider('maxValue');
-      $(this).val(currentValue);
-    })
-
-    $('input[name="step-size"]').each(function () {
-      let currentValue =
-          $(this)
-              .closest('.page__row')
-              .find('.slider')
-              .customSlider('stepSize');
-      $(this).val(currentValue);
-    })
-
+  _addHandlers () {
+    this._addBodyHandlers();
+    this._addTextInputHandlers('min-value', 'setMinValue');
+    this._addTextInputHandlers('max-value', 'setMaxValue');
+    this._addTextInputHandlers('current-value', 'setCurrentValue');
+    this._addTextInputHandlers('current-max-value', 'setCurrentMaxValue');
+    this._addTextInputHandlers('step-size', 'setStepSize');
+    this._addCheckboxHandlers('tip', 'showTip', 'hideTip');
+    this._addCheckboxHandlers('scale', 'showScale', 'hideScale');
+    this._addRadioHandlers();
   }
 
-  updateCheckboxes (el, on, off) {
+  _getSliderMethod (el, method) {
+    return el
+                .closest('.page__row')
+                .find('.slider')
+                .customSlider(method);
+  }
+
+  _updateSlider (el, method) {
+    el
+        .closest('.page__row')
+        .find('.slider')
+        .customSlider(method, el.val());
+  }
+
+  _setInputVal (name, method) {
+    let self = this;
+    $(`input[name="${name}"]`).each(function () {
+      let currentValue = self._getSliderMethod($(this), method);
+      $(this).val(currentValue);
+    });
+  }
+
+  _updateInputValues () {
+    this._setInputVal('current-value', 'currentValue');
+    this._setInputVal('current-max-value', 'currentMaxValue');
+    this._setInputVal('min-value', 'minValue');
+    this._setInputVal('max-value', 'maxValue');
+    this._setInputVal('step-size', 'stepSize');
+  }
+
+  _updateCheckboxes (el, on, off) {
       if (el.prop('checked')) {
-        el
-            .closest('.page__row')
-            .find('.slider')
-            .customSlider(on);
+        this._getSliderMethod(el, on);
       } else {
-        el
-            .closest('.page__row')
-            .find('.slider')
-            .customSlider(off);
+        this._getSliderMethod(el, off);
       }
   }
 
-  updateRadio (el, on, off) {
+  _updateRadio (el, on, off) {
     let radioGroup =
         el
             .closest('.page__row')
             .find($('input[name="orientation"]:checked'));
 
     if (radioGroup.val() === 'horizontal') {
-      el
-          .closest('.page__row')
-          .find('.slider')
-          .customSlider(on);
+      this._getSliderMethod(el, on);
     } else {
-      el
-          .closest('.page__row')
-          .find('.slider')
-          .customSlider(off);
+      this._getSliderMethod(el, off);
     }
-  }
-
-  updateSlider (el, method) {
-    el
-        .closest('.page__row')
-        .find('.slider')
-        .customSlider(method, el.val());
   }
 }
 
