@@ -16,10 +16,9 @@ export default class SliderView {
       trackStep: 10,
       progressFull: null,
       scale: null,
-      isGenerated: false,
       type: 'single',
       orientation: 'horizontal',
-      isTip: false,
+      isTip: true,
       isScale: false,
       model: options.model
     }, options);
@@ -41,10 +40,6 @@ export default class SliderView {
     return this.el.offset().top + this.el.innerHeight();
   }
 
-  get sliderType () {
-    return this.type;
-  }
-
   get _innerWidth () {
     return this.el.innerWidth() - this.runner1.el.innerWidth();
   }
@@ -61,23 +56,13 @@ export default class SliderView {
     return this.runner1.el.innerHeight();
   }
 
-  set sliderOrientation (orientation) {
-    if(orientation === 'vertical') {
-      this.orientation = 'vertical';
-    }
-  }
-
   updateSlider () {
     this.el.html('');
-    this.drawSlider();
+    this._drawSlider();
   }
 
-  drawSlider () {
-    if (this.isGenerated) {
-      return;
-    }
-
-    this.runner1 = new RunnerView({
+  _createRunner (prop, point) {
+    this[prop] = new RunnerView({
       type: this.type,
       orientation: this.orientation,
       parentLeftPoint: this._sliderLeftPoint,
@@ -85,37 +70,18 @@ export default class SliderView {
       parentTopPoint: this._sliderTopPoint,
       parentBottomPoint: this._sliderBottomPoint
     });
-    this.runner1.drawRunner(this.el, this.model.maxVal / this.model.startValue + this.model.minVal);
+    this[prop].drawRunner(this.el, this.model.calculateCoefficient(point));
+  }
 
-    if (this.isTip) {
-      this.tip1 = new TipView({
-        type: this.type,
-        orientation: this.orientation
-      });
-      this.tip1.drawTip(this.runner1.el, this.model.startValue + this.model.minVal);
-    }
+  _createTip (prop, el, val) {
+    this[prop] = new TipView({
+      type: this.type,
+      orientation: this.orientation
+    });
+    this[prop].drawTip(el, val);
+  }
 
-    if (this.type === 'interval') {
-
-      this.runner2 = new RunnerView({
-        type: this.type,
-        orientation: this.orientation,
-        parentLeftPoint: this._sliderLeftPoint,
-        parentRightPoint: this._sliderRightPoint,
-        parentTopPoint: this._sliderTopPoint,
-        parentBottomPoint: this._sliderBottomPoint
-      });
-      this.runner2.drawRunner(this.el, this.model.maxVal / this.model.endValue);
-
-      if (this.isTip) {
-        this.tip2 = new TipView({
-          type: this.type,
-          orientation: this.orientation
-        });
-        this.tip2.drawTip(this.runner2.el, this.model.endValue + this.model.minVal);
-      }
-    }
-
+  _createTrack () {
     this.track = new TrackView({
       type: this.type,
       orientation: this.orientation,
@@ -128,19 +94,48 @@ export default class SliderView {
       parentTopPoint: this._sliderTopPoint,
       parentBottomPoint: this._sliderBottomPoint
     });
-    this.track.drawTrack(this.el, this.model.maxVal / this.model.startValue, this.model.maxVal / this.model.endValue);
+    this.track.drawTrack(
+        this.el,
+        this.model.calculateCoefficient(this.model.startValue),
+        this.model.calculateCoefficient(this.model.endValue)
+    );
+  }
 
-    if (this.isScale) {
-      this.scale = new ScaleView({
-        parentWidth: this._innerWidth,
-        parentHeight: this._innerHeight,
-        type: this.type,
-        orientation: this.orientation
-      });
-      this.scale.drawScale(this.el, this.model.minVal, this.model.maxVal, this.trackStep);
+  _createScale () {
+    this.scale = new ScaleView({
+      parentWidth: this._innerWidth,
+      parentHeight: this._innerHeight,
+      type: this.type,
+      orientation: this.orientation
+    });
+    this.scale.drawScale(
+        this.el,
+        this.model.minVal,
+        this.model.maxVal,
+        this.trackStep
+    );
+  }
+
+  _drawSlider () {
+    this._createRunner('runner1', this.model.startValue);
+
+    if (this.isTip) {
+      this._createTip('tip1', this.runner1.el, this.model.startValue);
     }
 
-    this.isGenerated = true;
+    if (this.type === 'interval') {
+      this._createRunner('runner2', this.model.endValue);
+
+      if (this.isTip) {
+        this._createTip('tip2', this.runner2.el, this.model.endValue);
+      }
+    }
+
+    this._createTrack();
+
+    if (this.isScale) {
+      this._createScale();
+    }
   }
 
 }
