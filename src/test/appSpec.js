@@ -6,7 +6,6 @@ import RunnerView from '../components/slider/runner/RunnerView';
 import TipView from '../components/slider/tip/TipView';
 import TrackView from '../components/slider/track/TrackView';
 import ScaleView from '../components/slider/scale/ScaleView';
-import DemoView from '../components/demo/DemoView';
 
 // /* VIEW */
 //
@@ -586,53 +585,13 @@ describe('ScaleView. Функция drawScale', function () {
   });
 
   it('Количество элементов slider__scale-item определяется в зависимости от min, max и размера шага', function () {
-    expect($('.slider .slider__scale .slider__scale-item').length).toEqual(5);
+    expect($('.slider').eq(0).find('.slider__scale .slider__scale-item').length).toEqual(5);
   });
 
   it('Элемент slider__scale-item содержит корректное значение', function () {
     expect($('.slider .slider__scale .slider__scale-item').eq(0).text()).toEqual('5');
     expect($('.slider .slider__scale .slider__scale-item').eq(1).text()).toEqual('10');
     expect($('.slider .slider__scale .slider__scale-item').eq(2).text()).toEqual('15');
-  });
-
-});
-
-/* DEMO VIEW */
-
-describe('DemoView', function () {
-  let demoView;
-
-  beforeEach(function () {
-    demoView = new DemoView();
-  });
-
-  it('Создается экземпляр класса DemoView', function () {
-    expect(demoView).toBeDefined();
-  });
-
-});
-
-describe('DemoView. Функция init', function () {
-  let demoView;
-
-  beforeEach(function () {
-    demoView = new DemoView();
-  });
-
-  it('Создает элемент с классом page внутри body', function () {
-    expect($('.page')).toExist();
-  });
-
-  it('Создает элемент с классом slider_simple', function () {
-    expect($('.slider_simple')).toExist();
-  });
-
-  it('Создает элемент с классом slider_istip', function () {
-    expect($('.slider_istip')).toExist();
-  });
-
-  it('Создает элемент с классом slider_interval', function () {
-    expect($('.slider_interval')).toExist();
   });
 
 });
