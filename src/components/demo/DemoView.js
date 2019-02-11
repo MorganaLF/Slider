@@ -258,5 +258,3 @@ export default class DemoView {
   }
 }
 
-let demoView = new DemoView();
-demoView.init();
