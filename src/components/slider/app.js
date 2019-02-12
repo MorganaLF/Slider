@@ -24,11 +24,11 @@ class SliderApp {
   }
 
   currentValue () {
-    return this.sliderModel.calculateRoundValue(this.sliderModel.startValue);
+    return this.sliderModel.currentRoundValue;
   }
 
   currentMaxValue () {
-    return this.sliderModel.calculateRoundValue(this.sliderModel.endValue);
+    return this.sliderModel.currentRoundEndValue;
   }
 
   minValue () {
@@ -54,11 +54,11 @@ class SliderApp {
   }
 
   setCurrentValue (val) {
-    this.sliderModel.setCurrentValue(val);
+    this.sliderModel.currentValue = val;
   }
 
   setCurrentMaxValue (val) {
-    this.sliderModel.setCurrentMaxValue(val);
+    this.sliderModel.currentMaxValue = val;
   }
 
   setStepSize (val) {

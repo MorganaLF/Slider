@@ -70,7 +70,7 @@ export default class SliderView {
       parentTopPoint: this._sliderTopPoint,
       parentBottomPoint: this._sliderBottomPoint
     });
-    this[prop].drawRunner(this.el, this.model.calculateCoefficient(point));
+    this[prop].drawRunner(this.el, this.model._calculateCoefficient(point));
   }
 
   _createTip (prop, el, val) {
@@ -96,8 +96,8 @@ export default class SliderView {
     });
     this.track.drawTrack(
         this.el,
-        this.model.calculateCoefficient(this.model.startValue),
-        this.model.calculateCoefficient(this.model.endValue)
+        this.model._calculateCoefficient(this.model.startValue),
+        this.model._calculateCoefficient(this.model.endValue)
     );
   }
 

@@ -3,7 +3,6 @@ import $ from 'jquery';
 export default class SliderModel {
   constructor (options = {}) {
     $.extend(this, {
-      val: 0,
       startValue: 0,
       endValue: 100,
       minVal: 0,
@@ -18,7 +17,7 @@ export default class SliderModel {
     if (options.step && options.maxVal % options.step !== 0) {
       this.maxVal = Math.round(options.maxVal / options.step) * options.step
     }
-    if (options.step && options.startValue % options.step !== 0) {
+    if (options.step !==0 && options.startValue % options.step !== 0) {
       this.startValue = Math.round(options.startValue / options.step) * options.step
     }
     if (options.step && options.endValue % options.step !== 0) {
@@ -26,114 +25,87 @@ export default class SliderModel {
     }
   }
 
-  get currentValue () {
-    return this.val;
+  get currentRoundValue () {
+    return this._calculateRoundValue(this.startValue);
   }
 
-  get extremeValues () {
-    return {
-      min: this.minVal,
-      max: this.maxVal
+  get currentRoundEndValue () {
+    return this._calculateRoundValue(this.endValue);
+  }
+
+  set currentValue (val) {
+    if (this.step !== 0) {
+      this.startValue = Math.round(val / this.step) * this.step;
+    } else {
+      this.startValue = val;
     }
+    this._dispatchChangeValue('changestartvalue', this.startValue);
   }
 
-  calculateRoundValue (val) {
+  set currentMaxValue (val) {
+    if (this.step !== 0) {
+      this.endValue = Math.round(val / this.step) * this.step;
+    } else {
+      this.endValue = val;
+    }
+    this._dispatchChangeValue('changeendvalue', this.endValue);
+  }
+
+  _dispatchChangeValue (type, value) {
+    $(document.body).trigger({
+      model: this,
+      type: type,
+      value: this._calculateRoundValue(value),
+      coefficient: this._calculateCoefficient(value)
+    });
+  }
+
+  _checkIntervalValues (valueName) {
+    if (this.startValue > this.endValue && this[valueName] === this.startValue) {
+      this.startValue = this.endValue;
+      return false;
+    }
+
+    if (this.endValue < this.startValue && this[valueName] === this.endValue) {
+      this.endValue = this.startValue;
+      return false;
+    }
+
+    return true;
+  }
+
+  _calculateRoundValue (val) {
     return Math.round(val);
   }
 
-  get sliderType () {
-    return this.type;
-  }
-
-  setCurrentValue (val) {
-    this.startValue = val;
-    $(document.body).trigger({
-      model: this,
-      type: 'changestartvalue',
-      value: this.calculateRoundValue(this.startValue),
-      coefficient: this.calculateCoefficient(this.startValue)
-    });
-  }
-
-  setCurrentMaxValue (val) {
-    this.endValue = val;
-    $(document.body).trigger({
-      model: this,
-      type: 'changeendvalue',
-      value: this.calculateRoundValue(this.endValue),
-      coefficient: this.calculateCoefficient(this.endValue)
-    });
-  }
-
-  set extremeValues (values) {
-    this.minVal = values.min;
-    this.maxVal = values.max;
-  }
-
-  set sliderType (type) {
-    if (type === 'interval') {
-      this.type = 'interval'
-    }
-  }
-
-  set stepSize (size) {
-    this.step = size;
-  }
-
-  calculateStepValue (val) {
+  _calculateStepValue (val) {
     return (Math.round((this.maxVal - this.minVal) / val / this.step)) * this.step;
   }
 
-  calculateCoefficient (point) {
+  _calculateCoefficient (point) {
     return (this.maxVal - this.minVal) / (point - this.minVal);
   }
 
-  calculateValue (val, runnerType) {
-    let value;
-    let coefficient;
+  calculateValue (val, valueName) {
 
     if (this.step === 0) {
-      value = (this.maxVal - this.minVal) / val + this.minVal;
-      coefficient = val;
+      this[valueName] = (this.maxVal - this.minVal) / val + this.minVal;
     } else {
-      value = this.calculateStepValue(val) + this.minVal;
-      coefficient = this.calculateCoefficient(this[runnerType]);
+      this[valueName] = this._calculateStepValue(val) + this.minVal;
     }
 
-    this[runnerType] = value;
-
-    if (this.type === 'interval') {
-
-      if (this.startValue > this.endValue && this[runnerType] === this.startValue) {
-        this.startValue = this.endValue;
-        return false;
-      }
-
-      if (this.endValue < this.startValue && this[runnerType] === this.endValue) {
-        this.endValue = this.startValue;
-        return false;
-      }
+    if (this.type === 'interval' && !this._checkIntervalValues(valueName)) {
+      return false;
     }
 
-    if (this[runnerType] === this.startValue) {
-      $(document.body).trigger({
-        model: this,
-        type: 'changestartvalue',
-        value: this.calculateRoundValue(this.startValue),
-        coefficient: coefficient
-      });
+    if (this[valueName] === this.startValue) {
+      this._dispatchChangeValue('changestartvalue', this.startValue);
     }
 
-    if (this[runnerType] === this.endValue) {
-      $(document.body).trigger({
-        model: this,
-        type: 'changeendvalue',
-        value: this.calculateRoundValue(this.endValue),
-        coefficient: coefficient
-      });
+    if (this[valueName] === this.endValue) {
+      this._dispatchChangeValue('changeendvalue', this.endValue);
     }
 
-    return coefficient;
   }
 
 }
