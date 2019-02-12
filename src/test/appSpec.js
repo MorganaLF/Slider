@@ -23,44 +23,7 @@ import ScaleView from '../components/slider/scale/ScaleView';
 //     slider.drawSlider();
 //   });
 //
-//   it('Создает экземпляр класса SliderView', function () {
-//     expect(slider).toBeDefined();
-//   });
-//
-//   it('подгружает fixtures', function () {
-//     expect($('.slider')).toExist();
-//   });
-//
-//   it('Функция должна создавать элемент slider__progress внутри элемента slider', function () {
-//     expect($('.slider .slider__progress')).toExist();
-//   });
-//
-//   it('Функция должна создавать элемент slider__progress-full внутри элемента slider__progress', function () {
-//     expect($('.slider .slider__progress .slider__progress-full')).toExist();
-//   });
-//
-//   it('Функция должна создавать элемент slider__runner внутри элемента slider', function () {
-//     expect($('.slider .slider__runner')).toExist();
-//   });
-//
-//   it('Класс позволяет задать тип слайдера "interval"', function () {
-//     slider.type = 'interval';
-//     expect(slider.type).toEqual('interval');
-//   });
-//
-//   it('Функция создает два элемента slider__runner, если тип слайдера "interval"', function () {
-//     expect($('.slider .slider__runner').length).toEqual(2);
-//   });
-//
-//   it('Функция по умолчанию должна создавать элемент slider__tip внутри элемента slider__runner', function () {
-//     expect($('.slider .slider__runner .slider__tip')).toExist();
-//   });
-//
-//   it('Функция должна рисовать слайдер только один раз', function () {
-//     slider.drawSlider();
-//     expect($('.slider .slider__progress').length).toEqual(1);
-//   });
-// });
+
 //
 // describe('02 Движение ползунка слайдера', function () {
 //   let element,
