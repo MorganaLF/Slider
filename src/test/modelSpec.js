@@ -14,6 +14,67 @@ describe('SliderModel', function () {
     expect(sliderModel).toBeDefined();
   });
 
+  it('MinVal, MaxVal, StartValue, EndValue, step может быть только числом', function () {
+    sliderModel = new SliderModel({
+      minVal: 'dgsdg',
+      maxVal: 'asf2',
+      startValue: 'asgwet',
+      endValue: 'safan',
+      step: 'sah'
+    });
+    expect(sliderModel.minVal).toEqual(0);
+    expect(sliderModel.maxVal).toEqual(0);
+    expect(sliderModel.startValue).toEqual(0);
+    expect(sliderModel.endValue).toEqual(0);
+    expect(sliderModel.step).toEqual(0);
+  });
+
+  it('Минимальное значение не может быть меньше нуля', function () {
+    sliderModel = new SliderModel({
+      minVal: -10
+    });
+    expect(sliderModel.minVal).toEqual(10);
+  });
+
+  it('Максимальное значение не может быть меньше нуля', function () {
+    sliderModel = new SliderModel({
+      maxVal: -100
+    });
+    expect(sliderModel.maxVal).toEqual(100);
+  });
+
+  it('Стартовое значение не меньше, чем минимальное значение', function () {
+    sliderModel = new SliderModel({
+      minVal: 10,
+      startValue: 5
+    });
+    expect(sliderModel.startValue).toEqual(10);
+  });
+
+  it('Стартовое значение не больше, чем максимальное значение', function () {
+    sliderModel = new SliderModel({
+      maxVal: 100,
+      startValue: 105
+    });
+    expect(sliderModel.startValue).toEqual(100);
+  });
+
+  it('Конечное значение не больше, чем максимальное значение', function () {
+    sliderModel = new SliderModel({
+      maxVal: 100,
+      endValue: 105
+    });
+    expect(sliderModel.endValue).toEqual(100);
+  });
+
+  it('Конечное значение не меньше, чем минимальное значение', function () {
+    sliderModel = new SliderModel({
+      minVal: 10,
+      endValue: 5
+    });
+    expect(sliderModel.endValue).toEqual(10);
+  });
+
   it('Если установлен размер шага, минимальное и максимальное значение кратны этому шагу', function () {
     sliderModel = new SliderModel({
       step: 30,
@@ -74,6 +135,26 @@ describe('SliderModel. Сеттер currentValue', function () {
     expect(sliderModel.startValue).toEqual(10);
   });
 
+  it('Устанавливает только числовое значение', function () {
+    sliderModel.currentValue = 'dgsdA';
+    expect(sliderModel.startValue).toEqual(0);
+  });
+
+  it('Не устанавливает значение, большее, чем конечное', function () {
+    sliderModel.type = 'interval';
+    sliderModel.endValue = 80;
+    sliderModel.currentValue = 90;
+    expect(sliderModel.startValue).toEqual(80);
+  });
+
+  it('Устанавливает значение не меньше, чем минимальное', function () {
+    sliderModel = new SliderModel({
+      minVal: 30
+    });
+    sliderModel.currentMaxValue = 10;
+    expect(sliderModel.startValue).toEqual(30);
+  });
+
   it('Если установлен размер шага, устанавливает кратное шагу значение', function () {
     sliderModel.step = 20;
     sliderModel.currentValue = 19;
@@ -92,11 +173,31 @@ describe('SliderModel. Сеттер currentMaxValue', function () {
 
   beforeEach(function() {
     sliderModel = new SliderModel();
+    sliderModel.type = 'interval';
   });
 
   it('Устанавливает конечное значение', function () {
     sliderModel.currentMaxValue = 70;
     expect(sliderModel.endValue).toEqual(70);
+  });
+
+  it('Устанавливает только числовое значение', function () {
+    sliderModel.currentMaxValue = 'dgsdA';
+    expect(sliderModel.endValue).toEqual(0);
+  });
+
+  it('Не устанавливает значение, меньшее, чем начальное', function () {
+    sliderModel.startValue = 10;
+    sliderModel.currentMaxValue = 5;
+    expect(sliderModel.endValue).toEqual(10);
+  });
+
+  it('Устанавливает значение не меньше, чем минимальное', function () {
+    sliderModel = new SliderModel({
+      minVal: 30
+    });
+    sliderModel.currentMaxValue = 10;
+    expect(sliderModel.startValue).toEqual(30);
   });
 
   it('Если установлен размер шага, устанавливает кратное шагу значение', function () {
@@ -109,6 +210,13 @@ describe('SliderModel. Сеттер currentMaxValue', function () {
     spyOn(sliderModel, '_dispatchChangeValue');
     sliderModel.currentMaxValue = 49;
     expect(sliderModel._dispatchChangeValue).toHaveBeenCalled();
+  });
+
+  it('Не генерирует событие, если тип слайдера одиночный', function () {
+    sliderModel.type = 'single';
+    spyOn(sliderModel, '_dispatchChangeValue');
+    sliderModel.currentMaxValue = 49;
+    expect(sliderModel._dispatchChangeValue).not.toHaveBeenCalled();
   });
 });
 
@@ -123,17 +231,14 @@ describe('SliderModel. Метод calculateValue', function () {
     sliderModel.calculateValue(2, 'startValue');
     expect(sliderModel.startValue).toEqual(50);
 
-    // sliderModel.calculateValue(1, 'endValue');
-    // expect(sliderModel.endValue).toEqual(100);
+    sliderModel.calculateValue(1, 'endValue');
+    expect(sliderModel.endValue).toEqual(100);
   });
 
   it('Если установлен размер шага, устанавливается значение, кратное шагу', function () {
     sliderModel.step = 40;
     sliderModel.calculateValue(2, 'startValue');
     expect(sliderModel.startValue).toEqual(40);
-
-    // sliderModel.calculateValue(1, 'endValue');
-    // expect(sliderModel.endValue).toEqual(100);
   });
 
   it('Не устанавливает максимальное значение, меньшее, чем минимальное', function () {
@@ -161,6 +266,13 @@ describe('SliderModel. Метод calculateValue', function () {
     spyOn(sliderModel, '_dispatchChangeValue');
     sliderModel.calculateValue(2, 'endValue');
     expect(sliderModel._dispatchChangeValue).toHaveBeenCalled();
+  });
+
+  it('Не генерирует событие, если тип слайдера одиночный', function () {
+    sliderModel.type = 'single';
+    spyOn(sliderModel, '_dispatchChangeValue');
+    sliderModel.calculateValue(1, 'endValue');
+    expect(sliderModel._dispatchChangeValue).not.toHaveBeenCalled();
   });
 
   it('Позволяет посчитать текущее значение с учетом размера шага', function () {
