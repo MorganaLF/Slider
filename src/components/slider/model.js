@@ -11,18 +11,7 @@ export default class SliderModel {
       step: 0
     }, options);
 
-    if (options.step && options.minVal % options.step !== 0) {
-      this.minVal = Math.round(options.minVal / options.step) * options.step
-    }
-    if (options.step && options.maxVal % options.step !== 0) {
-      this.maxVal = Math.round(options.maxVal / options.step) * options.step
-    }
-    if (options.step !==0 && options.startValue % options.step !== 0) {
-      this.startValue = Math.round(options.startValue / options.step) * options.step
-    }
-    if (options.step && options.endValue % options.step !== 0) {
-      this.endValue = Math.round(options.endValue / options.step) * options.step
-    }
+    this._validateConstructor();
   }
 
   get currentRoundValue () {
@@ -34,30 +23,70 @@ export default class SliderModel {
   }
 
   set currentValue (val) {
-    if (this.step !== 0) {
-      this.startValue = Math.round(val / this.step) * this.step;
-    } else {
-      this.startValue = val;
+    this.startValue = val;
+    this._checkIsNumber('startValue');
+    this._checkCurrentValue('startValue');
+    this._checkStepValue ('startValue');
+    if (this.type === 'interval') {
+      this._checkIntervalValues('startValue');
     }
     this._dispatchChangeValue('changestartvalue', this.startValue);
   }
 
   set currentMaxValue (val) {
-    if (this.step !== 0) {
-      this.endValue = Math.round(val / this.step) * this.step;
-    } else {
-      this.endValue = val;
+    if (this.type === 'single') {
+      return;
     }
+    this.endValue = val;
+    this._checkIsNumber('endValue');
+    this._checkCurrentValue('endValue');
+    this._checkStepValue ('endValue');
+    this._checkIntervalValues('endValue');
     this._dispatchChangeValue('changeendvalue', this.endValue);
   }
 
-  _dispatchChangeValue (type, value) {
-    $(document.body).trigger({
-      model: this,
-      type: type,
-      value: this._calculateRoundValue(value),
-      coefficient: this._calculateCoefficient(value)
-    });
+  _validateConstructor () {
+    this._checkIsNumber('startValue');
+    this._checkIsNumber('endValue');
+    this._checkIsNumber('minVal');
+    this._checkIsNumber('maxVal');
+    this._checkIsNumber('step');
+    this._checkPositiveNumber('minVal');
+    this._checkPositiveNumber('maxVal');
+    this._checkCurrentValue('startValue');
+    this._checkCurrentValue('endValue');
+    this._checkStepValue ('minVal');
+    this._checkStepValue ('maxVal');
+    this._checkStepValue ('startValue');
+    this._checkStepValue ('endValue');
+  }
+
+  _checkIsNumber (prop) {
+    if (isNaN(this[prop])) {
+      this[prop] = 0;
+    }
+  }
+
+  _checkPositiveNumber (prop) {
+    if (this[prop] < 0) {
+      this[prop] = Math.abs(this[prop]);
+    }
+  }
+
+  _checkCurrentValue (prop) {
+    if (this[prop] < this.minVal) {
+      this[prop] = this.minVal;
+    }
+
+    if (this[prop] > this.maxVal) {
+      this[prop] = this.maxVal;
+    }
+  }
+
+  _checkStepValue (prop) {
+    if (this.step && this[prop] % this.step !== 0) {
+      this[prop] = Math.round(this[prop] / this.step) * this.step
+    }
   }
 
   _checkIntervalValues (valueName) {
@@ -72,6 +101,15 @@ export default class SliderModel {
     }
 
     return true;
+  }
+
+  _dispatchChangeValue (type, value) {
+    $(document.body).trigger({
+      model: this,
+      type: type,
+      value: this._calculateRoundValue(value),
+      coefficient: this._calculateCoefficient(value)
+    });
   }
 
   _calculateRoundValue (val) {
@@ -102,7 +140,7 @@ export default class SliderModel {
       this._dispatchChangeValue('changestartvalue', this.startValue);
     }
 
-    if (this[valueName] === this.endValue) {
+    if (this[valueName] === this.endValue && this.type === 'interval') {
       this._dispatchChangeValue('changeendvalue', this.endValue);
     }
 
