@@ -15,11 +15,11 @@ export default class RunnerView {
     }, options);
   }
 
-  get parentWidth () {
+  get _parentWidth () {
     return this.parentRightPoint - this.parentLeftPoint;
   }
 
-  get parentHeight () {
+  get _parentHeight () {
     return this.parentBottomPoint - this.parentTopPoint;
   }
 
@@ -36,7 +36,7 @@ export default class RunnerView {
 
   setRunnerPosition (coefficient) {
     let direction = this.orientation === 'horizontal' ? 'left' : 'top';
-    let parentGabarite  = this.orientation === 'horizontal' ? this.parentWidth : this.parentHeight;
+    let parentGabarite  = this.orientation === 'horizontal' ? this._parentWidth : this._parentHeight;
     let gabarite = this.orientation === 'horizontal' ? this.el.innerWidth() : this.el.innerHeight();
     if (coefficient !== 0) {
       this.el.css(direction, (parentGabarite - gabarite) / coefficient + 'px');
