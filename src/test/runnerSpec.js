@@ -232,7 +232,7 @@ describe('RunnerView. Функция moveRunner', function () {
     expect(ratio).toEqual(Infinity);
   });
 
-  it('Проверяет, не выходит ли координата за крайнюю правую точку', function () {
+  it('Проверяет, не выходит ли координата за крайнюю нижнюю точку', function () {
     runnerView.orientation = 'vertical';
     spyOnEvent('.slider__runner', 'move');
 
