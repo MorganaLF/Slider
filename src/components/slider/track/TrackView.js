@@ -14,8 +14,7 @@ export default class TrackView {
       parentTopPoint: options.parentTopPoint,
       parentBottomPoint: options.parentBottomPoint,
       type: options.type,
-      orientation: options.orientation,
-      model: options.model
+      orientation: options.orientation
     }, options);
   }
 
