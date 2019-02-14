@@ -53,95 +53,7 @@ import ScaleView from '../components/slider/scale/ScaleView';
 //   })
 // });
 //
-// /* MODEL */
-//
-// describe('03 SliderModel', function () {
-//   let sliderModel;
-//
-//   beforeEach(function() {
-//     sliderModel = new SliderModel();
-//   });
-//
-//   it('Создает экземпляр класса', function () {
-//     expect(sliderModel).toBeDefined();
-//   });
-//
-//   it('По умолчанию объект хранит значение value равное 0', function () {
-//     expect(sliderModel.currentValue).toEqual(0);
-//   });
-//
-//   it('Позволяет установить текущее значение value', function () {
-//     sliderModel.currentValue = 10;
-//     expect(sliderModel.currentValue).toEqual(10);
-//   });
-//
-//   it('Метод setExtremeValues позволяет задать максимальное и минимальное значение', function () {
-//     sliderModel.extremeValues = {min: 50, max: 5000};
-//     expect(sliderModel.extremeValues.min).toEqual(50);
-//     expect(sliderModel.extremeValues.max).toEqual(5000);
-//   });
-//
-//   it('Метод getSliderType позволяет получить тип слайдера', function () {
-//     expect(sliderModel.sliderType).toEqual('single');
-//   });
-//
-//   it('Метод setSliderType позволяет установить тип слайдера', function () {
-//     sliderModel.sliderType = 'interval';
-//     expect(sliderModel.sliderType).toEqual('interval');
-//   });
-//
-//   it('Метод setSliderType не позволяет установить не предусмотренный тип', function () {
-//     sliderModel.sliderType = '123';
-//     expect(sliderModel.sliderType).toEqual('single');
-//   });
-//
-//   it('Метод calculateValue считает текущее значение слайдера в зависимости от позиции курсора', function () {
-//     sliderModel.calculateValue(2, 'startValue');
-//     expect(sliderModel.startValue).toEqual(50);
-//
-//     sliderModel.calculateValue(1, 'endValue');
-//     expect(sliderModel.endValue).toEqual(100);
-//   });
-//
-// });
-//
-// /* CONTROLLER */
-//
-// describe('04 Controller', function () {
-//   let element,
-//       slider,
-//       runner,
-//       sliderModel,
-//       sliderController;
-//
-//   beforeEach(function () {
-//     setFixtures('<div class="slider"></div>');
-//     element = document.getElementsByClassName('slider')[0];
-//
-//     sliderModel = new SliderModel();
-//
-//     slider = new SliderView({el: element, model: sliderModel});
-//     slider.drawSlider();
-//     runner = element.getElementsByClassName('slider__runner')[0];
-//
-//     sliderController = new SliderController(slider, sliderModel);
-//     sliderController.init();
-//     spyOn(slider, 'moveRunner');
-//     spyOn(sliderController, 'onmouseup');
-//     $(runner).mousedown();
-//     $(window).mousemove();
-//     $(window).mouseup();
-//   });
-//
-//   it('Метод moveRunner запускается при клике на runner', function () {
-//     expect(slider.moveRunner).toHaveBeenCalled();
-//   });
-//
-//   it('При отпускании клавиши мыши все события прекращаются', function () {
-//     $(window).mouseup();
-//     expect(sliderController.onmouseup).toHaveBeenCalled();
-//   });
-// });
+
 //
 // /* VERTICAL SLIDER */
 //
@@ -187,27 +99,6 @@ import ScaleView from '../components/slider/scale/ScaleView';
 //   });
 // });
 //
-// /* STEP MODEL */
-//
-// describe('06 SliderModel', function () {
-//   let sliderModel;
-//
-//   beforeEach(function () {
-//     sliderModel = new SliderModel();
-//   });
-//
-//   it('Позволяет задать свойство stepSize', function () {
-//     sliderModel.stepSize = 5;
-//     expect(sliderModel.step).toEqual(5);
-//   });
-//
-//   it('Метод calculateStepValue позволяет посчитать текущее значение с учетом размера шага', function () {
-//     sliderModel.stepSize = 20;
-//     expect(sliderModel.calculateStepValue(2)).toEqual(60);
-//   });
-// });
-
-
 
 
 /* RUNNER VIEW */
