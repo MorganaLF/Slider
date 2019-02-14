@@ -7,3 +7,4 @@ import './components/slider/app';
 import './components/slider/runner/RunnerView';
 import './components/demo/DemoView';
 import './pages/index/index';
+import './components/slider/plugin';

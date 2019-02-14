@@ -1,5 +1,5 @@
 import $ from "jquery";
-import customSlider from '../slider/app';
+import customSlider from '../slider/plugin';
 
 export default class DemoView {
   constructor (options = {}) {
