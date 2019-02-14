@@ -11,15 +11,14 @@ export default class SliderController {
     this.tip2 = view.tip2;
     this.track = view.track;
     this.type = view.type;
-    this.onmove = this.onmove.bind(this);
-    this.onchangestartvalue = this.onchangestartvalue.bind(this);
-    this.onchangeendvalue = this.onchangeendvalue.bind(this);
-    this.onmousedown = this.onmousedown.bind(this);
-    this.onmousemove = this.onmousemove.bind(this);
-    this.onmouseup = this.onmouseup.bind(this);
+    this._onmove = this._onmove.bind(this);
+    this._onchangevalue = this._onchangevalue.bind(this);
+    this._onmousedown = this._onmousedown.bind(this);
+    this._onmousemove = this._onmousemove.bind(this);
+    this._onmouseup = this._onmouseup.bind(this);
   }
 
-  onmousedown (runner) {
+  _onmousedown (runner) {
     return (e) => {
       e.preventDefault();
 
@@ -28,74 +27,62 @@ export default class SliderController {
       runner.setRunnerShiftX(e);
       runner.setRunnerShiftY(e);
 
-      let mousemove = this.onmousemove(runner);
-      let onmove = this.onmove(runner, runnerType);
-      let mouseup = this.onmouseup(mousemove, onmove, runner);
+      let mousemove = this._onmousemove(runner);
+      let onmove = this._onmove(runner, runnerType);
+      let mouseup = this._onmouseup(mousemove, onmove, runner);
 
       $(window).on('mousemove', mousemove);
       $(window).on('mouseup', mouseup);
       runner.el.on('move', onmove);
-      // $('body').on('changestartvalue', this.onchangestartvalue);
-      // $('body').on('changeendvalue', this.onchangeendvalue);
 
     }
   };
 
-  onmove (runner, runnerType) {
+  _onmove (runner, runnerType) {
     return (e) => {
       this.model.calculateValue(e.detail, runnerType);
     }
   }
 
-  onchangestartvalue(e) {
-    if (e.model !== this.model) {
-      return;
+  _onchangevalue (runner, tip, point) {
+    return (e) => {
+      if (e.model !== this.model) {
+        return;
+      }
+      runner.setRunnerPosition(e.coefficient);
+      if (this.isTip) {
+        tip.updateTip(e.value);
+      }
+      this.track.animateTrack(e.coefficient, point);
     }
-    this.runner1.setRunnerPosition(e.coefficient);
-    if (this.isTip) {
-      this.tip1.updateTip(e.value);
-    }
-    this.track.animateTrack(e.coefficient, 'start');
   }
 
-  onchangeendvalue(e) {
-    if (e.model !== this.model) {
-      return;
-    }
-    this.runner2.setRunnerPosition(e.coefficient);
-    if (this.isTip) {
-      this.tip2.updateTip(e.value);
-    }
-    this.track.animateTrack(e.coefficient, 'end');
-  }
-
-  onmousemove (runner) {
+  _onmousemove (runner) {
     return (e) => {
       runner.moveRunner(e);
     }
   };
 
-  onmouseup (mousemovehandler, onmovehandler, runner) {
+  _onmouseup (mousemovehandler, onmovehandler, runner) {
     return (e) => {
       $(window).off( 'mousemove', mousemovehandler );
-      $(window).off( 'mouseup', this.onmouseup );
+      $(window).off( 'mouseup', this._onmouseup );
       runner.el.off('move', onmovehandler);
-      // $('body').off('changestartvalue', this.onchangestartvalue);
-      // $('body').off('changeendvalue', this.onchangeendvalue);
     }
   };
 
-  addHandlers (runner) {
-    let onmousedown = this.onmousedown(runner);
+  _addHandlers (runner, tip, changeevent, point) {
+    let onmousedown = this._onmousedown(runner);
+    let changevalue = this._onchangevalue(runner, tip, point);
+
     runner.el.on( 'mousedown', onmousedown );
-    $('body').on('changestartvalue', this.onchangestartvalue);
-    $('body').on('changeendvalue', this.onchangeendvalue);
+    $('body').on(changeevent, changevalue);
   }
 
   init () {
-    this.addHandlers(this.runner1);
+    this._addHandlers(this.runner1, this.tip1, 'changestartvalue', 'start');
     if (this.type === 'interval') {
-      this.addHandlers(this.runner2);
+      this._addHandlers(this.runner2, this.tip2, 'changeendvalue', 'end');
     }
   }
 }
