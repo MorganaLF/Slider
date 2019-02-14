@@ -13,7 +13,7 @@ export default class SliderView {
       tip1: null,
       tip2: null,
       track: null,
-      trackStep: 10,
+      trackItemsQuantity: 10,
       progressFull: null,
       scale: null,
       type: 'single',
@@ -112,7 +112,7 @@ export default class SliderView {
         this.el,
         this.model.minVal,
         this.model.maxVal,
-        this.trackStep
+        this.trackItemsQuantity
     );
   }
 

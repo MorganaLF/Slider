@@ -44,7 +44,7 @@ export default class ScaleView {
     scaleItem.css(positionProperty, itemIndent + 'px');
   }
 
-  drawScale (parent, minVal, maxVal, step) {
+  drawScale (parent, minVal, maxVal, itemsQuantity) {
     let scaleClass = this._checkOrientation('', ' slider__scale_vertical');
 
     this.el = $('<ul/>', {
@@ -52,11 +52,11 @@ export default class ScaleView {
     }).appendTo(parent);
     this.el.css(this._getSizeProperty(), this._getParentSize());
 
-    let itemsLength = (maxVal - minVal) / step;
+    let step = (maxVal - minVal) / itemsQuantity;
 
     for (let i = minVal; i <= maxVal; i += step) {
       let itemIndexNumber = (i - minVal) / step;
-      this._drawScaleItem(i, itemIndexNumber, itemsLength, this._getPositionProperty());
+      this._drawScaleItem(i, itemIndexNumber, itemsQuantity, this._getPositionProperty());
      }
   }
 }
