@@ -1,12 +1,10 @@
 {
-  "name": "webpack-2",
+  "name": "custom-slider",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "chartist": "^0.11.0",
-    "jquery": "^3.3.1",
-    "select2": "^4.0.6-rc.1"
+    "jquery": "^3.3.1"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
@@ -16,6 +14,7 @@
     "@babel/plugin-syntax-import-meta": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "autoprefixer": "^9.3.0",
+    "awesome-typescript-loader": "^5.2.1",
     "babel-loader": "^8.0.0",
     "copy-webpack-plugin": "^4.5.4",
     "css-loader": "^1.0.0",
@@ -39,9 +38,11 @@
     "postcss-loader": "^3.0.0",
     "pug": "^2.0.3",
     "pug-loader": "^2.4.0",
+    "source-map-loader": "^0.2.4",
     "style-loader": "^0.23.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
+    "typescript": "^3.3.3",
     "webpack": "^4.28.4",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.10"
