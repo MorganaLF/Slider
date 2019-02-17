@@ -10,7 +10,7 @@ export default class TipView {
     }, options);
   }
 
-  drawTip (parent, val) {
+  drawTip (parent, val: number) {
     let tipClass: string =
         this.orientation === 'horizontal' ? '' : ' slider__tip_vertical';
 
@@ -21,7 +21,7 @@ export default class TipView {
     this.updateTip(val);
   }
 
-  updateTip (val) {
+  updateTip (val: number) {
     this.el.html(val);
   }
 

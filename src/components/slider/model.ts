@@ -14,15 +14,15 @@ export default class SliderModel {
     this._validateConstructor();
   }
 
-  get currentRoundValue () {
+  get currentRoundValue (): number {
     return this._calculateRoundValue(this.startValue);
   }
 
-  get currentRoundEndValue () {
+  get currentRoundEndValue (): number {
     return this._calculateRoundValue(this.endValue);
   }
 
-  set currentValue (val) {
+  set currentValue (val: number) {
     this.startValue = val;
     this._checkIsNumber('startValue');
     this._checkCurrentValue('startValue');
@@ -33,7 +33,7 @@ export default class SliderModel {
     this._dispatchChangeValue('changestartvalue', this.startValue);
   }
 
-  set currentMaxValue (val) {
+  set currentMaxValue (val: number) {
     if (this.type === 'single') {
       return;
     }
@@ -61,19 +61,19 @@ export default class SliderModel {
     this._checkStepValue ('endValue');
   }
 
-  _checkIsNumber (prop) {
+  _checkIsNumber (prop: string) {
     if (isNaN(this[prop])) {
       this[prop] = 0;
     }
   }
 
-  _checkPositiveNumber (prop) {
+  _checkPositiveNumber (prop: string) {
     if (this[prop] < 0) {
       this[prop] = Math.abs(this[prop]);
     }
   }
 
-  _checkCurrentValue (prop) {
+  _checkCurrentValue (prop: string) {
     if (this[prop] < this.minVal) {
       this[prop] = this.minVal;
     }
@@ -83,13 +83,13 @@ export default class SliderModel {
     }
   }
 
-  _checkStepValue (prop) {
+  _checkStepValue (prop: string) {
     if (this.step && this[prop] % this.step !== 0) {
       this[prop] = Math.round(this[prop] / this.step) * this.step
     }
   }
 
-  _checkIntervalValues (valueName) {
+  _checkIntervalValues (valueName: string): boolean {
     if (this.startValue > this.endValue && this[valueName] === this.startValue) {
       this.startValue = this.endValue;
       return false;
@@ -103,7 +103,7 @@ export default class SliderModel {
     return true;
   }
 
-  _dispatchChangeValue (type, value) {
+  _dispatchChangeValue (type: string, value: number) {
     $(document.body).trigger({
       model: this,
       type: type,
@@ -112,19 +112,19 @@ export default class SliderModel {
     });
   }
 
-  _calculateRoundValue (val) {
+  _calculateRoundValue (val: number): number {
     return Math.round(val);
   }
 
-  _calculateStepValue (val) {
+  _calculateStepValue (val: number): number {
     return (Math.round((this.maxVal - this.minVal) / val / this.step)) * this.step;
   }
 
-  _calculateCoefficient (point) {
+  _calculateCoefficient (point: number): number {
     return (this.maxVal - this.minVal) / (point - this.minVal);
   }
 
-  calculateValue (val, valueName) {
+  calculateValue (val: number, valueName: string) {
 
     if (this.step === 0) {
       this[valueName] = (this.maxVal - this.minVal) / val + this.minVal;

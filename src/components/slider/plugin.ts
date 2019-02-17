@@ -3,7 +3,7 @@ import SliderApp from './app';
 export default $.fn.customSlider;
 let result;
 
-$.fn.customSlider = function(options) {
+$.fn.customSlider = function(options: object | string) {
 
   let args = arguments;
 

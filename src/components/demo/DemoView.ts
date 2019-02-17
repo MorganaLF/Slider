@@ -176,13 +176,13 @@ export default class DemoView {
     });
   }
 
-  _addTextInputHandlers (name, method) {
+  _addTextInputHandlers (name: string, method: string) {
     $(`input[name="${name}"]`).on('change', (e) => {
       this._updateSlider($(e.target), method);
     });
   }
 
-  _addCheckboxHandlers (name, on, off) {
+  _addCheckboxHandlers (name: string, on: string, off: string) {
     $(`input[name="${name}"]`).on('change', (e) => {
       this._updateCheckboxes($(e.target), on, off);
     });
@@ -206,21 +206,21 @@ export default class DemoView {
     this._addRadioHandlers();
   }
 
-  _getSliderMethod (el, method) {
+  _getSliderMethod (el, method: string) {
     return el
                 .closest('.page__row')
                 .find('.slider')
                 .customSlider(method);
   }
 
-  _updateSlider (el, method) {
+  _updateSlider (el, method: string) {
     el
         .closest('.page__row')
         .find('.slider')
         .customSlider(method, el.val());
   }
 
-  _setInputVal (name, method) {
+  _setInputVal (name, method: string) {
     let self = this;
     $(`input[name="${name}"]`).each(function () {
       let currentValue = self._getSliderMethod($(this), method);
@@ -236,7 +236,7 @@ export default class DemoView {
     this._setInputVal('step-size', 'stepSize');
   }
 
-  _updateCheckboxes (el, on, off) {
+  _updateCheckboxes (el, on: string, off: string) {
       if (el.prop('checked')) {
         this._getSliderMethod(el, on);
       } else {
@@ -244,7 +244,7 @@ export default class DemoView {
       }
   }
 
-  _updateRadio (el, on, off) {
+  _updateRadio (el, on: string, off: string) {
     let radioGroup: object =
         el
             .closest('.page__row')

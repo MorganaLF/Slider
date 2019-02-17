@@ -38,13 +38,13 @@ export default class SliderController {
     }
   };
 
-  _onmove (runner, runnerType) {
+  _onmove (runner, runnerType: string) {
     return (e) => {
       this.model.calculateValue(e.detail, runnerType);
     }
   }
 
-  _onchangevalue (runner, tip, point) {
+  _onchangevalue (runner, tip, point: number) {
     return (e) => {
       if (e.model !== this.model) {
         return;
@@ -71,7 +71,7 @@ export default class SliderController {
     }
   };
 
-  _addHandlers (runner, tip, changeevent, point) {
+  _addHandlers (runner, tip, changeevent: string, point: number) {
     let onmousedown = this._onmousedown(runner);
     let changevalue = this._onchangevalue(runner, tip, point);
 

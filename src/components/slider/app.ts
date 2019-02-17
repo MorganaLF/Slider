@@ -22,37 +22,37 @@ export default class SliderApp {
     }, options);
   }
 
-  currentValue () {
+  currentValue (): number {
     return this.sliderModel.currentRoundValue;
   }
 
-  currentMaxValue () {
+  currentMaxValue (): number {
     return this.sliderModel.currentRoundEndValue;
   }
 
-  minValue () {
+  minValue (): number {
     return this.sliderModel.minVal;
   }
 
-  maxValue () {
+  maxValue (): number {
     return this.sliderModel.maxVal;
   }
 
-  stepSize () {
+  stepSize (): number {
     return this.sliderModel.step;
   }
 
-  setMinValue (val) {
+  setMinValue (val: number) {
     this.minVal = parseInt(val);
     this.init();
   }
 
-  setMaxValue (val) {
+  setMaxValue (val: number) {
     this.maxVal = parseInt(val);
     this.init();
   }
 
-  setCurrentValue (val) {
+  setCurrentValue (val: number) {
     this.sliderModel.currentValue = val;
   }
 
@@ -60,7 +60,7 @@ export default class SliderApp {
     this.sliderModel.currentMaxValue = val;
   }
 
-  setStepSize (val) {
+  setStepSize (val: number) {
     this.step = val;
     this.init();
   }

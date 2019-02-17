@@ -15,15 +15,15 @@ export default class RunnerView {
     }, options);
   }
 
-  get _parentWidth () {
+  get _parentWidth (): number {
     return this.parentRightPoint - this.parentLeftPoint;
   }
 
-  get _parentHeight () {
+  get _parentHeight (): number {
     return this.parentBottomPoint - this.parentTopPoint;
   }
 
-  drawRunner (parent, coefficient) {
+  drawRunner (parent, coefficient: number) {
     let runnerClass: string =
         this.orientation === 'horizontal' ? '' : ' slider__runner_vertical';
 
@@ -34,7 +34,7 @@ export default class RunnerView {
     this.setRunnerPosition(coefficient);
   }
 
-  setRunnerPosition (coefficient) {
+  setRunnerPosition (coefficient: number) {
     let direction: string = this.orientation === 'horizontal' ? 'left' : 'top';
     let parentGabarite: number  = this.orientation === 'horizontal' ? this._parentWidth : this._parentHeight;
     let gabarite: number = this.orientation === 'horizontal' ? this.el.innerWidth() : this.el.innerHeight();
@@ -51,7 +51,7 @@ export default class RunnerView {
     this.shiftY = e.pageY - this.el.offset().top;
   }
 
-  _checkCursorPosition (coord, startPoint, endPoint, shift, gabarite) {
+  _checkCursorPosition (coord: number, startPoint: number, endPoint: number, shift: number, gabarite: number): number {
     if (coord < startPoint + shift) {
       coord = 0;
     } else if (coord > endPoint - gabarite + shift) {
@@ -62,9 +62,9 @@ export default class RunnerView {
     return coord;
   }
 
-  _dispatchMoveRunner (coord, startPoint, endPoint, shift, gabarite) {
+  _dispatchMoveRunner (coord: number, startPoint: number, endPoint: number, shift: number, gabarite: number) {
     coord = this._checkCursorPosition(coord, startPoint, endPoint, shift, gabarite);
-    let ratio = (endPoint - startPoint - gabarite) / coord;
+    let ratio: number = (endPoint - startPoint - gabarite) / coord;
 
     this.el.trigger({
       type: 'move',

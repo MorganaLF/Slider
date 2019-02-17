@@ -24,35 +24,35 @@ export default class SliderView {
     }, options);
   }
 
-  get _sliderLeftPoint () {
+  get _sliderLeftPoint (): number {
     return this.el.offset().left;
   }
 
-  get _sliderTopPoint () {
+  get _sliderTopPoint (): number {
     return this.el.offset().top;
   }
 
-  get _sliderRightPoint () {
+  get _sliderRightPoint (): number {
     return this.el.offset().left + this.el.innerWidth();
   }
 
-  get _sliderBottomPoint () {
+  get _sliderBottomPoint (): number {
     return this.el.offset().top + this.el.innerHeight();
   }
 
-  get _innerWidth () {
+  get _innerWidth (): number {
     return this.el.innerWidth() - this.runner1.el.innerWidth();
   }
 
-  get _innerHeight () {
+  get _innerHeight (): number {
     return this.el.innerHeight() - this.runner1.el.innerHeight();
   }
 
-  get _runnerWidth () {
+  get _runnerWidth (): number {
     return this.runner1.el.innerWidth();
   }
 
-  get _runnerHeight () {
+  get _runnerHeight (): number {
     return this.runner1.el.innerHeight();
   }
 
@@ -61,7 +61,7 @@ export default class SliderView {
     this._drawSlider();
   }
 
-  _createRunner (prop, point) {
+  _createRunner (prop: string, point: number) {
     this[prop] = new RunnerView({
       type: this.type,
       orientation: this.orientation,
@@ -73,7 +73,7 @@ export default class SliderView {
     this[prop].drawRunner(this.el, this.model._calculateCoefficient(point));
   }
 
-  _createTip (prop, el, val) {
+  _createTip (prop: string, el, val: number) {
     this[prop] = new TipView({
       type: this.type,
       orientation: this.orientation
