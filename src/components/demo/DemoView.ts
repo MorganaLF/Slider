@@ -8,7 +8,7 @@ export default class DemoView {
   }
 
   _createDemoPage () {
-    let demoTemplate = $(
+    let demoTemplate: object = $(
         `<div class="page">
           <div class="page__row">
             <div class="page__col">
@@ -245,7 +245,7 @@ export default class DemoView {
   }
 
   _updateRadio (el, on, off) {
-    let radioGroup =
+    let radioGroup: object =
         el
             .closest('.page__row')
             .find($('input[name="orientation"]:checked'));

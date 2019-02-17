@@ -38,9 +38,9 @@ export default class TrackView {
 
   drawTrack (parent, coefficient, coefficientTwo) {
 
-    let trackClass =
+    let trackClass: string =
         this.orientation === 'horizontal' ? '' : ' slider__track_vertical';
-    let trackFullClass =
+    let trackFullClass: string =
         this.orientation === 'horizontal' ? '' : ' slider__track-full_vertical';
 
     this.el = $('<div/>', {
@@ -69,8 +69,8 @@ export default class TrackView {
   }
 
   _setIntervalTrack (coefficient, startPoint, endPoint, gabariteProperty, gabarite, point) {
-    let startIndent,
-        endIndent;
+    let startIndent: number,
+        endIndent: number;
 
     if (point === 'start') {
       startIndent = gabarite / coefficient;

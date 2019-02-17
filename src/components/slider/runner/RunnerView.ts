@@ -24,7 +24,7 @@ export default class RunnerView {
   }
 
   drawRunner (parent, coefficient) {
-    let runnerClass =
+    let runnerClass: string =
         this.orientation === 'horizontal' ? '' : ' slider__runner_vertical';
 
     this.el = $('<div/>', {
@@ -35,9 +35,9 @@ export default class RunnerView {
   }
 
   setRunnerPosition (coefficient) {
-    let direction = this.orientation === 'horizontal' ? 'left' : 'top';
-    let parentGabarite  = this.orientation === 'horizontal' ? this._parentWidth : this._parentHeight;
-    let gabarite = this.orientation === 'horizontal' ? this.el.innerWidth() : this.el.innerHeight();
+    let direction: string = this.orientation === 'horizontal' ? 'left' : 'top';
+    let parentGabarite: number  = this.orientation === 'horizontal' ? this._parentWidth : this._parentHeight;
+    let gabarite: number = this.orientation === 'horizontal' ? this.el.innerWidth() : this.el.innerHeight();
     if (coefficient !== 0) {
       this.el.css(direction, (parentGabarite - gabarite) / coefficient + 'px');
     }

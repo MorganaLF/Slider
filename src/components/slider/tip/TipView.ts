@@ -11,7 +11,7 @@ export default class TipView {
   }
 
   drawTip (parent, val) {
-    let tipClass =
+    let tipClass: string =
         this.orientation === 'horizontal' ? '' : ' slider__tip_vertical';
 
     this.el = $('<div/>', {

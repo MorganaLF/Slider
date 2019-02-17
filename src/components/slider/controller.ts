@@ -22,7 +22,7 @@ export default class SliderController {
     return (e) => {
       e.preventDefault();
 
-      let runnerType = runner === this.runner1 ? 'startValue' : 'endValue';
+      let runnerType: string = runner === this.runner1 ? 'startValue' : 'endValue';
 
       runner.setRunnerShiftX(e);
       runner.setRunnerShiftY(e);

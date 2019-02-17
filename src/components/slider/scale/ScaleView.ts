@@ -32,30 +32,30 @@ export default class ScaleView {
   }
 
   _drawScaleItem (i, index, itemsLength, positionProperty) {
-    let scaleItem = $('<li/>', {
+    let scaleItem: object = $('<li/>', {
       class: 'slider__scale-item',
       text: i
     }).appendTo(this.el);
 
-    let itemGabarite = this._getInnerSize(scaleItem);
-    let itemIndent = index * (this._getParentSize() / itemsLength) - itemGabarite / 2;
+    let itemGabarite: number = this._getInnerSize(scaleItem);
+    let itemIndent: number = index * (this._getParentSize() / itemsLength) - itemGabarite / 2;
 
     scaleItem.css('position', 'absolute');
     scaleItem.css(positionProperty, itemIndent + 'px');
   }
 
   drawScale (parent, minVal, maxVal, itemsQuantity) {
-    let scaleClass = this._checkOrientation('', ' slider__scale_vertical');
+    let scaleClass: string = this._checkOrientation('', ' slider__scale_vertical');
 
     this.el = $('<ul/>', {
       class: 'slider__scale' + scaleClass,
     }).appendTo(parent);
     this.el.css(this._getSizeProperty(), this._getParentSize());
 
-    let step = (maxVal - minVal) / itemsQuantity;
+    let step: number = (maxVal - minVal) / itemsQuantity;
 
     for (let i = minVal; i <= maxVal; i += step) {
-      let itemIndexNumber = (i - minVal) / step;
+      let itemIndexNumber: number = (i - minVal) / step;
       this._drawScaleItem(i, itemIndexNumber, itemsQuantity, this._getPositionProperty());
      }
   }
