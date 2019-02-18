@@ -18,7 +18,7 @@ export default class SliderController {
     this._onmouseup = this._onmouseup.bind(this);
   }
 
-  _onmousedown (runner): (e) => void {
+  _onmousedown (runner): (e: {}) => void {
     return (e): void => {
       e.preventDefault();
 
@@ -38,13 +38,13 @@ export default class SliderController {
     }
   };
 
-  _onmove (runner, runnerType: string): (e) => void {
+  _onmove (runner: {}, runnerType: string): (e: {}) => void {
     return (e): void => {
       this.model.calculateValue(e.detail, runnerType);
     }
   }
 
-  _onchangevalue (runner, tip, point: number): (e) => void {
+  _onchangevalue (runner: {}, tip: {}, point: string): (e: {}) => void {
     return (e): void => {
       if (e.model !== this.model) {
         return;
@@ -57,21 +57,25 @@ export default class SliderController {
     }
   }
 
-  _onmousemove (runner): (e) => void {
+  _onmousemove (runner: {}): (e: {}) => void {
     return (e): void => {
       runner.moveRunner(e);
     }
   };
 
-  _onmouseup (mousemovehandler, onmovehandler, runner): (e) => void {
-    return (e): void => {
-      $(window).off( 'mousemove', mousemovehandler );
-      $(window).off( 'mouseup', this._onmouseup );
-      runner.el.off('move', onmovehandler);
-    }
+  _onmouseup (
+    mousemovehandler: (runner: {}) => () => void,
+    onmovehandler: (runner: {}, runnerType: string) => () => void,
+    runner: {})
+    : (e: {}) => void {
+      return (e): void => {
+        $(window).off( 'mousemove', mousemovehandler );
+        $(window).off( 'mouseup', this._onmouseup );
+        runner.el.off('move', onmovehandler);
+      }
   };
 
-  _addHandlers (runner, tip, changeevent: string, point: number): void {
+  _addHandlers (runner: {}, tip: {}, changeevent: string, point: string): void {
     let onmousedown = this._onmousedown(runner);
     let changevalue = this._onchangevalue(runner, tip, point);
 

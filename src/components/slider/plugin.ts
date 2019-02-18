@@ -10,7 +10,7 @@ $.fn.customSlider = function(options: object | string): (method: string, arg: st
   this.each(function () {
 
     if (typeof options === 'object' || ! options) {
-      let dataConfig = {
+      let dataConfig: {} = {
         startValue: $(this).data('start-value'),
         endValue: $(this).data('end-value'),
         minVal: $(this).data('min-value'),

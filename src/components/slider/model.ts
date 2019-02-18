@@ -33,7 +33,7 @@ export default class SliderModel {
     this._dispatchChangeValue('changestartvalue', this.startValue);
   }
 
-  set currentMaxValue (val: number): void {
+  set currentMaxValue (val: number) {
     if (this.type === 'single') {
       return;
     }
