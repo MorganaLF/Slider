@@ -189,7 +189,7 @@ export default class DemoView {
   }
 
   _addRadioHandlers (): void {
-    $('input[name="orientation"]').on('change', (e) => {
+    $('input[name="orientation"]').on('change', (e): void => {
       this._updateRadio($(e.target), 'setHorisontalOrientation', 'setVeticalOrientation');
     });
   }
@@ -206,7 +206,7 @@ export default class DemoView {
     this._addRadioHandlers();
   }
 
-  _getSliderMethod (el, method: string) {
+  _getSliderMethod (el, method: string): number {
     return el
                 .closest('.page__row')
                 .find('.slider')
@@ -223,7 +223,7 @@ export default class DemoView {
   _setInputVal (name, method: string): void {
     let self = this;
     $(`input[name="${name}"]`).each(function () {
-      let currentValue = self._getSliderMethod($(this), method);
+      let currentValue: number = self._getSliderMethod($(this), method);
       $(this).val(currentValue);
     });
   }

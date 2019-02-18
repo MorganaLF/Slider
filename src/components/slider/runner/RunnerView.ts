@@ -34,7 +34,7 @@ export default class RunnerView {
     this.setRunnerPosition(coefficient);
   }
 
-  setRunnerPosition (coefficient: number) {
+  setRunnerPosition (coefficient: number): void {
     let direction: string = this.orientation === 'horizontal' ? 'left' : 'top';
     let parentGabarite: number  = this.orientation === 'horizontal' ? this._parentWidth : this._parentHeight;
     let gabarite: number = this.orientation === 'horizontal' ? this.el.innerWidth() : this.el.innerHeight();
@@ -72,7 +72,7 @@ export default class RunnerView {
     });
   }
 
-  moveRunner (e) {
+  moveRunner (e): void {
     if (this.orientation === 'horizontal') {
       this._dispatchMoveRunner(e.pageX, this.parentLeftPoint, this.parentRightPoint, this.shiftX, this.el.innerWidth());
     } else {
