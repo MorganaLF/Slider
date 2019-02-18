@@ -43,11 +43,11 @@ export default class RunnerView {
     }
   }
 
-  setRunnerShiftX (e) {
+  setRunnerShiftX (e): void {
     this.shiftX = e.pageX - this.el.offset().left;
   }
 
-  setRunnerShiftY (e) {
+  setRunnerShiftY (e): void {
     this.shiftY = e.pageY - this.el.offset().top;
   }
 
@@ -62,7 +62,7 @@ export default class RunnerView {
     return coord;
   }
 
-  _dispatchMoveRunner (coord: number, startPoint: number, endPoint: number, shift: number, gabarite: number) {
+  _dispatchMoveRunner (coord: number, startPoint: number, endPoint: number, shift: number, gabarite: number): void {
     coord = this._checkCursorPosition(coord, startPoint, endPoint, shift, gabarite);
     let ratio: number = (endPoint - startPoint - gabarite) / coord;
 

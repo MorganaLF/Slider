@@ -56,12 +56,12 @@ export default class SliderView {
     return this.runner1.el.innerHeight();
   }
 
-  updateSlider () {
+  updateSlider (): void {
     this.el.html('');
     this._drawSlider();
   }
 
-  _createRunner (prop: string, point: number) {
+  _createRunner (prop: string, point: number): void {
     this[prop] = new RunnerView({
       type: this.type,
       orientation: this.orientation,
@@ -73,7 +73,7 @@ export default class SliderView {
     this[prop].drawRunner(this.el, this.model._calculateCoefficient(point));
   }
 
-  _createTip (prop: string, el, val: number) {
+  _createTip (prop: string, el, val: number): void {
     this[prop] = new TipView({
       type: this.type,
       orientation: this.orientation
@@ -81,7 +81,7 @@ export default class SliderView {
     this[prop].drawTip(el, val);
   }
 
-  _createTrack () {
+  _createTrack (): void {
     this.track = new TrackView({
       type: this.type,
       orientation: this.orientation,
@@ -101,7 +101,7 @@ export default class SliderView {
     );
   }
 
-  _createScale () {
+  _createScale (): void {
     this.scale = new ScaleView({
       parentWidth: this._innerWidth,
       parentHeight: this._innerHeight,
@@ -116,7 +116,7 @@ export default class SliderView {
     );
   }
 
-  _drawSlider () {
+  _drawSlider (): void {
     this._createRunner('runner1', this.model.startValue);
 
     if (this.isTip) {

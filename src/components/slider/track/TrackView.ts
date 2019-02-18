@@ -36,7 +36,7 @@ export default class TrackView {
     }
   }
 
-  drawTrack (parent, coefficient: number, coefficientTwo: number) {
+  drawTrack (parent, coefficient: number, coefficientTwo: number): void {
 
     let trackClass: string =
         this.orientation === 'horizontal' ? '' : ' slider__track_vertical';
@@ -60,7 +60,7 @@ export default class TrackView {
     }
   }
 
-  _setSingleTrackLength (pos: number, property: string, gabarite: string, runnerGabarite: string) {
+  _setSingleTrackLength (pos: number, property: string, gabarite: string, runnerGabarite: string): void {
     if (pos !== 0) {
       this.trackFull.css(property, this[gabarite] / pos + this[runnerGabarite]/2 + 'px');
     } else {
@@ -68,7 +68,7 @@ export default class TrackView {
     }
   }
 
-  _setIntervalTrack (coefficient: number, startPoint: string, endPoint: string, gabariteProperty: string, gabarite: string, pointName: string) {
+  _setIntervalTrack (coefficient: number, startPoint: string, endPoint: string, gabariteProperty: string, gabarite: string, pointName: string): void {
     let startIndent: number,
         endIndent: number;
 
@@ -84,7 +84,7 @@ export default class TrackView {
     this.trackFull.css(gabariteProperty, gabarite - startIndent - endIndent + 'px');
   }
 
-  animateTrack (coefficient: number, pointName: string) {
+  animateTrack (coefficient: number, pointName: string): void {
     if (this.type === 'interval') {
       if (this.orientation === 'horizontal') {
         this._setIntervalTrack(coefficient, 'left', 'right', 'width', this.el.innerWidth(), pointName);

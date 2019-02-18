@@ -7,7 +7,7 @@ export default class DemoView {
     }, options);
   }
 
-  _createDemoPage () {
+  _createDemoPage (): void {
     let demoTemplate: object = $(
         `<div class="page">
           <div class="page__row">
@@ -142,7 +142,7 @@ export default class DemoView {
     demoTemplate.appendTo($('body'));
   }
 
-  init () {
+  init (): void {
     this._createDemoPage();
 
     $('.slider_simple').customSlider();
@@ -167,7 +167,7 @@ export default class DemoView {
     this._addHandlers();
   }
 
-  _addBodyHandlers () {
+  _addBodyHandlers (): void {
     $('body').on('changestartvalue', () => {
       this._updateInputValues();
     });
@@ -176,25 +176,25 @@ export default class DemoView {
     });
   }
 
-  _addTextInputHandlers (name: string, method: string) {
+  _addTextInputHandlers (name: string, method: string): void {
     $(`input[name="${name}"]`).on('change', (e) => {
       this._updateSlider($(e.target), method);
     });
   }
 
-  _addCheckboxHandlers (name: string, on: string, off: string) {
+  _addCheckboxHandlers (name: string, on: string, off: string): void {
     $(`input[name="${name}"]`).on('change', (e) => {
       this._updateCheckboxes($(e.target), on, off);
     });
   }
 
-  _addRadioHandlers () {
+  _addRadioHandlers (): void {
     $('input[name="orientation"]').on('change', (e) => {
       this._updateRadio($(e.target), 'setHorisontalOrientation', 'setVeticalOrientation');
     });
   }
 
-  _addHandlers () {
+  _addHandlers (): void {
     this._addBodyHandlers();
     this._addTextInputHandlers('min-value', 'setMinValue');
     this._addTextInputHandlers('max-value', 'setMaxValue');
@@ -213,14 +213,14 @@ export default class DemoView {
                 .customSlider(method);
   }
 
-  _updateSlider (el, method: string) {
+  _updateSlider (el, method: string): void {
     el
         .closest('.page__row')
         .find('.slider')
         .customSlider(method, el.val());
   }
 
-  _setInputVal (name, method: string) {
+  _setInputVal (name, method: string): void {
     let self = this;
     $(`input[name="${name}"]`).each(function () {
       let currentValue = self._getSliderMethod($(this), method);
@@ -228,7 +228,7 @@ export default class DemoView {
     });
   }
 
-  _updateInputValues () {
+  _updateInputValues (): void {
     this._setInputVal('current-value', 'currentValue');
     this._setInputVal('current-max-value', 'currentMaxValue');
     this._setInputVal('min-value', 'minValue');
@@ -236,7 +236,7 @@ export default class DemoView {
     this._setInputVal('step-size', 'stepSize');
   }
 
-  _updateCheckboxes (el, on: string, off: string) {
+  _updateCheckboxes (el, on: string, off: string): void {
       if (el.prop('checked')) {
         this._getSliderMethod(el, on);
       } else {
@@ -244,7 +244,7 @@ export default class DemoView {
       }
   }
 
-  _updateRadio (el, on: string, off: string) {
+  _updateRadio (el, on: string, off: string): void {
     let radioGroup: object =
         el
             .closest('.page__row')

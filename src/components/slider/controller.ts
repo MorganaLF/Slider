@@ -71,7 +71,7 @@ export default class SliderController {
     }
   };
 
-  _addHandlers (runner, tip, changeevent: string, point: number) {
+  _addHandlers (runner, tip, changeevent: string, point: number): void {
     let onmousedown = this._onmousedown(runner);
     let changevalue = this._onchangevalue(runner, tip, point);
 
@@ -79,7 +79,7 @@ export default class SliderController {
     $('body').on(changeevent, changevalue);
   }
 
-  init () {
+  init (): void {
     this._addHandlers(this.runner1, this.tip1, 'changestartvalue', 'start');
     if (this.type === 'interval') {
       this._addHandlers(this.runner2, this.tip2, 'changeendvalue', 'end');

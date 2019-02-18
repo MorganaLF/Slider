@@ -42,60 +42,60 @@ export default class SliderApp {
     return this.sliderModel.step;
   }
 
-  setMinValue (val: number) {
+  setMinValue (val: number): void {
     this.minVal = parseInt(val);
     this.init();
   }
 
-  setMaxValue (val: number) {
+  setMaxValue (val: number): void {
     this.maxVal = parseInt(val);
     this.init();
   }
 
-  setCurrentValue (val: number) {
+  setCurrentValue (val: number): void {
     this.sliderModel.currentValue = val;
   }
 
-  setCurrentMaxValue (val) {
+  setCurrentMaxValue (val): void {
     this.sliderModel.currentMaxValue = val;
   }
 
-  setStepSize (val: number) {
+  setStepSize (val: number): void {
     this.step = val;
     this.init();
   }
 
-  showTip () {
+  showTip (): void {
     this.isTip = true;
     this.init();
   }
 
-  hideTip () {
+  hideTip (): void {
     this.isTip = false;
     this.init();
   }
 
-  showScale () {
+  showScale (): void {
     this.isScale = true;
     this.init();
   }
 
-  hideScale () {
+  hideScale (): void {
     this.isScale = false;
     this.init();
   }
 
-  setVeticalOrientation () {
+  setVeticalOrientation (): void {
     this.orientation = 'vertical';
     this.init();
   }
 
-  setHorisontalOrientation () {
+  setHorisontalOrientation (): void {
     this.orientation = 'horizontal';
     this.init();
   }
 
-  init () {
+  init (): void {
     this.sliderModel = new SliderModel({
       startValue: this.startValue,
       endValue: this.endValue,

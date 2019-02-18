@@ -33,7 +33,7 @@ export default class SliderModel {
     this._dispatchChangeValue('changestartvalue', this.startValue);
   }
 
-  set currentMaxValue (val: number) {
+  set currentMaxValue (val: number): void {
     if (this.type === 'single') {
       return;
     }
@@ -45,7 +45,7 @@ export default class SliderModel {
     this._dispatchChangeValue('changeendvalue', this.endValue);
   }
 
-  _validateConstructor () {
+  _validateConstructor (): void {
     this._checkIsNumber('startValue');
     this._checkIsNumber('endValue');
     this._checkIsNumber('minVal');
@@ -61,19 +61,19 @@ export default class SliderModel {
     this._checkStepValue ('endValue');
   }
 
-  _checkIsNumber (prop: string) {
+  _checkIsNumber (prop: string): void {
     if (isNaN(this[prop])) {
       this[prop] = 0;
     }
   }
 
-  _checkPositiveNumber (prop: string) {
+  _checkPositiveNumber (prop: string): void {
     if (this[prop] < 0) {
       this[prop] = Math.abs(this[prop]);
     }
   }
 
-  _checkCurrentValue (prop: string) {
+  _checkCurrentValue (prop: string): void {
     if (this[prop] < this.minVal) {
       this[prop] = this.minVal;
     }
@@ -83,7 +83,7 @@ export default class SliderModel {
     }
   }
 
-  _checkStepValue (prop: string) {
+  _checkStepValue (prop: string): void {
     if (this.step && this[prop] % this.step !== 0) {
       this[prop] = Math.round(this[prop] / this.step) * this.step
     }
@@ -103,7 +103,7 @@ export default class SliderModel {
     return true;
   }
 
-  _dispatchChangeValue (type: string, value: number) {
+  _dispatchChangeValue (type: string, value: number): void {
     $(document.body).trigger({
       model: this,
       type: type,
@@ -124,7 +124,7 @@ export default class SliderModel {
     return (this.maxVal - this.minVal) / (point - this.minVal);
   }
 
-  calculateValue (val: number, valueName: string) {
+  calculateValue (val: number, valueName: string): void | boolean {
 
     if (this.step === 0) {
       this[valueName] = (this.maxVal - this.minVal) / val + this.minVal;

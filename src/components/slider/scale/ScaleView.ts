@@ -31,7 +31,7 @@ export default class ScaleView {
     return this.orientation === 'horizontal' ? valOne : valTwo;
   }
 
-  _drawScaleItem (i: number, index: number, itemsLength: number, positionProperty: string) {
+  _drawScaleItem (i: number, index: number, itemsLength: number, positionProperty: string): void {
     let scaleItem: object = $('<li/>', {
       class: 'slider__scale-item',
       text: i
@@ -44,7 +44,7 @@ export default class ScaleView {
     scaleItem.css(positionProperty, itemIndent + 'px');
   }
 
-  drawScale (parent, minVal: number, maxVal: number, itemsQuantity: number) {
+  drawScale (parent, minVal: number, maxVal: number, itemsQuantity: number): void {
     let scaleClass: string = this._checkOrientation('', ' slider__scale_vertical');
 
     this.el = $('<ul/>', {
