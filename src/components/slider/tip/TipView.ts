@@ -1,16 +1,27 @@
 import $ from "jquery";
 
+type TipViewOptions = {
+    el: null | {},
+    type: string,
+    orientation: string,
+    parent: null | {}
+}
+
 export default class TipView {
-  constructor (options = {}) {
-    $.extend(this, {
-      el: null,
-      type: options.type,
-      orientation: options.orientation,
-      parent: null
-    }, options);
+  private el: null | {};
+  private  type: string;
+  private  orientation: string;
+  private  parent: null | {};
+
+  constructor (options : TipViewOptions) {
+    this.el = null;
+    this.type = options.type;
+    this.orientation = options.orientation;
+    this.parent = null;
+    $.extend(this, options);
   }
 
-  drawTip (parent, val: number): void {
+  public drawTip (parent: {}, val: number): void {
     let tipClass: string =
         this.orientation === 'horizontal' ? '' : ' slider__tip_vertical';
 
@@ -21,7 +32,7 @@ export default class TipView {
     this.updateTip(val);
   }
 
-  updateTip (val: number): void {
+  public updateTip (val: number): void {
     this.el.html(val);
   }
 

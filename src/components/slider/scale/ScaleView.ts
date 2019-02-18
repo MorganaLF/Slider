@@ -1,37 +1,51 @@
 import $ from "jquery";
 
+type ScaleViewOptions = {
+    el: null | {},
+    parentWidth: number,
+    parentHeight: number,
+    type: string,
+    orientation: string
+}
+
 export default class ScaleView {
-  constructor (options = {}) {
-    $.extend(this, {
-      el: null,
-      parentWidth: options.parentWidth,
-      parentHeight: options.parentHeight,
-      type: options.type,
-      orientation: options.orientation
-    }, options);
+  private  el: null | {};
+  private  parentWidth: number;
+  private  parentHeight: number;
+  private  type: string;
+  private  orientation: string;
+
+  constructor (options: ScaleViewOptions) {
+      this.el = null;
+      this.parentWidth = options.parentWidth;
+      this.parentHeight = options.parentHeight;
+      this.type = options.type;
+      this.orientation = options.orientation;
+
+    $.extend(this, options);
   }
 
-  _getSizeProperty (): string {
+  private _getSizeProperty (): string {
     return this._checkOrientation('width', 'height');
   }
 
-  _getPositionProperty (): string {
+  private _getPositionProperty (): string {
     return this._checkOrientation('left', 'top');
   }
 
-  _getInnerSize (element): string {
+  private _getInnerSize (element): number {
     return this._checkOrientation(element.innerWidth(), element.innerHeight());
   }
 
-  _getParentSize (): string {
+  private _getParentSize (): number {
     return this._checkOrientation(this.parentWidth, this.parentHeight);
   }
 
-  _checkOrientation (valOne: string, valTwo: string): string {
+  private _checkOrientation (valOne: number, valTwo: number): number {
     return this.orientation === 'horizontal' ? valOne : valTwo;
   }
 
-  _drawScaleItem (i: number, index: number, itemsLength: number, positionProperty: string): void {
+  private _drawScaleItem (i: number, index: number, itemsLength: number, positionProperty: string): void {
     let scaleItem: object = $('<li/>', {
       class: 'slider__scale-item',
       text: i
@@ -44,7 +58,7 @@ export default class ScaleView {
     scaleItem.css(positionProperty, itemIndent + 'px');
   }
 
-  drawScale (parent, minVal: number, maxVal: number, itemsQuantity: number): void {
+  public drawScale (parent: {}, minVal: number, maxVal: number, itemsQuantity: number): void {
     let scaleClass: string = this._checkOrientation('', ' slider__scale_vertical');
 
     this.el = $('<ul/>', {

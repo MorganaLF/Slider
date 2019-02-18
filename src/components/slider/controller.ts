@@ -1,7 +1,27 @@
 import $ from 'jquery';
 
 export default class SliderController {
-  constructor (view, model) {
+  private view: {};
+  private model: {};
+  private isTip: boolean;
+  private runner1: {};
+  private runner2: {};
+  private tip1: {};
+  private tip2: {};
+  private track: {};
+  private type: {};
+  private _onmove: (runner: {}, runnerType: string) => (e: {}) => void;
+  private _onchangevalue: (runner: {}, tip: {}, point: string) => (e: {}) => void;
+  private _onmousedown: (runner: {}) => (e: {}) => void;
+  private _onmousemove: (runner: {}) => (e: {}) => void;
+  private _onmouseup: (
+          mousemovehandler: (runner: {}) => () => void,
+          onmovehandler: (runner: {}, runnerType: string) => () => void,
+          runner: {}
+      )
+      => (e: {}) => void;
+
+  constructor (view: {}, model: {}) {
     this.view = view;
     this.model = model;
     this.isTip = view.isTip;
@@ -11,14 +31,14 @@ export default class SliderController {
     this.tip2 = view.tip2;
     this.track = view.track;
     this.type = view.type;
-    this._onmove = this._onmove.bind(this);
-    this._onchangevalue = this._onchangevalue.bind(this);
-    this._onmousedown = this._onmousedown.bind(this);
-    this._onmousemove = this._onmousemove.bind(this);
-    this._onmouseup = this._onmouseup.bind(this);
+    this._onmove = this.move.bind(this);
+    this._onchangevalue = this.changevalue.bind(this);
+    this._onmousedown = this.mousedown.bind(this);
+    this._onmousemove = this.mousemove.bind(this);
+    this._onmouseup = this.mouseup.bind(this);
   }
 
-  _onmousedown (runner): (e: {}) => void {
+  private mousedown (runner: {}): (e: {}) => void {
     return (e): void => {
       e.preventDefault();
 
@@ -38,13 +58,13 @@ export default class SliderController {
     }
   };
 
-  _onmove (runner: {}, runnerType: string): (e: {}) => void {
+  private move (runner: {}, runnerType: string): (e: {}) => void {
     return (e): void => {
       this.model.calculateValue(e.detail, runnerType);
     }
   }
 
-  _onchangevalue (runner: {}, tip: {}, point: string): (e: {}) => void {
+  private changevalue (runner: {}, tip: {}, point: string): (e: {}) => void {
     return (e): void => {
       if (e.model !== this.model) {
         return;
@@ -57,13 +77,13 @@ export default class SliderController {
     }
   }
 
-  _onmousemove (runner: {}): (e: {}) => void {
+  private mousemove (runner: {}): (e: {}) => void {
     return (e): void => {
       runner.moveRunner(e);
     }
   };
 
-  _onmouseup (
+  private mouseup (
     mousemovehandler: (runner: {}) => () => void,
     onmovehandler: (runner: {}, runnerType: string) => () => void,
     runner: {})
@@ -75,7 +95,7 @@ export default class SliderController {
       }
   };
 
-  _addHandlers (runner: {}, tip: {}, changeevent: string, point: string): void {
+  private _addHandlers (runner: {}, tip: {}, changeevent: string, point: string): void {
     let onmousedown = this._onmousedown(runner);
     let changevalue = this._onchangevalue(runner, tip, point);
 
@@ -83,7 +103,7 @@ export default class SliderController {
     $('body').on(changeevent, changevalue);
   }
 
-  init (): void {
+  public init (): void {
     this._addHandlers(this.runner1, this.tip1, 'changestartvalue', 'start');
     if (this.type === 'interval') {
       this._addHandlers(this.runner2, this.tip2, 'changeendvalue', 'end');

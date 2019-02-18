@@ -1,24 +1,52 @@
 import $ from "jquery";
 
+type TrackViewOptions = {
+    el: null | {},
+    trackFull: null | {},
+    parentWidth: number,
+    parentHeight: number,
+    runnerWidth: number,
+    runnerHeight: number,
+    parentLeftPoint: number,
+    parentRightPoint: number,
+    parentTopPoint: number,
+    parentBottomPoint: number,
+    type: string,
+    orientation: string
+}
+
 export default class TrackView {
-  constructor (options = {}) {
-    $.extend(this, {
-      el: null,
-      trackFull: null,
-      parentWidth: options.parentWidth,
-      parentHeight: options.parentHeight,
-      runnerWidth: options.runnerWidth,
-      runnerHeight: options.runnerHeight,
-      parentLeftPoint: options.parentLeftPoint,
-      parentRightPoint: options.parentRightPoint,
-      parentTopPoint: options.parentTopPoint,
-      parentBottomPoint: options.parentBottomPoint,
-      type: options.type,
-      orientation: options.orientation
-    }, options);
+  public el: null | {};
+  private trackFull: null | {};
+  private parentWidth: number;
+  private parentHeight: number;
+  private runnerWidth: number;
+  private runnerHeight: number;
+  private parentLeftPoint: number;
+  private parentRightPoint: number;
+  private parentTopPoint: number;
+  private parentBottomPoint: number;
+  private type: string;
+  private orientation: string;
+
+  constructor (options: TrackViewOptions) {
+      this.el = null;
+      this.trackFull = null;
+      this.parentWidth = options.parentWidth;
+      this.parentHeight = options.parentHeight;
+      this.runnerWidth = options.runnerWidth;
+      this.runnerHeight = options.runnerHeight;
+      this.parentLeftPoint = options.parentLeftPoint;
+      this.parentRightPoint = options.parentRightPoint;
+      this.parentTopPoint = options.parentTopPoint;
+      this.parentBottomPoint = options.parentBottomPoint;
+      this.type = options.type;
+      this.orientation = options.orientation;
+
+      $.extend(this, options);
   }
 
-  get _trackPoints (): object {
+  private get _trackPoints (): {} {
     return {
       left: this.el.offset().left,
       top: this.el.offset().top,
@@ -27,7 +55,7 @@ export default class TrackView {
     }
   }
 
-  get _trackFullPoints (): object {
+  private get _trackFullPoints (): {} {
     return {
       left: this.trackFull.offset().left,
       top: this.trackFull.offset().top,
@@ -36,7 +64,7 @@ export default class TrackView {
     }
   }
 
-  drawTrack (parent, coefficient: number, coefficientTwo: number): void {
+  public drawTrack (parent, coefficient: number, coefficientTwo: number): void {
 
     let trackClass: string =
         this.orientation === 'horizontal' ? '' : ' slider__track_vertical';
@@ -60,7 +88,7 @@ export default class TrackView {
     }
   }
 
-  _setSingleTrackLength (pos: number, property: string, gabarite: string, runnerGabarite: string): void {
+  private _setSingleTrackLength (pos: number, property: string, gabarite: string, runnerGabarite: string): void {
     if (pos !== 0) {
       this.trackFull.css(property, this[gabarite] / pos + this[runnerGabarite]/2 + 'px');
     } else {
@@ -68,7 +96,7 @@ export default class TrackView {
     }
   }
 
-  _setIntervalTrack (coefficient: number, startPoint: string, endPoint: string, gabariteProperty: string, gabarite: string, pointName: string): void {
+  private _setIntervalTrack (coefficient: number, startPoint: string, endPoint: string, gabariteProperty: string, gabarite: string, pointName: string): void {
     let startIndent: number,
         endIndent: number;
 
@@ -84,7 +112,7 @@ export default class TrackView {
     this.trackFull.css(gabariteProperty, gabarite - startIndent - endIndent + 'px');
   }
 
-  animateTrack (coefficient: number, pointName: string): void {
+  public animateTrack (coefficient: number, pointName: string): void {
     if (this.type === 'interval') {
       if (this.orientation === 'horizontal') {
         this._setIntervalTrack(coefficient, 'left', 'right', 'width', this.el.innerWidth(), pointName);

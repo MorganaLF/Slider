@@ -4,64 +4,95 @@ import TipView from './tip/TipView';
 import TrackView from './track/TrackView';
 import ScaleView from './scale/ScaleView';
 
+type SliderViewOptions = {
+   el: {},
+   runner1: null | {},
+   runner2: null | {},
+   tip1: null | {},
+   tip2: null | {},
+   track: null | {},
+   trackItemsQuantity: number,
+   progressFull: null | {},
+   scale: null | {},
+   type: string,
+   orientation: string,
+   isTip: boolean,
+   isScale: boolean,
+   model: {}
+}
+
 export default class SliderView {
-  constructor (options = {}) {
-    $.extend(this, {
-      el: options.el,
-      runner1: null,
-      runner2: null,
-      tip1: null,
-      tip2: null,
-      track: null,
-      trackItemsQuantity: 10,
-      progressFull: null,
-      scale: null,
-      type: 'single',
-      orientation: 'horizontal',
-      isTip: true,
-      isScale: false,
-      model: options.model
-    }, options);
+  private el: {};
+  public runner1: null | {};
+  public runner2: null | {};
+  public tip1: null | {};
+  public tip2: null | {};
+  public track: null | {};
+  private trackItemsQuantity: number;
+  private progressFull: null | {};
+  private scale: null | {};
+  private type: string;
+  private orientation: string;
+  private isTip: boolean;
+  private isScale: boolean;
+  private model: {};
+
+  constructor (options: SliderViewOptions) {
+      this.el = options.el;
+      this.runner1 = null;
+      this.runner2 = null;
+      this.tip1 = null;
+      this.tip2 = null;
+      this.track = null;
+      this.trackItemsQuantity = 10;
+      this.progressFull = null;
+      this.scale = null;
+      this.type = 'single';
+      this.orientation = 'horizontal';
+      this.isTip = true;
+      this.isScale = false;
+      this.model = options.model;
+      $.extend(this, options);
   }
 
-  get _sliderLeftPoint (): number {
+  private get _sliderLeftPoint (): number {
     return this.el.offset().left;
   }
 
-  get _sliderTopPoint (): number {
+  private get _sliderTopPoint (): number {
     return this.el.offset().top;
   }
 
-  get _sliderRightPoint (): number {
+  private get _sliderRightPoint (): number {
     return this.el.offset().left + this.el.innerWidth();
   }
 
-  get _sliderBottomPoint (): number {
+  private get _sliderBottomPoint (): number {
     return this.el.offset().top + this.el.innerHeight();
   }
 
-  get _innerWidth (): number {
+  private get _innerWidth (): number {
     return this.el.innerWidth() - this.runner1.el.innerWidth();
   }
 
-  get _innerHeight (): number {
+  private get _innerHeight (): number {
     return this.el.innerHeight() - this.runner1.el.innerHeight();
   }
 
-  get _runnerWidth (): number {
+  private get _runnerWidth (): number {
     return this.runner1.el.innerWidth();
   }
 
-  get _runnerHeight (): number {
+  private get _runnerHeight (): number {
     return this.runner1.el.innerHeight();
   }
 
-  updateSlider (): void {
+  public updateSlider (): void {
     this.el.html('');
     this._drawSlider();
   }
 
-  _createRunner (prop: string, point: number): void {
+  private _createRunner (prop: string, point: number): void {
     this[prop] = new RunnerView({
       type: this.type,
       orientation: this.orientation,
@@ -73,7 +104,7 @@ export default class SliderView {
     this[prop].drawRunner(this.el, this.model._calculateCoefficient(point));
   }
 
-  _createTip (prop: string, el, val: number): void {
+  private _createTip (prop: string, el, val: number): void {
     this[prop] = new TipView({
       type: this.type,
       orientation: this.orientation
@@ -81,7 +112,7 @@ export default class SliderView {
     this[prop].drawTip(el, val);
   }
 
-  _createTrack (): void {
+  private _createTrack (): void {
     this.track = new TrackView({
       type: this.type,
       orientation: this.orientation,
@@ -101,7 +132,7 @@ export default class SliderView {
     );
   }
 
-  _createScale (): void {
+  private _createScale (): void {
     this.scale = new ScaleView({
       parentWidth: this._innerWidth,
       parentHeight: this._innerHeight,
@@ -116,7 +147,7 @@ export default class SliderView {
     );
   }
 
-  _drawSlider (): void {
+  private _drawSlider (): void {
     this._createRunner('runner1', this.model.startValue);
 
     if (this.isTip) {

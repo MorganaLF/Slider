@@ -1,28 +1,44 @@
 import $ from 'jquery';
 
+type SliderModelOptions = {
+    startValue: number,
+    endValue: number,
+    minVal: number,
+    maxVal: number,
+    type: string,
+    step: number
+}
+
 export default class SliderModel {
-  constructor (options = {}) {
-    $.extend(this, {
-      startValue: 0,
-      endValue: 100,
-      minVal: 0,
-      maxVal: 100,
-      type: 'single',
-      step: 0
-    }, options);
+  public startValue: number;
+  public endValue: number;
+  public minVal: number;
+  public maxVal: number;
+  public type: string;
+  public step: number;
+
+  constructor (options: SliderModelOptions) {
+    this.startValue = 0;
+    this.endValue = 100;
+    this.minVal = 0;
+    this.maxVal = 100;
+    this.type = 'single';
+    this.step = 0;
+
+    $.extend(this, options);
 
     this._validateConstructor();
   }
 
-  get currentRoundValue (): number {
+  public get currentRoundValue (): number {
     return this._calculateRoundValue(this.startValue);
   }
 
-  get currentRoundEndValue (): number {
+  public get currentRoundEndValue (): number {
     return this._calculateRoundValue(this.endValue);
   }
 
-  set currentValue (val: number) {
+  public set currentValue (val: number) {
     this.startValue = val;
     this._checkIsNumber('startValue');
     this._checkCurrentValue('startValue');
@@ -33,7 +49,7 @@ export default class SliderModel {
     this._dispatchChangeValue('changestartvalue', this.startValue);
   }
 
-  set currentMaxValue (val: number) {
+  public set currentMaxValue (val: number) {
     if (this.type === 'single') {
       return;
     }
@@ -45,7 +61,7 @@ export default class SliderModel {
     this._dispatchChangeValue('changeendvalue', this.endValue);
   }
 
-  _validateConstructor (): void {
+  private _validateConstructor (): void {
     this._checkIsNumber('startValue');
     this._checkIsNumber('endValue');
     this._checkIsNumber('minVal');
@@ -61,19 +77,19 @@ export default class SliderModel {
     this._checkStepValue ('endValue');
   }
 
-  _checkIsNumber (prop: string): void {
+  private _checkIsNumber (prop: string): void {
     if (isNaN(this[prop])) {
       this[prop] = 0;
     }
   }
 
-  _checkPositiveNumber (prop: string): void {
+  private _checkPositiveNumber (prop: string): void {
     if (this[prop] < 0) {
       this[prop] = Math.abs(this[prop]);
     }
   }
 
-  _checkCurrentValue (prop: string): void {
+  private _checkCurrentValue (prop: string): void {
     if (this[prop] < this.minVal) {
       this[prop] = this.minVal;
     }
@@ -83,13 +99,13 @@ export default class SliderModel {
     }
   }
 
-  _checkStepValue (prop: string): void {
+  private _checkStepValue (prop: string): void {
     if (this.step && this[prop] % this.step !== 0) {
       this[prop] = Math.round(this[prop] / this.step) * this.step
     }
   }
 
-  _checkIntervalValues (valueName: string): boolean {
+  private _checkIntervalValues (valueName: string): boolean {
     if (this.startValue > this.endValue && this[valueName] === this.startValue) {
       this.startValue = this.endValue;
       return false;
@@ -103,7 +119,7 @@ export default class SliderModel {
     return true;
   }
 
-  _dispatchChangeValue (type: string, value: number): void {
+  private _dispatchChangeValue (type: string, value: number): void {
     $(document.body).trigger({
       model: this,
       type: type,
@@ -112,19 +128,19 @@ export default class SliderModel {
     });
   }
 
-  _calculateRoundValue (val: number): number {
+  private _calculateRoundValue (val: number): number {
     return Math.round(val);
   }
 
-  _calculateStepValue (val: number): number {
+  private _calculateStepValue (val: number): number {
     return (Math.round((this.maxVal - this.minVal) / val / this.step)) * this.step;
   }
 
-  _calculateCoefficient (point: number): number {
+  private _calculateCoefficient (point: number): number {
     return (this.maxVal - this.minVal) / (point - this.minVal);
   }
 
-  calculateValue (val: number, valueName: string): void | boolean {
+  public calculateValue (val: number, valueName: string): void | boolean {
 
     if (this.step === 0) {
       this[valueName] = (this.maxVal - this.minVal) / val + this.minVal;
