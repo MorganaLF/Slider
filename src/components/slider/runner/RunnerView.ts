@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
 type RunnerViewOptions = {
-    el: null | {},
+    el: null | JQuery,
     shiftX: number,
     shiftY: number,
     type: string,
@@ -13,7 +13,7 @@ type RunnerViewOptions = {
 }
 
 export default class RunnerView {
-   private el: null | {};
+   private el: null | JQuery;
    private shiftX: number;
    private shiftY: number;
    private type: string;
@@ -45,7 +45,7 @@ export default class RunnerView {
     return this.parentBottomPoint - this.parentTopPoint;
   }
 
-  public drawRunner (parent, coefficient: number) {
+  public drawRunner (parent: JQuery, coefficient: number) {
     let runnerClass: string =
         this.orientation === 'horizontal' ? '' : ' slider__runner_vertical';
 
@@ -57,20 +57,29 @@ export default class RunnerView {
   }
 
   public setRunnerPosition (coefficient: number): void {
+    if (!this.el) {
+        return;
+    }
     let direction: string = this.orientation === 'horizontal' ? 'left' : 'top';
     let parentGabarite: number  = this.orientation === 'horizontal' ? this._parentWidth : this._parentHeight;
-    let gabarite: number = this.orientation === 'horizontal' ? this.el.innerWidth() : this.el.innerHeight();
+    let gabarite: number = this.orientation === 'horizontal' ? this.el.innerWidth()! : this.el.innerHeight()!;
     if (coefficient !== 0) {
       this.el.css(direction, (parentGabarite - gabarite) / coefficient + 'px');
     }
   }
 
   public setRunnerShiftX (e): void {
-    this.shiftX = e.pageX - this.el.offset().left;
+      if (!this.el) {
+          return;
+      }
+    this.shiftX = e.pageX - this.el.offset()!.left;
   }
 
   public setRunnerShiftY (e): void {
-    this.shiftY = e.pageY - this.el.offset().top;
+      if (!this.el) {
+          return;
+      }
+    this.shiftY = e.pageY - this.el.offset()!.top;
   }
 
   private _checkCursorPosition (coord: number, startPoint: number, endPoint: number, shift: number, gabarite: number): number {
@@ -85,6 +94,10 @@ export default class RunnerView {
   }
 
   private _dispatchMoveRunner (coord: number, startPoint: number, endPoint: number, shift: number, gabarite: number): void {
+      if (!this.el) {
+          return;
+      }
+
     coord = this._checkCursorPosition(coord, startPoint, endPoint, shift, gabarite);
     let ratio: number = (endPoint - startPoint - gabarite) / coord;
 
@@ -95,10 +108,13 @@ export default class RunnerView {
   }
 
   public moveRunner (e): void {
+      if (!this.el) {
+          return;
+      }
     if (this.orientation === 'horizontal') {
-      this._dispatchMoveRunner(e.pageX, this.parentLeftPoint, this.parentRightPoint, this.shiftX, this.el.innerWidth());
+      this._dispatchMoveRunner(e.pageX, this.parentLeftPoint, this.parentRightPoint, this.shiftX, this.el.innerWidth()!);
     } else {
-      this._dispatchMoveRunner(e.pageY, this.parentTopPoint, this.parentBottomPoint, this.shiftY, this.el.innerHeight());
+      this._dispatchMoveRunner(e.pageY, this.parentTopPoint, this.parentBottomPoint, this.shiftY, this.el.innerHeight()!);
     }
   }
 }

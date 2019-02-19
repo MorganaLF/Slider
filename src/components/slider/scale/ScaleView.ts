@@ -1,7 +1,7 @@
 import $ from "jquery";
 
 type ScaleViewOptions = {
-    el: null | {},
+    el: null | JQuery,
     parentWidth: number,
     parentHeight: number,
     type: string,
@@ -9,7 +9,7 @@ type ScaleViewOptions = {
 }
 
 export default class ScaleView {
-  private  el: null | {};
+  private  el: null | JQuery;
   private  parentWidth: number;
   private  parentHeight: number;
   private  type: string;
@@ -33,7 +33,7 @@ export default class ScaleView {
     return this._checkOrientation('left', 'top');
   }
 
-  private _getInnerSize (element): number {
+  private _getInnerSize (element: JQuery): number {
     return this._checkOrientation(element.innerWidth(), element.innerHeight());
   }
 
@@ -46,19 +46,23 @@ export default class ScaleView {
   }
 
   private _drawScaleItem (i: number, index: number, itemsLength: number, positionProperty: string): void {
-    let scaleItem: object = $('<li/>', {
+    if (!this.el) {
+        return;
+    }
+
+    let scaleItem: JQuery = $('<li/>', {
       class: 'slider__scale-item',
       text: i
     }).appendTo(this.el);
 
-    let itemGabarite: number = this._getInnerSize(scaleItem); /* ПРОВЕРИТЬ */
+    let itemGabarite: number = this._getInnerSize(scaleItem);
     let itemIndent: number = index * (this._getParentSize() / itemsLength) - itemGabarite / 2;
 
     scaleItem.css('position', 'absolute');
     scaleItem.css(positionProperty, itemIndent + 'px');
   }
 
-  public drawScale (parent: {}, minVal: number, maxVal: number, itemsQuantity: number): void {
+  public drawScale (parent: JQuery, minVal: number, maxVal: number, itemsQuantity: number): void {
     let scaleClass: string = this._checkOrientation('', ' slider__scale_vertical');
 
     this.el = $('<ul/>', {

@@ -43,7 +43,7 @@ export default class DemoView {
   }
 
   private _createDemoPage (): void {
-    let demoTemplate: object = $(
+    let demoTemplate: JQuery = $(
         `<div class="page">
           <div class="page__row">
             <div class="page__col">
@@ -241,14 +241,14 @@ export default class DemoView {
     this._addRadioHandlers();
   }
 
-  private _getSliderMethod (el, method: string): number {
+  private _getSliderMethod (el: JQuery, method: string): number {
     return el
                 .closest('.page__row')
                 .find('.slider')
                 .customSlider(method);
   }
 
-  private _updateSlider (el, method: string): void {
+  private _updateSlider (el: JQuery, method: string): void {
     el
         .closest('.page__row')
         .find('.slider')
@@ -271,7 +271,7 @@ export default class DemoView {
     this._setInputVal('step-size', 'stepSize');
   }
 
-  private _updateCheckboxes (el, on: string, off: string): void {
+  private _updateCheckboxes (el: JQuery, on: string, off: string): void {
       if (el.prop('checked')) {
         this._getSliderMethod(el, on);
       } else {
@@ -279,8 +279,8 @@ export default class DemoView {
       }
   }
 
-  private _updateRadio (el, on: string, off: string): void {
-    let radioGroup: object =
+  private _updateRadio (el: JQuery, on: string, off: string): void {
+    let radioGroup: JQuery =
         el
             .closest('.page__row')
             .find($('input[name="orientation"]:checked'));

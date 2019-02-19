@@ -1,8 +1,8 @@
 import $ from "jquery";
 
 type TrackViewOptions = {
-    el: null | {},
-    trackFull: null | {},
+    el: null | JQuery,
+    trackFull: null | JQuery,
     parentWidth: number,
     parentHeight: number,
     runnerWidth: number,
@@ -16,8 +16,8 @@ type TrackViewOptions = {
 }
 
 export default class TrackView {
-  public el: null | {};
-  private trackFull: null | {};
+  public el: null | JQuery;
+  private trackFull: null | JQuery;
   private parentWidth: number;
   private parentHeight: number;
   private runnerWidth: number;
@@ -47,24 +47,29 @@ export default class TrackView {
   }
 
   private get _trackPoints (): {} {
-    return {
-      left: this.el.offset().left,
-      top: this.el.offset().top,
-      right: this.el.offset().left + this.el.innerWidth(),
-      bottom: this.el.offset().top + this.el.innerHeight()
-    }
+      if (this.el) {
+          return {
+              left: this.el.offset()!.left,
+              top: this.el.offset()!.top,
+              right: this.el.offset()!.left + this.el.innerWidth()!,
+              bottom: this.el.offset()!.top + this.el.innerHeight()!
+          }
+      }
+
   }
 
   private get _trackFullPoints (): {} {
-    return {
-      left: this.trackFull.offset().left,
-      top: this.trackFull.offset().top,
-      right: this.trackFull.offset().left + this.trackFull.innerWidth(),
-      bottom: this.trackFull.offset().top + this.trackFull.innerHeight()
-    }
+      if (this.trackFull) {
+          return {
+              left: this.trackFull.offset()!.left,
+              top: this.trackFull.offset()!.top,
+              right: this.trackFull.offset()!.left + this.trackFull.innerWidth()!,
+              bottom: this.trackFull.offset()!.top + this.trackFull.innerHeight()!
+          }
+      }
   }
 
-  public drawTrack (parent, coefficient: number, coefficientTwo: number): void {
+  public drawTrack (parent: JQuery, coefficient: number, coefficientTwo: number): void {
 
     let trackClass: string =
         this.orientation === 'horizontal' ? '' : ' slider__track_vertical';
@@ -89,6 +94,9 @@ export default class TrackView {
   }
 
   private _setSingleTrackLength (pos: number, property: string, gabarite: string, runnerGabarite: string): void {
+    if (!this.trackFull) {
+        return;
+    }
     if (pos !== 0) {
       this.trackFull.css(property, this[gabarite] / pos + this[runnerGabarite]/2 + 'px');
     } else {
@@ -97,7 +105,10 @@ export default class TrackView {
   }
 
   private _setIntervalTrack (coefficient: number, startPoint: string, endPoint: string, gabariteProperty: string, gabarite: string, pointName: string): void {
-    let startIndent: number,
+      if (!this.trackFull) {
+          return;
+      }
+      let startIndent: number,
         endIndent: number;
 
     if (pointName === 'start') {
@@ -113,11 +124,14 @@ export default class TrackView {
   }
 
   public animateTrack (coefficient: number, pointName: string): void {
+      if (!this.el) {
+          return;
+      }
     if (this.type === 'interval') {
       if (this.orientation === 'horizontal') {
-        this._setIntervalTrack(coefficient, 'left', 'right', 'width', this.el.innerWidth(), pointName);
+        this._setIntervalTrack(coefficient, 'left', 'right', 'width', this.el.innerWidth()!, pointName);
       } else {
-        this._setIntervalTrack(coefficient, 'top', 'bottom', 'height', this.el.innerHeight(), pointName);
+        this._setIntervalTrack(coefficient, 'top', 'bottom', 'height', this.el.innerHeight()!, pointName);
       }
     } else {
       if (this.orientation === 'horizontal') {
