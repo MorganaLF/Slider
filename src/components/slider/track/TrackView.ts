@@ -1,8 +1,8 @@
 import $ from "jquery";
 
 type TrackViewOptions = {
-    el: null | JQuery,
-    trackFull: null | JQuery,
+    el?: null | JQuery,
+    trackFull?: null | JQuery,
     parentWidth: number,
     parentHeight: number,
     runnerWidth: number,
@@ -16,8 +16,8 @@ type TrackViewOptions = {
 }
 
 export default class TrackView {
-  public el: null | JQuery;
-  private trackFull: null | JQuery;
+  public el?: null | JQuery;
+  private trackFull?: null | JQuery;
   private parentWidth: number;
   private parentHeight: number;
   private runnerWidth: number;

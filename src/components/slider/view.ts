@@ -4,50 +4,60 @@ import TipView from './tip/TipView';
 import TrackView from './track/TrackView';
 import ScaleView from './scale/ScaleView';
 
-type RunnerViewOptions = {
-    el: null | JQuery,
-    shiftX: number,
-    shiftY: number,
-    type: string,
-    orientation: string,
-    parentLeftPoint: number,
-    parentRightPoint: number,
-    parentTopPoint: number,
-    parentBottomPoint: number
+interface ISliderModel {
+    minVal: number,
+    maxVal: number,
+    startValue: number,
+    endValue: number,
+    calculateCoefficient (point: number): number
+}
+
+interface IRunnerView {
+    el: JQuery,
+    drawRunner (parent: JQuery, coefficient: number): void
+}
+
+interface ITrackView {
+    drawTrack (parent: JQuery, coefficient: number, coefficientTwo: number): void
+}
+
+interface IScaleView {
+    drawScale (parent: JQuery, minVal: number, maxVal: number, itemsQuantity: number): void
 }
 
 type SliderViewOptions = {
    el: null | JQuery,
-   runner1: null | RunnerViewOptions,
-   runner2: null | RunnerViewOptions,
+   runner1: null | IRunnerView,
+   runner2: null | IRunnerView,
    tip1: null | {},
    tip2: null | {},
-   track: null | {},
+   track: null | ITrackView,
    trackItemsQuantity: number,
    progressFull: null | {},
-   scale: null | {},
+   scale: null | IScaleView,
    type: string,
    orientation: string,
    isTip: boolean,
    isScale: boolean,
-   model: {}
+   model: ISliderModel
 }
 
 export default class SliderView {
+  [key: string]: any;
   private el: null | JQuery;
-  public runner1: null | RunnerViewOptions;
-  public runner2: null | RunnerViewOptions;
+  public runner1: null | IRunnerView;
+  public runner2: null | IRunnerView;
   public tip1: null | {};
   public tip2: null | {};
-  public track: null | {};
+  public track: null | ITrackView;
   private trackItemsQuantity: number;
   private progressFull: null | {};
-  private scale: null | {};
+  private scale: null | IScaleView;
   private type: string;
   private orientation: string;
   private isTip: boolean;
   private isScale: boolean;
-  private model: {};
+  private model: ISliderModel;
 
   constructor (options: SliderViewOptions) {
       this.el = options.el;
@@ -68,46 +78,46 @@ export default class SliderView {
       $.extend(this, options);
   }
 
-  private get _sliderLeftPoint (): number | false {
-      return this.el ? this.el.offset()!.left : false;
+  private get _sliderLeftPoint (): number {
+      return this.el ? this.el.offset()!.left : 0;
   }
 
-  private get _sliderTopPoint (): number | false {
-      return this.el ? this.el.offset()!.top : false;
+  private get _sliderTopPoint (): number {
+      return this.el ? this.el.offset()!.top : 0;
   }
 
-  private get _sliderRightPoint (): number | false {
-      return this.el ? this.el.offset()!.left + this.el.innerWidth()! : false;
+  private get _sliderRightPoint (): number {
+      return this.el ? this.el.offset()!.left + this.el.innerWidth()! : 0;
   }
 
-  private get _sliderBottomPoint (): number | false {
-    return this.el ? this.el.offset()!.top + this.el.innerHeight()! : false;
+  private get _sliderBottomPoint (): number {
+    return this.el ? this.el.offset()!.top + this.el.innerHeight()! : 0;
   }
 
-  private get _innerWidth (): number | false {
+  private get _innerWidth (): number {
       if (!this.el || !this.runner1 || !this.runner1.el) {
-          return false;
+          return 0;
       }
       return this.el.innerWidth()! - this.runner1.el.innerWidth()!;
   }
 
-  private get _innerHeight (): number | false {
+  private get _innerHeight (): number {
       if (!this.el || !this.runner1 || !this.runner1.el) {
-          return false;
+          return 0;
       }
     return this.el.innerHeight()! - this.runner1.el.innerHeight()!;
   }
 
-  private get _runnerWidth (): number | false {
+  private get _runnerWidth (): number {
       if (!this.runner1 || !this.runner1.el) {
-          return false;
+          return 0;
       }
     return this.runner1.el.innerWidth()!;
   }
 
-  private get _runnerHeight (): number | false {
+  private get _runnerHeight (): number {
       if (!this.runner1 || !this.runner1.el) {
-          return false;
+          return 0;
       }
     return this.runner1.el.innerHeight()!;
   }
@@ -129,7 +139,7 @@ export default class SliderView {
       parentTopPoint: this._sliderTopPoint,
       parentBottomPoint: this._sliderBottomPoint
     });
-    this[prop].drawRunner(this.el, this.model._calculateCoefficient(point));
+    this[prop].drawRunner(this.el, this.model.calculateCoefficient(point));
   }
 
   private _createTip (prop: string, el: JQuery, val: number): void {
@@ -141,6 +151,9 @@ export default class SliderView {
   }
 
   private _createTrack (): void {
+    if (!this.el) {
+        return;
+    }
     this.track = new TrackView({
       type: this.type,
       orientation: this.orientation,
@@ -155,12 +168,15 @@ export default class SliderView {
     });
     this.track.drawTrack(
         this.el,
-        this.model._calculateCoefficient(this.model.startValue),
-        this.model._calculateCoefficient(this.model.endValue)
+        this.model.calculateCoefficient(this.model.startValue),
+        this.model.calculateCoefficient(this.model.endValue)
     );
   }
 
   private _createScale (): void {
+      if (!this.el) {
+          return;
+      }
     this.scale = new ScaleView({
       parentWidth: this._innerWidth,
       parentHeight: this._innerHeight,

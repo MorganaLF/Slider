@@ -1,9 +1,9 @@
 import $ from 'jquery';
 
 type RunnerViewOptions = {
-    el: null | JQuery,
-    shiftX: number,
-    shiftY: number,
+    el?: null | JQuery,
+    shiftX?: number,
+    shiftY?: number,
     type: string,
     orientation: string,
     parentLeftPoint: number,
@@ -13,9 +13,9 @@ type RunnerViewOptions = {
 }
 
 export default class RunnerView {
-   private el: null | JQuery;
-   private shiftX: number;
-   private shiftY: number;
+   private el?: null | JQuery;
+   private shiftX?: number;
+   private shiftY?: number;
    private type: string;
    private orientation: string;
    private parentLeftPoint: number;
@@ -45,7 +45,7 @@ export default class RunnerView {
     return this.parentBottomPoint - this.parentTopPoint;
   }
 
-  public drawRunner (parent: JQuery, coefficient: number) {
+  public drawRunner (parent: JQuery, coefficient: number): void {
     let runnerClass: string =
         this.orientation === 'horizontal' ? '' : ' slider__runner_vertical';
 

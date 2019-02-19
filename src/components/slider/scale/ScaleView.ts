@@ -1,7 +1,7 @@
 import $ from "jquery";
 
 type ScaleViewOptions = {
-    el: null | JQuery,
+    el?: null | JQuery,
     parentWidth: number,
     parentHeight: number,
     type: string,
@@ -9,7 +9,7 @@ type ScaleViewOptions = {
 }
 
 export default class ScaleView {
-  private  el: null | JQuery;
+  private  el?: null | JQuery;
   private  parentWidth: number;
   private  parentHeight: number;
   private  type: string;

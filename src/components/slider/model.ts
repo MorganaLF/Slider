@@ -124,7 +124,7 @@ export default class SliderModel {
       model: this,
       type: type,
       value: this._calculateRoundValue(value),
-      coefficient: this._calculateCoefficient(value)
+      coefficient: this.calculateCoefficient(value)
     });
   }
 
@@ -136,7 +136,7 @@ export default class SliderModel {
     return (Math.round((this.maxVal - this.minVal) / val / this.step)) * this.step;
   }
 
-  private _calculateCoefficient (point: number): number {
+  public calculateCoefficient (point: number): number {
     return (this.maxVal - this.minVal) / (point - this.minVal);
   }
 
