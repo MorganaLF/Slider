@@ -10,6 +10,7 @@ type SliderModelOptions = {
 }
 
 export default class SliderModel {
+  [key: string]: any;
   public startValue: number;
   public endValue: number;
   public minVal: number;
