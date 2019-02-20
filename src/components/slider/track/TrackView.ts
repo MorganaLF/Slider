@@ -15,6 +15,14 @@ type TrackViewOptions = {
     orientation: string
 }
 
+type trackPoints = {
+    left: number,
+    top: number,
+    right: number,
+    bottom: number,
+    [key: string]: number
+}
+
 export default class TrackView {
   public el?: null | JQuery;
   private trackFull?: null | JQuery;
@@ -28,6 +36,7 @@ export default class TrackView {
   private parentBottomPoint: number;
   private type: string;
   private orientation: string;
+  [key: string]: any;
 
   constructor (options: TrackViewOptions) {
       this.el = null;
@@ -46,7 +55,7 @@ export default class TrackView {
       $.extend(this, options);
   }
 
-  private get _trackPoints (): {} {
+  private get _trackPoints (): trackPoints | false {
       if (this.el) {
           return {
               left: this.el.offset()!.left,
@@ -54,11 +63,12 @@ export default class TrackView {
               right: this.el.offset()!.left + this.el.innerWidth()!,
               bottom: this.el.offset()!.top + this.el.innerHeight()!
           }
+      } else {
+          return false;
       }
-
   }
 
-  private get _trackFullPoints (): {} {
+  private get _trackFullPoints (): trackPoints | false {
       if (this.trackFull) {
           return {
               left: this.trackFull.offset()!.left,
@@ -66,6 +76,8 @@ export default class TrackView {
               right: this.trackFull.offset()!.left + this.trackFull.innerWidth()!,
               bottom: this.trackFull.offset()!.top + this.trackFull.innerHeight()!
           }
+      } else {
+          return false;
       }
   }
 
@@ -104,8 +116,8 @@ export default class TrackView {
     }
   }
 
-  private _setIntervalTrack (coefficient: number, startPoint: string, endPoint: string, gabariteProperty: string, gabarite: string, pointName: string): void {
-      if (!this.trackFull) {
+  private _setIntervalTrack (coefficient: number, startPoint: string, endPoint: string, gabariteProperty: string, gabarite: number, pointName: string): void {
+      if (!this.trackFull || !this._trackPoints || !this._trackFullPoints) {
           return;
       }
       let startIndent: number,
