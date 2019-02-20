@@ -1,27 +1,61 @@
 import $ from 'jquery';
 
-export default class SliderController {
-  private view: {};
-  private model: {};
-  private isTip: boolean;
-  private runner1: {};
-  private runner2: {};
-  private tip1: {};
-  private tip2: {};
-  private track: {};
-  private type: {};
-  private _onmove: (runner: {}, runnerType: string) => (e: {}) => void;
-  private _onchangevalue: (runner: {}, tip: {}, point: string) => (e: {}) => void;
-  private _onmousedown: (runner: {}) => (e: {}) => void;
-  private _onmousemove: (runner: {}) => (e: {}) => void;
-  private _onmouseup: (
-          mousemovehandler: (runner: {}) => () => void,
-          onmovehandler: (runner: {}, runnerType: string) => () => void,
-          runner: {}
-      )
-      => (e: {}) => void;
+interface ITipView {
+    updateTip (val: number): void
+}
 
-  constructor (view: {}, model: {}) {
+interface ITrackView {
+    drawTrack (parent: JQuery, coefficient: number, coefficientTwo: number): void,
+    animateTrack (coefficient: number, pointName: string): void
+}
+
+interface ISliderModel {
+    minVal: number,
+    maxVal: number,
+    startValue: number,
+    endValue: number,
+    calculateCoefficient (point: number): number,
+    calculateValue (val: number, valueName: string): void | boolean
+}
+
+interface IRunnerView {
+    el: JQuery,
+    drawRunner (parent: JQuery, coefficient: number): void,
+    setRunnerShiftX (e: JQuery.MouseDownEvent): void,
+    setRunnerShiftY (e: JQuery.MouseDownEvent): void,
+    setRunnerPosition (coefficient: number): void,
+    moveRunner (e: JQuery.MouseMoveEvent): void
+}
+
+interface ITrackView {
+    drawTrack (parent: JQuery, coefficient: number, coefficientTwo: number): void
+}
+
+interface ISliderView {
+    runner1: null | IRunnerView,
+    runner2: null | IRunnerView,
+    tip1: null | ITipView,
+    tip2: null | ITipView,
+    track: null | ITrackView,
+    type: string,
+    isTip: boolean
+}
+
+export default class SliderController {
+  private view: ISliderView;
+  private model: ISliderModel;
+  private isTip: boolean;
+  private runner1: null | IRunnerView;
+  private runner2: null | IRunnerView;
+  private tip1: null | ITipView;
+  private tip2: null | ITipView;
+  private track: null | ITrackView;
+  private type: string;
+  private _onchangevalue: (runner: IRunnerView, tip: ITipView, point: string) => (e: Event) => void;
+  private _onmousedown?: (e: JQuery.MouseDownEvent) => void;
+  private _onmouseup?: (e: JQuery.MouseUpEvent) => void;
+
+  constructor (view: ISliderView, model: ISliderModel) {
     this.view = view;
     this.model = model;
     this.isTip = view.isTip;
@@ -31,15 +65,10 @@ export default class SliderController {
     this.tip2 = view.tip2;
     this.track = view.track;
     this.type = view.type;
-    this._onmove = this.move.bind(this);
     this._onchangevalue = this.changevalue.bind(this);
-    this._onmousedown = this.mousedown.bind(this);
-    this._onmousemove = this.mousemove.bind(this);
-    this._onmouseup = this.mouseup.bind(this);
   }
 
-  private mousedown (runner: {}): (e: {}) => void {
-    return (e): void => {
+  private mousedown (runner: IRunnerView, e: JQuery.MouseDownEvent): void {
       e.preventDefault();
 
       let runnerType: string = runner === this.runner1 ? 'startValue' : 'endValue';
@@ -47,56 +76,53 @@ export default class SliderController {
       runner.setRunnerShiftX(e);
       runner.setRunnerShiftY(e);
 
-      let mousemove = this._onmousemove(runner);
-      let onmove = this._onmove(runner, runnerType);
-      let mouseup = this._onmouseup(mousemove, onmove, runner);
+      let mousemove = this.mousemove.bind(this, runner);
+      let onmove = this.move.bind(this, runnerType);
+      this._onmouseup = this.mouseup.bind(this, mousemove, onmove, runner);
 
       $(window).on('mousemove', mousemove);
-      $(window).on('mouseup', mouseup);
+      $(window).on('mouseup', this._onmouseup);
       runner.el.on('move', onmove);
-
-    }
   };
 
-  private move (runner: {}, runnerType: string): (e: {}) => void {
-    return (e): void => {
-      this.model.calculateValue(e.detail, runnerType);
-    }
+  private move (runnerType: string, e: JQuery.TriggeredEvent): void {
+      if (e) {
+          this.model.calculateValue((<any>e).detail.ratio, runnerType);
+      }
   }
 
-  private changevalue (runner: {}, tip: {}, point: string): (e: {}) => void {
-    return (e): void => {
-      if (e.model !== this.model) {
+  private changevalue (runner: IRunnerView, tip: ITipView, point: string): (e: Event) => void {
+    return (e) => {
+      if ((<any>e).model !== this.model) {
         return;
       }
-      runner.setRunnerPosition(e.coefficient);
+      runner.setRunnerPosition((<any>e).coefficient);
       if (this.isTip) {
-        tip.updateTip(e.value);
+        tip.updateTip((<any>e).value);
       }
-      this.track.animateTrack(e.coefficient, point);
+      if (this.track) {
+          this.track.animateTrack((<any>e).coefficient, point);
+      }
     }
   }
 
-  private mousemove (runner: {}): (e: {}) => void {
-    return (e): void => {
+  private mousemove (runner: IRunnerView, e: JQuery.MouseMoveEvent): void {
       runner.moveRunner(e);
-    }
   };
 
   private mouseup (
-    mousemovehandler: (runner: {}) => () => void,
-    onmovehandler: (runner: {}, runnerType: string) => () => void,
-    runner: {})
-    : (e: {}) => void {
-      return (e): void => {
-        $(window).off( 'mousemove', mousemovehandler );
+    mousemovehandler: (e: JQuery.MouseMoveEvent) => void,
+    onmovehandler: (e: JQuery.TriggeredEvent) => void,
+    runner: IRunnerView): void
+  {
+        $(window).off('mousemove', mousemovehandler );
         $(window).off( 'mouseup', this._onmouseup );
         runner.el.off('move', onmovehandler);
-      }
+
   };
 
-  private _addHandlers (runner: {}, tip: {}, changeevent: string, point: string): void {
-    let onmousedown = this._onmousedown(runner);
+  private _addHandlers (runner: IRunnerView, tip: ITipView, changeevent: string, point: string): void {
+    let onmousedown = this._onmousedown = this.mousedown.bind(this, runner);
     let changevalue = this._onchangevalue(runner, tip, point);
 
     runner.el.on( 'mousedown', onmousedown );
@@ -104,8 +130,10 @@ export default class SliderController {
   }
 
   public init (): void {
-    this._addHandlers(this.runner1, this.tip1, 'changestartvalue', 'start');
-    if (this.type === 'interval') {
+    if (this.runner1 && this.tip1) {
+        this._addHandlers(this.runner1, this.tip1, 'changestartvalue', 'start');
+    }
+    if (this.type === 'interval' && this.runner2 && this.tip2) {
       this._addHandlers(this.runner2, this.tip2, 'changeendvalue', 'end');
     }
   }

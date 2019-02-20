@@ -68,14 +68,14 @@ export default class RunnerView {
     }
   }
 
-  public setRunnerShiftX (e): void {
+  public setRunnerShiftX (e: Event): void {
       if (!this.el) {
           return;
       }
     this.shiftX = e.pageX - this.el.offset()!.left;
   }
 
-  public setRunnerShiftY (e): void {
+  public setRunnerShiftY (e: Event): void {
       if (!this.el) {
           return;
       }
@@ -103,11 +103,13 @@ export default class RunnerView {
 
     this.el.trigger({
       type: 'move',
-      detail: ratio
+      detail: {
+          ratio: ratio
+      }
     });
   }
 
-  public moveRunner (e): void {
+  public moveRunner (e: JQuery.MouseMoveEvent): void {
       if (!this.el) {
           return;
       }

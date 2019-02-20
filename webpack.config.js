@@ -70,6 +70,8 @@ module.exports = (env, options) => {
         test: /\.tsx?$/,
         loader: 'awesome-typescript-loader',
         options: {
+          "baseUrl": "types",
+          "typeRoots": ["types"],
           "useBabel": true,
           "babelOptions": {
             "babelrc": false, /* Important line */
