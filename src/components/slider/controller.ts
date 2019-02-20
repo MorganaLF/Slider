@@ -1,55 +1,19 @@
 import $ from 'jquery';
-
-interface ITipView {
-    updateTip (val: number): void
-}
-
-interface ITrackView {
-    drawTrack (parent: JQuery, coefficient: number, coefficientTwo: number): void,
-    animateTrack (coefficient: number, pointName: string): void
-}
-
-interface ISliderModel {
-    minVal: number,
-    maxVal: number,
-    startValue: number,
-    endValue: number,
-    calculateCoefficient (point: number): number,
-    calculateValue (val: number, valueName: string): void | boolean
-}
-
-interface IRunnerView {
-    el: JQuery,
-    drawRunner (parent: JQuery, coefficient: number): void,
-    setRunnerShiftX (e: JQuery.MouseDownEvent): void,
-    setRunnerShiftY (e: JQuery.MouseDownEvent): void,
-    setRunnerPosition (coefficient: number): void,
-    moveRunner (e: JQuery.MouseMoveEvent): void
-}
-
-interface ITrackView {
-    drawTrack (parent: JQuery, coefficient: number, coefficientTwo: number): void
-}
-
-interface ISliderView {
-    runner1: null | IRunnerView,
-    runner2: null | IRunnerView,
-    tip1: null | ITipView,
-    tip2: null | ITipView,
-    track: null | ITrackView,
-    type: string,
-    isTip: boolean
-}
+import {ISliderModel} from '../interfaces';
+import {ISliderView} from "../interfaces";
+import {IRunnerView} from '../interfaces';
+import {ITrackView} from '../interfaces';
+import {ITipView} from '../interfaces';
 
 export default class SliderController {
   private view: ISliderView;
   private model: ISliderModel;
   private isTip: boolean;
-  private runner1: null | IRunnerView;
-  private runner2: null | IRunnerView;
-  private tip1: null | ITipView;
-  private tip2: null | ITipView;
-  private track: null | ITrackView;
+  private runner1?: null | IRunnerView;
+  private runner2?: null | IRunnerView;
+  private tip1?: null | ITipView;
+  private tip2?: null | ITipView;
+  private track?: null | ITrackView;
   private type: string;
   private _onchangevalue: (runner: IRunnerView, tip: ITipView, point: string) => (e: Event) => void;
   private _onmousedown?: (e: JQuery.MouseDownEvent) => void;

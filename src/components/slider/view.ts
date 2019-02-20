@@ -3,38 +3,22 @@ import RunnerView from './runner/RunnerView';
 import TipView from './tip/TipView';
 import TrackView from './track/TrackView';
 import ScaleView from './scale/ScaleView';
-
-interface ISliderModel {
-    minVal: number,
-    maxVal: number,
-    startValue: number,
-    endValue: number,
-    calculateCoefficient (point: number): number
-}
-
-interface IRunnerView {
-    el: JQuery,
-    drawRunner (parent: JQuery, coefficient: number): void
-}
-
-interface ITrackView {
-    drawTrack (parent: JQuery, coefficient: number, coefficientTwo: number): void
-}
-
-interface IScaleView {
-    drawScale (parent: JQuery, minVal: number, maxVal: number, itemsQuantity: number): void
-}
+import {ISliderModel} from '../interfaces';
+import {IRunnerView} from '../interfaces';
+import {ITrackView} from '../interfaces';
+import {IScaleView} from '../interfaces';
+import {ITipView} from '../interfaces';
 
 type SliderViewOptions = {
    el: null | JQuery,
-   runner1: null | IRunnerView,
-   runner2: null | IRunnerView,
-   tip1: null | {},
-   tip2: null | {},
-   track: null | ITrackView,
+   runner1?: null | IRunnerView,
+   runner2?: null | IRunnerView,
+   tip1?: null | ITipView,
+   tip2?: null | ITipView,
+   track?: null | ITrackView,
    trackItemsQuantity: number,
-   progressFull: null | {},
-   scale: null | IScaleView,
+   progressFull?: null | JQuery,
+   scale?: null | IScaleView,
    type: string,
    orientation: string,
    isTip: boolean,
@@ -45,17 +29,17 @@ type SliderViewOptions = {
 export default class SliderView {
   [key: string]: any;
   private el: null | JQuery;
-  public runner1: null | IRunnerView;
-  public runner2: null | IRunnerView;
-  public tip1: null | {};
-  public tip2: null | {};
-  public track: null | ITrackView;
+  public runner1?: null | IRunnerView;
+  public runner2?: null | IRunnerView;
+  public tip1?: null | ITipView;
+  public tip2?: null | ITipView;
+  public track?: null | ITrackView;
   private trackItemsQuantity: number;
-  private progressFull: null | {};
-  private scale: null | IScaleView;
-  private type: string;
+  private progressFull?: null | JQuery;
+  private scale?: null | IScaleView;
+  public type: string;
   private orientation: string;
-  private isTip: boolean;
+  public isTip: boolean;
   private isScale: boolean;
   private model: ISliderModel;
 
