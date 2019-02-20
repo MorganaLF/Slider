@@ -14,8 +14,8 @@ type RunnerViewOptions = {
 
 export default class RunnerView {
    private el?: null | JQuery;
-   private shiftX?: number;
-   private shiftY?: number;
+   private shiftX: number = 0;
+   private shiftY: number = 0;
    private type: string;
    private orientation: string;
    private parentLeftPoint: number;
@@ -68,14 +68,14 @@ export default class RunnerView {
     }
   }
 
-  public setRunnerShiftX (e: Event): void {
+  public setRunnerShiftX (e: JQuery.MouseDownEvent): void {
       if (!this.el) {
           return;
       }
     this.shiftX = e.pageX - this.el.offset()!.left;
   }
 
-  public setRunnerShiftY (e: Event): void {
+  public setRunnerShiftY (e: JQuery.MouseDownEvent): void {
       if (!this.el) {
           return;
       }
@@ -100,13 +100,8 @@ export default class RunnerView {
 
     coord = this._checkCursorPosition(coord, startPoint, endPoint, shift, gabarite);
     let ratio: number = (endPoint - startPoint - gabarite) / coord;
-
-    this.el.trigger({
-      type: 'move',
-      detail: {
-          ratio: ratio
-      }
-    });
+    let moveEvent = $.Event( "move", { detail: { ratio: ratio } } );
+    this.el.trigger(moveEvent);
   }
 
   public moveRunner (e: JQuery.MouseMoveEvent): void {

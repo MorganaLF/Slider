@@ -15,7 +15,7 @@ export default class SliderController {
   private tip2?: null | ITipView;
   private track?: null | ITrackView;
   private type: string;
-  private _onchangevalue: (runner: IRunnerView, tip: ITipView, point: string) => (e: Event) => void;
+  private _onchangevalue: (runner: IRunnerView, tip: ITipView, point: string) => (e: JQuery.TriggeredEvent) => void;
   private _onmousedown?: (e: JQuery.MouseDownEvent) => void;
   private _onmouseup?: (e: JQuery.MouseUpEvent) => void;
 
@@ -50,22 +50,22 @@ export default class SliderController {
   };
 
   private move (runnerType: string, e: JQuery.TriggeredEvent): void {
-      if (e) {
+      if (e.detail) {
           this.model.calculateValue((<any>e).detail.ratio, runnerType);
       }
   }
 
-  private changevalue (runner: IRunnerView, tip: ITipView, point: string): (e: Event) => void {
+  private changevalue (runner: IRunnerView, tip: ITipView, point: string): (e: JQuery.TriggeredEvent) => void {
     return (e) => {
-      if ((<any>e).model !== this.model) {
+      if ((<any>e).detail.model !== this.model) {
         return;
       }
-      runner.setRunnerPosition((<any>e).coefficient);
+      runner.setRunnerPosition((<any>e).detail.coefficient);
       if (this.isTip) {
-        tip.updateTip((<any>e).value);
+        tip.updateTip((<any>e).detail.value);
       }
       if (this.track) {
-          this.track.animateTrack((<any>e).coefficient, point);
+          this.track.animateTrack((<any>e).detail.coefficient, point);
       }
     }
   }

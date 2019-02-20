@@ -121,12 +121,13 @@ export default class SliderModel {
   }
 
   private _dispatchChangeValue (type: string, value: number): void {
-    $(document.body).trigger({
-      model: this,
-      type: type,
-      value: this._calculateRoundValue(value),
-      coefficient: this.calculateCoefficient(value)
-    });
+    let changeValueEvent = $.Event( type, { detail: {
+            model: this,
+            value: this._calculateRoundValue(value),
+            coefficient: this.calculateCoefficient(value)
+        }
+    } );
+    $(document.body).trigger(changeValueEvent);
   }
 
   private _calculateRoundValue (val: number): number {
