@@ -2,9 +2,12 @@ import $ from 'jquery';
 import SliderView from './view';
 import SliderModel from './model';
 import SliderController from './controller';
+import {ISliderModel} from '../interfaces';
+import {ISliderView} from "../interfaces";
+import {ISliderController} from '../interfaces';
 
 type SliderAppOptions = {
-    element: {},
+    element: JQuery,
     startValue: number,
     endValue: number,
     minVal: number,
@@ -14,13 +17,14 @@ type SliderAppOptions = {
     step: number,
     isTip: boolean,
     isScale: boolean,
-    sliderModel: {},
-    sliderView: {},
-    sliderController: {}
+    trackItemsQuantity: number,
+    sliderModel: ISliderModel,
+    sliderView: ISliderView,
+    sliderController: ISliderController
 }
 
 export default class SliderApp {
-  private el: {};
+  private el: JQuery;
   private startValue: number;
   private endValue: number;
   private minVal: number;
@@ -30,9 +34,10 @@ export default class SliderApp {
   private step: number;
   private isTip: boolean;
   private isScale: boolean;
-  private sliderModel: null | {};
-  private sliderView: null | {};
-  private sliderController: null | {};
+  private trackItemsQuantity: number;
+  private sliderModel: null | ISliderModel;
+  private sliderView: null | ISliderView;
+  private sliderController: null | ISliderController;
 
   constructor (options: SliderAppOptions) {
     this.el = options.element;
@@ -45,6 +50,7 @@ export default class SliderApp {
     this.step = 0;
     this.isTip = true;
     this.isScale = false;
+    this.trackItemsQuantity = 10;
     this.sliderModel = null;
     this.sliderView = null;
     this.sliderController = null;
@@ -53,32 +59,32 @@ export default class SliderApp {
   }
 
   public currentValue (): number {
-    return this.sliderModel ? this.sliderModel.currentRoundValue : false;
+    return this.sliderModel ? this.sliderModel.currentRoundValue : 0;
   }
 
   public currentMaxValue (): number {
-    return this.sliderModel ? this.sliderModel.currentRoundEndValue : false;
+    return this.sliderModel ? this.sliderModel.currentRoundEndValue : 0;
   }
 
   public minValue (): number {
-    return this.sliderModel ? this.sliderModel.minVal : false;
+    return this.sliderModel ? this.sliderModel.minVal : 0;
   }
 
   public maxValue (): number {
-    return this.sliderModel ? this.sliderModel.maxVal : false;
+    return this.sliderModel ? this.sliderModel.maxVal : 0;
   }
 
   public stepSize (): number {
-    return this.sliderModel ? this.sliderModel.step : false;
+    return this.sliderModel ? this.sliderModel.step : 0;
   }
 
-  public setMinValue (val: number): void {
-    this.minVal = parseInt(val);
+  public setMinValue (val: number | string): void {
+    this.minVal = typeof val === 'string' ? parseInt(val) : val;
     this.init();
   }
 
-  public setMaxValue (val: number): void {
-    this.maxVal = parseInt(val);
+  public setMaxValue (val: number | string): void {
+    this.maxVal = typeof val === 'string' ? parseInt(val) : val;
     this.init();
   }
 
@@ -89,7 +95,7 @@ export default class SliderApp {
     this.sliderModel.currentValue = val;
   }
 
-  public setCurrentMaxValue (val): void | false{
+  public setCurrentMaxValue (val: number): void | false{
       if (!this.sliderModel) {
           return false;
       }
@@ -147,13 +153,16 @@ export default class SliderApp {
       orientation: this.orientation,
       model: this.sliderModel,
       isTip: this.isTip,
-      isScale: this.isScale
+      isScale: this.isScale,
+      trackItemsQuantity: this.trackItemsQuantity
     });
 
     if (this.sliderView && this.sliderModel) {
         this.sliderView.updateSlider();
         this.sliderController = new SliderController(this.sliderView, this.sliderModel);
-        this.sliderController.init();
+        if (this.sliderController) {
+            this.sliderController.init();
+        }
     }
   }
 }
