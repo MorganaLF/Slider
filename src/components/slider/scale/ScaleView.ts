@@ -41,7 +41,7 @@ export default class ScaleView {
     return this._checkOrientation(this.parentWidth, this.parentHeight);
   }
 
-  private _checkOrientation (valOne: number, valTwo: number): number {
+  private _checkOrientation (valOne: any, valTwo: any): any {
     return this.orientation === 'horizontal' ? valOne : valTwo;
   }
 
