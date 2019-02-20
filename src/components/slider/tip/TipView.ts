@@ -31,7 +31,7 @@ export default class TipView {
 
   public updateTip (val: number): void {
     if (this.el) {
-        this.el.html(val);
+        this.el.html(val+'');
     }
   }
 
