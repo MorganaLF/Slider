@@ -27,6 +27,23 @@ export interface ISliderController {
     init(): void;
 }
 
+export interface SliderAppOptions {
+    element?: JQuery,
+    startValue?: number,
+    endValue?: number,
+    minVal?: number,
+    maxVal?: number,
+    type?: string,
+    orientation?: string,
+    step?: number,
+    isTip?: boolean,
+    isScale?: boolean,
+    trackItemsQuantity?: number,
+    sliderModel?: ISliderModel,
+    sliderView?: ISliderView,
+    sliderController?: ISliderController
+}
+
 export interface IRunnerView {
     el: JQuery,
     drawRunner (parent: JQuery, coefficient: number): void,

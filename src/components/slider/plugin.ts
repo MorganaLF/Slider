@@ -1,9 +1,10 @@
 import $ from "jquery";
 import SliderApp from './app';
+import {SliderAppOptions} from '../interfaces';
 export default $.fn.customSlider;
 let result: (method: string, arg: string) => void;
 
-$.fn.customSlider = function(options: object | string): (method: string, arg: string) => void {
+$.fn.customSlider = function(options: SliderAppOptions): (method: string, arg: string) => void {
 
   let args = arguments;
 

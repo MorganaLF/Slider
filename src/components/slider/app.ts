@@ -7,24 +7,24 @@ import {ISliderView} from "../interfaces";
 import {ISliderController} from '../interfaces';
 
 type SliderAppOptions = {
-    element: JQuery,
-    startValue: number,
-    endValue: number,
-    minVal: number,
-    maxVal: number,
-    type: string,
-    orientation: string,
-    step: number,
-    isTip: boolean,
-    isScale: boolean,
-    trackItemsQuantity: number,
-    sliderModel: ISliderModel,
-    sliderView: ISliderView,
-    sliderController: ISliderController
+    element?: JQuery,
+    startValue?: number,
+    endValue?: number,
+    minVal?: number,
+    maxVal?: number,
+    type?: string,
+    orientation?: string,
+    step?: number,
+    isTip?: boolean,
+    isScale?: boolean,
+    trackItemsQuantity?: number,
+    sliderModel?: ISliderModel,
+    sliderView?: ISliderView,
+    sliderController?: ISliderController
 }
 
 export default class SliderApp {
-  private el: JQuery;
+  private el?: JQuery;
   private startValue: number;
   private endValue: number;
   private minVal: number;
@@ -138,6 +138,9 @@ export default class SliderApp {
   }
 
   public init (): void {
+    if (!this.el) {
+      return;
+    }
     this.sliderModel = new SliderModel({
       startValue: this.startValue,
       endValue: this.endValue,
