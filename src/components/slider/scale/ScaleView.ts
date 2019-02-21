@@ -1,12 +1,5 @@
 import $ from "jquery";
-
-type ScaleViewOptions = {
-    el?: null | JQuery,
-    parentWidth: number,
-    parentHeight: number,
-    type: string,
-    orientation: string
-}
+import {ScaleViewOptions} from "../../interfaces";
 
 export default class ScaleView {
   private  el?: null | JQuery;

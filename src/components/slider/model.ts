@@ -1,13 +1,6 @@
 import $ from 'jquery';
+import {SliderModelOptions} from '../interfaces';
 
-type SliderModelOptions = {
-    startValue: number,
-    endValue: number,
-    minVal: number,
-    maxVal: number,
-    type: string,
-    step: number
-}
 
 export default class SliderModel {
   [key: string]: any;

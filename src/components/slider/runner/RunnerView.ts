@@ -1,16 +1,5 @@
 import $ from 'jquery';
-
-type RunnerViewOptions = {
-    el?: null | JQuery,
-    shiftX?: number,
-    shiftY?: number,
-    type: string,
-    orientation: string,
-    parentLeftPoint: number,
-    parentRightPoint: number,
-    parentTopPoint: number,
-    parentBottomPoint: number
-}
+import {RunnerViewOptions} from "../../interfaces";
 
 export default class RunnerView {
    private el?: null | JQuery;

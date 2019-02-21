@@ -5,23 +5,7 @@ import SliderController from './controller';
 import {ISliderModel} from '../interfaces';
 import {ISliderView} from "../interfaces";
 import {ISliderController} from '../interfaces';
-
-type SliderAppOptions = {
-    element?: JQuery,
-    startValue?: number,
-    endValue?: number,
-    minVal?: number,
-    maxVal?: number,
-    type?: string,
-    orientation?: string,
-    step?: number,
-    isTip?: boolean,
-    isScale?: boolean,
-    trackItemsQuantity?: number,
-    sliderModel?: ISliderModel,
-    sliderView?: ISliderView,
-    sliderController?: ISliderController
-}
+import {SliderAppOptions} from "../interfaces";
 
 export default class SliderApp {
   private el?: JQuery;

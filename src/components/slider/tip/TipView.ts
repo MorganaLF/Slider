@@ -1,10 +1,5 @@
 import $ from "jquery";
-
-type TipViewOptions = {
-    el?: null | JQuery,
-    type: string,
-    orientation: string
-}
+import {TipViewOptions} from "../../interfaces";
 
 export default class TipView {
   private el: null | JQuery;

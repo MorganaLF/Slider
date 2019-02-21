@@ -6,8 +6,6 @@ import {ITrackView} from '../interfaces';
 import {ITipView} from '../interfaces';
 
 export default class SliderController {
-  private view: ISliderView;
-  private model: ISliderModel;
   private isTip: boolean;
   private runner1?: null | IRunnerView;
   private runner2?: null | IRunnerView;
@@ -15,13 +13,11 @@ export default class SliderController {
   private tip2?: null | ITipView;
   private track?: null | ITrackView;
   private type: string;
-  private _onchangevalue: (runner: IRunnerView, tip: ITipView, point: string) => (e: JQuery.TriggeredEvent) => void;
+  private _onchangevalue: (runner: IRunnerView, tip: ITipView, point: string) => (e: JQuery.TriggeredEvent) => void = this.changevalue.bind(this);
   private _onmousedown?: (e: JQuery.MouseDownEvent) => void;
   private _onmouseup?: (e: JQuery.MouseUpEvent) => void;
 
-  constructor (view: ISliderView, model: ISliderModel) {
-    this.view = view;
-    this.model = model;
+  constructor (private view: ISliderView, private model: ISliderModel) {
     this.isTip = view.isTip;
     this.runner1 = view.runner1;
     this.runner2 = view.runner2;

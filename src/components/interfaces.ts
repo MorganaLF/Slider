@@ -1,18 +1,23 @@
-export interface ISliderModel {
-    minVal: number,
-    maxVal: number,
+export type SliderModelOptions = {
     startValue: number,
     endValue: number,
-    step: number,
-    currentRoundValue: number,
-    currentRoundEndValue: number,
-    currentValue: number,
-    currentMaxValue: number,
-    calculateCoefficient (point: number): number,
-    calculateValue (val: number, valueName: string): void | boolean
+    minVal: number,
+    maxVal: number,
+    type: string,
+    step: number
 }
 
-export interface ISliderView {
+type PrivateSliderViewOptions = {
+    el: null | JQuery,
+    trackItemsQuantity: number,
+    orientation: string,
+    progressFull?: null | JQuery,
+    scale?: null | IScaleView,
+    isScale: boolean,
+    model: ISliderModel
+}
+
+type PublicSliderViewOptions = {
     runner1?: null | IRunnerView,
     runner2?: null | IRunnerView,
     tip1?: null | ITipView,
@@ -20,14 +25,11 @@ export interface ISliderView {
     track?: null | ITrackView,
     type: string,
     isTip: boolean,
-    updateSlider(): void
 }
 
-export interface ISliderController {
-    init(): void;
-}
+export type SliderViewOptions = PrivateSliderViewOptions & PublicSliderViewOptions;
 
-export interface SliderAppOptions {
+export type SliderAppOptions = {
     element?: JQuery,
     startValue?: number,
     endValue?: number,
@@ -42,6 +44,78 @@ export interface SliderAppOptions {
     sliderModel?: ISliderModel,
     sliderView?: ISliderView,
     sliderController?: ISliderController
+}
+
+export type TrackViewOptions = {
+    el?: null | JQuery,
+    trackFull?: null | JQuery,
+    parentWidth: number,
+    parentHeight: number,
+    runnerWidth: number,
+    runnerHeight: number,
+    parentLeftPoint: number,
+    parentRightPoint: number,
+    parentTopPoint: number,
+    parentBottomPoint: number,
+    type: string,
+    orientation: string
+}
+
+export type trackPoints = {
+    left: number,
+    top: number,
+    right: number,
+    bottom: number,
+    [key: string]: number
+}
+
+export type TipViewOptions = {
+    el?: null | JQuery,
+    type: string,
+    orientation: string
+}
+
+export type ScaleViewOptions = {
+    el?: null | JQuery,
+    parentWidth: number,
+    parentHeight: number,
+    type: string,
+    orientation: string
+}
+
+export type RunnerViewOptions = {
+    el?: null | JQuery,
+    shiftX?: number,
+    shiftY?: number,
+    type: string,
+    orientation: string,
+    parentLeftPoint: number,
+    parentRightPoint: number,
+    parentTopPoint: number,
+    parentBottomPoint: number
+}
+
+declare global {
+    interface JQuery {
+        customSlider: (...rest: any[]) => any;
+    }
+}
+
+export interface ISliderModel extends SliderModelOptions{
+    currentRoundValue: number,
+    currentRoundEndValue: number,
+    currentValue: number,
+    currentMaxValue: number,
+    calculateCoefficient (point: number): number,
+    calculateValue (val: number, valueName: string): void | boolean
+}
+
+export interface ISliderView extends PublicSliderViewOptions{
+    updateSlider(): void
+}
+
+export interface ISliderController {
+    init(): void;
 }
 
 export interface IRunnerView {

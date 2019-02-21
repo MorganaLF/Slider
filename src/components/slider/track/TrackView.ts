@@ -1,27 +1,6 @@
 import $ from "jquery";
-
-type TrackViewOptions = {
-    el?: null | JQuery,
-    trackFull?: null | JQuery,
-    parentWidth: number,
-    parentHeight: number,
-    runnerWidth: number,
-    runnerHeight: number,
-    parentLeftPoint: number,
-    parentRightPoint: number,
-    parentTopPoint: number,
-    parentBottomPoint: number,
-    type: string,
-    orientation: string
-}
-
-type trackPoints = {
-    left: number,
-    top: number,
-    right: number,
-    bottom: number,
-    [key: string]: number
-}
+import {TrackViewOptions} from "../../interfaces";
+import {trackPoints} from "../../interfaces";
 
 export default class TrackView {
   public el?: null | JQuery;

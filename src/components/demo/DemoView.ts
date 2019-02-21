@@ -3,13 +3,6 @@ import SliderApp from '../slider/app';
 import {SliderAppOptions} from '../interfaces';
 let result: (method: string, arg: string) => void;
 
-declare global {
-    interface JQuery {
-        customSlider: (...rest: any[]) => any;
-    }
-}
-
-
 $.fn.customSlider = function(options?: SliderAppOptions, ...rest: any[]): any {
 
     let args = arguments;

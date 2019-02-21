@@ -8,23 +8,7 @@ import {IRunnerView} from '../interfaces';
 import {ITrackView} from '../interfaces';
 import {IScaleView} from '../interfaces';
 import {ITipView} from '../interfaces';
-
-type SliderViewOptions = {
-   el: null | JQuery,
-   runner1?: null | IRunnerView,
-   runner2?: null | IRunnerView,
-   tip1?: null | ITipView,
-   tip2?: null | ITipView,
-   track?: null | ITrackView,
-   trackItemsQuantity: number,
-   progressFull?: null | JQuery,
-   scale?: null | IScaleView,
-   type: string,
-   orientation: string,
-   isTip: boolean,
-   isScale: boolean,
-   model: ISliderModel
-}
+import {SliderViewOptions} from '../interfaces';
 
 export default class SliderView {
   [key: string]: any;
