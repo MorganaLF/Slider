@@ -94,9 +94,9 @@ export default class RunnerView {
   }
 
   public moveRunner (e: JQuery.MouseMoveEvent): void {
-      if (!this.el) {
-          return;
-      }
+    if (!this.el) {
+       return;
+    }
     if (this.orientation === 'horizontal') {
       this._dispatchMoveRunner(e.pageX, this.parentLeftPoint, this.parentRightPoint, this.shiftX, this.el.innerWidth()!);
     } else {

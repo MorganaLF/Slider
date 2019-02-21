@@ -160,6 +160,7 @@ export default class SliderView {
   }
 
   private _drawSlider (): void {
+    this._createTrack();
     this._createRunner('runner1', this.model.startValue);
 
     if (this.isTip && this.runner1) {
@@ -173,8 +174,6 @@ export default class SliderView {
         this._createTip('tip2', this.runner2.el!, this.model.endValue);
       }
     }
-
-    this._createTrack();
 
     if (this.isScale) {
       this._createScale();

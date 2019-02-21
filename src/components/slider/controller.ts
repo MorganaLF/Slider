@@ -13,7 +13,7 @@ export default class SliderController {
   private tip2?: null | ITipView;
   private track?: null | ITrackView;
   private type: string;
-  private _onchangevalue: (runner: IRunnerView, tip: ITipView, point: string) => (e: JQuery.TriggeredEvent) => void = this.changevalue.bind(this);
+  private _onchangevalue: (runner: IRunnerView, tip: ITipView | false, point: string) => (e: JQuery.TriggeredEvent) => void = this.changevalue.bind(this);
   private _onmousedown?: (e: JQuery.MouseDownEvent) => void;
   private _onmouseup?: (e: JQuery.MouseUpEvent) => void;
 
