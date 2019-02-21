@@ -1,18 +1,17 @@
-import $ from "jquery";
+//import $ from "jquery";
+import $ = require('jquery');
 import {ScaleViewOptions} from "../../interfaces";
 
 export default class ScaleView {
   private  el?: null | JQuery;
   private  parentWidth: number;
   private  parentHeight: number;
-  private  type: string;
   private  orientation: string;
 
   constructor (options: ScaleViewOptions) {
       this.el = null;
       this.parentWidth = options.parentWidth;
       this.parentHeight = options.parentHeight;
-      this.type = options.type;
       this.orientation = options.orientation;
 
     $.extend(this, options);

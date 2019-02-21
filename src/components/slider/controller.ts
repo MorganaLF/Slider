@@ -1,4 +1,5 @@
-import $ from 'jquery';
+//import $ from 'jquery';
+import $ = require('jquery');
 import {ISliderModel} from '../interfaces';
 import {ISliderView} from "../interfaces";
 import {IRunnerView} from '../interfaces';
@@ -7,11 +8,11 @@ import {ITipView} from '../interfaces';
 
 export default class SliderController {
   private isTip: boolean;
-  private runner1?: null | IRunnerView;
-  private runner2?: null | IRunnerView;
-  private tip1?: null | ITipView;
-  private tip2?: null | ITipView;
-  private track?: null | ITrackView;
+  public runner1?: null | IRunnerView;
+  public runner2?: null | IRunnerView;
+  public tip1?: null | ITipView;
+  public tip2?: null | ITipView;
+  public track?: null | ITrackView;
   private type: string;
   private _onchangevalue: (runner: IRunnerView, tip: ITipView | false, point: string) => (e: JQuery.TriggeredEvent) => void = this.changevalue.bind(this);
   private _onmousedown?: (e: JQuery.MouseDownEvent) => void;

@@ -1,17 +1,36 @@
-import $ from 'jquery';
+//import $ from 'jquery';
+import $ = require('jquery');
 import SliderView from '../components/slider/view';
 import SliderModel from '../components/slider/model';
+// import '../../node_modules/@types/jasmine';
+// import '../../node_modules/@types/jasmine-jquery';
+// import '../../node_modules/@types/jquery';
 
 describe('SliderView', function () {
   let element,
-      slider,
+      slider: SliderView,
       sliderModel;
 
   beforeEach(function() {
     setFixtures('<div class="slider"></div>');
     element = $('.slider');
-    sliderModel = new SliderModel();
-    slider = new SliderView({el: element, model: sliderModel});
+    sliderModel = new SliderModel({
+        startValue: 0,
+        endValue: 70.954,
+        minVal: 0,
+        maxVal: 100,
+        step: 0,
+        type: 'single'
+    });
+    slider = new SliderView({
+        el: element,
+        type: 'single',
+        orientation: 'horizontal',
+        model: sliderModel,
+        isTip: true,
+        isScale: true,
+        trackItemsQuantity: 10
+    });
     slider.updateSlider();
   });
 
@@ -22,14 +41,29 @@ describe('SliderView', function () {
 
 describe('SliderView. Функция updateSlider', function () {
   let element,
-      slider,
+      slider: SliderView,
       sliderModel;
 
   beforeEach(function() {
     setFixtures('<div class="slider"></div>');
     element = $('.slider');
-    sliderModel = new SliderModel();
-    slider = new SliderView({el: element, model: sliderModel});
+      sliderModel = new SliderModel({
+          startValue: 0,
+          endValue: 70.954,
+          minVal: 0,
+          maxVal: 100,
+          step: 0,
+          type: 'single'
+      });
+      slider = new SliderView({
+          el: element,
+          type: 'single',
+          orientation: 'horizontal',
+          model: sliderModel,
+          isTip: true,
+          isScale: true,
+          trackItemsQuantity: 10
+      });
     slider.updateSlider();
   });
 
@@ -76,32 +110,31 @@ describe('SliderView. Функция updateSlider', function () {
   });
 
   it('Записывает экземпляр класса RunnerView в свойство runner1', function () {
-    expect(slider.runner1.el).toBeDefined();
+    expect(slider.runner1!.el).toBeDefined();
   });
 
   it('Записывает экземпляр класса RunnerView в свойство runner2, если тип слайдера interval', function () {
     slider.type = 'interval';
     slider.updateSlider();
-    expect(slider.runner2.el).toBeDefined();
+    expect(slider.runner2!.el).toBeDefined();
   });
 
   it('Записывает экземпляр класса TipView в свойство tip1', function () {
-    expect(slider.tip1.el).toBeDefined();
+    expect(slider.tip1!.updateTip).toBeDefined();
   });
 
   it('Записывает экземпляр класса TipView в свойство tip2, если тип слайдера interval', function () {
     slider.type = 'interval';
     slider.updateSlider();
-    expect(slider.tip2.el).toBeDefined();
+    expect(slider.tip2!.updateTip).toBeDefined();
   });
 
   it('Записывает экземпляр класса TrackView в свойство track', function () {
-    expect(slider.track.el).toBeDefined();
+    expect(slider.track!.drawTrack).toBeDefined();
   });
 
   it('Записывает экземпляр класса ScaleView в свойство scale', function () {
-    slider.isScale = true;
     slider.updateSlider();
-    expect(slider.scale.el).toBeDefined();
+    expect(slider.scale!.drawScale).toBeDefined();
   });
 });

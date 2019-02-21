@@ -1,13 +1,26 @@
-import $ from 'jquery';
+//import $ from 'jquery';
+import $ = require('jquery');
 import TrackView from '../components/slider/track/TrackView';
-
-/* TRACK VIEW */
+// import '../../node_modules/@types/jasmine';
+// import '../../node_modules/@types/jasmine-jquery';
+// import '../../node_modules/@types/jquery';
 
 describe('TrackView', function () {
-  let trackView;
+  let trackView: TrackView;
 
   beforeEach(function () {
-    trackView = new TrackView();
+    trackView = new TrackView({
+        orientation: 'horizontal',
+        type: 'single',
+        parentWidth: 350,
+        parentHeight: 350,
+        runnerWidth: 50,
+        runnerHeight: 50,
+        parentLeftPoint: 0,
+        parentRightPoint: 350,
+        parentTopPoint: 0,
+        parentBottomPoint: 350
+    });
   });
 
   it('Создается экземпляр класса TrackView', function () {
@@ -17,13 +30,24 @@ describe('TrackView', function () {
 });
 
 describe('TrackView. Функция drawTrack', function () {
-  let trackView,
-      parent;
+  let trackView: TrackView,
+      parent: JQuery;
 
   beforeEach(function () {
     setFixtures('<div class="slider"></div>');
     parent = $('.slider');
-    trackView = new TrackView();
+    trackView = new TrackView({
+        orientation: 'horizontal',
+        type: 'single',
+        parentWidth: 350,
+        parentHeight: 350,
+        runnerWidth: 50,
+        runnerHeight: 50,
+        parentLeftPoint: 0,
+        parentRightPoint: 350,
+        parentTopPoint: 0,
+        parentBottomPoint: 350
+    });
     trackView.drawTrack(parent, 2, 1);
   });
 
@@ -36,8 +60,19 @@ describe('TrackView. Функция drawTrack', function () {
   });
 
   it('При вертикальном виде добавляет класс slider__track_vertical', function () {
-    trackView.orientation = 'vertical';
-    trackView.drawTrack(parent);
+      trackView = new TrackView({
+          orientation: 'vertical',
+          type: 'single',
+          parentWidth: 350,
+          parentHeight: 350,
+          runnerWidth: 50,
+          runnerHeight: 50,
+          parentLeftPoint: 0,
+          parentRightPoint: 350,
+          parentTopPoint: 0,
+          parentBottomPoint: 350
+      });
+    trackView.drawTrack(parent, 2, 1);
     expect($('.slider .slider__track_vertical')).toExist();
   });
 
@@ -49,7 +84,18 @@ describe('TrackView. Функция drawTrack', function () {
   });
 
   it('Поддерживает интервальный тип', function () {
-    trackView.type = 'interval';
+      trackView = new TrackView({
+          orientation: 'vertical',
+          type: 'interval',
+          parentWidth: 350,
+          parentHeight: 350,
+          runnerWidth: 50,
+          runnerHeight: 50,
+          parentLeftPoint: 0,
+          parentRightPoint: 350,
+          parentTopPoint: 0,
+          parentBottomPoint: 350
+      });
     let spy = spyOn(trackView, 'animateTrack');
     trackView.drawTrack(parent, 2, 1);
     expect(spy).toHaveBeenCalled();
@@ -59,8 +105,8 @@ describe('TrackView. Функция drawTrack', function () {
 });
 
 describe('TrackView. Функция animateTrack', function () {
-  let trackView,
-      parent;
+  let trackView: TrackView,
+      parent: JQuery;
 
   beforeEach(function () {
     setFixtures('<div class="slider"></div>');
@@ -78,21 +124,33 @@ describe('TrackView. Функция animateTrack', function () {
       parentLeftPoint: 0,
       parentRightPoint: 350,
       parentTopPoint: 0,
-      parentBottomPoint: 350,
+      parentBottomPoint: 350
     });
     trackView.drawTrack(parent, 2, 1);
-    trackView.el.css('position', 'relative');
+    trackView.el!.css('position', 'relative');
   });
 
   it('Устанавливает ширину дорожки, если тип слайдера single', function () {
     trackView.animateTrack(2, 'start');
-    expect(trackView.trackFull.css('width')).toEqual('200px');
+    expect(trackView.trackFull!.css('width')).toEqual('200px');
   });
 
   it('Устанавливает высоту дорожки, если слайдер имеет вертикальный вид', function () {
-    trackView.orientation = 'vertical';
+      trackView = new TrackView({
+          orientation: 'vertical',
+          type: 'single',
+          parentWidth: 350,
+          parentHeight: 350,
+          runnerWidth: 50,
+          runnerHeight: 50,
+          parentLeftPoint: 0,
+          parentRightPoint: 350,
+          parentTopPoint: 0,
+          parentBottomPoint: 350
+      });
+    trackView.drawTrack(parent, 1, 1);
     trackView.animateTrack(2, 'start');
-    expect(trackView.trackFull.css('height')).toEqual('200px');
+    expect(trackView.trackFull!.css('height')).toEqual('200px');
   });
 
   it('Устанавливает ширину и отступ дорожки, если тип слайдера interval', function () {
@@ -109,13 +167,13 @@ describe('TrackView. Функция animateTrack', function () {
       parentBottomPoint: 350,
     });
     trackView.drawTrack(parent, 2, 1);
-    trackView.el.find('.slider__track-full').css('position', 'relative');
+    trackView.el!.find('.slider__track-full').css('position', 'relative');
 
     trackView.animateTrack(2, 'start');
     trackView.animateTrack(1.75, 'end');
 
-    expect(trackView.trackFull.css('left')).toEqual('175px');
-    expect(trackView.trackFull.css('width')).toEqual('25px');
+    expect(trackView.trackFull!.css('left')).toEqual('175px');
+    expect(trackView.trackFull!.css('width')).toEqual('25px');
   });
 
   it('Устанавливает высоту и отступ дорожки, если тип слайдера interval, вид вертикальный', function () {
@@ -132,14 +190,14 @@ describe('TrackView. Функция animateTrack', function () {
       parentBottomPoint: 350,
     });
     trackView.drawTrack(parent, 2, 1);
-    trackView.el.css('height', '100%');
-    trackView.el.find('.slider__track-full').css('position', 'relative');
+    trackView.el!.css('height', '100%');
+    trackView.el!.find('.slider__track-full').css('position', 'relative');
 
     trackView.animateTrack(2, 'start');
     trackView.animateTrack(1.75, 'end');
 
-    expect(trackView.trackFull.css('top')).toEqual('175px');
-    expect(trackView.trackFull.css('height')).toEqual('25px');
+    expect(trackView.trackFull!.css('top')).toEqual('175px');
+    expect(trackView.trackFull!.css('height')).toEqual('25px');
   });
 
 });

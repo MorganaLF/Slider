@@ -1,4 +1,5 @@
-import $ from 'jquery';
+//import $ from 'jquery';
+import $ = require('jquery');
 import {SliderModelOptions} from '../interfaces';
 
 

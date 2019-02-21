@@ -1,9 +1,13 @@
-import $ from "jquery";
+//import $ from "jquery";
+import $ = require('jquery');
 import customSlider from '../components/slider/plugin';
 import SliderApp from "../components/slider/app";
+// import '../../node_modules/@types/jasmine';
+// import '../../node_modules/@types/jasmine-jquery';
+// import '../../node_modules/@types/jquery';
 
 describe('Функция customSlider', function () {
-  let el;
+  let el: JQuery;
   beforeEach(function () {
     setFixtures('<div class="slider"></div>');
     el = $('.slider');

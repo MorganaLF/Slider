@@ -1,11 +1,20 @@
-import $ from 'jquery';
+//import $ from 'jquery';
+import $ = require('jquery');
 import ScaleView from '../components/slider/scale/ScaleView';
+// import '../../node_modules/@types/jasmine';
+// import '../../node_modules/@types/jasmine-jquery';
+// import '../../node_modules/@types/jquery';
 
 describe('ScaleView', function () {
-  let scaleView;
+  let scaleView: ScaleView;
 
   beforeEach(function () {
-    scaleView = new ScaleView();
+      setFixtures('<div class="slider"></div>');
+    scaleView = new ScaleView({
+        parentWidth: 300,
+        parentHeight: 300,
+        orientation: 'horizontal'
+    });
   });
 
   it('Создается экземпляр класса ScaleView', function () {
@@ -15,14 +24,17 @@ describe('ScaleView', function () {
 });
 
 describe('ScaleView. Функция drawScale', function () {
-  let scaleView,
-      parent;
+  let scaleView: ScaleView,
+      parent: JQuery;
 
   beforeEach(function () {
     setFixtures('<div class="slider"></div>');
     parent = $('.slider');
-
-    scaleView = new ScaleView();
+      scaleView = new ScaleView({
+          parentWidth: 300,
+          parentHeight: 300,
+          orientation: 'horizontal'
+      });
     scaleView.drawScale(parent, 5, 25, 4);
   });
 
@@ -31,7 +43,11 @@ describe('ScaleView. Функция drawScale', function () {
   });
 
   it('Поддерживает вертикальный вид', function () {
-    scaleView.orientation = 'vertical';
+      scaleView = new ScaleView({
+          parentWidth: 300,
+          parentHeight: 300,
+          orientation: 'vertical'
+      });
     scaleView.drawScale(parent, 5, 25, 4);
     expect($('.slider .slider__scale_vertical')).toExist();
   });

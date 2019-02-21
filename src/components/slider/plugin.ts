@@ -1,4 +1,5 @@
-import $ from "jquery";
+//import $ from "jquery";
+import $ = require('jquery');
 import SliderApp from './app';
 import {SliderAppOptions} from '../interfaces';
 export default $.fn.customSlider;
@@ -23,7 +24,7 @@ $.fn.customSlider = function(options: SliderAppOptions): (method: string, arg: s
         isScale: $(this).data('scale')
       };
 
-      options = $.extend({element: $(this)}, options, dataConfig);
+      options = $.extend({el: $(this)}, options, dataConfig);
       $(this).data('constructor', new SliderApp(options));
       result = $(this).data('constructor').init();
 

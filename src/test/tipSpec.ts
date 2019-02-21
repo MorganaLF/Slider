@@ -1,13 +1,17 @@
-import $ from 'jquery';
+//import $ from 'jquery';
+import $ = require('jquery');
 import TipView from '../components/slider/tip/TipView';
-
-/* TIP VIEW */
+// import '../../node_modules/@types/jasmine';
+// import '../../node_modules/@types/jasmine-jquery';
+// import '../../node_modules/@types/jquery';
 
 describe('TipView', function () {
-  let tipView;
+  let tipView: TipView;
 
   beforeEach(function () {
-    tipView = new TipView();
+    tipView = new TipView({
+        orientation: 'horizontal'
+    });
   });
 
   it('Создается экземпляр класса RunnerView', function () {
@@ -17,14 +21,16 @@ describe('TipView', function () {
 });
 
 describe('TipView. Функция drawTip', function () {
-  let tipView,
-      parent;
+  let tipView: TipView,
+      parent: JQuery;
 
   beforeEach(function () {
     setFixtures('<div class="slider"><div class="slider__runner"></div></div>');
     parent = $('.slider__runner');
-    tipView = new TipView();
-    tipView.drawTip(parent);
+    tipView = new TipView({
+        orientation: 'horizontal'
+    });
+    tipView.drawTip(parent, 0);
   });
 
   it('Должна создавать элемент slider__tip внутри элемента slider__runner', function () {
@@ -32,22 +38,26 @@ describe('TipView. Функция drawTip', function () {
   });
 
   it('Добавляет класс slider__tip_vertical, если имеет вертикальный вид', function () {
-    tipView.orientation = 'vertical';
-    tipView.drawTip(parent);
+      tipView = new TipView({
+          orientation: 'vertical'
+      });
+    tipView.drawTip(parent, 0);
     expect($('.slider .slider__runner .slider__tip_vertical')).toExist();
   });
 
 });
 
 describe('TipView. Функция updateTip', function () {
-  let tipView,
-      parent;
+    let tipView: TipView,
+        parent: JQuery;
 
   beforeEach(function () {
     setFixtures('<div class="slider"><div class="slider__runner"></div></div>');
     parent = $('.slider__runner');
-    tipView = new TipView();
-    tipView.drawTip(parent);
+      tipView = new TipView({
+          orientation: 'horizontal'
+      });
+    tipView.drawTip(parent, 0);
   });
 
   it('Должна обновлять значение внутри подсказки', function () {

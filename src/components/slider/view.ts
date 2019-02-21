@@ -1,4 +1,5 @@
-import $ from 'jquery';
+//import $ from 'jquery';
+import $ = require('jquery');
 import RunnerView from './runner/RunnerView';
 import TipView from './tip/TipView';
 import TrackView from './track/TrackView';
@@ -12,7 +13,7 @@ import {SliderViewOptions} from '../interfaces';
 
 export default class SliderView {
   [key: string]: any;
-  private el: null | JQuery;
+  public el: null | JQuery;
   public runner1?: null | IRunnerView;
   public runner2?: null | IRunnerView;
   public tip1?: null | ITipView;
@@ -20,7 +21,7 @@ export default class SliderView {
   public track?: null | ITrackView;
   private trackItemsQuantity: number;
   private progressFull?: null | JQuery;
-  private scale?: null | IScaleView;
+  public scale?: null | IScaleView;
   public type: string;
   private orientation: string;
   public isTip: boolean;
@@ -112,7 +113,6 @@ export default class SliderView {
 
   private _createTip (prop: string, el: JQuery, val: number): void {
     this[prop] = new TipView({
-      type: this.type,
       orientation: this.orientation
     });
     this[prop].drawTip(el, val);
@@ -148,7 +148,6 @@ export default class SliderView {
     this.scale = new ScaleView({
       parentWidth: this._innerWidth,
       parentHeight: this._innerHeight,
-      type: this.type,
       orientation: this.orientation
     });
     this.scale.drawScale(

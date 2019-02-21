@@ -1,10 +1,11 @@
-import $ from 'jquery';
+//import $ from 'jquery';
+import $ = require('jquery');
 import {RunnerViewOptions} from "../../interfaces";
 
 export default class RunnerView {
-   private el?: null | JQuery;
-   private shiftX: number = 0;
-   private shiftY: number = 0;
+   public el?: null | JQuery;
+   public shiftX: number = 0;
+   public shiftY: number = 0;
    private type: string;
    private orientation: string;
    private parentLeftPoint: number;

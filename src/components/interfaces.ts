@@ -8,7 +8,6 @@ export type SliderModelOptions = {
 }
 
 type PrivateSliderViewOptions = {
-    el: null | JQuery,
     trackItemsQuantity: number,
     orientation: string,
     progressFull?: null | JQuery,
@@ -18,6 +17,7 @@ type PrivateSliderViewOptions = {
 }
 
 type PublicSliderViewOptions = {
+    el: null | JQuery,
     runner1?: null | IRunnerView,
     runner2?: null | IRunnerView,
     tip1?: null | ITipView,
@@ -30,7 +30,7 @@ type PublicSliderViewOptions = {
 export type SliderViewOptions = PrivateSliderViewOptions & PublicSliderViewOptions;
 
 export type SliderAppOptions = {
-    element?: JQuery,
+    el?: JQuery,
     startValue?: number,
     endValue?: number,
     minVal?: number,
@@ -71,7 +71,6 @@ export type trackPoints = {
 
 export type TipViewOptions = {
     el?: null | JQuery,
-    type: string,
     orientation: string
 }
 
@@ -79,7 +78,6 @@ export type ScaleViewOptions = {
     el?: null | JQuery,
     parentWidth: number,
     parentHeight: number,
-    type: string,
     orientation: string
 }
 
@@ -99,6 +97,10 @@ declare global {
     interface JQuery {
         customSlider: (...rest: any[]) => any;
     }
+}
+
+export interface ISliderApp {
+    init (): void
 }
 
 export interface ISliderModel extends SliderModelOptions{

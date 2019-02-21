@@ -1,19 +1,26 @@
-import $ from 'jquery';
+//import $ from 'jquery';
+import $ = require('jquery');
 import SliderView from '../components/slider/view';
 import SliderModel from '../components/slider/model';
 import SliderController from "../components/slider/controller";
 import SliderApp from '../components/slider/app';
+import {ISliderApp} from "../components/interfaces";
+// import '../../node_modules/@types/jasmine';
+// import '../../node_modules/@types/jasmine-jquery';
+// import '../../node_modules/@types/jquery';
 
 describe('SliderApp', function () {
   it('Создает экземпляр класса SliderApp', function () {
-    let sliderApp = new SliderApp();
+    setFixtures('<div class="slider"></div>');
+    let el = $('.slider');
+    let sliderApp = new SliderApp({el: el});
     expect(sliderApp).toBeDefined();
   });
 });
 
 describe('SliderApp. Метод init', function () {
-  let sliderApp,
-      el;
+  let sliderApp: SliderApp,
+      el: JQuery;
   beforeEach(function () {
     setFixtures('<div class="slider"></div>');
     el = $('.slider');
@@ -27,19 +34,26 @@ describe('SliderApp. Метод init', function () {
     expect(sliderApp.sliderView instanceof SliderView).toBeTruthy();
   });
   it('Обновляет вид', function () {
-    expect(sliderApp.sliderView.el).toEqual(el);
+    expect(sliderApp.sliderView!.el).toEqual(el);
   });
   it('Создает экземпляр класса SliderController', function () {
     expect(sliderApp.sliderController instanceof SliderController).toBeTruthy();
   });
   it('Инициализирует контроллер', function () {
-    expect(sliderApp.sliderController.type).toBeDefined();
+    expect(sliderApp.sliderController!.init).toBeDefined();
   });
 });
 
 describe('SliderApp. Метод currentValue', function () {
   it('Возвращает округленное значение startValue модели', function () {
-    let sliderModel = new SliderModel({startValue: 30.154});
+    let sliderModel = new SliderModel({
+        startValue: 30.154,
+        endValue: 100,
+        minVal: 0,
+        maxVal: 100,
+        step: 0,
+        type: 'single'
+    });
     let sliderApp = new SliderApp({sliderModel: sliderModel});
     expect(sliderApp.currentValue()).toEqual(30);
   });
@@ -47,7 +61,14 @@ describe('SliderApp. Метод currentValue', function () {
 
 describe('SliderApp. Метод currentMaxValue', function () {
   it('Возвращает округленное значение endValue модели', function () {
-    let sliderModel = new SliderModel({endValue: 70.954});
+    let sliderModel = new SliderModel({
+        startValue: 0,
+        endValue: 70.954,
+        minVal: 0,
+        maxVal: 100,
+        step: 0,
+        type: 'single'
+    });
     let sliderApp = new SliderApp({sliderModel: sliderModel});
     expect(sliderApp.currentMaxValue()).toEqual(71);
   });
@@ -55,7 +76,14 @@ describe('SliderApp. Метод currentMaxValue', function () {
 
 describe('SliderApp. Метод minValue', function () {
   it('Возвращает значение minVal модели', function () {
-    let sliderModel = new SliderModel({minVal: 10});
+    let sliderModel = new SliderModel({
+        startValue: 0,
+        endValue: 100,
+        minVal: 10,
+        maxVal: 100,
+        step: 0,
+        type: 'single'
+    });
     let sliderApp = new SliderApp({sliderModel: sliderModel});
     expect(sliderApp.minValue()).toEqual(10);
   });
@@ -63,7 +91,14 @@ describe('SliderApp. Метод minValue', function () {
 
 describe('SliderApp. Метод maxValue', function () {
   it('Возвращает значение maxVal модели', function () {
-    let sliderModel = new SliderModel({maxVal: 80});
+    let sliderModel = new SliderModel({
+        startValue: 0,
+        endValue: 100,
+        minVal: 0,
+        maxVal: 80,
+        step: 0,
+        type: 'single'
+    });
     let sliderApp = new SliderApp({sliderModel: sliderModel});
     expect(sliderApp.maxValue()).toEqual(80);
   });
@@ -71,15 +106,22 @@ describe('SliderApp. Метод maxValue', function () {
 
 describe('SliderApp. Метод stepSize', function () {
   it('Возвращает значение step модели', function () {
-    let sliderModel = new SliderModel({step: 15});
+    let sliderModel = new SliderModel({
+        startValue: 0,
+        endValue: 100,
+        minVal: 0,
+        maxVal: 100,
+        step: 15,
+        type: 'single'
+    });
     let sliderApp = new SliderApp({sliderModel: sliderModel});
     expect(sliderApp.stepSize()).toEqual(15);
   });
 });
 
 describe('SliderApp. Метод setMinValue', function () {
-  let sliderApp,
-      el;
+  let sliderApp: SliderApp,
+      el: JQuery;
   beforeEach(function () {
     setFixtures('<div class="slider"></div>');
     el = $('.slider');
@@ -88,7 +130,7 @@ describe('SliderApp. Метод setMinValue', function () {
     sliderApp.setMinValue(5);
   });
   it('Устанавливает значение minVal модели', function () {
-    expect(sliderApp.sliderModel.minVal).toEqual(5);
+    expect(sliderApp.sliderModel!.minVal).toEqual(5);
   });
   it('Инициализирует плагин заново', function () {
     let spy = spyOn(sliderApp, 'init');
@@ -98,8 +140,8 @@ describe('SliderApp. Метод setMinValue', function () {
 });
 
 describe('SliderApp. Метод setMaxValue', function () {
-  let sliderApp,
-      el;
+  let sliderApp: SliderApp,
+      el: JQuery;
   beforeEach(function () {
     setFixtures('<div class="slider"></div>');
     el = $('.slider');
@@ -108,7 +150,7 @@ describe('SliderApp. Метод setMaxValue', function () {
     sliderApp.setMaxValue(75);
   });
   it('Устанавливает значение minVal модели', function () {
-    expect(sliderApp.sliderModel.maxVal).toEqual(75);
+    expect(sliderApp.sliderModel!.maxVal).toEqual(75);
   });
   it('Инициализирует плагин заново', function () {
     let spy = spyOn(sliderApp, 'init');
@@ -118,27 +160,41 @@ describe('SliderApp. Метод setMaxValue', function () {
 });
 
 describe('SliderApp. Метод setCurrentValue', function () {
-  it('Возвращает значение startValue модели', function () {
-    let sliderModel = new SliderModel({startValue: 0});
+  it('Устанавливает значение startValue модели', function () {
+    let sliderModel = new SliderModel({
+        startValue: 0,
+        endValue: 100,
+        minVal: 0,
+        maxVal: 100,
+        step: 0,
+        type: 'single'
+    });
     let sliderApp = new SliderApp({sliderModel: sliderModel});
     sliderApp.setCurrentValue(20);
-    expect(sliderApp.sliderModel.startValue).toEqual(20);
+    expect(sliderApp.sliderModel!.startValue).toEqual(20);
   });
 });
 
 describe('SliderApp. Метод setCurrentMaxValue', function () {
   it('Возвращает значение endValue модели', function () {
-    let sliderModel = new SliderModel({endValue: 100});
+    let sliderModel = new SliderModel({
+        startValue: 0,
+        endValue: 100,
+        minVal: 0,
+        maxVal: 100,
+        step: 15,
+        type: 'single'
+    });
     sliderModel.type = 'interval';
     let sliderApp = new SliderApp({sliderModel: sliderModel});
     sliderApp.setCurrentMaxValue(60);
-    expect(sliderApp.sliderModel.endValue).toEqual(60);
+    expect(sliderApp.sliderModel!.endValue).toEqual(60);
   });
 });
 
 describe('SliderApp. Метод setStepSize', function () {
-  let sliderApp,
-      el;
+  let sliderApp: SliderApp,
+      el: JQuery;
   beforeEach(function () {
     setFixtures('<div class="slider"></div>');
     el = $('.slider');
@@ -147,7 +203,7 @@ describe('SliderApp. Метод setStepSize', function () {
     sliderApp.setStepSize(7);
   });
   it('Устанавливает значение step модели', function () {
-    expect(sliderApp.sliderModel.step).toEqual(7);
+    expect(sliderApp.sliderModel!.step).toEqual(7);
   });
   it('Инициализирует плагин заново', function () {
     let spy = spyOn(sliderApp, 'init');
@@ -157,8 +213,8 @@ describe('SliderApp. Метод setStepSize', function () {
 });
 
 describe('SliderApp. Метод showTip', function () {
-  let sliderApp,
-      el;
+  let sliderApp: SliderApp,
+      el: JQuery;
   beforeEach(function () {
     setFixtures('<div class="slider"></div>');
     el = $('.slider');
@@ -167,7 +223,7 @@ describe('SliderApp. Метод showTip', function () {
     sliderApp.showTip();
   });
   it('Устанавливает значение isTip вида в положение true', function () {
-    expect(sliderApp.sliderView.isTip).toBeTruthy();
+    expect(sliderApp.sliderView!.isTip).toBeTruthy();
   });
   it('Инициализирует плагин заново', function () {
     let spy = spyOn(sliderApp, 'init');
@@ -177,8 +233,8 @@ describe('SliderApp. Метод showTip', function () {
 });
 
 describe('SliderApp. Метод hideTip', function () {
-  let sliderApp,
-      el;
+  let sliderApp: SliderApp,
+      el: JQuery;
   beforeEach(function () {
     setFixtures('<div class="slider"></div>');
     el = $('.slider');
@@ -187,7 +243,7 @@ describe('SliderApp. Метод hideTip', function () {
     sliderApp.hideTip();
   });
   it('Устанавливает значение isTip вида в положение false', function () {
-    expect(sliderApp.sliderView.isTip).toBeFalsy();
+    expect(sliderApp.sliderView!.isTip).toBeFalsy();
   });
   it('Инициализирует плагин заново', function () {
     let spy = spyOn(sliderApp, 'init');
@@ -197,8 +253,8 @@ describe('SliderApp. Метод hideTip', function () {
 });
 
 describe('SliderApp. Метод showScale', function () {
-  let sliderApp,
-      el;
+  let sliderApp: SliderApp,
+      el: JQuery;
   beforeEach(function () {
     setFixtures('<div class="slider"></div>');
     el = $('.slider');
@@ -207,7 +263,7 @@ describe('SliderApp. Метод showScale', function () {
     sliderApp.showScale();
   });
   it('Устанавливает значение isScale вида в положение true', function () {
-    expect(sliderApp.sliderView.isScale).toBeTruthy();
+    expect(sliderApp.isScale).toBeTruthy();
   });
   it('Инициализирует плагин заново', function () {
     let spy = spyOn(sliderApp, 'init');
@@ -217,8 +273,8 @@ describe('SliderApp. Метод showScale', function () {
 });
 
 describe('SliderApp. Метод hideScale', function () {
-  let sliderApp,
-      el;
+  let sliderApp: SliderApp,
+      el: JQuery;
   beforeEach(function () {
     setFixtures('<div class="slider"></div>');
     el = $('.slider');
@@ -227,7 +283,7 @@ describe('SliderApp. Метод hideScale', function () {
     sliderApp.hideScale();
   });
   it('Устанавливает значение isScale вида в положение false', function () {
-    expect(sliderApp.sliderView.isScale).toBeFalsy();
+    expect(sliderApp.isScale).toBeFalsy();
   });
   it('Инициализирует плагин заново', function () {
     let spy = spyOn(sliderApp, 'init');
@@ -237,8 +293,8 @@ describe('SliderApp. Метод hideScale', function () {
 });
 
 describe('SliderApp. Метод setVeticalOrientation', function () {
-  let sliderApp,
-      el;
+  let sliderApp: SliderApp,
+      el: JQuery;
   beforeEach(function () {
     setFixtures('<div class="slider"></div>');
     el = $('.slider');
@@ -247,7 +303,7 @@ describe('SliderApp. Метод setVeticalOrientation', function () {
     sliderApp.setVeticalOrientation();
   });
   it('Устанавливает вертикальное положение слайдера', function () {
-    expect(sliderApp.sliderView.orientation).toEqual('vertical');
+    expect(sliderApp.orientation).toEqual('vertical');
   });
   it('Инициализирует плагин заново', function () {
     let spy = spyOn(sliderApp, 'init');
@@ -257,8 +313,8 @@ describe('SliderApp. Метод setVeticalOrientation', function () {
 });
 
 describe('SliderApp. Метод setHorisontalOrientation', function () {
-  let sliderApp,
-      el;
+  let sliderApp: SliderApp,
+      el: JQuery;
   beforeEach(function () {
     setFixtures('<div class="slider"></div>');
     el = $('.slider');
@@ -267,7 +323,7 @@ describe('SliderApp. Метод setHorisontalOrientation', function () {
     sliderApp.setHorisontalOrientation();
   });
   it('Устанавливает горизонтальное положение слайдера', function () {
-    expect(sliderApp.sliderView.orientation).toEqual('horizontal');
+    expect(sliderApp.orientation).toEqual('horizontal');
   });
   it('Инициализирует плагин заново', function () {
     let spy = spyOn(sliderApp, 'init');

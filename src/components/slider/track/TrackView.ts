@@ -1,10 +1,11 @@
-import $ from "jquery";
+//import $ from "jquery";
+import $ = require('jquery');
 import {TrackViewOptions} from "../../interfaces";
 import {trackPoints} from "../../interfaces";
 
 export default class TrackView {
   public el?: null | JQuery;
-  private trackFull?: null | JQuery;
+  public trackFull?: null | JQuery;
   private parentWidth: number;
   private parentHeight: number;
   private runnerWidth: number;

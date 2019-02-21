@@ -1,4 +1,5 @@
-import $ from 'jquery';
+//import $ from 'jquery';
+import $ = require('jquery');
 import SliderView from './view';
 import SliderModel from './model';
 import SliderController from './controller';
@@ -14,17 +15,17 @@ export default class SliderApp {
   private minVal: number;
   private maxVal: number;
   private type: string;
-  private orientation: string;
+  public orientation: string;
   private step: number;
   private isTip: boolean;
-  private isScale: boolean;
+  public isScale: boolean;
   private trackItemsQuantity: number;
-  private sliderModel: null | ISliderModel;
-  private sliderView: null | ISliderView;
-  private sliderController: null | ISliderController;
+  public sliderModel: null | ISliderModel;
+  public sliderView: null | ISliderView;
+  public sliderController: null | ISliderController;
 
   constructor (options: SliderAppOptions) {
-    this.el = options.element;
+    this.el = options.el;
     this.startValue = 0;
     this.endValue = 100;
     this.minVal = 0;

@@ -1,4 +1,5 @@
-import $ from "jquery";
+//import $ from "jquery";
+import $ = require('jquery');
 import SliderApp from '../slider/app';
 import {SliderAppOptions} from '../interfaces';
 let result: (method: string, arg: string) => void;
@@ -22,7 +23,7 @@ $.fn.customSlider = function(options?: SliderAppOptions, ...rest: any[]): any {
                 isScale: $(this).data('scale')
             };
 
-            options = $.extend({element: $(this)}, options, dataConfig);
+            options = $.extend({el: $(this)}, options, dataConfig);
             $(this).data('constructor', new SliderApp(options));
             result = $(this).data('constructor').init();
 
@@ -191,7 +192,7 @@ export default class DemoView {
     });
     $('.slider_step').customSlider({
       type: 'single',
-      //minVal: 20,
+      minVal: 16,
       startValue: 20,
       endValue: 80,
       step: 20

@@ -1,14 +1,13 @@
-import $ from "jquery";
+//import $ from "jquery";
+import $ = require('jquery');
 import {TipViewOptions} from "../../interfaces";
 
 export default class TipView {
   private el: null | JQuery;
-  private  type: string;
   private  orientation: string;
 
   constructor (options : TipViewOptions) {
     this.el = null;
-    this.type = options.type;
     this.orientation = options.orientation;
     $.extend(this, options);
   }

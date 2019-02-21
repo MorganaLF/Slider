@@ -1,18 +1,38 @@
-import $ from 'jquery';
+//import $ from 'jquery';
+import $ = require('jquery');
 import SliderView from '../components/slider/view';
 import SliderModel from '../components/slider/model';
 import SliderController from "../components/slider/controller";
-
-/* CONTROLLER */
+// import '../../node_modules/@types/jasmine';
+// import '../../node_modules/@types/jasmine-jquery';
+// import '../../node_modules/@types/jquery';
 
 describe('SliderController', function () {
-  let sliderView,
-      sliderModel,
-      sliderController;
+  let element,
+      sliderView: SliderView,
+      sliderModel: SliderModel,
+      sliderController: SliderController;
 
   beforeEach(function () {
-    sliderModel = new SliderModel();
-    sliderView = new SliderView();
+    setFixtures('<div class="slider"></div>');
+    element = $('.slider');
+    sliderModel = new SliderModel({
+        startValue: 0,
+        endValue: 100,
+        minVal: 0,
+        maxVal: 100,
+        step: 0,
+        type: 'single'
+    });
+    sliderView = new SliderView({
+        el: element,
+        type: 'single',
+        orientation: 'horizontal',
+        model: sliderModel,
+        isTip: true,
+        isScale: true,
+        trackItemsQuantity: 10
+    });
     sliderController = new SliderController(sliderView, sliderModel);
   });
 
@@ -25,17 +45,32 @@ describe('SliderController', function () {
 describe('SliderController. Метод init (событие changestartvalue)', function () {
   let element,
       sliderView,
-      runner,
-      sliderModel,
-      sliderController,
-      spy,
-      spyOnCustomEvent;
+      runner: JQuery,
+      sliderModel: SliderModel,
+      sliderController: SliderController,
+      spy: (obj: JQuery, func: any) => void,
+      spyOnCustomEvent: (obj: any, func: any, event: string) => void;
 
   beforeEach(function () {
     setFixtures('<div class="slider"></div>');
     element = $('.slider');
-    sliderModel = new SliderModel({type: 'interval'});
-    sliderView = new SliderView({el: element, model: sliderModel, type: 'interval'});
+    sliderModel = new SliderModel({
+        startValue: 0,
+        endValue: 100,
+        minVal: 0,
+        maxVal: 100,
+        step: 0,
+        type: 'interval'
+    });
+    sliderView = new SliderView({
+        el: element,
+        type: 'interval',
+        orientation: 'horizontal',
+        model: sliderModel,
+        isTip: true,
+        isScale: true,
+        trackItemsQuantity: 10
+    });
     sliderView.updateSlider();
     runner = $('.slider__runner');
 
@@ -45,11 +80,8 @@ describe('SliderController. Метод init (событие changestartvalue)', 
     spyOnCustomEvent = function (obj, func, event) {
       spy = spyOn(obj, func);
       spyOnEvent('body', event);
-
-      $('body').trigger({
-        model: sliderModel,
-        type: event,
-      });
+      let e = $.Event(event, {detail: {model: sliderModel}});
+      $('body').trigger(e);
     }
 
   });
@@ -62,8 +94,8 @@ describe('SliderController. Метод init (событие changestartvalue)', 
   });
 
   it('При клике на runner устанавливается shift бегунка', function () {
-    let spy = spyOn(sliderController.runner1, 'setRunnerShiftX');
-    let spy2 = spyOn(sliderController.runner1, 'setRunnerShiftY');
+    let spy = spyOn(sliderController.runner1, (<never>'setRunnerShiftX'));
+    let spy2 = spyOn(sliderController.runner1, (<never>'setRunnerShiftY'));
 
     $(runner).mousedown();
 
