@@ -51,13 +51,13 @@ export default class SliderController {
       }
   }
 
-  private changevalue (runner: IRunnerView, tip: ITipView, point: string): (e: JQuery.TriggeredEvent) => void {
+  private changevalue (runner: IRunnerView, tip: ITipView | false, point: string): (e: JQuery.TriggeredEvent) => void {
     return (e) => {
       if ((<any>e).detail.model !== this.model) {
         return;
       }
       runner.setRunnerPosition((<any>e).detail.coefficient);
-      if (this.isTip) {
+      if (tip) {
         tip.updateTip((<any>e).detail.value);
       }
       if (this.track) {
@@ -81,7 +81,7 @@ export default class SliderController {
 
   };
 
-  private _addHandlers (runner: IRunnerView, tip: ITipView, changeevent: string, point: string): void {
+  private _addHandlers (runner: IRunnerView, tip: ITipView | false, changeevent: string, point: string): void {
     let onmousedown = this._onmousedown = this.mousedown.bind(this, runner);
     let changevalue = this._onchangevalue(runner, tip, point);
 
@@ -90,11 +90,14 @@ export default class SliderController {
   }
 
   public init (): void {
-    if (this.runner1 && this.tip1) {
-        this._addHandlers(this.runner1, this.tip1, 'changestartvalue', 'start');
+    let tip1 = this.isTip && this.tip1 ? this.tip1 : false;
+    let tip2 = this.isTip && this.tip2 ? this.tip2 : false;
+
+    if (this.runner1) {
+        this._addHandlers(this.runner1, tip1, 'changestartvalue', 'start');
     }
     if (this.type === 'interval' && this.runner2 && this.tip2) {
-      this._addHandlers(this.runner2, this.tip2, 'changeendvalue', 'end');
+      this._addHandlers(this.runner2, tip2, 'changeendvalue', 'end');
     }
   }
 }
