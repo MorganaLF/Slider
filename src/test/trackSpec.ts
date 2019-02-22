@@ -130,7 +130,12 @@ describe('TrackView. Функция animateTrack', function () {
     trackView.el!.css('position', 'relative');
   });
 
-  it('Устанавливает ширину дорожки, если тип слайдера single', function () {
+    it('Возвращает false, если элемент неопределен', function () {
+        trackView.el = null;
+        expect(trackView.animateTrack(2, 'start')).toEqual(false);
+    });
+
+    it('Устанавливает ширину дорожки, если тип слайдера single', function () {
     trackView.animateTrack(2, 'start');
     expect(trackView.trackFull!.css('width')).toEqual('200px');
   });

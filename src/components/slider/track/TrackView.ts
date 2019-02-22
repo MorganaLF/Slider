@@ -115,9 +115,9 @@ export default class TrackView {
     this.trackFull.css(gabariteProperty, gabarite - startIndent - endIndent + 'px');
   }
 
-  public animateTrack (coefficient: number, pointName: string): void {
+  public animateTrack (coefficient: number, pointName: string): void | false{
       if (!this.el) {
-          return;
+          return false;
       }
     if (this.type === 'interval') {
       if (this.orientation === 'horizontal') {
