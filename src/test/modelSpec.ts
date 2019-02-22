@@ -51,6 +51,18 @@ describe('SliderModel', function () {
     expect(sliderModel.minVal).toEqual(10);
   });
 
+    it('Минимальное значение не может быть больше максимального', function () {
+        sliderModel = new SliderModel({
+            startValue: 0,
+            endValue: 100,
+            minVal: 150,
+            maxVal: 100,
+            step: 0,
+            type: 'single'
+        });
+        expect(sliderModel.minVal).toEqual(99);
+    });
+
   it('Максимальное значение не может быть меньше нуля', function () {
     sliderModel = new SliderModel({
         startValue: 0,

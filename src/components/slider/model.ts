@@ -62,6 +62,7 @@ export default class SliderModel {
     this._checkIsNumber('minVal');
     this._checkIsNumber('maxVal');
     this._checkIsNumber('step');
+    this._checkExtremeValues();
     this._checkPositiveNumber('minVal');
     this._checkPositiveNumber('maxVal');
     this._checkCurrentValue('startValue');
@@ -81,6 +82,12 @@ export default class SliderModel {
   private _checkPositiveNumber (prop: string): void {
     if (this[prop] < 0) {
       this[prop] = Math.abs(this[prop]);
+    }
+  }
+
+  private _checkExtremeValues (): void {
+    if (this.minVal > this.maxVal) {
+      this.minVal = this.maxVal -1;
     }
   }
 
