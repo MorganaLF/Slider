@@ -27,6 +27,10 @@ describe('SliderApp. Метод init', function () {
     sliderApp = new SliderApp({el: el});
     sliderApp.init();
   });
+    it('Возвращает false, если элемент не определен', function () {
+        (<any>sliderApp).el = null;
+        expect(sliderApp.init()).toEqual(false);
+    });
   it('Создает экземпляр класса SliderModel', function () {
     expect(sliderApp.sliderModel instanceof SliderModel).toBeTruthy();
   });
@@ -45,78 +49,123 @@ describe('SliderApp. Метод init', function () {
 });
 
 describe('SliderApp. Метод currentValue', function () {
-  it('Возвращает округленное значение startValue модели', function () {
-    let sliderModel = new SliderModel({
-        startValue: 30.154,
-        endValue: 100,
-        minVal: 0,
-        maxVal: 100,
-        step: 0,
-        type: 'single'
+  let sliderModel,
+      sliderApp: SliderApp;
+
+    beforeEach(function () {
+        sliderModel = new SliderModel({
+            startValue: 30.154,
+            endValue: 100,
+            minVal: 0,
+            maxVal: 100,
+            step: 0,
+            type: 'single'
+        });
+        sliderApp = new SliderApp({sliderModel: sliderModel});
     });
-    let sliderApp = new SliderApp({sliderModel: sliderModel});
+  it('Возвращает округленное значение startValue модели', function () {
     expect(sliderApp.currentValue()).toEqual(30);
   });
+    it('Возвращает 0, если модель не определена', function () {
+        sliderApp.sliderModel = null;
+        expect(sliderApp.currentValue()).toEqual(0);
+    });
 });
 
 describe('SliderApp. Метод currentMaxValue', function () {
-  it('Возвращает округленное значение endValue модели', function () {
-    let sliderModel = new SliderModel({
-        startValue: 0,
-        endValue: 70.954,
-        minVal: 0,
-        maxVal: 100,
-        step: 0,
-        type: 'single'
+    let sliderModel,
+        sliderApp: SliderApp;
+
+    beforeEach(function () {
+        sliderModel = new SliderModel({
+            startValue: 0,
+            endValue: 70.954,
+            minVal: 0,
+            maxVal: 100,
+            step: 0,
+            type: 'single'
+        });
+        sliderApp = new SliderApp({sliderModel: sliderModel});
     });
-    let sliderApp = new SliderApp({sliderModel: sliderModel});
+  it('Возвращает округленное значение endValue модели', function () {
     expect(sliderApp.currentMaxValue()).toEqual(71);
   });
+    it('Возвращает 0, если модель не определена', function () {
+        sliderApp.sliderModel = null;
+        expect(sliderApp.currentMaxValue()).toEqual(0);
+    });
 });
 
 describe('SliderApp. Метод minValue', function () {
-  it('Возвращает значение minVal модели', function () {
-    let sliderModel = new SliderModel({
-        startValue: 0,
-        endValue: 100,
-        minVal: 10,
-        maxVal: 100,
-        step: 0,
-        type: 'single'
+    let sliderModel,
+        sliderApp: SliderApp;
+
+    beforeEach(function () {
+        sliderModel = new SliderModel({
+            startValue: 0,
+            endValue: 100,
+            minVal: 10,
+            maxVal: 100,
+            step: 0,
+            type: 'single'
+        });
+        sliderApp = new SliderApp({sliderModel: sliderModel});
     });
-    let sliderApp = new SliderApp({sliderModel: sliderModel});
+  it('Возвращает значение minVal модели', function () {
     expect(sliderApp.minValue()).toEqual(10);
   });
+    it('Возвращает 0, если модель не определена', function () {
+        sliderApp.sliderModel = null;
+        expect(sliderApp.minValue()).toEqual(0);
+    });
 });
 
 describe('SliderApp. Метод maxValue', function () {
-  it('Возвращает значение maxVal модели', function () {
-    let sliderModel = new SliderModel({
-        startValue: 0,
-        endValue: 100,
-        minVal: 0,
-        maxVal: 80,
-        step: 0,
-        type: 'single'
+    let sliderModel,
+        sliderApp: SliderApp;
+
+    beforeEach(function () {
+        sliderModel = new SliderModel({
+            startValue: 0,
+            endValue: 100,
+            minVal: 0,
+            maxVal: 80,
+            step: 0,
+            type: 'single'
+        });
+        sliderApp = new SliderApp({sliderModel: sliderModel});
     });
-    let sliderApp = new SliderApp({sliderModel: sliderModel});
+  it('Возвращает значение maxVal модели', function () {
     expect(sliderApp.maxValue()).toEqual(80);
   });
+    it('Возвращает 0, если модель не определена', function () {
+        sliderApp.sliderModel = null;
+        expect(sliderApp.maxValue()).toEqual(0);
+    });
 });
 
 describe('SliderApp. Метод stepSize', function () {
-  it('Возвращает значение step модели', function () {
-    let sliderModel = new SliderModel({
-        startValue: 0,
-        endValue: 100,
-        minVal: 0,
-        maxVal: 100,
-        step: 15,
-        type: 'single'
+    let sliderModel,
+        sliderApp: SliderApp;
+
+    beforeEach(function () {
+        sliderModel = new SliderModel({
+            startValue: 0,
+            endValue: 100,
+            minVal: 0,
+            maxVal: 100,
+            step: 15,
+            type: 'single'
+        });
+        sliderApp = new SliderApp({sliderModel: sliderModel});
     });
-    let sliderApp = new SliderApp({sliderModel: sliderModel});
+  it('Возвращает значение step модели', function () {
     expect(sliderApp.stepSize()).toEqual(15);
   });
+    it('Возвращает 0, если модель не определена', function () {
+        sliderApp.sliderModel = null;
+        expect(sliderApp.stepSize()).toEqual(0);
+    });
 });
 
 describe('SliderApp. Метод setMinValue', function () {
@@ -127,11 +176,15 @@ describe('SliderApp. Метод setMinValue', function () {
     el = $('.slider');
     sliderApp = new SliderApp({el: el});
     sliderApp.init();
-    sliderApp.setMinValue(5);
   });
   it('Устанавливает значение minVal модели', function () {
+      sliderApp.setMinValue(5);
     expect(sliderApp.sliderModel!.minVal).toEqual(5);
   });
+    it('Заменяет строку на число', function () {
+        sliderApp.setMinValue('15');
+        expect(sliderApp.sliderModel!.minVal).toEqual(15);
+    });
   it('Инициализирует плагин заново', function () {
     let spy = spyOn(sliderApp, 'init');
     sliderApp.setMinValue(5);
@@ -147,11 +200,15 @@ describe('SliderApp. Метод setMaxValue', function () {
     el = $('.slider');
     sliderApp = new SliderApp({el: el});
     sliderApp.init();
-    sliderApp.setMaxValue(75);
   });
   it('Устанавливает значение minVal модели', function () {
+      sliderApp.setMaxValue(75);
     expect(sliderApp.sliderModel!.maxVal).toEqual(75);
   });
+    it('Заменяет строку на число', function () {
+        sliderApp.setMaxValue('65');
+        expect(sliderApp.sliderModel!.maxVal).toEqual(65);
+    });
   it('Инициализирует плагин заново', function () {
     let spy = spyOn(sliderApp, 'init');
     sliderApp.setMaxValue(95);
@@ -160,36 +217,53 @@ describe('SliderApp. Метод setMaxValue', function () {
 });
 
 describe('SliderApp. Метод setCurrentValue', function () {
-  it('Устанавливает значение startValue модели', function () {
-    let sliderModel = new SliderModel({
-        startValue: 0,
-        endValue: 100,
-        minVal: 0,
-        maxVal: 100,
-        step: 0,
-        type: 'single'
+    let sliderModel,
+        sliderApp: SliderApp;
+
+    beforeEach(function () {
+        sliderModel = new SliderModel({
+            startValue: 0,
+            endValue: 100,
+            minVal: 0,
+            maxVal: 100,
+            step: 0,
+            type: 'single'
+        });
+        sliderApp = new SliderApp({sliderModel: sliderModel});
     });
-    let sliderApp = new SliderApp({sliderModel: sliderModel});
+  it('Устанавливает значение startValue модели', function () {
     sliderApp.setCurrentValue(20);
     expect(sliderApp.sliderModel!.startValue).toEqual(20);
   });
+    it('Если модель не определена, возвращает false', function () {
+        sliderApp.sliderModel = null;
+        expect(sliderApp.setCurrentValue(20)).toEqual(false);
+    });
 });
 
 describe('SliderApp. Метод setCurrentMaxValue', function () {
-  it('Возвращает значение endValue модели', function () {
-    let sliderModel = new SliderModel({
-        startValue: 0,
-        endValue: 100,
-        minVal: 0,
-        maxVal: 100,
-        step: 15,
-        type: 'single'
+    let sliderModel: SliderModel,
+        sliderApp: SliderApp;
+
+    beforeEach(function () {
+        sliderModel = new SliderModel({
+            startValue: 0,
+            endValue: 100,
+            minVal: 0,
+            maxVal: 100,
+            step: 15,
+            type: 'interval'
+        });
+        sliderApp = new SliderApp({sliderModel: sliderModel});
     });
-    sliderModel.type = 'interval';
-    let sliderApp = new SliderApp({sliderModel: sliderModel});
+  it('Возвращает значение endValue модели', function () {
     sliderApp.setCurrentMaxValue(60);
     expect(sliderApp.sliderModel!.endValue).toEqual(60);
   });
+    it('Если модель не определена, возвращает false', function () {
+        sliderApp.sliderModel = null;
+        expect(sliderApp.setCurrentMaxValue(60)).toEqual(false);
+    });
 });
 
 describe('SliderApp. Метод setStepSize', function () {

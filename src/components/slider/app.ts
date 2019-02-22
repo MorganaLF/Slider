@@ -122,9 +122,9 @@ export default class SliderApp {
     this.init();
   }
 
-  public init (): void {
+  public init (): void | false {
     if (!this.el) {
-      return;
+      return false;
     }
     this.sliderModel = new SliderModel({
       startValue: this.startValue,
