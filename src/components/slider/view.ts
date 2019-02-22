@@ -159,21 +159,30 @@ export default class SliderView {
   }
 
   private _drawSlider (): void {
-    this._createTrack();
+    if (!this.el) {
+        return;
+    }
+
+    if (this.orientation === 'vertical') {
+        this.el.addClass('slider_vertical')
+    } else {
+        this.el.removeClass('slider_vertical')
+    }
+
     this._createRunner('runner1', this.model.startValue);
 
     if (this.isTip && this.runner1) {
-      this._createTip('tip1', this.runner1.el!, this.model.startValue);
+      this._createTip('tip1', this.runner1.el, this.model.startValue);
     }
 
     if (this.type === 'interval') {
       this._createRunner('runner2', this.model.endValue);
 
       if (this.isTip && this.runner2) {
-        this._createTip('tip2', this.runner2.el!, this.model.endValue);
+        this._createTip('tip2', this.runner2.el, this.model.endValue);
       }
     }
-
+      this._createTrack();
     if (this.isScale) {
       this._createScale();
     }

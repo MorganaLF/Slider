@@ -40,9 +40,9 @@ describe('SliderView', function () {
 });
 
 describe('SliderView. Функция updateSlider', function () {
-  let element,
+  let element: JQuery,
       slider: SliderView,
-      sliderModel;
+      sliderModel: SliderModel;
 
   beforeEach(function() {
     setFixtures('<div class="slider"></div>');
@@ -67,7 +67,40 @@ describe('SliderView. Функция updateSlider', function () {
     slider.updateSlider();
   });
 
-  it('Должна создавать элемент slider__track внутри указанного элемента', function () {
+    it('Не рисует слайдер, если элемент null либо undefined', function () {
+        slider.el = null;
+        expect(slider.updateSlider()).toEqual(false);
+    });
+
+    it('Добавляет корневому элементу класс vertical, если ориентация вертикальная', function () {
+        slider = new SliderView({
+            el: element,
+            type: 'single',
+            orientation: 'vertical',
+            model: sliderModel,
+            isTip: true,
+            isScale: true,
+            trackItemsQuantity: 10
+        });
+        slider.updateSlider();
+        expect($('.slider_vertical')).toExist();
+    });
+
+    it('Удаляет у корневого элемента класс vertical, если ориентация горизонтальная', function () {
+        slider = new SliderView({
+            el: element,
+            type: 'single',
+            orientation: 'horizontal',
+            model: sliderModel,
+            isTip: true,
+            isScale: true,
+            trackItemsQuantity: 10
+        });
+        slider.updateSlider();
+        expect($('.slider_vertical')).not.toExist();
+    });
+
+    it('Должна создавать элемент slider__track внутри указанного элемента', function () {
     expect($('.slider .slider__track')).toExist();
   });
 
