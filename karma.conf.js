@@ -31,9 +31,9 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'src/components/**/*.ts': ['webpack', "babel", "karma-typescript", 'sourcemap', 'coverage'],
-      'src/test/**/*.ts': ['webpack', "babel", "karma-typescript",  'sourcemap', 'coverage'],
-      'karma.conf.js': ['webpack', "babel", "karma-typescript",  'sourcemap', 'coverage']
+      'src/components/**/*.ts': ["karma-typescript", 'sourcemap', 'coverage'],
+      'src/test/**/*.ts': ["karma-typescript",  'sourcemap', 'coverage'],
+      'karma.conf.js': ["karma-typescript",  'sourcemap', 'coverage']
     },
 
 
