@@ -46,9 +46,9 @@ export default class RunnerView {
     this.setRunnerPosition(coefficient);
   }
 
-  public setRunnerPosition (coefficient: number): void {
+  public setRunnerPosition (coefficient: number): void | false {
     if (!this.el) {
-        return;
+        return false;
     }
     let direction: string = this.orientation === 'horizontal' ? 'left' : 'top';
     let parentGabarite: number  = this.orientation === 'horizontal' ? this._parentWidth : this._parentHeight;
@@ -58,16 +58,16 @@ export default class RunnerView {
     }
   }
 
-  public setRunnerShiftX (e: JQuery.MouseDownEvent): void {
+  public setRunnerShiftX (e: JQuery.MouseDownEvent): void | false {
       if (!this.el) {
-          return;
+          return false;
       }
     this.shiftX = e.pageX - this.el.offset()!.left;
   }
 
-  public setRunnerShiftY (e: JQuery.MouseDownEvent): void {
+  public setRunnerShiftY (e: JQuery.MouseDownEvent): void | false {
       if (!this.el) {
-          return;
+          return false;
       }
     this.shiftY = e.pageY - this.el.offset()!.top;
   }
@@ -94,9 +94,9 @@ export default class RunnerView {
     this.el.trigger(moveEvent);
   }
 
-  public moveRunner (e: JQuery.MouseMoveEvent): void {
+  public moveRunner (e: JQuery.MouseMoveEvent): void | false {
     if (!this.el) {
-       return;
+       return false;
     }
     if (this.orientation === 'horizontal') {
       this._dispatchMoveRunner(e.pageX, this.parentLeftPoint, this.parentRightPoint, this.shiftX, this.el.innerWidth()!);

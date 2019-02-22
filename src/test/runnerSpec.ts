@@ -90,7 +90,12 @@ describe('RunnerView. Функция setRunnerPosition', function () {
     runnerView.el!.css('position', 'absolute');
   });
 
-  it('Горизонтальному ползунку задается положение left', function () {
+    it('Если элемент неопределен, возвращает false', function () {
+        runnerView.el = null;
+        expect(runnerView.setRunnerPosition(2)).toEqual(false);
+    });
+
+    it('Горизонтальному ползунку задается положение left', function () {
     runnerView.el!.css('width', '50px');
     runnerView.setRunnerPosition(2);
     expect(runnerView.el!.css('left')).toEqual('150px');
@@ -132,6 +137,11 @@ describe('RunnerView. Функция setRunnerShiftX', function () {
     runnerView.drawRunner(parent, 1);
   });
 
+    it('Если элемент неопределен, возвращает false', function () {
+        runnerView.el = null;
+        expect(runnerView.setRunnerShiftX((<any>{pageX: 10}))).toEqual(false);
+    });
+
   it('Сохраняет смещение курсора относительно ползунка', function () {
     runnerView.setRunnerShiftX((<any>{pageX: 10}));
     let shift = 10 - runnerView.el!.offset()!.left;
@@ -158,6 +168,11 @@ describe('RunnerView. Функция setRunnerShiftY', function () {
     });
     runnerView.drawRunner(parent, 1);
   });
+
+    it('Если элемент неопределен, возвращает false', function () {
+        runnerView.el = null;
+        expect(runnerView.setRunnerShiftY((<any>{pageY: 10}))).toEqual(false);
+    });
 
   it('Сохраняет смещение курсора относительно ползунка', function () {
     runnerView.setRunnerShiftY((<any>{pageY: 10}));
@@ -190,6 +205,11 @@ describe('RunnerView. Функция moveRunner', function () {
     $('.slider__runner').css('width', '50px');
     $('.slider__runner').css('height', '50px');
   });
+
+    it('Если элемент неопределен, возвращает false', function () {
+        runnerView.el = null;
+        expect(runnerView.moveRunner((<any>{pageX: 30, pageY: 10}))).toEqual(false);
+    });
 
   it('Генерирует событие, отправляя коэффициент и тип ползунка', function () {
     spyOnEvent('.slider__runner', 'move');
