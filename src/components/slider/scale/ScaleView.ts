@@ -37,9 +37,9 @@ export default class ScaleView {
     return this.orientation === 'horizontal' ? valOne : valTwo;
   }
 
-  private _drawScaleItem (i: number, index: number, itemsLength: number, positionProperty: string): void {
+  private _drawScaleItem (i: number, index: number, itemsLength: number, positionProperty: string): void | false {
     if (!this.el) {
-        return;
+        return false;
     }
 
     let scaleItem: JQuery = $('<li/>', {

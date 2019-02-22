@@ -38,7 +38,12 @@ describe('ScaleView. Функция drawScale', function () {
     scaleView.drawScale(parent, 5, 25, 4);
   });
 
-  it('Создает элемент slider__scale внутри указанного родителя', function () {
+    it('Не создает вложенные элементы, если корневой элемент неопределен', function () {
+        (<any>scaleView).el = null;
+        expect((<any>scaleView)._drawScaleItem()).toEqual(false);
+    });
+
+    it('Создает элемент slider__scale внутри указанного родителя', function () {
     expect($('.slider .slider__scale')).toExist();
   });
 
