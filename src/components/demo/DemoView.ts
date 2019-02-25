@@ -264,11 +264,11 @@ export default class DemoView {
   }
 
   private _updateInputValues (): void {
-    this._setInputVal('current-value', 'currentValue');
-    this._setInputVal('current-max-value', 'currentMaxValue');
-    this._setInputVal('min-value', 'minValue');
-    this._setInputVal('max-value', 'maxValue');
-    this._setInputVal('step-size', 'stepSize');
+    this._setInputVal('current-value', 'getCurrentValue');
+    this._setInputVal('current-max-value', 'getCurrentMaxValue');
+    this._setInputVal('min-value', 'getMinValue');
+    this._setInputVal('max-value', 'getMaxValue');
+    this._setInputVal('step-size', 'getStepSize');
   }
 
   private _updateCheckboxes (el: JQuery, on: string, off: string): void {

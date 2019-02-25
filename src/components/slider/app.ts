@@ -43,23 +43,23 @@ export default class SliderApp {
     $.extend(this, options);
   }
 
-  public currentValue (): number {
+  public getCurrentValue (): number {
     return this.sliderModel ? this.sliderModel.currentRoundValue : 0;
   }
 
-  public currentMaxValue (): number {
+  public getCurrentMaxValue (): number {
     return this.sliderModel ? this.sliderModel.currentRoundEndValue : 0;
   }
 
-  public minValue (): number {
+  public getMinValue (): number {
     return this.sliderModel ? this.sliderModel.minVal : 0;
   }
 
-  public maxValue (): number {
+  public getMaxValue (): number {
     return this.sliderModel ? this.sliderModel.maxVal : 0;
   }
 
-  public stepSize (): number {
+  public getStepSize (): number {
     return this.sliderModel ? this.sliderModel.step : 0;
   }
 

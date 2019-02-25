@@ -26,8 +26,8 @@ describe('Функция customSlider', function () {
   });
 
   it('При вызове с аргументами вызывает соответствующий метод SliderApp', function () {
-    let spy = spyOn(el.data('constructor'), 'currentValue');
-    el.customSlider('currentValue');
+    let spy = spyOn(el.data('constructor'), 'getCurrentValue');
+    el.customSlider('getCurrentValue');
     expect(spy).toHaveBeenCalled();
 
     let spy2 = spyOn(el.data('constructor'), 'setMinValue');

@@ -64,11 +64,11 @@ describe('SliderApp. Метод currentValue', function () {
         sliderApp = new SliderApp({sliderModel: sliderModel});
     });
   it('Возвращает округленное значение startValue модели', function () {
-    expect(sliderApp.currentValue()).toEqual(30);
+    expect(sliderApp.getCurrentValue()).toEqual(30);
   });
     it('Возвращает 0, если модель не определена', function () {
         sliderApp.sliderModel = null;
-        expect(sliderApp.currentValue()).toEqual(0);
+        expect(sliderApp.getCurrentValue()).toEqual(0);
     });
 });
 
@@ -88,11 +88,11 @@ describe('SliderApp. Метод currentMaxValue', function () {
         sliderApp = new SliderApp({sliderModel: sliderModel});
     });
   it('Возвращает округленное значение endValue модели', function () {
-    expect(sliderApp.currentMaxValue()).toEqual(71);
+    expect(sliderApp.getCurrentMaxValue()).toEqual(71);
   });
     it('Возвращает 0, если модель не определена', function () {
         sliderApp.sliderModel = null;
-        expect(sliderApp.currentMaxValue()).toEqual(0);
+        expect(sliderApp.getCurrentMaxValue()).toEqual(0);
     });
 });
 
@@ -112,11 +112,11 @@ describe('SliderApp. Метод minValue', function () {
         sliderApp = new SliderApp({sliderModel: sliderModel});
     });
   it('Возвращает значение minVal модели', function () {
-    expect(sliderApp.minValue()).toEqual(10);
+    expect(sliderApp.getMinValue()).toEqual(10);
   });
     it('Возвращает 0, если модель не определена', function () {
         sliderApp.sliderModel = null;
-        expect(sliderApp.minValue()).toEqual(0);
+        expect(sliderApp.getMinValue()).toEqual(0);
     });
 });
 
@@ -136,11 +136,11 @@ describe('SliderApp. Метод maxValue', function () {
         sliderApp = new SliderApp({sliderModel: sliderModel});
     });
   it('Возвращает значение maxVal модели', function () {
-    expect(sliderApp.maxValue()).toEqual(80);
+    expect(sliderApp.getMaxValue()).toEqual(80);
   });
     it('Возвращает 0, если модель не определена', function () {
         sliderApp.sliderModel = null;
-        expect(sliderApp.maxValue()).toEqual(0);
+        expect(sliderApp.getMaxValue()).toEqual(0);
     });
 });
 
@@ -160,11 +160,11 @@ describe('SliderApp. Метод stepSize', function () {
         sliderApp = new SliderApp({sliderModel: sliderModel});
     });
   it('Возвращает значение step модели', function () {
-    expect(sliderApp.stepSize()).toEqual(15);
+    expect(sliderApp.getStepSize()).toEqual(15);
   });
     it('Возвращает 0, если модель не определена', function () {
         sliderApp.sliderModel = null;
-        expect(sliderApp.stepSize()).toEqual(0);
+        expect(sliderApp.getStepSize()).toEqual(0);
     });
 });
 
