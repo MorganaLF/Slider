@@ -1,4 +1,4 @@
-import SliderModel from '../components/slider/model';
+import SliderModel from '../plugin/SliderModel';
 //import $ from "jquery";
 import $ = require('jquery');
 // import '../../node_modules/@types/jasmine';

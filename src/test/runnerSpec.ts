@@ -1,6 +1,6 @@
 //import $ from 'jquery';
 import $ = require('jquery');
-import RunnerView from '../components/slider/runner/RunnerView';
+import RunnerView from '../plugin/runner/RunnerView';
 import {exportAllDeclaration} from "babel-types";
 // import '../../node_modules/@types/jasmine';
 // import '../../node_modules/@types/jasmine-jquery';

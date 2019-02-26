@@ -4,12 +4,12 @@ import RunnerView from './runner/RunnerView';
 import TipView from './tip/TipView';
 import TrackView from './track/TrackView';
 import ScaleView from './scale/ScaleView';
-import {ISliderModel} from '../interfaces';
-import {IRunnerView} from '../interfaces';
-import {ITrackView} from '../interfaces';
-import {IScaleView} from '../interfaces';
-import {ITipView} from '../interfaces';
-import {SliderViewOptions} from '../interfaces';
+import {ISliderModel} from './interfaces';
+import {IRunnerView} from './interfaces';
+import {ITrackView} from './interfaces';
+import {IScaleView} from './interfaces';
+import {ITipView} from './interfaces';
+import {SliderViewOptions} from './interfaces';
 
 export default class SliderView {
   [key: string]: any;

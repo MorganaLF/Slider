@@ -1,6 +1,6 @@
 //import $ from 'jquery';
 import $ = require('jquery');
-import TipView from '../components/slider/tip/TipView';
+import TipView from '../plugin/tip/TipView';
 // import '../../node_modules/@types/jasmine';
 // import '../../node_modules/@types/jasmine-jquery';
 // import '../../node_modules/@types/jquery';

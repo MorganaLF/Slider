@@ -1,7 +1,7 @@
 //import $ from "jquery";
 import $ = require('jquery');
-import SliderApp from '../slider/app';
-import {SliderAppOptions} from '../interfaces';
+import SliderApp from '../../plugin/SliderApp';
+import {SliderAppOptions} from '../../plugin/interfaces';
 let result: (method: string, arg: string) => void;
 
 export default class DemoView {

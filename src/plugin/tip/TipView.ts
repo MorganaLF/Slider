@@ -1,6 +1,6 @@
 //import $ from "jquery";
 import $ = require('jquery');
-import {TipViewOptions} from "../../interfaces";
+import {TipViewOptions} from "../interfaces";
 
 export default class TipView {
   private el: null | JQuery;

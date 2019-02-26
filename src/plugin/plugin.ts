@@ -1,7 +1,7 @@
 //import $ from "jquery";
 import $ = require('jquery');
-import SliderApp from './app';
-import {SliderAppOptions} from '../interfaces';
+import SliderApp from './SliderApp';
+import {SliderAppOptions} from './interfaces';
 
 let result: (method: string, arg: string) => void;
 

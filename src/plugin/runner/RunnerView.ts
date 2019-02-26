@@ -1,6 +1,6 @@
 //import $ from 'jquery';
 import $ = require('jquery');
-import {RunnerViewOptions} from "../../interfaces";
+import {RunnerViewOptions} from "../interfaces";
 
 export default class RunnerView {
    public el?: null | JQuery;

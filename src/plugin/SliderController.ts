@@ -1,10 +1,10 @@
 //import $ from 'jquery';
 import $ = require('jquery');
-import {ISliderModel} from '../interfaces';
-import {ISliderView} from "../interfaces";
-import {IRunnerView} from '../interfaces';
-import {ITrackView} from '../interfaces';
-import {ITipView} from '../interfaces';
+import {ISliderModel} from './interfaces';
+import {ISliderView} from "./interfaces";
+import {IRunnerView} from './interfaces';
+import {ITrackView} from './interfaces';
+import {ITipView} from './interfaces';
 
 export default class SliderController {
   private isTip: boolean;

@@ -15,7 +15,7 @@ const conf = {
   plugins: [
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: path.resolve(__dirname, './src/pages/index/index.pug')
+      template: path.resolve(__dirname, './src/pages/demo/demo.pug')
     }),
     new ExtractTextPlugin('styles.css'),
     new CopyWebpackPlugin([

@@ -1,7 +1,7 @@
 //import $ from "jquery";
 import $ = require('jquery');
-import {TrackViewOptions} from "../../interfaces";
-import {trackPoints} from "../../interfaces";
+import {TrackViewOptions} from "../interfaces";
+import {trackPoints} from "../interfaces";
 
 export default class TrackView {
   public el?: null | JQuery;

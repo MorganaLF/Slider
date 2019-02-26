@@ -1,6 +1,6 @@
 //import $ from 'jquery';
 import $ = require('jquery');
-import {SliderModelOptions} from '../interfaces';
+import {SliderModelOptions} from './interfaces';
 
 
 export default class SliderModel {

@@ -1,12 +1,12 @@
 //import $ from 'jquery';
 import $ = require('jquery');
-import SliderView from './view';
-import SliderModel from './model';
-import SliderController from './controller';
-import {ISliderModel} from '../interfaces';
-import {ISliderView} from "../interfaces";
-import {ISliderController} from '../interfaces';
-import {SliderAppOptions} from "../interfaces";
+import SliderView from './SliderView';
+import SliderModel from './SliderModel';
+import SliderController from './SliderController';
+import {ISliderModel} from './interfaces';
+import {ISliderView} from "./interfaces";
+import {ISliderController} from './interfaces';
+import {SliderAppOptions} from "./interfaces";
 
 export default class SliderApp {
   private el?: JQuery;

@@ -1,6 +1,6 @@
 //import $ from "jquery";
 import $ = require('jquery');
-import {ScaleViewOptions} from "../../interfaces";
+import {ScaleViewOptions} from "../interfaces";
 
 export default class ScaleView {
   private  el?: null | JQuery;
