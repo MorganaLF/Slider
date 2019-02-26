@@ -19,7 +19,7 @@ export default class SliderView {
   public tip1?: null | ITipView;
   public tip2?: null | ITipView;
   public track?: null | ITrackView;
-  private trackItemsQuantity: number;
+  private scaleItemsQuantity: number;
   private progressFull?: null | JQuery;
   public scale?: null | IScaleView;
   public type: string;
@@ -35,7 +35,7 @@ export default class SliderView {
       this.tip1 = null;
       this.tip2 = null;
       this.track = null;
-      this.trackItemsQuantity = 10;
+      this.scaleItemsQuantity = 10;
       this.progressFull = null;
       this.scale = null;
       this.type = 'single';
@@ -154,7 +154,7 @@ export default class SliderView {
         this.el,
         this.model.minVal,
         this.model.maxVal,
-        this.trackItemsQuantity
+        this.scaleItemsQuantity
     );
   }
 

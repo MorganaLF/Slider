@@ -31,7 +31,7 @@ describe('SliderController', function () {
         model: sliderModel,
         isTip: true,
         isScale: true,
-        trackItemsQuantity: 10
+        scaleItemsQuantity: 10
     });
     sliderController = new SliderController(sliderView, sliderModel);
   });
@@ -69,7 +69,7 @@ describe('SliderController. Метод init (событие changestartvalue)', 
         model: sliderModel,
         isTip: true,
         isScale: true,
-        trackItemsQuantity: 10
+        scaleItemsQuantity: 10
     });
     sliderView.updateSlider();
     runner = $('.slider__runner');

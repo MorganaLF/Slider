@@ -19,7 +19,7 @@ export default class SliderApp {
   private step: number;
   private isTip: boolean;
   public isScale: boolean;
-  private trackItemsQuantity: number;
+  private scaleItemsQuantity: number;
   public sliderModel: null | ISliderModel;
   public sliderView: null | ISliderView;
   public sliderController: null | ISliderController;
@@ -35,7 +35,7 @@ export default class SliderApp {
     this.step = 0;
     this.isTip = true;
     this.isScale = false;
-    this.trackItemsQuantity = 10;
+    this.scaleItemsQuantity = 10;
     this.sliderModel = null;
     this.sliderView = null;
     this.sliderController = null;
@@ -61,6 +61,10 @@ export default class SliderApp {
 
   public getStepSize (): number {
     return this.sliderModel ? this.sliderModel.step : 0;
+  }
+
+  public getScaleItemsQuantity (): number {
+    return this.scaleItemsQuantity;
   }
 
   public setMinValue (val: number | string): void {
@@ -90,6 +94,11 @@ export default class SliderApp {
   public setStepSize (val: number): void {
     this.step = val;
     this.init();
+  }
+
+  public setScaleItemsQuantity (val: number): void {
+      this.scaleItemsQuantity = val;
+      this.init();
   }
 
   public showTip (): void {
@@ -142,7 +151,7 @@ export default class SliderApp {
       model: this.sliderModel,
       isTip: this.isTip,
       isScale: this.isScale,
-      trackItemsQuantity: this.trackItemsQuantity
+      scaleItemsQuantity: this.scaleItemsQuantity
     });
 
     if (this.sliderView && this.sliderModel) {

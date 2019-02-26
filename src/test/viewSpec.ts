@@ -29,7 +29,7 @@ describe('SliderView', function () {
         model: sliderModel,
         isTip: true,
         isScale: true,
-        trackItemsQuantity: 10
+        scaleItemsQuantity: 10
     });
     slider.updateSlider();
   });
@@ -62,7 +62,7 @@ describe('SliderView. Функция updateSlider', function () {
           model: sliderModel,
           isTip: true,
           isScale: true,
-          trackItemsQuantity: 10
+          scaleItemsQuantity: 10
       });
     slider.updateSlider();
   });
@@ -80,7 +80,7 @@ describe('SliderView. Функция updateSlider', function () {
             model: sliderModel,
             isTip: true,
             isScale: true,
-            trackItemsQuantity: 10
+            scaleItemsQuantity: 10
         });
         slider.updateSlider();
         expect($('.slider_vertical')).toExist();
@@ -94,7 +94,7 @@ describe('SliderView. Функция updateSlider', function () {
             model: sliderModel,
             isTip: true,
             isScale: true,
-            trackItemsQuantity: 10
+            scaleItemsQuantity: 10
         });
         slider.updateSlider();
         expect($('.slider_vertical')).not.toExist();

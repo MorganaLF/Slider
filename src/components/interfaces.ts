@@ -8,7 +8,7 @@ export type SliderModelOptions = {
 }
 
 type PrivateSliderViewOptions = {
-    trackItemsQuantity: number,
+    scaleItemsQuantity: number,
     orientation: string,
     progressFull?: null | JQuery,
     scale?: null | IScaleView,

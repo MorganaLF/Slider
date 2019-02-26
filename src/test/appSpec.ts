@@ -168,6 +168,26 @@ describe('SliderApp. Метод stepSize', function () {
     });
 });
 
+describe('SliderApp. Метод getScaleItemsQuantity', function () {
+    let sliderModel,
+        sliderApp: SliderApp;
+
+    beforeEach(function () {
+        sliderModel = new SliderModel({
+            startValue: 0,
+            endValue: 100,
+            minVal: 0,
+            maxVal: 100,
+            step: 15,
+            type: 'single'
+        });
+        sliderApp = new SliderApp({sliderModel: sliderModel});
+    });
+    it('Возвращает значение scaleItemsQuantity', function () {
+        expect(sliderApp.getScaleItemsQuantity()).toEqual(10);
+    });
+});
+
 describe('SliderApp. Метод setMinValue', function () {
   let sliderApp: SliderApp,
       el: JQuery;

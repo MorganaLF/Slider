@@ -104,6 +104,8 @@ export default class DemoView {
                   <div class="options__col">
                     <label for="">Current value</label>
                     <input class="input" type="text" name="current-value">
+                    <label for="">Quantity of scale parts </label>
+                    <input class="input" type="text" name="scale-items">
                   </div>
                   <div class="options__col">
                     <div class="checkboxes">
@@ -289,6 +291,7 @@ export default class DemoView {
     this._addTextInputHandlers('current-value', 'setCurrentValue');
     this._addTextInputHandlers('current-max-value', 'setCurrentMaxValue');
     this._addTextInputHandlers('step-size', 'setStepSize');
+    this._addTextInputHandlers('scale-items', 'setScaleItemsQuantity');
     this._addCheckboxHandlers('tip', 'showTip', 'hideTip');
     this._addCheckboxHandlers('scale', 'showScale', 'hideScale');
     this._addCheckboxHandlers('orientation', 'setVeticalOrientation', 'setHorisontalOrientation');
@@ -322,6 +325,7 @@ export default class DemoView {
     this._setInputVal('min-value', 'getMinValue');
     this._setInputVal('max-value', 'getMaxValue');
     this._setInputVal('step-size', 'getStepSize');
+    this._setInputVal('scale-items', 'getScaleItemsQuantity');
   }
 
   private _updateCheckboxes (el: JQuery, on: string, off: string): void {
