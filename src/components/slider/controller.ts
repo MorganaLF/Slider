@@ -14,7 +14,6 @@ export default class SliderController {
   public tip2?: null | ITipView;
   public track?: null | ITrackView;
   private type: string;
-  private _onchangevalue: (runner: IRunnerView, tip: ITipView | false, point: string) => (e: JQuery.TriggeredEvent) => void = this.changevalue.bind(this);
   private _onmousedown?: (e: JQuery.MouseDownEvent) => void;
   private _onmouseup?: (e: JQuery.MouseUpEvent) => void;
 
@@ -26,13 +25,12 @@ export default class SliderController {
     this.tip2 = view.tip2;
     this.track = view.track;
     this.type = view.type;
-    this._onchangevalue = this.changevalue.bind(this);
   }
 
   private mousedown (runner: IRunnerView, e: JQuery.MouseDownEvent): void {
       e.preventDefault();
 
-      let runnerType: string = runner === this.runner1 ? 'startValue' : 'endValue';
+      let runnerType: string = runner === this.view.runner1 ? 'startValue' : 'endValue';
 
       runner.setRunnerShiftX(e);
       runner.setRunnerShiftY(e);
@@ -52,8 +50,7 @@ export default class SliderController {
       }
   }
 
-  private changevalue (runner: IRunnerView, tip: ITipView | false, point: string): (e: JQuery.TriggeredEvent) => void {
-    return (e) => {
+  private changevalue (runner: IRunnerView, tip: ITipView | false, point: string, e: JQuery.TriggeredEvent): void {
       if ((<any>e).detail.model !== this.model) {
         return;
       }
@@ -61,10 +58,10 @@ export default class SliderController {
       if (tip) {
         tip.updateTip((<any>e).detail.value);
       }
-      if (this.track) {
-          this.track.animateTrack((<any>e).detail.coefficient, point);
+      if (this.view.track) {
+          this.view.track.animateTrack((<any>e).detail.coefficient, point);
       }
-    }
+
   }
 
   private mousemove (runner: IRunnerView, e: JQuery.MouseMoveEvent): void {
@@ -82,23 +79,41 @@ export default class SliderController {
 
   };
 
+  private resize (): void {
+      this.view.updateSlider();
+
+      this.runner1 = this.view.runner1;
+      this.runner2 = this.view.runner2;
+      this.tip1 = this.view.tip1;
+      this.tip2 = this.view.tip2;
+      this.track = this.view.track;
+
+      this._checkoutHandlers();
+  }
+
   private _addHandlers (runner: IRunnerView, tip: ITipView | false, changeevent: string, point: string): void {
     let onmousedown = this._onmousedown = this.mousedown.bind(this, runner);
-    let changevalue = this._onchangevalue(runner, tip, point);
-
+    let changevalue = this.changevalue.bind(this, runner, tip, point);
     runner.el.on( 'mousedown', onmousedown );
     $('body').on(changeevent, changevalue);
   }
 
-  public init (): void {
-    let tip1 = this.isTip && this.tip1 ? this.tip1 : false;
-    let tip2 = this.isTip && this.tip2 ? this.tip2 : false;
+  private _checkoutHandlers () {
+      let tip1 = this.isTip && this.tip1 ? this.tip1 : false;
+      let tip2 = this.isTip && this.tip2 ? this.tip2 : false;
 
-    if (this.runner1) {
-        this._addHandlers(this.runner1, tip1, 'changestartvalue', 'start');
-    }
-    if (this.type === 'interval' && this.runner2 && this.tip2) {
-      this._addHandlers(this.runner2, tip2, 'changeendvalue', 'end');
-    }
+      if (this.runner1) {
+          this._addHandlers(this.runner1, tip1, 'changestartvalue', 'start');
+      }
+      if (this.type === 'interval' && this.runner2 && this.tip2) {
+          this._addHandlers(this.runner2, tip2, 'changeendvalue', 'end');
+      }
+  }
+
+  public init (): void {
+    let onresize = this.resize.bind(this);
+
+    this._checkoutHandlers();
+    $(window).on('resize', onresize);
   }
 }
