@@ -64,13 +64,27 @@ export default class DemoView {
                     <input class="input" type="text" name="current-value">
                   </div>
                   <div class="options__col">
-                    <label for="">Show tip</label>
-                    <input type="checkbox" name="tip" id="" checked>
-                    <label for="">Show scale</label>
-                    <input type="checkbox" name="scale" id="">
-                    <label for="">Horizontal / vertical</label>
-                    <input type="radio" name="orientation" value="horizontal" id="" checked>
-                    <input type="radio" name="orientation" value="vertical" id="">
+                    <div class="checkboxes">
+                        <label for="">Show tip</label>
+                        <label class="tick-box" for="tip">
+                          <input class="tick-box__input" type="checkbox" name="tip" id="tip" checked>
+                          <div class="tick-box__round"></div>
+                        </label>
+                    </div>
+                    <div class="checkboxes">
+                        <label for="">Show scale</label>
+                        <label class="tick-box" for="scale">
+                          <input class="tick-box__input" type="checkbox" name="scale" id="scale">
+                          <div class="tick-box__round"></div>
+                        </label> 
+                    </div>
+                    <div class="checkboxes">
+                        <label for="">Vertical orientation</label>
+                        <label class="tick-box" for="orientation">
+                          <input class="tick-box__input" type="checkbox" name="orientation" id="orientation">
+                          <div class="tick-box__round"></div>
+                        </label> 
+                    </div>
                   </div>
                 </div>
               </form>
@@ -80,27 +94,41 @@ export default class DemoView {
           <div class="page__row">
             <div class="page__col page__options-col">
               <form class="options">
-                  <div class="options__row">
-                    <div class="options__col">
-                      <label for="">Min value</label>
-                      <input type="text" name="min-value">
-                      <label for="">Max value</label>
-                      <input type="text" name="max-value">
+                <div class="options__row">
+                  <div class="options__col">
+                    <label for="">Min value</label>
+                    <input class="input" type="text" name="min-value">
+                    <label for="">Max value</label>
+                    <input class="input" type="text" name="max-value">
+                  </div>
+                  <div class="options__col">
+                    <label for="">Current value</label>
+                    <input class="input" type="text" name="current-value">
+                  </div>
+                  <div class="options__col">
+                    <div class="checkboxes">
+                        <label for="">Show tip</label>
+                        <label class="tick-box" for="tip2">
+                          <input class="tick-box__input" type="checkbox" name="tip" id="tip2">
+                          <div class="tick-box__round"></div>
+                        </label>
                     </div>
-                    <div class="options__col">
-                      <label for="">Current value</label>
-                      <input type="text" name="current-value">
+                    <div class="checkboxes">
+                        <label for="">Show scale</label>
+                        <label class="tick-box" for="scale2">
+                          <input class="tick-box__input" type="checkbox" name="scale" id="scale2" checked>
+                          <div class="tick-box__round"></div>
+                        </label> 
                     </div>
-                    <div class="options__col">
-                      <label for="">Show tip</label>
-                      <input type="checkbox" name="tip" id="">
-                      <label for="">Show scale</label>
-                      <input type="checkbox" name="scale" id="" checked>
-                      <label for="">Horizontal / vertical</label>
-                      <input type="radio" name="orientation" value="horizontal" id="" checked>
-                      <input type="radio" name="orientation" value="vertical" id="">
+                    <div class="checkboxes">
+                        <label for="">Vertical orientation</label>
+                        <label class="tick-box" for="orientation2">
+                          <input class="tick-box__input" type="checkbox" name="orientation" id="orientation2">
+                          <div class="tick-box__round"></div>
+                        </label> 
                     </div>
                   </div>
+                </div>
               </form>
             </div>
             <div class="page__col">
@@ -128,13 +156,27 @@ export default class DemoView {
                     <input class="input" type="text" name="current-max-value">
                   </div>
                   <div class="options__col">
-                    <label for="">Show tip</label>
-                    <input type="checkbox" name="tip" id="" checked>
-                    <label for="">Show scale</label>
-                    <input type="checkbox" name="scale" id="">
-                    <label for="">Horizontal / vertical</label>
-                    <input type="radio" name="orientation" value="horizontal" id="" checked>
-                    <input type="radio" name="orientation" value="vertical" id="">
+                    <div class="checkboxes">
+                        <label for="">Show tip</label>
+                        <label class="tick-box" for="tip3">
+                          <input class="tick-box__input" type="checkbox" name="tip" id="tip3" checked>
+                          <div class="tick-box__round"></div>
+                        </label>  
+                    </div>
+                    <div class="checkboxes">
+                        <label for="">Show scale</label>
+                        <label class="tick-box" for="scale3">
+                          <input class="tick-box__input" type="checkbox" name="scale" id="scale3">
+                          <div class="tick-box__round"></div>
+                        </label>
+                    </div>
+                    <div class="checkboxes">
+                        <label for="">Vertical orientation</label>
+                        <label class="tick-box" for="orientation3">
+                          <input class="tick-box__input" type="checkbox" name="orientation" id="orientation3">
+                          <div class="tick-box__round"></div>
+                        </label> 
+                    </div>
                   </div>
                 </div>
               </form>
@@ -154,19 +196,31 @@ export default class DemoView {
                   <div class="options__col">
                     <label for="">Current min value</label>
                     <input class="input" type="text" name="current-value">
-                    <label for="">Current max value</label>
-                    <input class="input" type="text" name="current-max-value">
+                    <label for="">Step size</label>
+                    <input class="input" type="text" name="step-size">
                   </div>
                   <div class="options__col">
-                    <label for="">Step size</label>
-                    <input type="text" name="step-size">
-                    <label for="">Show tip</label>
-                    <input type="checkbox" name="tip" id="" checked>
-                    <label for="">Show scale</label>
-                    <input type="checkbox" name="scale" id="">
-                    <label for="">Horizontal / vertical</label>
-                    <input type="radio" name="orientation" value="horizontal" id="" checked>
-                    <input type="radio" name="orientation" value="vertical" id="">
+                    <div class="checkboxes">
+                        <label for="">Show tip</label>
+                        <label class="tick-box" for="tip4">
+                          <input class="tick-box__input" type="checkbox" name="tip" id="tip4" checked>
+                          <div class="tick-box__round"></div>
+                        </label>
+                    </div>
+                    <div class="checkboxes">
+                        <label for="">Show scale</label>
+                        <label class="tick-box" for="scale4">
+                          <input class="tick-box__input" type="checkbox" name="scale" id="scale4">
+                          <div class="tick-box__round"></div>
+                        </label>
+                    </div>
+                    <div class="checkboxes">
+                        <label for="">Vertical orientation</label>
+                        <label class="tick-box" for="orientation4">
+                          <input class="tick-box__input" type="checkbox" name="orientation" id="orientation4">
+                          <div class="tick-box__round"></div>
+                        </label> 
+                    </div>
                   </div>
                 </div>
               </form>
@@ -218,18 +272,13 @@ export default class DemoView {
   private _addTextInputHandlers (name: string, method: string): void {
     $(`input[name="${name}"]`).on('change', (e) => {
       this._updateSlider($(e.target), method);
+      this._updateInputValues();
     });
   }
 
   private _addCheckboxHandlers (name: string, on: string, off: string): void {
     $(`input[name="${name}"]`).on('change', (e) => {
       this._updateCheckboxes($(e.target), on, off);
-    });
-  }
-
-  private _addRadioHandlers (): void {
-    $('input[name="orientation"]').on('change', (e): void => {
-      this._updateRadio($(e.target), 'setHorisontalOrientation', 'setVeticalOrientation');
     });
   }
 
@@ -242,7 +291,7 @@ export default class DemoView {
     this._addTextInputHandlers('step-size', 'setStepSize');
     this._addCheckboxHandlers('tip', 'showTip', 'hideTip');
     this._addCheckboxHandlers('scale', 'showScale', 'hideScale');
-    this._addRadioHandlers();
+    this._addCheckboxHandlers('orientation', 'setVeticalOrientation', 'setHorisontalOrientation');
   }
 
   private _getSliderMethod (el: JQuery, method: string): number {
@@ -281,19 +330,6 @@ export default class DemoView {
       } else {
         this._getSliderMethod(el, off);
       }
-  }
-
-  private _updateRadio (el: JQuery, on: string, off: string): void {
-    let radioGroup: JQuery =
-        el
-            .closest('.page__row')
-            .find($('input[name="orientation"]:checked'));
-
-    if (radioGroup.val() === 'horizontal') {
-      this._getSliderMethod(el, on);
-    } else {
-      this._getSliderMethod(el, off);
-    }
   }
 }
 
