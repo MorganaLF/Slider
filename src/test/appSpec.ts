@@ -306,6 +306,26 @@ describe('SliderApp. Метод setStepSize', function () {
   });
 });
 
+describe('SliderApp. Метод setScaleItemsQuantity', function () {
+    let sliderApp: SliderApp,
+        el: JQuery;
+    beforeEach(function () {
+        setFixtures('<div class="slider"></div>');
+        el = $('.slider');
+        sliderApp = new SliderApp({el: el});
+        sliderApp.init();
+        sliderApp.setScaleItemsQuantity(27);
+    });
+    it('Устанавливает значение scaleItemsQuantity', function () {
+        expect(sliderApp.scaleItemsQuantity).toEqual(27);
+    });
+    it('Инициализирует плагин заново', function () {
+        let spy = spyOn(sliderApp, 'init');
+        sliderApp.setStepSize(7);
+        expect(spy).toHaveBeenCalled();
+    });
+});
+
 describe('SliderApp. Метод showTip', function () {
   let sliderApp: SliderApp,
       el: JQuery;

@@ -19,7 +19,7 @@ export default class SliderApp {
   private step: number;
   private isTip: boolean;
   public isScale: boolean;
-  private scaleItemsQuantity: number;
+  public scaleItemsQuantity: number;
   public sliderModel: null | ISliderModel;
   public sliderView: null | ISliderView;
   public sliderController: null | ISliderController;
