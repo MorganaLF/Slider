@@ -75,7 +75,11 @@ export default class SliderModel {
 
   private _checkIsNumber (prop: string): void {
     if (isNaN(this[prop])) {
-      this[prop] = 0;
+      if (prop === 'startValue' || prop === 'minVal' || prop === 'step') {
+          this[prop] = 0;
+      } else if (prop === 'endValue' || prop === 'maxVal') {
+          this[prop] = 100;
+      }
     }
   }
 
@@ -87,7 +91,11 @@ export default class SliderModel {
 
   private _checkExtremeValues (): void {
     if (this.minVal > this.maxVal) {
-      this.minVal = this.maxVal -1;
+      if (this.step === 0) {
+          this.minVal = this.maxVal - 1;
+      } else {
+          this.minVal = this.maxVal - this.step;
+      }
     }
   }
 
