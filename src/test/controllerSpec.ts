@@ -138,4 +138,10 @@ describe('SliderController. Метод init (событие changestartvalue)', 
     expect($('body')).toHandle("changeendvalue");
     expect(spy).toHaveBeenCalled();
   });
+
+    it('При событии resize обновляется вид слайдера', function () {
+        let spy = spyOn((<any>sliderController).view, 'updateSlider');
+        $(window).trigger('resize');
+        expect(spy).toHaveBeenCalled();
+    });
 });
