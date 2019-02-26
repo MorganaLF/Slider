@@ -44,7 +44,7 @@ export default class ScaleView {
 
     let scaleItem: JQuery = $('<li/>', {
       class: 'slider__scale-item',
-      text: i
+      text: Math.round(i)
     }).appendTo(this.el);
 
     let itemGabarite: number = this._getInnerSize(scaleItem);
@@ -56,15 +56,18 @@ export default class ScaleView {
 
   public drawScale (parent: JQuery, minVal: number, maxVal: number, itemsQuantity: number): void {
     let scaleClass: string = this._checkOrientation('', ' slider__scale_vertical');
+    minVal = Math.round(minVal);
+    maxVal = Math.round(maxVal);
+    itemsQuantity = Math.round(itemsQuantity);
 
     this.el = $('<ul/>', {
       class: 'slider__scale' + scaleClass,
     }).appendTo(parent);
     this.el.css(this._getSizeProperty(), this._getParentSize());
 
-    let step: number = (maxVal - minVal) / itemsQuantity;
+    let step: number = +((maxVal - minVal) / itemsQuantity).toFixed(10);
 
-    for (let i = minVal; i <= maxVal; i += step) {
+    for (let i = minVal; i <= maxVal; i = +(step + i).toFixed(10)) {
       let itemIndexNumber: number = (i - minVal) / step;
       this._drawScaleItem(i, itemIndexNumber, itemsQuantity, this._getPositionProperty());
      }
