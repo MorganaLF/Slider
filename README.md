@@ -1,6 +1,6 @@
 # Custom Slider
 
-[Demo](http://example.com)
+[Demo](https://morganalf.github.io/Slider/dist/)
 
 A flexible JQuery slider that supports many settings: a range of values, data display, scale display and much more.
 
