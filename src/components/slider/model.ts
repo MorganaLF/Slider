@@ -118,11 +118,13 @@ export default class SliderModel {
   private _checkIntervalValues (valueName: string): boolean {
     if (this.startValue > this.endValue && this[valueName] === this.startValue) {
       this.startValue = this.endValue;
+      this._dispatchChangeValue('changestartvalue', this.startValue);
       return false;
     }
 
     if (this.endValue < this.startValue && this[valueName] === this.endValue) {
       this.endValue = this.startValue;
+      this._dispatchChangeValue('changeendvalue', this.endValue);
       return false;
     }
 
