@@ -1,6 +1,5 @@
 //import $ from "jquery";
 import $ = require('jquery');
-import customSlider from '../components/slider/plugin';
 import SliderApp from "../components/slider/app";
 // import '../../node_modules/@types/jasmine';
 // import '../../node_modules/@types/jasmine-jquery';
