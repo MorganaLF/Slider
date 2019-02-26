@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for test\controllerSpec.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../index.html">all files</a> / <a href="index.html">test/</a> controllerSpec.ts
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>65/65</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>0/0</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>14/14</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">100% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>65/65</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">//import $ from 'jquery';
+import $ = require('jquery');
+import SliderView from '../components/slider/view';
+import SliderModel from '../components/slider/model';
+import SliderController from "../components/slider/controller";
+// import '../../node_modules/@types/jasmine';
+// import '../../node_modules/@types/jasmine-jquery';
+// import '../../node_modules/@types/jquery';
+&nbsp;
+describe('SliderController', function () {
+  let element,
+      sliderView: SliderView,
+      sliderModel: SliderModel,
+      sliderController: SliderController;
+&nbsp;
+  beforeEach(function () {
+    setFixtures('&lt;div class="slider"&gt;&lt;/div&gt;');
+    element = $('.slider');
+    sliderModel = new SliderModel({
+        startValue: 0,
+        endValue: 100,
+        minVal: 0,
+        maxVal: 100,
+        step: 0,
+        type: 'single'
+    });
+    sliderView = new SliderView({
+        el: element,
+        type: 'single',
+        orientation: 'horizontal',
+        model: sliderModel,
+        isTip: true,
+        isScale: true,
+        trackItemsQuantity: 10
+    });
+    sliderController = new SliderController(sliderView, sliderModel);
+  });
+&nbsp;
+  it('Создается экземпляр класса SliderController', function () {
+    expect(sliderController).toBeDefined();
+  });
+&nbsp;
+});
+&nbsp;
+describe('SliderController. Метод init (событие changestartvalue)', function () {
+  let element,
+      sliderView,
+      runner: JQuery,
+      sliderModel: SliderModel,
+      sliderController: SliderController,
+      spy: (obj: JQuery, func: any) =&gt; void,
+      spyOnCustomEvent: (obj: any, func: any, event: string) =&gt; void;
+&nbsp;
+  beforeEach(function () {
+    setFixtures('&lt;div class="slider"&gt;&lt;/div&gt;');
+    element = $('.slider');
+    sliderModel = new SliderModel({
+        startValue: 0,
+        endValue: 100,
+        minVal: 0,
+        maxVal: 100,
+        step: 0,
+        type: 'interval'
+    });
+    sliderView = new SliderView({
+        el: element,
+        type: 'interval',
+        orientation: 'horizontal',
+        model: sliderModel,
+        isTip: true,
+        isScale: true,
+        trackItemsQuantity: 10
+    });
+    sliderView.updateSlider();
+    runner = $('.slider__runner');
+&nbsp;
+    sliderController = new SliderController(sliderView, sliderModel);
+    sliderController.init();
+&nbsp;
+    spyOnCustomEvent = function (obj, func, event) {
+      spy = spyOn(obj, func);
+      spyOnEvent('body', event);
+      let e = $.Event(event, {detail: {model: sliderModel}});
+      $('body').trigger(e);
+    }
+&nbsp;
+  });
+&nbsp;
+  it('При клике на runner и движении мыши пересчитывается значение модели', function () {
+    let spy = spyOn(sliderModel, 'calculateValue');
+    $(runner).mousedown();
+    $(window).mousemove();
+    expect(spy).toHaveBeenCalled();
+  });
+&nbsp;
+  it('При клике на runner устанавливается shift бегунка', function () {
+    let spy = spyOn(sliderController.runner1, (&lt;never&gt;'setRunnerShiftX'));
+    let spy2 = spyOn(sliderController.runner1, (&lt;never&gt;'setRunnerShiftY'));
+&nbsp;
+    $(runner).mousedown();
+&nbsp;
+    expect(spy).toHaveBeenCalled();
+    expect(spy2).toHaveBeenCalled();
+  });
+&nbsp;
+  it('При событии changestartvalue устанавливается новое положение бегунка', function () {
+    spyOnCustomEvent(sliderController.runner1, 'setRunnerPosition', "changestartvalue");
+    expect($('body')).toHandle("changestartvalue");
+    expect(spy).toHaveBeenCalled();
+  });
+&nbsp;
+  it('При событии changestartvalue обновляется подсказка', function () {
+    spyOnCustomEvent(sliderController.tip1, 'updateTip', "changestartvalue");
+    expect($('body')).toHandle("changestartvalue");
+    expect(spy).toHaveBeenCalled();
+  });
+&nbsp;
+  it('При событии changestartvalue обновляется дорожка слайдера', function () {
+    spyOnCustomEvent(sliderController.track, 'animateTrack', "changestartvalue");
+    expect($('body')).toHandle("changestartvalue");
+    expect(spy).toHaveBeenCalled();
+  });
+&nbsp;
+  it('При событии changeendvalue устанавливается новое положение второго бегунка', function () {
+    spyOnCustomEvent(sliderController.runner2, 'setRunnerPosition', "changeendvalue");
+    expect($('body')).toHandle("changeendvalue");
+    expect(spy).toHaveBeenCalled();
+  });
+&nbsp;
+  it('При событии changeendvalue обновляется подсказка', function () {
+    spyOnCustomEvent(sliderController.tip2, 'updateTip', "changeendvalue");
+    expect($('body')).toHandle("changeendvalue");
+    expect(spy).toHaveBeenCalled();
+  });
+&nbsp;
+  it('При событии changeendvalue обновляется дорожка слайдера', function () {
+    spyOnCustomEvent(sliderController.track, 'animateTrack', "changeendvalue");
+    expect($('body')).toHandle("changeendvalue");
+    expect(spy).toHaveBeenCalled();
+  });
+});</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Feb 22 2019 00:12:51 GMT+0300 (RTZ 2 (зима))
+</div>
+</div>
+<script src="../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../sorter.js"></script>
+</body>
+</html>

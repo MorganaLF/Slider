@@ -2,9 +2,10 @@ let path = require('path');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const { CheckerPlugin } = require('awesome-typescript-loader');
 
 const conf = {
-  entry: './src/index.js',
+  entry: './src/index.ts',
   devServer: {
     overlay: true,
     watchOptions: {
@@ -14,7 +15,7 @@ const conf = {
   plugins: [
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: path.resolve(__dirname, './src/pages/index/index.pug')
+      template: path.resolve(__dirname, './src/pages/demo/demo.pug')
     }),
     new ExtractTextPlugin('styles.css'),
     new CopyWebpackPlugin([
@@ -38,6 +39,7 @@ const conf = {
         flatten: true
       }
     ]),
+    new CheckerPlugin(),
     require('autoprefixer'),
     //require('cssnano')
   ]
@@ -58,11 +60,27 @@ module.exports = (env, options) => {
         publicPath: publicDir
   };
 
+  conf.resolve = {
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.styl']
+  };
+
   conf.module = {
     rules: [
       {
-        test: /\.js$/,
-        loader: 'babel-loader',
+        test: /\.tsx?$/,
+        loader: 'awesome-typescript-loader',
+        options: {
+          "baseUrl": "types",
+          "typeRoots": ["types"],
+          "useBabel": true,
+          "babelOptions": {
+            "babelrc": false, /* Important line */
+            "presets": [
+              ["@babel/preset-env", { "targets": "last 2 versions, ie 11", "modules": false }]
+            ]
+          },
+          "babelCore": "@babel/core", // needed for Babel v7
+        },
         exclude: '/node_modules/'
       },
       {

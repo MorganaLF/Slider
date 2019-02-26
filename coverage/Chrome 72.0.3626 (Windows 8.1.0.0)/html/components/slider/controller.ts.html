@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Code coverage report for components\slider\controller.ts</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+<body>
+<div class='wrapper'>
+  <div class='pad1'>
+    <h1>
+      <a href="../../index.html">all files</a> / <a href="index.html">components/slider/</a> controller.ts
+    </h1>
+    <div class='clearfix'>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">94.74% </span>
+        <span class="quiet">Statements</span>
+        <span class='fraction'>54/57</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">84% </span>
+        <span class="quiet">Branches</span>
+        <span class='fraction'>21/25</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">90% </span>
+        <span class="quiet">Functions</span>
+        <span class='fraction'>9/10</span>
+      </div>
+      <div class='fl pad1y space-right2'>
+        <span class="strong">94.44% </span>
+        <span class="quiet">Lines</span>
+        <span class='fraction'>51/54</span>
+      </div>
+    </div>
+  </div>
+  <div class='status-line high'></div>
+<pre><table class="coverage">
+<tr><td class="line-count quiet">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-yes">55×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">62×</span>
+<span class="cline-any cline-yes">62×</span>
+<span class="cline-any cline-yes">558×</span>
+<span class="cline-any cline-yes">552×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-yes">6×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">2×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">62×</span>
+<span class="cline-any cline-yes">62×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">62×</span>
+<span class="cline-any cline-yes">62×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">54×</span>
+<span class="cline-any cline-yes">54×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">54×</span>
+<span class="cline-any cline-yes">54×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">54×</span>
+<span class="cline-any cline-yes">8×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span></td><td class="text"><pre class="prettyprint lang-js">//import $ from 'jquery';
+import $ = require('jquery');
+import {ISliderModel} from '../interfaces';
+import {ISliderView} from "../interfaces";
+import {IRunnerView} from '../interfaces';
+import {ITrackView} from '../interfaces';
+import {ITipView} from '../interfaces';
+&nbsp;
+export default class SliderController {
+  private isTip: boolean;
+  public runner1?: null | IRunnerView;
+  public runner2?: null | IRunnerView;
+  public tip1?: null | ITipView;
+  public tip2?: null | ITipView;
+  public track?: null | ITrackView;
+  private type: string;
+  private _onchangevalue: (runner: IRunnerView, tip: ITipView | false, point: string) =&gt; (e: JQuery.TriggeredEvent) =&gt; void = this.changevalue.bind(this);
+  private _onmousedown?: (e: JQuery.MouseDownEvent) =&gt; void;
+  private _onmouseup?: (e: JQuery.MouseUpEvent) =&gt; void;
+&nbsp;
+  constructor (private view: ISliderView, private model: ISliderModel) {
+    this.isTip = view.isTip;
+    this.runner1 = view.runner1;
+    this.runner2 = view.runner2;
+    this.tip1 = view.tip1;
+    this.tip2 = view.tip2;
+    this.track = view.track;
+    this.type = view.type;
+    this._onchangevalue = this.changevalue.bind(this);
+  }
+&nbsp;
+  private mousedown (runner: IRunnerView, e: JQuery.MouseDownEvent): void {
+      e.preventDefault();
+&nbsp;
+      let runnerType: string = runner === this.runner1 ? 'startValue' : 'endValue';
+&nbsp;
+      runner.setRunnerShiftX(e);
+      runner.setRunnerShiftY(e);
+&nbsp;
+      let mousemove = this.mousemove.bind(this, runner);
+      let onmove = this.move.bind(this, runnerType);
+      this._onmouseup = this.mouseup.bind(this, mousemove, onmove, runner);
+&nbsp;
+      $(window).on('mousemove', mousemove);
+      $(window).on('mouseup', this._onmouseup);
+      runner.el.on('move', onmove);
+  };
+&nbsp;
+  private move (runnerType: string, e: JQuery.TriggeredEvent): void {
+      <span class="missing-if-branch" title="else path not taken" >E</span>if (e.detail) {
+          this.model.calculateValue((&lt;any&gt;e).detail.ratio, runnerType);
+      }
+  }
+&nbsp;
+  private changevalue (runner: IRunnerView, tip: ITipView | false, point: string): (e: JQuery.TriggeredEvent) =&gt; void {
+    return (e) =&gt; {
+      if ((&lt;any&gt;e).detail.model !== this.model) {
+        return;
+      }
+      runner.setRunnerPosition((&lt;any&gt;e).detail.coefficient);
+      <span class="missing-if-branch" title="else path not taken" >E</span>if (tip) {
+        tip.updateTip((&lt;any&gt;e).detail.value);
+      }
+      <span class="missing-if-branch" title="else path not taken" >E</span>if (this.track) {
+          this.track.animateTrack((&lt;any&gt;e).detail.coefficient, point);
+      }
+    }
+  }
+&nbsp;
+  private mousemove (runner: IRunnerView, e: JQuery.MouseMoveEvent): void {
+      runner.moveRunner(e);
+  };
+&nbsp;
+<span class="fstat-no" title="function not covered" >  private mouseup (</span>
+    mousemovehandler: (e: JQuery.MouseMoveEvent) =&gt; void,
+    onmovehandler: (e: JQuery.TriggeredEvent) =&gt; void,
+    runner: IRunnerView): void
+  {
+<span class="cstat-no" title="statement not covered" >        $(window).off('mousemove', mousemovehandler );</span>
+<span class="cstat-no" title="statement not covered" >        $(window).off( 'mouseup', this._onmouseup );</span>
+<span class="cstat-no" title="statement not covered" >        runner.el.off('move', onmovehandler);</span>
+&nbsp;
+  };
+&nbsp;
+  private _addHandlers (runner: IRunnerView, tip: ITipView | false, changeevent: string, point: string): void {
+    let onmousedown = this._onmousedown = this.mousedown.bind(this, runner);
+    let changevalue = this._onchangevalue(runner, tip, point);
+&nbsp;
+    runner.el.on( 'mousedown', onmousedown );
+    $('body').on(changeevent, changevalue);
+  }
+&nbsp;
+  public init (): void {
+    let tip1 = this.isTip &amp;&amp; this.tip1 ? this.tip1 : false;
+    let tip2 = this.isTip &amp;&amp; this.tip2 ? this.tip2 : false;
+&nbsp;
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (this.runner1) {
+        this._addHandlers(this.runner1, tip1, 'changestartvalue', 'start');
+    }
+    if (this.type === 'interval' &amp;&amp; this.runner2 &amp;&amp; this.tip2) {
+      this._addHandlers(this.runner2, tip2, 'changeendvalue', 'end');
+    }
+  }
+}</pre></td></tr>
+</table></pre>
+<div class='push'></div><!-- for sticky footer -->
+</div><!-- /wrapper -->
+<div class='footer quiet pad2 space-top1 center small'>
+  Code coverage
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Feb 22 2019 00:12:51 GMT+0300 (RTZ 2 (зима))
+</div>
+</div>
+<script src="../../prettify.js"></script>
+<script>
+window.onload = function () {
+        if (typeof prettyPrint === 'function') {
+            prettyPrint();
+        }
+};
+</script>
+<script src="../../sorter.js"></script>
+</body>
+</html>

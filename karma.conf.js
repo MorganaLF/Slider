@@ -12,17 +12,16 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['jasmine-jquery', 'jasmine'],
+    frameworks: ['jasmine-jquery', 'jasmine', "karma-typescript"],
 
 
     // list of files / patterns to load in the browser
     files: [
-      'src/components/**/*.js',
-      'src/pages/**/*.js',
-      'src/test/**/*Spec.js',
-      'src/test/fixtures/slider.html'
+      'src/components/**/*.ts',
+      //'src/pages/**/*.js',
+      'src/test/**/*Spec.ts',
+      //'src/test/fixtures/slider.html'
     ],
-
 
     // list of files / patterns to exclude
     exclude: [
@@ -32,16 +31,16 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'src/components/**/*.js': ['webpack', 'babel', 'sourcemap', 'coverage'],
-      'src/test/**/*.js': ['webpack', 'babel', 'sourcemap', 'coverage'],
-      'karma.conf.js': ['webpack', 'babel', 'sourcemap', 'coverage']
+      'src/components/**/*.ts': ["karma-typescript", 'sourcemap', 'coverage'],
+      'src/test/**/*.ts': ["karma-typescript",  'sourcemap', 'coverage'],
+      'karma.conf.js': ["karma-typescript",  'sourcemap', 'coverage']
     },
 
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress', 'coverage'],
+    reporters: ['progress', 'coverage', "karma-typescript"],
 
     coverageReporter: {
       dir:'tmp/coverage/',

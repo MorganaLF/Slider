@@ -1,0 +1,51 @@
+body
+  font-family: sans-serif
+
+.page
+  max-width: 1200px
+  margin: 0 auto
+  &__row
+    display: flex
+    align-items: center
+    +md()
+      flex-wrap: wrap
+  &__col
+    padding 20px
+    .slider
+      width: 500px
+      +md()
+        width: 100%
+    .slider_vertical
+      margin: 0 50px
+      width: auto
+    +md()
+      width: 100%
+  &__options-col
+    flex-grow 1
+    +md()
+      order -1
+
+.options
+  &__row
+    display: flex
+    +xs()
+      flex-wrap: wrap
+  &__col
+    flex-grow: 1
+    padding 0 10px
+    box-sizing: border-box
+    +xs()
+      width: 100%
+    &:nth-child(3)
+      flex-shrink 0
+
+label
+  display: block
+  margin-bottom: 10px
+
+.checkboxes
+  display: flex
+  justify-content: space-between
+  align-items center
+  label:first-child
+    margin-right: 20px

@@ -1,0 +1,9 @@
+import './styles/main.styl';
+import './plugin/plugin';
+import './plugin/SliderApp';
+import './plugin/SliderView';
+import './plugin/SliderModel';
+import './plugin/SliderController';
+import './plugin/runner/RunnerView';
+import './pages/demo/DemoView';
+import './pages/demo/demo-init';
