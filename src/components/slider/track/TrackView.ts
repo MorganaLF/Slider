@@ -85,18 +85,18 @@ export default class TrackView {
     }
   }
 
-  private _setSingleTrackLength (pos: number, property: string, gabarite: string, runnerGabarite: string): void {
+  private _setSingleTrackLength (pos: number, property: string, size: string, runnerSize: string): void {
     if (!this.trackFull) {
         return;
     }
     if (pos !== 0) {
-      this.trackFull.css(property, this[gabarite] / pos + this[runnerGabarite]/2 + 'px');
+      this.trackFull.css(property, this[size] / pos + this[runnerSize]/2 + 'px');
     } else {
       this.trackFull.css(property, '0px');
     }
   }
 
-  private _setIntervalTrack (coefficient: number, startPoint: string, endPoint: string, gabariteProperty: string, gabarite: number, pointName: string): void {
+  private _setIntervalTrack (coefficient: number, startPoint: string, endPoint: string, sizeProperty: string, size: number, runnerSize: string, pointName: string): void {
       if (!this.trackFull || !this._trackPoints || !this._trackFullPoints) {
           return;
       }
@@ -104,15 +104,15 @@ export default class TrackView {
         endIndent: number;
 
     if (pointName === 'start') {
-      startIndent = gabarite / coefficient;
-      endIndent = this._trackPoints[endPoint] - this._trackFullPoints[endPoint];
-      this.trackFull.css(startPoint, gabarite / coefficient  + 'px');
+      startIndent = (size - this[runnerSize]) / coefficient;
+      endIndent = this._trackPoints[endPoint] - this._trackFullPoints[endPoint] - this[runnerSize];
+      this.trackFull.css(startPoint, startIndent  + 'px');
     } else {
-      startIndent = this._trackFullPoints[startPoint] - this._trackPoints[startPoint];
-      endIndent = gabarite - gabarite / coefficient;
+      startIndent = this._trackFullPoints[startPoint] - this._trackPoints[startPoint] - this[runnerSize];
+      endIndent = (size - this[runnerSize]) - (size - this[runnerSize]) / coefficient;
     }
 
-    this.trackFull.css(gabariteProperty, gabarite - startIndent - endIndent + 'px');
+    this.trackFull.css(sizeProperty, Math.floor((size - this[runnerSize]) - startIndent - endIndent) + 'px');
   }
 
   public animateTrack (coefficient: number, pointName: string): void | false{
@@ -121,9 +121,9 @@ export default class TrackView {
       }
     if (this.type === 'interval') {
       if (this.orientation === 'horizontal') {
-        this._setIntervalTrack(coefficient, 'left', 'right', 'width', this.el.innerWidth()!, pointName);
+        this._setIntervalTrack(coefficient, 'left', 'right', 'width', this.el.innerWidth()!, 'runnerWidth', pointName);
       } else {
-        this._setIntervalTrack(coefficient, 'top', 'bottom', 'height', this.el.innerHeight()!, pointName);
+        this._setIntervalTrack(coefficient, 'top', 'bottom', 'height', this.el.innerHeight()!, 'runnerHeight', pointName);
       }
     } else {
       if (this.orientation === 'horizontal') {
