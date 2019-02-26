@@ -45,22 +45,23 @@ export default class DemoView {
   private _createDemoPage (): void {
     let demoTemplate: JQuery = $(
         `<div class="page">
+          <h1 class="subheading">Simple slider</h1>
           <div class="page__row">
             <div class="page__col">
               <div class="slider slider_simple"></div>
             </div>
-            <div class="page__col">
+            <div class="page__col page__options-col">
               <form class="options">
                 <div class="options__row">
                   <div class="options__col">
                     <label for="">Min value</label>
-                    <input type="text" name="min-value">
+                    <input class="input" type="text" name="min-value">
                     <label for="">Max value</label>
-                    <input type="text" name="max-value">
+                    <input class="input" type="text" name="max-value">
                   </div>
                   <div class="options__col">
                     <label for="">Current value</label>
-                    <input type="text" name="current-value">
+                    <input class="input" type="text" name="current-value">
                   </div>
                   <div class="options__col">
                     <label for="">Show tip</label>
@@ -75,8 +76,9 @@ export default class DemoView {
               </form>
             </div>
           </div>
+          <h2 class="subheading">Slider with scale</h2>
           <div class="page__row">
-            <div class="page__col">
+            <div class="page__col page__options-col">
               <form class="options">
                   <div class="options__row">
                     <div class="options__col">
@@ -105,24 +107,25 @@ export default class DemoView {
               <div class="slider slider_istip"></div>
             </div>
           </div>
+          <h2 class="subheading">Interval slider</h2>
           <div class="page__row">
             <div class="page__col">
               <div class="slider slider_interval"></div>
             </div>
-            <div class="page__col">
+            <div class="page__col page__options-col">
               <form class="options">
                 <div class="options__row">
                   <div class="options__col">
                     <label for="">Min value</label>
-                    <input type="text" name="min-value">
+                    <input class="input" type="text" name="min-value">
                     <label for="">Max value</label>
-                    <input type="text" name="max-value">
+                    <input class="input" type="text" name="max-value">
                   </div>
                   <div class="options__col">
                     <label for="">Current min value</label>
-                    <input type="text" name="current-value">
+                    <input class="input" type="text" name="current-value">
                     <label for="">Current max value</label>
-                    <input type="text" name="current-max-value">
+                    <input class="input" type="text" name="current-max-value">
                   </div>
                   <div class="options__col">
                     <label for="">Show tip</label>
@@ -137,21 +140,22 @@ export default class DemoView {
               </form>
             </div>
           </div>
+          <h2 class="subheading">Slider with step value</h2>
           <div class="page__row">
-            <div class="page__col">
+            <div class="page__col page__options-col">
               <form class="options">
                 <div class="options__row">
                   <div class="options__col">
                     <label for="">Min value</label>
-                    <input type="text" name="min-value">
+                    <input class="input" type="text" name="min-value">
                     <label for="">Max value</label>
-                    <input type="text" name="max-value">
+                    <input class="input" type="text" name="max-value">
                   </div>
                   <div class="options__col">
                     <label for="">Current min value</label>
-                    <input type="text" name="current-value">
+                    <input class="input" type="text" name="current-value">
                     <label for="">Current max value</label>
-                    <input type="text" name="current-max-value">
+                    <input class="input" type="text" name="current-max-value">
                   </div>
                   <div class="options__col">
                     <label for="">Step size</label>

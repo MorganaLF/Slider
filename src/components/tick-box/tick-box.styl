@@ -1,0 +1,23 @@
+.tick-box
+  position: relative
+  display: inline-block
+  width rem(24px)
+  height rem(24px)
+  border-radius: 50%
+  overflow: hidden
+  cursor: pointer
+  &__input
+    display: none
+    &:checked + .tick-box__round
+      background-color secondary-color
+      background-image: url("images/check-white.svg")
+  &__round
+    content: ''
+    position: absolute
+    top: 0
+    left: 0
+    width rem(24px)
+    height rem(24px)
+    background light-grey url("images/check-grey.svg") no-repeat center
+    background-size: 60%
+    transition: .4s
