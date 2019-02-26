@@ -33,9 +33,9 @@ describe('SliderModel', function () {
       type: 'single'
     });
     expect(sliderModel.minVal).toEqual(0);
-    expect(sliderModel.maxVal).toEqual(0);
+    expect(sliderModel.maxVal).toEqual(100);
     expect(sliderModel.startValue).toEqual(0);
-    expect(sliderModel.endValue).toEqual(0);
+    expect(sliderModel.endValue).toEqual(100);
     expect(sliderModel.step).toEqual(0);
   });
 
@@ -271,7 +271,7 @@ describe('SliderModel. Сеттер currentMaxValue', function () {
 
   it('Устанавливает только числовое значение', function () {
     (<any>sliderModel.currentMaxValue) = 'dgsdA';
-    expect(sliderModel.endValue).toEqual(0);
+    expect(sliderModel.endValue).toEqual(100);
   });
 
   it('Не устанавливает значение, меньшее, чем начальное', function () {
