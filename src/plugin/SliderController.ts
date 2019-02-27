@@ -39,9 +39,18 @@ export default class SliderController {
       let onmove = this.move.bind(this, runnerType);
       this._onmouseup = this.mouseup.bind(this, mousemove, onmove, runner);
 
-      $(window).on('mousemove', mousemove);
-      (<any>$(window)).on('touchmove', mousemove);
-      (<any>$(window)).on('touchend', this._onmouseup);
+      if ('touchmove' in window) {
+          (<any>$(window)).on('touchmove', mousemove);
+      } else {
+          $(window).on('mousemove', mousemove);
+      }
+
+      if ('touchend' in window) {
+          (<any>$(window)).on('touchend', this._onmouseup);
+      } else {
+          $(window).on('mouseup', this._onmouseup);
+      }
+
       runner.el.on('move', onmove);
   };
 
@@ -95,8 +104,15 @@ export default class SliderController {
   private _addHandlers (runner: IRunnerView, tip: ITipView | false, changeevent: string, point: string): void {
     let onmousedown = this._onmousedown = this.mousedown.bind(this, runner);
     let changevalue = this.changevalue.bind(this, runner, tip, point);
-    runner.el.on( 'mousedown', onmousedown );
-    (<any>runner).el.on( 'touchstart', onmousedown );
+
+      if ('touchstart' in window) {
+          alert('ok');
+          (<any>runner).el.on( 'touchstart', onmousedown );
+      } else {
+          alert('not ok');
+          runner.el.on( 'mousedown', onmousedown );
+      }
+
     $('body').on(changeevent, changevalue);
   }
 
