@@ -39,13 +39,13 @@ export default class SliderController {
       let onmove = this.move.bind(this, runnerType);
       this._onmouseup = this.mouseup.bind(this, mousemove, onmove, runner);
 
-      if ('touchmove' in window) {
+      if (typeof document.body.ontouchmove !== "undefined") {
           (<any>$(window)).on('touchmove', mousemove);
       } else {
           $(window).on('mousemove', mousemove);
       }
 
-      if ('touchend' in window) {
+      if (typeof document.body.ontouchend !== "undefined") {
           (<any>$(window)).on('touchend', this._onmouseup);
       } else {
           $(window).on('mouseup', this._onmouseup);
@@ -105,11 +105,11 @@ export default class SliderController {
     let onmousedown = this._onmousedown = this.mousedown.bind(this, runner);
     let changevalue = this.changevalue.bind(this, runner, tip, point);
 
-      if ('touchstart' in window) {
-          alert('ok');
+      if (typeof document.body.ontouchstart !== "undefined") {
+          //alert('ok');
           (<any>runner).el.on( 'touchstart', onmousedown );
       } else {
-          alert('not ok');
+          //alert('not ok');
           runner.el.on( 'mousedown', onmousedown );
       }
 

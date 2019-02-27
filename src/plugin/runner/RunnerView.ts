@@ -62,14 +62,16 @@ export default class RunnerView {
       if (!this.el) {
           return false;
       }
-    this.shiftX = e.pageX - this.el.offset()!.left;
+      let pageX = (<any>e).targetTouches[0].pageX ? (<any>e).targetTouches[0].pageX : e.pageX;
+    this.shiftX = pageX - this.el.offset()!.left;
   }
 
   public setRunnerShiftY (e: JQuery.MouseDownEvent): void | false {
       if (!this.el) {
           return false;
       }
-    this.shiftY = e.pageY - this.el.offset()!.top;
+      let pageY = (<any>e).targetTouches[0].pageY ? (<any>e).targetTouches[0].pageY : e.pageY;
+    this.shiftY = pageY - this.el.offset()!.top;
   }
 
   private _checkCursorPosition (coord: number, startPoint: number, endPoint: number, shift: number, gabarite: number): number {
@@ -98,10 +100,12 @@ export default class RunnerView {
     if (!this.el) {
        return false;
     }
+    let pageX = (<any>e).targetTouches[0].pageX ? (<any>e).targetTouches[0].pageX : e.pageX;
+    let pageY = (<any>e).targetTouches[0].pageY ? (<any>e).targetTouches[0].pageY : e.pageY;
     if (this.orientation === 'horizontal') {
-      this._dispatchMoveRunner(e.pageX, this.parentLeftPoint, this.parentRightPoint, this.shiftX, this.el.innerWidth()!);
+      this._dispatchMoveRunner(pageX, this.parentLeftPoint, this.parentRightPoint, this.shiftX, this.el.innerWidth()!);
     } else {
-      this._dispatchMoveRunner(e.pageY, this.parentTopPoint, this.parentBottomPoint, this.shiftY, this.el.innerHeight()!);
+      this._dispatchMoveRunner(pageY, this.parentTopPoint, this.parentBottomPoint, this.shiftY, this.el.innerHeight()!);
     }
   }
 }
