@@ -62,15 +62,17 @@ export default class RunnerView {
       if (!this.el) {
           return false;
       }
-      let pageX = (<any>e).targetTouches[0].pageX ? (<any>e).targetTouches[0].pageX : e.pageX;
-    this.shiftX = pageX - this.el.offset()!.left;
+
+      let pageX = (<any>e).targetTouches ? (<any>e).targetTouches[0].pageX : e.pageX;
+
+      this.shiftX = pageX - this.el.offset()!.left;
   }
 
   public setRunnerShiftY (e: JQuery.MouseDownEvent): void | false {
       if (!this.el) {
           return false;
       }
-      let pageY = (<any>e).targetTouches[0].pageY ? (<any>e).targetTouches[0].pageY : e.pageY;
+      let pageY = (<any>e).targetTouches ? (<any>e).targetTouches[0].pageY : e.pageY;
     this.shiftY = pageY - this.el.offset()!.top;
   }
 
@@ -100,8 +102,8 @@ export default class RunnerView {
     if (!this.el) {
        return false;
     }
-    let pageX = (<any>e).targetTouches[0].pageX ? (<any>e).targetTouches[0].pageX : e.pageX;
-    let pageY = (<any>e).targetTouches[0].pageY ? (<any>e).targetTouches[0].pageY : e.pageY;
+    let pageX = (<any>e).targetTouches ? (<any>e).targetTouches[0].pageX : e.pageX;
+    let pageY = (<any>e).targetTouches ? (<any>e).targetTouches[0].pageY : e.pageY;
     if (this.orientation === 'horizontal') {
       this._dispatchMoveRunner(pageX, this.parentLeftPoint, this.parentRightPoint, this.shiftX, this.el.innerWidth()!);
     } else {
