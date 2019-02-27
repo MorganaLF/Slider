@@ -111,14 +111,14 @@ export default class TrackView {
     if (pointName === 'start') {
       startIndent = Math.floor((size - floorRunnerSize) / coefficient);
       endIndent = floorTrackPoint - floorTrackFullPoint - floorRunnerSize;
-      console.log(endIndent);
-      this.trackFull.css(startPoint, startIndent  + 'px');
+
+      this.trackFull.css(startPoint, startIndent + floorRunnerSize / 2  + 'px');
     } else {
       startIndent = this._trackFullPoints[startPoint] - this._trackPoints[startPoint] - floorRunnerSize;
-      endIndent = (size - floorRunnerSize) - (size - floorRunnerSize) / coefficient + 1;
+      endIndent = (size - floorRunnerSize) - (size - floorRunnerSize) / coefficient;
     }
 
-    this.trackFull.css(sizeProperty, Math.floor((size - floorRunnerSize) - startIndent - endIndent) + 'px');
+    this.trackFull.css(sizeProperty, Math.floor((size - floorRunnerSize) - startIndent - endIndent - floorRunnerSize / 2) + 'px');
   }
 
   public animateTrack (coefficient: number, pointName: string): void | false{

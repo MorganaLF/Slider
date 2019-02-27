@@ -174,8 +174,8 @@ describe('TrackView. Функция animateTrack', function () {
     trackView.animateTrack(2, 'start');
     trackView.animateTrack(1, 'end');
 
-    expect(trackView.trackFull!.css('left')).toEqual('150px');
-    expect(trackView.trackFull!.css('width')).toEqual('200px');
+    expect(trackView.trackFull!.css('left')).toEqual('175px');
+    expect(trackView.trackFull!.css('width')).toEqual('150px');
   });
 
   it('Устанавливает высоту и отступ дорожки, если тип слайдера interval, вид вертикальный', function () {
@@ -198,8 +198,8 @@ describe('TrackView. Функция animateTrack', function () {
     trackView.animateTrack(2, 'start');
     trackView.animateTrack(1, 'end');
 
-    expect(trackView.trackFull!.css('top')).toEqual('150px');
-    expect(trackView.trackFull!.css('height')).toEqual('200px');
+    expect(trackView.trackFull!.css('top')).toEqual('175px');
+    expect(trackView.trackFull!.css('height')).toEqual('150px');
   });
 
 });
