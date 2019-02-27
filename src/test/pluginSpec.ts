@@ -1,8 +1,8 @@
 //import $ from "jquery";
 import $ = require('jquery');
 import SliderApp from "../plugin/SliderApp";
-// import '../../node_modules/@types/jasmine';
-// import '../../node_modules/@types/jasmine-jquery';
+ import '../../node_modules/@types/jasmine';
+ import '../../node_modules/@types/jasmine-jquery';
 // import '../../node_modules/@types/jquery';
 
 describe('Функция customSlider', function () {

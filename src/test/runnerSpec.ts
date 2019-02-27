@@ -2,8 +2,8 @@
 import $ = require('jquery');
 import RunnerView from '../plugin/runner/RunnerView';
 import {exportAllDeclaration} from "babel-types";
-// import '../../node_modules/@types/jasmine';
-// import '../../node_modules/@types/jasmine-jquery';
+ import '../../node_modules/@types/jasmine';
+ import '../../node_modules/@types/jasmine-jquery';
 // import '../../node_modules/@types/jquery';
 
 describe('RunnerView', function () {
@@ -72,7 +72,7 @@ describe('RunnerView. Функция drawRunner', function () {
 
 describe('RunnerView. Функция setRunnerPosition', function () {
   let runnerView: RunnerView,
-      parent;
+      parent: JQuery;
 
   beforeEach(function () {
     setFixtures('<div class="slider"></div>');
