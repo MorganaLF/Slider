@@ -3,8 +3,8 @@ import $ = require('jquery');
 import SliderView from '../plugin/SliderView';
 import SliderModel from '../plugin/SliderModel';
 import SliderController from "../plugin/SliderController";
-// import '../../node_modules/@types/jasmine';
-// import '../../node_modules/@types/jasmine-jquery';
+ import '../../node_modules/@types/jasmine';
+ import '../../node_modules/@types/jasmine-jquery';
 // import '../../node_modules/@types/jquery';
 
 describe('SliderController', function () {

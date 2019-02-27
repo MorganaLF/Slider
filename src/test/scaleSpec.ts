@@ -1,8 +1,8 @@
 //import $ from 'jquery';
 import $ = require('jquery');
 import ScaleView from '../plugin/scale/ScaleView';
-// import '../../node_modules/@types/jasmine';
-// import '../../node_modules/@types/jasmine-jquery';
+ import '../../node_modules/@types/jasmine';
+ import '../../node_modules/@types/jasmine-jquery';
 // import '../../node_modules/@types/jquery';
 
 describe('ScaleView', function () {

@@ -5,8 +5,8 @@ import SliderModel from '../plugin/SliderModel';
 import SliderController from "../plugin/SliderController";
 import SliderApp from '../plugin/SliderApp';
 import {ISliderApp} from "../plugin/interfaces";
-// import '../../node_modules/@types/jasmine';
-// import '../../node_modules/@types/jasmine-jquery';
+ import '../../node_modules/@types/jasmine';
+ import '../../node_modules/@types/jasmine-jquery';
 // import '../../node_modules/@types/jquery';
 
 describe('SliderApp', function () {
