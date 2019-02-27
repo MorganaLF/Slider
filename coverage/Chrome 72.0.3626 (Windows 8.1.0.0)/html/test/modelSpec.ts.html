@@ -22,7 +22,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>145/145</span>
+        <span class='fraction'>148/148</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -32,12 +32,12 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>43/43</span>
+        <span class='fraction'>44/44</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>145/145</span>
+        <span class='fraction'>148/148</span>
       </div>
     </div>
   </div>
@@ -401,33 +401,26 @@
 356
 357
 358
-359</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
+359
+360
+361
+362
+363
+364
+365
+366
+367
+368</td><td class="line-coverage quiet"><span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">10×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">11×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -437,8 +430,33 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -759,12 +777,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import SliderModel from '../components/slider/model';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import SliderModel from '../plugin/SliderModel';
 //import $ from "jquery";
 import $ = require('jquery');
-// import '../../node_modules/@types/jasmine';
-// import '../../node_modules/@types/jasmine-jquery';
-// import '../../node_modules/@types/jquery';
 &nbsp;
 describe('SliderModel', function () {
   let sliderModel: SliderModel;
@@ -794,9 +809,9 @@ describe('SliderModel', function () {
       type: 'single'
     });
     expect(sliderModel.minVal).toEqual(0);
-    expect(sliderModel.maxVal).toEqual(0);
+    expect(sliderModel.maxVal).toEqual(100);
     expect(sliderModel.startValue).toEqual(0);
-    expect(sliderModel.endValue).toEqual(0);
+    expect(sliderModel.endValue).toEqual(100);
     expect(sliderModel.step).toEqual(0);
   });
 &nbsp;
@@ -811,6 +826,18 @@ describe('SliderModel', function () {
     });
     expect(sliderModel.minVal).toEqual(10);
   });
+&nbsp;
+    it('Минимальное значение не может быть больше максимального', function () {
+        sliderModel = new SliderModel({
+            startValue: 0,
+            endValue: 100,
+            minVal: 150,
+            maxVal: 100,
+            step: 0,
+            type: 'single'
+        });
+        expect(sliderModel.minVal).toEqual(99);
+    });
 &nbsp;
   it('Максимальное значение не может быть меньше нуля', function () {
     sliderModel = new SliderModel({
@@ -1020,7 +1047,7 @@ describe('SliderModel. Сеттер currentMaxValue', function () {
 &nbsp;
   it('Устанавливает только числовое значение', function () {
     (&lt;any&gt;sliderModel.currentMaxValue) = 'dgsdA';
-    expect(sliderModel.endValue).toEqual(0);
+    expect(sliderModel.endValue).toEqual(100);
   });
 &nbsp;
   it('Не устанавливает значение, меньшее, чем начальное', function () {
@@ -1123,7 +1150,7 @@ describe('SliderModel. Метод calculateValue', function () {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Feb 22 2019 00:12:51 GMT+0300 (RTZ 2 (зима))
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Feb 27 2019 15:56:59 GMT+0300 (RTZ 2 (зима))
 </div>
 </div>
 <script src="../prettify.js"></script>

@@ -22,7 +22,7 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Statements</span>
-        <span class='fraction'>70/70</span>
+        <span class='fraction'>73/73</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
@@ -32,12 +32,12 @@
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Functions</span>
-        <span class='fraction'>16/16</span>
+        <span class='fraction'>17/17</span>
       </div>
       <div class='fl pad1y space-right2'>
         <span class="strong">100% </span>
         <span class="quiet">Lines</span>
-        <span class='fraction'>70/70</span>
+        <span class='fraction'>73/73</span>
       </div>
     </div>
   </div>
@@ -246,12 +246,11 @@
 201
 202
 203
-204</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+204
+205
+206</td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-yes">1×</span>
@@ -357,12 +356,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
-<span class="cline-any cline-yes">4×</span>
-<span class="cline-any cline-yes">4×</span>
-<span class="cline-any cline-yes">4×</span>
-<span class="cline-any cline-yes">4×</span>
-<span class="cline-any cline-yes">4×</span>
-<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -374,8 +373,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4×</span>
-<span class="cline-any cline-yes">4×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-yes">5×</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
+<span class="cline-any cline-yes">1×</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1×</span>
@@ -451,10 +455,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">//import $ from 'jquery';
 import $ = require('jquery');
-import TrackView from '../components/slider/track/TrackView';
-// import '../../node_modules/@types/jasmine';
-// import '../../node_modules/@types/jasmine-jquery';
-// import '../../node_modules/@types/jquery';
+import TrackView from '../plugin/track/TrackView';
 &nbsp;
 describe('TrackView', function () {
   let trackView: TrackView;
@@ -581,7 +582,12 @@ describe('TrackView. Функция animateTrack', function () {
     trackView.el!.css('position', 'relative');
   });
 &nbsp;
-  it('Устанавливает ширину дорожки, если тип слайдера single', function () {
+    it('Возвращает false, если элемент неопределен', function () {
+        trackView.el = null;
+        expect(trackView.animateTrack(2, 'start')).toEqual(false);
+    });
+&nbsp;
+    it('Устанавливает ширину дорожки, если тип слайдера single', function () {
     trackView.animateTrack(2, 'start');
     expect(trackView.trackFull!.css('width')).toEqual('200px');
   });
@@ -621,10 +627,10 @@ describe('TrackView. Функция animateTrack', function () {
     trackView.el!.find('.slider__track-full').css('position', 'relative');
 &nbsp;
     trackView.animateTrack(2, 'start');
-    trackView.animateTrack(1.75, 'end');
+    trackView.animateTrack(1, 'end');
 &nbsp;
-    expect(trackView.trackFull!.css('left')).toEqual('175px');
-    expect(trackView.trackFull!.css('width')).toEqual('25px');
+    expect(trackView.trackFull!.css('left')).toEqual('150px');
+    expect(trackView.trackFull!.css('width')).toEqual('200px');
   });
 &nbsp;
   it('Устанавливает высоту и отступ дорожки, если тип слайдера interval, вид вертикальный', function () {
@@ -645,10 +651,10 @@ describe('TrackView. Функция animateTrack', function () {
     trackView.el!.find('.slider__track-full').css('position', 'relative');
 &nbsp;
     trackView.animateTrack(2, 'start');
-    trackView.animateTrack(1.75, 'end');
+    trackView.animateTrack(1, 'end');
 &nbsp;
-    expect(trackView.trackFull!.css('top')).toEqual('175px');
-    expect(trackView.trackFull!.css('height')).toEqual('25px');
+    expect(trackView.trackFull!.css('top')).toEqual('150px');
+    expect(trackView.trackFull!.css('height')).toEqual('200px');
   });
 &nbsp;
 });
@@ -658,7 +664,7 @@ describe('TrackView. Функция animateTrack', function () {
 </div><!-- /wrapper -->
 <div class='footer quiet pad2 space-top1 center small'>
   Code coverage
-  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Fri Feb 22 2019 00:12:51 GMT+0300 (RTZ 2 (зима))
+  generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Wed Feb 27 2019 15:56:59 GMT+0300 (RTZ 2 (зима))
 </div>
 </div>
 <script src="../prettify.js"></script>

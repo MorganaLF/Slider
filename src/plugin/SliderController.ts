@@ -40,7 +40,8 @@ export default class SliderController {
       this._onmouseup = this.mouseup.bind(this, mousemove, onmove, runner);
 
       $(window).on('mousemove', mousemove);
-      $(window).on('mouseup', this._onmouseup);
+      (<any>$(window)).on('touchmove', mousemove);
+      (<any>$(window)).on('touchend', this._onmouseup);
       runner.el.on('move', onmove);
   };
 
@@ -95,6 +96,7 @@ export default class SliderController {
     let onmousedown = this._onmousedown = this.mousedown.bind(this, runner);
     let changevalue = this.changevalue.bind(this, runner, tip, point);
     runner.el.on( 'mousedown', onmousedown );
+    (<any>runner).el.on( 'touchstart', onmousedown );
     $('body').on(changeevent, changevalue);
   }
 

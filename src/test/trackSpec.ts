@@ -1,9 +1,6 @@
 //import $ from 'jquery';
 import $ = require('jquery');
 import TrackView from '../plugin/track/TrackView';
- import '../../node_modules/@types/jasmine';
- import '../../node_modules/@types/jasmine-jquery';
-// import '../../node_modules/@types/jquery';
 
 describe('TrackView', function () {
   let trackView: TrackView;
