@@ -18,11 +18,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'src/plugin/**/*.ts',
-      'node_modules/@types/jasmine-jquery/**/*.ts',
-      'node_modules/@types/jasmine/**/*.ts',
-      //'src/pages/**/*.js',
-      'src/test/**/*Spec.ts',
-      //'src/test/fixtures/slider.html'
+      'src/test/**/*Spec.ts'
     ],
 
     // list of files / patterns to exclude
@@ -33,8 +29,6 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      'node_modules/@types/jasmine-jquery/**/*.ts': ["karma-typescript"],
-      'node_modules/@types/jasmine/**/*.ts': ["karma-typescript"],
       'src/plugin/**/*.ts': ["karma-typescript", 'sourcemap', 'coverage'],
       'src/test/**/*.ts': ["karma-typescript",  'sourcemap', 'coverage'],
       'karma.conf.js': ["karma-typescript",  'sourcemap', 'coverage']

@@ -1,10 +1,6 @@
 //import $ from 'jquery';
 import $ = require('jquery');
 import RunnerView from '../plugin/runner/RunnerView';
-import {exportAllDeclaration} from "babel-types";
- import '../../node_modules/@types/jasmine';
- import '../../node_modules/@types/jasmine-jquery';
-// import '../../node_modules/@types/jquery';
 
 describe('RunnerView', function () {
   let runnerView: RunnerView;

@@ -2,9 +2,6 @@
 import $ = require('jquery');
 import SliderView from '../plugin/SliderView';
 import SliderModel from '../plugin/SliderModel';
-// import '../../node_modules/@types/jasmine';
- import '../../node_modules/@types/jasmine-jquery';
- import '../../node_modules/@types/jquery';
 
 describe('SliderView', function () {
   let element,

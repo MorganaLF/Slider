@@ -1,9 +1,6 @@
 import SliderModel from '../plugin/SliderModel';
 //import $ from "jquery";
 import $ = require('jquery');
- import '../../node_modules/@types/jasmine';
- import '../../node_modules/@types/jasmine-jquery';
-// import '../../node_modules/@types/jquery';
 
 describe('SliderModel', function () {
   let sliderModel: SliderModel;

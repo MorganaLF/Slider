@@ -81,7 +81,7 @@ module.exports = (env, options) => {
           },
           "babelCore": "@babel/core", // needed for Babel v7
         },
-        exclude: '/node_modules/'
+        exclude: ['/node_modules/', '/src/test/']
       },
       {
         test: /\.styl$/,
