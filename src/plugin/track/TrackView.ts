@@ -103,16 +103,22 @@ export default class TrackView {
       let startIndent: number,
         endIndent: number;
 
+      size = Math.floor(size);
+      let floorRunnerSize = Math.floor(this[runnerSize]);
+      let floorTrackPoint = Math.floor(this._trackPoints[endPoint]);
+      let floorTrackFullPoint = Math.floor(this._trackFullPoints[endPoint]);
+
     if (pointName === 'start') {
-      startIndent = (size - this[runnerSize]) / coefficient;
-      endIndent = this._trackPoints[endPoint] - this._trackFullPoints[endPoint] - this[runnerSize];
+      startIndent = Math.floor((size - floorRunnerSize) / coefficient);
+      endIndent = floorTrackPoint - floorTrackFullPoint - floorRunnerSize;
+      console.log(endIndent);
       this.trackFull.css(startPoint, startIndent  + 'px');
     } else {
-      startIndent = this._trackFullPoints[startPoint] - this._trackPoints[startPoint] - this[runnerSize];
-      endIndent = (size - this[runnerSize]) - (size - this[runnerSize]) / coefficient;
+      startIndent = this._trackFullPoints[startPoint] - this._trackPoints[startPoint] - floorRunnerSize;
+      endIndent = (size - floorRunnerSize) - (size - floorRunnerSize) / coefficient + 1;
     }
 
-    this.trackFull.css(sizeProperty, Math.floor((size - this[runnerSize]) - startIndent - endIndent) + 'px');
+    this.trackFull.css(sizeProperty, Math.floor((size - floorRunnerSize) - startIndent - endIndent) + 'px');
   }
 
   public animateTrack (coefficient: number, pointName: string): void | false{
