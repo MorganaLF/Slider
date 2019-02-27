@@ -70,8 +70,12 @@ module.exports = (env, options) => {
         test: /\.tsx?$/,
         loader: 'awesome-typescript-loader',
         options: {
-          "baseUrl": "types",
-          "typeRoots": ["types"],
+          "baseUrl": "./node_modules/@types",
+          "typeRoots": ["./node_modules/@types"],
+          "types": [
+            "jasmine",
+            "jasmine-jquery"
+          ],
           "useBabel": true,
           "babelOptions": {
             "babelrc": false, /* Important line */
@@ -81,7 +85,7 @@ module.exports = (env, options) => {
           },
           "babelCore": "@babel/core", // needed for Babel v7
         },
-        exclude: ['/node_modules/', '/src/test/']
+        exclude: [/node_modules\/(?!(@types)\/).*/]
       },
       {
         test: /\.styl$/,

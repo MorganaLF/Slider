@@ -7,3 +7,5 @@ import './plugin/SliderController';
 import './plugin/runner/RunnerView';
 import './pages/demo/DemoView';
 import './pages/demo/demo-init';
+import jasmine from 'jasmine';
+//import 'jasmine-jquery';
