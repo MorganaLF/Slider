@@ -140,13 +140,13 @@ describe('SliderView. Функция updateSlider', function () {
   });
 
   it('Записывает экземпляр класса RunnerView в свойство runner1', function () {
-    expect(slider.runner1!.el).toBeDefined();
+    expect(slider.runner1!.$element).toBeDefined();
   });
 
   it('Записывает экземпляр класса RunnerView в свойство runner2, если тип слайдера interval', function () {
     slider.type = 'interval';
     slider.updateSlider();
-    expect(slider.runner2!.el).toBeDefined();
+    expect(slider.runner2!.$element).toBeDefined();
   });
 
   it('Записывает экземпляр класса TipView в свойство tip1', function () {

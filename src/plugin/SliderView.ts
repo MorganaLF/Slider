@@ -64,31 +64,31 @@ export default class SliderView {
   }
 
   private get _innerWidth (): number {
-      if (!this.el || !this.runner1 || !this.runner1.el) {
+      if (!this.el || !this.runner1 || !this.runner1.$element) {
           return 0;
       }
-      return this.el.innerWidth()! - this.runner1.el.innerWidth()!;
+      return this.el.innerWidth()! - this.runner1.$element.innerWidth()!;
   }
 
   private get _innerHeight (): number {
-      if (!this.el || !this.runner1 || !this.runner1.el) {
+      if (!this.el || !this.runner1 || !this.runner1.$element) {
           return 0;
       }
-    return this.el.innerHeight()! - this.runner1.el.innerHeight()!;
+    return this.el.innerHeight()! - this.runner1.$element.innerHeight()!;
   }
 
   private get _runnerWidth (): number {
-      if (!this.runner1 || !this.runner1.el) {
+      if (!this.runner1 || !this.runner1.$element) {
           return 0;
       }
-    return this.runner1.el.innerWidth()!;
+    return this.runner1.$element.innerWidth()!;
   }
 
   private get _runnerHeight (): number {
-      if (!this.runner1 || !this.runner1.el) {
+      if (!this.runner1 || !this.runner1.$element) {
           return 0;
       }
-    return this.runner1.el.innerHeight()!;
+    return this.runner1.$element.innerHeight()!;
   }
 
   public updateSlider (): void | false {
@@ -172,14 +172,14 @@ export default class SliderView {
     this._createRunner('runner1', this.model.startValue);
 
     if (this.isTip && this.runner1) {
-      this._createTip('tip1', this.runner1.el, Math.round(this.model.startValue));
+      this._createTip('tip1', this.runner1.$element, Math.round(this.model.startValue));
     }
 
     if (this.type === 'interval') {
       this._createRunner('runner2', this.model.endValue);
 
       if (this.isTip && this.runner2) {
-        this._createTip('tip2', this.runner2.el, Math.round(this.model.endValue));
+        this._createTip('tip2', this.runner2.$element, Math.round(this.model.endValue));
       }
     }
       this._createTrack();

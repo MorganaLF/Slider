@@ -1,113 +1,173 @@
-//import $ from 'jquery';
-import $ = require('jquery');
-import {RunnerViewOptions} from "../interfaces";
+import {
+  ICheckCursorPositionSettings,
+  IDispatchMoveEventSettings,
+  RunnerViewOptions,
+} from './RunnerInterfaces';
 
-export default class RunnerView {
-   public el?: null | JQuery;
-   public shiftX: number = 0;
-   public shiftY: number = 0;
-   private type: string;
-   private orientation: string;
-   private parentLeftPoint: number;
-   private parentRightPoint: number;
-   private parentTopPoint: number;
-   private parentBottomPoint: number;
+class RunnerView {
+  public $element?: null | JQuery;
+  public shiftX: number = 0;
+  public shiftY: number = 0;
+  readonly orientation: string;
+  readonly parentLeftPoint: number;
+  readonly parentRightPoint: number;
+  readonly parentTopPoint: number;
+  readonly parentBottomPoint: number;
 
-  constructor (options: RunnerViewOptions) {
-    this.el = null;
+  constructor(options: RunnerViewOptions) {
+    this.$element = null;
     this.shiftX = 0;
     this.shiftY = 0;
-    this.type = options.type;
     this.orientation = options.orientation;
     this.parentLeftPoint = options.parentLeftPoint;
     this.parentRightPoint = options.parentRightPoint;
     this.parentTopPoint = options.parentTopPoint;
     this.parentBottomPoint = options.parentBottomPoint;
-
-    $.extend(this, options);
   }
 
-  private get _parentWidth (): number {
-    return this.parentRightPoint - this.parentLeftPoint;
-  }
+  public drawRunner(parent: JQuery, coefficient: number): void {
+    const runnerClass: string = this.orientation === 'horizontal'
+      ? ''
+      : ' slider__runner_vertical';
 
-  private get _parentHeight (): number {
-    return this.parentBottomPoint - this.parentTopPoint;
-  }
-
-  public drawRunner (parent: JQuery, coefficient: number): void {
-    let runnerClass: string =
-        this.orientation === 'horizontal' ? '' : ' slider__runner_vertical';
-
-    this.el = $('<div/>', {
-      class: 'slider__runner' + runnerClass,
+    this.$element = $('<div/>', {
+      class: `slider__runner${runnerClass}`,
     }).appendTo(parent);
 
     this.setRunnerPosition(coefficient);
   }
 
-  public setRunnerPosition (coefficient: number): void | false {
-    if (!this.el) {
-        return false;
+  public setRunnerPosition(coefficient: number): void | false {
+    if (!this.$element) {
+      return false;
     }
-    let direction: string = this.orientation === 'horizontal' ? 'left' : 'top';
-    let parentGabarite: number  = this.orientation === 'horizontal' ? this._parentWidth : this._parentHeight;
-    let gabarite: number = this.orientation === 'horizontal' ? this.el.innerWidth()! : this.el.innerHeight()!;
+
+    const parentSize: number = this.orientation === 'horizontal'
+      ? this._getParentWidth()
+      : this._getParentHeight();
+
+    const runnerSize: number = this.orientation === 'horizontal'
+      ? this.$element.innerWidth()!
+      : this.$element.innerHeight()!;
+
+    const runnerOffset: number = (parentSize - runnerSize) / coefficient;
+    const direction: string = this.orientation === 'horizontal' ? 'left' : 'top';
+
     if (coefficient !== 0) {
-      this.el.css(direction, (parentGabarite - gabarite) / coefficient + 'px');
+      this.$element.css(direction, `${runnerOffset}px`);
     }
   }
 
-  public setRunnerShiftX (e: JQuery.MouseDownEvent): void | false {
-      if (!this.el) {
-          return false;
-      }
-
-      let pageX = (<any>e).targetTouches ? (<any>e).targetTouches[0].pageX : e.pageX;
-
-      this.shiftX = pageX - this.el.offset()!.left;
-  }
-
-  public setRunnerShiftY (e: JQuery.MouseDownEvent): void | false {
-      if (!this.el) {
-          return false;
-      }
-      let pageY = (<any>e).targetTouches ? (<any>e).targetTouches[0].pageY : e.pageY;
-    this.shiftY = pageY - this.el.offset()!.top;
-  }
-
-  private _checkCursorPosition (coord: number, startPoint: number, endPoint: number, shift: number, gabarite: number): number {
-    if (coord < startPoint + shift) {
-      coord = 0;
-    } else if (coord > endPoint - gabarite + shift) {
-      coord = endPoint - startPoint - gabarite;
-    } else {
-      coord = coord - startPoint - shift;
+  public moveRunner(e: JQuery.MouseMoveEvent): void | false {
+    if (!this.$element) {
+      return false;
     }
-    return coord;
-  }
 
-  private _dispatchMoveRunner (coord: number, startPoint: number, endPoint: number, shift: number, gabarite: number): void {
-      if (!this.el) {
-          return;
-      }
-
-    coord = this._checkCursorPosition(coord, startPoint, endPoint, shift, gabarite);
-    let ratio: number = (endPoint - startPoint - gabarite) / coord;
-    let moveEvent = $.Event( "move", { detail: { ratio: ratio } } );
-    this.el.trigger(moveEvent);
-  }
-
-  public moveRunner (e: JQuery.MouseMoveEvent): void | false {
-    if (!this.el) {
-       return false;
-    }
-    let pageX = (<any>e).targetTouches ? (<any>e).targetTouches[0].pageX : e.pageX;
-    let pageY = (<any>e).targetTouches ? (<any>e).targetTouches[0].pageY : e.pageY;
     if (this.orientation === 'horizontal') {
-      this._dispatchMoveRunner(pageX, this.parentLeftPoint, this.parentRightPoint, this.shiftX, this.el.innerWidth()!);
+      const pageX: number = (<any>e).targetTouches
+        ? (<any>e).targetTouches[0].pageX
+        : e.pageX;
+
+      this._dispatchMoveEvent({
+        coordinate: pageX,
+        startPoint: this.parentLeftPoint,
+        endPoint: this.parentRightPoint,
+        shift: this.shiftX,
+        runnerSize: this.$element.innerWidth()!,
+      });
     } else {
-      this._dispatchMoveRunner(pageY, this.parentTopPoint, this.parentBottomPoint, this.shiftY, this.el.innerHeight()!);
+      const pageY: number = (<any>e).targetTouches
+        ? (<any>e).targetTouches[0].pageY
+        : e.pageY;
+
+      this._dispatchMoveEvent({
+        coordinate: pageY,
+        startPoint: this.parentTopPoint,
+        endPoint: this.parentBottomPoint,
+        shift: this.shiftY,
+        runnerSize: this.$element.innerHeight()!,
+      });
     }
+  }
+
+  public setRunnerShiftX(event: JQuery.MouseDownEvent): void | false {
+    if (!this.$element) {
+      return false;
+    }
+
+    const pageX: number = (<any>event).targetTouches
+      ? (<any>event).targetTouches[0].pageX
+      : event.pageX;
+
+    this.shiftX = pageX - this.$element.offset()!.left;
+  }
+
+  public setRunnerShiftY(event: JQuery.MouseDownEvent): void | false {
+    if (!this.$element) {
+      return false;
+    }
+
+    const pageY: number = (<any>event).targetTouches
+      ? (<any>event).targetTouches[0].pageY
+      : event.pageY;
+
+    this.shiftY = pageY - this.$element.offset()!.top;
+  }
+
+  private _getParentWidth(): number {
+    return this.parentRightPoint - this.parentLeftPoint;
+  }
+
+  private _getParentHeight(): number {
+    return this.parentBottomPoint - this.parentTopPoint;
+  }
+
+  private _checkCursorPosition({
+    coordinate,
+    startPoint,
+    endPoint,
+    shift,
+    runnerSize,
+  }: ICheckCursorPositionSettings): number {
+
+    const isCoordinateLessThanLeftPoint: boolean = coordinate < (startPoint + shift);
+    const isCoordinateGreaterThanEndPoint: boolean = coordinate > (endPoint - runnerSize + shift);
+    let newCoordinate: number;
+
+    if (isCoordinateLessThanLeftPoint) {
+      newCoordinate = 0;
+    } else if (isCoordinateGreaterThanEndPoint) {
+      newCoordinate = endPoint - startPoint - runnerSize;
+    } else {
+      newCoordinate = coordinate - startPoint - shift;
+    }
+
+    return newCoordinate;
+  }
+
+  private _dispatchMoveEvent({
+    coordinate,
+    startPoint,
+    endPoint,
+    shift,
+    runnerSize,
+  }: IDispatchMoveEventSettings): void {
+    if (!this.$element) {
+      return;
+    }
+
+    const newCoordinate: number = this._checkCursorPosition({
+      coordinate,
+      startPoint,
+      endPoint,
+      shift,
+      runnerSize,
+    });
+
+    const ratio: number = (endPoint - startPoint - runnerSize) / newCoordinate;
+    const $moveEvent = $.Event('move', { detail: { ratio } });
+    this.$element.trigger($moveEvent);
   }
 }
+
+export default RunnerView;

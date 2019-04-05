@@ -51,7 +51,7 @@ export default class SliderController {
           $(window).on('mouseup', this._onmouseup);
       }
 
-      runner.el.on('move', onmove);
+      runner.$element.on('move', onmove);
   };
 
   private move (runnerType: string, e: JQuery.TriggeredEvent): void {
@@ -85,7 +85,7 @@ export default class SliderController {
   {
         $(window).off('mousemove', mousemovehandler );
         $(window).off( 'mouseup', this._onmouseup );
-        runner.el.off('move', onmovehandler);
+        runner.$element.off('move', onmovehandler);
 
   };
 
@@ -106,11 +106,9 @@ export default class SliderController {
     let changevalue = this.changevalue.bind(this, runner, tip, point);
 
       if (typeof document.body.ontouchstart !== "undefined") {
-          //alert('ok');
-          (<any>runner).el.on( 'touchstart', onmousedown );
+          (<any>runner).$element.on( 'touchstart', onmousedown );
       } else {
-          //alert('not ok');
-          runner.el.on( 'mousedown', onmousedown );
+          runner.$element.on( 'mousedown', onmousedown );
       }
 
     $('body').on(changeevent, changevalue);
