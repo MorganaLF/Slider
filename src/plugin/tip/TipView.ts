@@ -1,32 +1,31 @@
-//import $ from "jquery";
-import $ = require('jquery');
-import {TipViewOptions} from "../interfaces";
+import { TipViewOptions } from './TipInterfaces';
 
-export default class TipView {
-  private el: null | JQuery;
-  private  orientation: string;
+class TipView {
+  public $element: null | JQuery;
+  readonly orientation: string;
 
   constructor (options : TipViewOptions) {
-    this.el = null;
+    this.$element = null;
     this.orientation = options.orientation;
-    $.extend(this, options);
   }
 
-  public drawTip (parent: JQuery, val: number): void {
-    let tipClass: string =
-        this.orientation === 'horizontal' ? '' : ' slider__tip_vertical';
+  public drawTip ($parent: JQuery, currentValue: number): void {
+    const classModifierName: string = this.orientation === 'horizontal'
+      ? ''
+      : ' slider__tip_vertical';
 
-    this.el = $('<div/>', {
-      class: 'slider__tip' + tipClass,
-    }).appendTo(parent);
+    this.$element = $('<div/>', {
+      class: `slider__tip${classModifierName}`,
+    }).appendTo($parent);
 
-    this.updateTip(val);
+    this.updateTip(currentValue);
   }
 
-  public updateTip (val: number): void {
-    if (this.el) {
-        this.el.html(val+'');
+  public updateTip (currentValue: number): void {
+    if (this.$element) {
+      this.$element.html(`${String(currentValue)}`);
     }
   }
-
 }
+
+export default TipView;
