@@ -1,75 +1,101 @@
-//import $ from "jquery";
-import $ = require('jquery');
-import {ScaleViewOptions} from "../interfaces";
+import {
+  ScaleViewOptions,
+  IDrawMarkSettings,
+  IDrawScaleSettings,
+} from './ScaleInterfaces';
 
-export default class ScaleView {
-  private  el?: null | JQuery;
-  private  parentWidth: number;
-  private  parentHeight: number;
-  private  orientation: string;
+class ScaleView {
+  public $element?: null | JQuery;
+  readonly parentWidth: number;
+  readonly parentHeight: number;
+  readonly orientation: string;
 
   constructor (options: ScaleViewOptions) {
-      this.el = null;
-      this.parentWidth = options.parentWidth;
-      this.parentHeight = options.parentHeight;
-      this.orientation = options.orientation;
-
-    $.extend(this, options);
+    this.$element = null;
+    this.parentWidth = options.parentWidth;
+    this.parentHeight = options.parentHeight;
+    this.orientation = options.orientation;
   }
 
-  private _getSizeProperty (): string {
-    return this._checkOrientation('width', 'height');
+  public drawScale ({
+    $parent,
+    minValue,
+    maxValue,
+    marksQuantity,
+  }: IDrawScaleSettings): void {
+    const scaleClass: string = this._getOrientationBasedValue(
+      '',
+      ' slider__scale_vertical',
+    );
+
+    this.$element = $('<ul/>', {
+      class: `slider__scale ${scaleClass}`,
+    })
+      .css(this._getSizePropertyName(), this._getParentSize())
+      .appendTo($parent);
+
+    const roundedMaxValue: number = Math.round(maxValue);
+    const roundedMinValue: number = Math.round(minValue);
+    const roundedMarksQuantity: number = Math.round(marksQuantity);
+    const step: number = (roundedMaxValue - roundedMinValue) / roundedMarksQuantity;
+    const roundedStep: number = Number(step.toFixed(10));
+
+    for (
+      let i: number = roundedMinValue;
+      i <= roundedMaxValue;
+      i = Number((roundedStep + i).toFixed(10))
+    ) {
+      const markIndex: number = (i - roundedMinValue) / step;
+
+      this._drawMark({
+        markIndex,
+        markText: i,
+        marksQuantity: roundedMarksQuantity,
+        positionProperty: this._getPositionPropertyName(),
+      });
+    }
   }
 
-  private _getPositionProperty (): string {
-    return this._checkOrientation('left', 'top');
+  private _getSizePropertyName (): string {
+    return this._getOrientationBasedValue('width', 'height');
   }
 
-  private _getInnerSize (element: JQuery): number {
-    return this._checkOrientation(element.innerWidth(), element.innerHeight());
+  private _getPositionPropertyName (): string {
+    return this._getOrientationBasedValue('left', 'top');
+  }
+
+  private _getInnerSize ($element: JQuery): number {
+    return this._getOrientationBasedValue($element.innerWidth(), $element.innerHeight());
   }
 
   private _getParentSize (): number {
-    return this._checkOrientation(this.parentWidth, this.parentHeight);
+    return this._getOrientationBasedValue(this.parentWidth, this.parentHeight);
   }
 
-  private _checkOrientation (valOne: any, valTwo: any): any {
-    return this.orientation === 'horizontal' ? valOne : valTwo;
+  private _getOrientationBasedValue (horizontalValue: any, verticalValue: any): any {
+    return this.orientation === 'horizontal' ? horizontalValue : verticalValue;
   }
 
-  private _drawScaleItem (i: number, index: number, itemsLength: number, positionProperty: string): void | false {
-    if (!this.el) {
-        return false;
+  private _drawMark ({
+    markText,
+    markIndex,
+    marksQuantity,
+    positionProperty,
+  }: IDrawMarkSettings): void | false {
+    if (!this.$element) {
+      return false;
     }
 
-    let scaleItem: JQuery = $('<li/>', {
+    const $mark: JQuery = $('<li/>', {
       class: 'slider__scale-item',
-      text: Math.round(i)
-    }).appendTo(this.el);
+      text: Math.round(markText),
+    }).appendTo(this.$element);
 
-    let itemGabarite: number = this._getInnerSize(scaleItem);
-    let itemIndent: number = index * (this._getParentSize() / itemsLength) - itemGabarite / 2;
+    const markSize: number = this._getInnerSize($mark);
+    const markIndent: number = markIndex * (this._getParentSize() / marksQuantity) - markSize / 2;
 
-    scaleItem.css('position', 'absolute');
-    scaleItem.css(positionProperty, itemIndent + 'px');
-  }
-
-  public drawScale (parent: JQuery, minVal: number, maxVal: number, itemsQuantity: number): void {
-    let scaleClass: string = this._checkOrientation('', ' slider__scale_vertical');
-    minVal = Math.round(minVal);
-    maxVal = Math.round(maxVal);
-    itemsQuantity = Math.round(itemsQuantity);
-
-    this.el = $('<ul/>', {
-      class: 'slider__scale' + scaleClass,
-    }).appendTo(parent);
-    this.el.css(this._getSizeProperty(), this._getParentSize());
-
-    let step: number = +((maxVal - minVal) / itemsQuantity).toFixed(10);
-
-    for (let i = minVal; i <= maxVal; i = +(step + i).toFixed(10)) {
-      let itemIndexNumber: number = (i - minVal) / step;
-      this._drawScaleItem(i, itemIndexNumber, itemsQuantity, this._getPositionProperty());
-     }
+    $mark.css(positionProperty, `${markIndent}px`);
   }
 }
+
+export default ScaleView;
