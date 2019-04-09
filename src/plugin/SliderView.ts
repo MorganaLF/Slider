@@ -65,36 +65,36 @@ export default class SliderView {
 
   private get _innerWidth (): number {
     if (!this.el || !this.runner1 || !this.runner1.$element) {
-        return 0;
-      }
+      return 0;
+    }
     return this.el.innerWidth()! - this.runner1.$element.innerWidth()!;
   }
 
   private get _innerHeight (): number {
     if (!this.el || !this.runner1 || !this.runner1.$element) {
-        return 0;
-      }
+      return 0;
+    }
     return this.el.innerHeight()! - this.runner1.$element.innerHeight()!;
   }
 
   private get _runnerWidth (): number {
     if (!this.runner1 || !this.runner1.$element) {
-        return 0;
-      }
+      return 0;
+    }
     return this.runner1.$element.innerWidth()!;
   }
 
   private get _runnerHeight (): number {
     if (!this.runner1 || !this.runner1.$element) {
-        return 0;
-      }
+      return 0;
+    }
     return this.runner1.$element.innerHeight()!;
   }
 
   public updateSlider (): void | false {
     if (!this.el) {
-        return false;
-      }
+      return false;
+    }
     this.el.html('');
     this._drawSlider();
   }
@@ -125,26 +125,22 @@ export default class SliderView {
     this.track = new TrackView({
       type: this.type,
       orientation: this.orientation,
-      parentWidth: this._innerWidth,
-      parentHeight: this._innerHeight,
-      runnerWidth: this._runnerWidth,
-      runnerHeight: this._runnerHeight,
-      parentLeftPoint: this._sliderLeftPoint,
-      parentRightPoint: this._sliderRightPoint,
-      parentTopPoint: this._sliderTopPoint,
-      parentBottomPoint: this._sliderBottomPoint,
+      _parentWidth: this._innerWidth,
+      _parentHeight: this._innerHeight,
+      _runnerWidth: this._runnerWidth,
+      _runnerHeight: this._runnerHeight,
     });
-    this.track.drawTrack(
-        this.el,
-        this.model.calculateCoefficient(this.model.startValue),
-        this.model.calculateCoefficient(this.model.endValue),
-    );
+    this.track.drawTrack({
+      $parent: this.el,
+      startValueCoefficient: this.model.calculateCoefficient(this.model.startValue),
+      endValueCoefficient: this.model.calculateCoefficient(this.model.endValue),
+    });
   }
 
   private _createScale (): void {
     if (!this.el) {
-        return;
-      }
+      return;
+    }
     this.scale = new ScaleView({
       parentWidth: this._innerWidth,
       parentHeight: this._innerHeight,

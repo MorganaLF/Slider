@@ -1,142 +1,197 @@
-//import $ from "jquery";
-import $ = require('jquery');
-import {TrackViewOptions} from "../interfaces";
-import {trackPoints} from "../interfaces";
+import {
+  TrackViewOptions,
+  TrackPoints,
+  IDrawTrackSettings,
+  IAnimateSingleTrackSettings,
+  IAnimateIntervalTrackSettings,
+} from './TrackInterfaces';
 
-export default class TrackView {
-  public el?: null | JQuery;
-  public trackFull?: null | JQuery;
-  private parentWidth: number;
-  private parentHeight: number;
-  private runnerWidth: number;
-  private runnerHeight: number;
-  private parentLeftPoint: number;
-  private parentRightPoint: number;
-  private parentTopPoint: number;
-  private parentBottomPoint: number;
-  private type: string;
-  private orientation: string;
+class TrackView {
+  public $element?: null | JQuery;
+  public $filledTrack?: null | JQuery;
+  private _parentWidth: number;
+  private _parentHeight: number;
+  private _runnerWidth: number;
+  private _runnerHeight: number;
+  readonly type: string;
+  readonly orientation: string;
   [key: string]: any;
 
   constructor (options: TrackViewOptions) {
-      this.el = null;
-      this.trackFull = null;
-      this.parentWidth = options.parentWidth;
-      this.parentHeight = options.parentHeight;
-      this.runnerWidth = options.runnerWidth;
-      this.runnerHeight = options.runnerHeight;
-      this.parentLeftPoint = options.parentLeftPoint;
-      this.parentRightPoint = options.parentRightPoint;
-      this.parentTopPoint = options.parentTopPoint;
-      this.parentBottomPoint = options.parentBottomPoint;
-      this.type = options.type;
-      this.orientation = options.orientation;
-
-      $.extend(this, options);
+    this.$element = null;
+    this.$filledTrack = null;
+    this._parentWidth = options._parentWidth;
+    this._parentHeight = options._parentHeight;
+    this._runnerWidth = options._runnerWidth;
+    this._runnerHeight = options._runnerHeight;
+    this.type = options.type;
+    this.orientation = options.orientation;
   }
 
-  private get _trackPoints (): trackPoints | false {
-      if (this.el) {
-          return {
-              left: this.el.offset()!.left,
-              top: this.el.offset()!.top,
-              right: this.el.offset()!.left + this.el.innerWidth()!,
-              bottom: this.el.offset()!.top + this.el.innerHeight()!
-          }
-      } else {
-          return false;
-      }
-  }
+  public drawTrack ({
+    $parent,
+    startValueCoefficient,
+    endValueCoefficient,
+  }: IDrawTrackSettings): void {
 
-  private get _trackFullPoints (): trackPoints | false {
-      if (this.trackFull) {
-          return {
-              left: this.trackFull.offset()!.left,
-              top: this.trackFull.offset()!.top,
-              right: this.trackFull.offset()!.left + this.trackFull.innerWidth()!,
-              bottom: this.trackFull.offset()!.top + this.trackFull.innerHeight()!
-          }
-      } else {
-          return false;
-      }
-  }
+    const trackModifierName: string = this.orientation === 'horizontal'
+      ? ''
+      : ' slider__track_vertical';
 
-  public drawTrack (parent: JQuery, coefficient: number, coefficientTwo: number): void {
+    this.$element = $('<div/>', {
+      class: `slider__track${trackModifierName}`,
+    });
 
-    let trackClass: string =
-        this.orientation === 'horizontal' ? '' : ' slider__track_vertical';
-    let trackFullClass: string =
-        this.orientation === 'horizontal' ? '' : ' slider__track-full_vertical';
+    const filledTrackModifierName: string = this.orientation === 'horizontal'
+      ? ''
+      : ' slider__track-full_vertical';
 
-    this.el = $('<div/>', {
-      class: 'slider__track' + trackClass,
-    }).prependTo(parent);
+    this.$filledTrack = $('<div/>', {
+      class: `slider__track-full${filledTrackModifierName}`,
+    }).appendTo(this.$element);
 
-    this.trackFull = $('<div/>', {
-      class: 'slider__track-full' + trackFullClass,
-    }).appendTo(this.el);
+    this.$element.prependTo($parent);
 
-    this.trackFull.css('left', '0');
-
-    this.animateTrack(coefficient, 'start');
+    this.animateTrack(startValueCoefficient, 'start');
 
     if (this.type === 'interval') {
-      this.animateTrack(coefficientTwo, 'end');
+      this.animateTrack(endValueCoefficient, 'end');
     }
   }
 
-  private _setSingleTrackLength (pos: number, property: string, size: string, runnerSize: string): void {
-    if (!this.trackFull) {
-        return;
-    }
-    if (pos !== 0) {
-      this.trackFull.css(property, this[size] / pos + this[runnerSize]/2 + 'px');
-    } else {
-      this.trackFull.css(property, '0px');
-    }
-  }
-
-  private _setIntervalTrack (coefficient: number, startPoint: string, endPoint: string, sizeProperty: string, size: number, runnerSize: string, pointName: string): void {
-      if (!this.trackFull || !this._trackPoints || !this._trackFullPoints) {
-          return;
-      }
-      let startIndent: number,
-        endIndent: number;
-
-      size = Math.floor(size);
-      let floorRunnerSize = Math.floor(this[runnerSize]);
-      let floorTrackPoint = Math.floor(this._trackPoints[endPoint]);
-      let floorTrackFullPoint = Math.floor(this._trackFullPoints[endPoint]);
-
-    if (pointName === 'start') {
-      startIndent = Math.floor((size - floorRunnerSize) / coefficient);
-      endIndent = floorTrackPoint - floorTrackFullPoint - floorRunnerSize;
-
-      this.trackFull.css(startPoint, startIndent + floorRunnerSize / 2  + 'px');
-    } else {
-      startIndent = this._trackFullPoints[startPoint] - this._trackPoints[startPoint] - floorRunnerSize;
-      endIndent = (size - floorRunnerSize) - (size - floorRunnerSize) / coefficient;
+  public animateTrack (coefficient: number, animatedPointName: string): void | false {
+    if (!this.$element) {
+      return false;
     }
 
-    this.trackFull.css(sizeProperty, Math.floor((size - floorRunnerSize) - startIndent - endIndent - floorRunnerSize / 2) + 'px');
-  }
-
-  public animateTrack (coefficient: number, pointName: string): void | false{
-      if (!this.el) {
-          return false;
-      }
     if (this.type === 'interval') {
       if (this.orientation === 'horizontal') {
-        this._setIntervalTrack(coefficient, 'left', 'right', 'width', this.el.innerWidth()!, 'runnerWidth', pointName);
+        this._animateIntervalTrack({
+          coefficient,
+          animatedPointName,
+          startPointName: 'left',
+          endPointName: 'right',
+          sizeProperty: 'width',
+          size: this.$element.innerWidth()!,
+          runnerSizeKey: '_runnerWidth',
+        });
       } else {
-        this._setIntervalTrack(coefficient, 'top', 'bottom', 'height', this.el.innerHeight()!, 'runnerHeight', pointName);
+        this._animateIntervalTrack({
+          coefficient,
+          animatedPointName,
+          startPointName: 'top',
+          endPointName: 'bottom',
+          sizeProperty: 'height',
+          size: this.$element.innerHeight()!,
+          runnerSizeKey: '_runnerHeight',
+        });
       }
     } else {
       if (this.orientation === 'horizontal') {
-        this._setSingleTrackLength(coefficient, 'width', 'parentWidth', 'runnerWidth');
+        this._animateSingleTrack({
+          coefficient,
+          sizeProperty: 'width',
+          sizeKey: '_parentWidth',
+          runnerSizeKey: '_runnerWidth',
+        });
       } else {
-        this._setSingleTrackLength(coefficient, 'height', 'parentHeight', 'runnerHeight');
+        this._animateSingleTrack({
+          coefficient,
+          sizeProperty: 'height',
+          sizeKey: '_parentHeight',
+          runnerSizeKey: '_runnerHeight',
+        });
       }
     }
+  }
+
+  private _getTrackPoints (pointName: string): number {
+    if (this.$element) {
+      const trackPoints: TrackPoints = {
+        left: this.$element.offset()!.left,
+        top: this.$element.offset()!.top,
+        right: this.$element.offset()!.left + this.$element.innerWidth()!,
+        bottom: this.$element.offset()!.top + this.$element.innerHeight()!,
+      };
+
+      return trackPoints[pointName];
+    }
+
+    return 0;
+  }
+
+  private _getFilledTrackPoints (pointName: string): number {
+    if (this.$filledTrack) {
+      const filledTrackPoints: TrackPoints = {
+        left: this.$filledTrack.offset()!.left,
+        top: this.$filledTrack.offset()!.top,
+        right: this.$filledTrack.offset()!.left + this.$filledTrack.innerWidth()!,
+        bottom: this.$filledTrack.offset()!.top + this.$filledTrack.innerHeight()!,
+      };
+
+      return filledTrackPoints[pointName];
+    }
+
+    return 0;
+  }
+
+  private _animateSingleTrack ({
+    coefficient,
+    sizeProperty,
+    sizeKey,
+    runnerSizeKey,
+  }: IAnimateSingleTrackSettings): void {
+    if (!this.$filledTrack) {
+      return;
+    }
+
+    if (coefficient !== 0) {
+      const filledTrackSize: number = this[sizeKey] / coefficient + this[runnerSizeKey] / 2;
+      this.$filledTrack.css(sizeProperty, `${filledTrackSize}px`);
+    } else {
+      this.$filledTrack.css(sizeProperty, '0px');
+    }
+  }
+
+  private _animateIntervalTrack ({
+    coefficient,
+    startPointName,
+    endPointName,
+    sizeProperty,
+    size,
+    runnerSizeKey,
+    animatedPointName,
+  }: IAnimateIntervalTrackSettings): void {
+    if (!this.$filledTrack) {
+      return;
+    }
+
+    const roundedSize: number = Math.floor(size);
+    const roundedRunnerSize: number = Math.floor(this[runnerSizeKey]);
+    const innerSize: number = roundedSize - roundedRunnerSize;
+    const roundedEndPoint: number = Math.floor(this._getTrackPoints(endPointName));
+    const roundedFilledEndPoint: number = Math.floor(this._getFilledTrackPoints(endPointName));
+    let startIndent: number;
+    let endIndent: number;
+
+    if (animatedPointName === 'start') {
+      startIndent = Math.floor((roundedSize - roundedRunnerSize) / coefficient);
+      endIndent = roundedEndPoint - roundedFilledEndPoint - roundedRunnerSize;
+      const filledTrackOffset: number = startIndent + roundedRunnerSize / 2;
+
+      this.$filledTrack.css(startPointName, `${filledTrackOffset}px`);
+    } else {
+      const trackStartPoint: number = this._getTrackPoints(startPointName);
+      const filledTrackStartPoint: number = this._getFilledTrackPoints(startPointName);
+
+      startIndent = filledTrackStartPoint - trackStartPoint - roundedRunnerSize;
+      endIndent = innerSize - innerSize / coefficient;
+    }
+
+    const filledTrackSize: number = innerSize - startIndent - endIndent - roundedRunnerSize / 2;
+    const roundedFilledTrackSize: number = Math.floor(filledTrackSize);
+    this.$filledTrack.css(sizeProperty, `${roundedFilledTrackSize}px`);
   }
 }
+
+export default TrackView;

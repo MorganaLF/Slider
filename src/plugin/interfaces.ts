@@ -46,43 +46,6 @@ export type SliderAppOptions = {
   sliderController?: ISliderController,
 };
 
-export type TrackViewOptions = {
-  el?: null | JQuery,
-  trackFull?: null | JQuery,
-  parentWidth: number,
-  parentHeight: number,
-  runnerWidth: number,
-  runnerHeight: number,
-  parentLeftPoint: number,
-  parentRightPoint: number,
-  parentTopPoint: number,
-  parentBottomPoint: number,
-  type: string,
-  orientation: string,
-};
-
-export type trackPoints = {
-  left: number,
-  top: number,
-  right: number,
-  bottom: number,
-  [key: string]: number,
-};
-
-export type TipViewOptions = {
-  el?: null | JQuery,
-  orientation: string,
-};
-
-export type ScaleViewOptions = {
-  el?: null | JQuery,
-  parentWidth: number,
-  parentHeight: number,
-  orientation: string,
-};
-
-
-
 declare global {
     interface JQuery {
       customSlider: (...rest: any[]) => any;
@@ -119,6 +82,4 @@ export interface IScaleView {
   drawScale (parent: JQuery, minVal: number, maxVal: number, itemsQuantity: number): void;
 }
 
-export interface ITipView {
-  updateTip (val: number): void;
-}
+
