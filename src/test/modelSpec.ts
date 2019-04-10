@@ -1,4 +1,4 @@
-import SliderModel from '../plugin/SliderModel';
+import SliderModel from '../plugin/SliderModel/SliderModel';
 //import $ from "jquery";
 import $ = require('jquery');
 

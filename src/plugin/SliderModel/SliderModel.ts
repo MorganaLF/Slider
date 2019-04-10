@@ -1,7 +1,6 @@
 //import $ from 'jquery';
 import $ = require('jquery');
-import {SliderModelOptions} from './interfaces';
-
+import {SliderModelOptions} from '../interfaces';
 
 export default class SliderModel {
   [key: string]: any;
@@ -23,6 +22,11 @@ export default class SliderModel {
     $.extend(this, options);
 
     this._validateConstructor();
+
+    setTimeout(() => {
+      this._dispatchChangeValue('setstartvalue', this.startValue);
+      this._dispatchChangeValue('setendvalue', this.endValue);
+    }, 500)
   }
 
   public get currentRoundValue (): number {

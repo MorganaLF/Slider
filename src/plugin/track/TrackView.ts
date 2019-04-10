@@ -1,13 +1,13 @@
 import {
   TrackViewOptions,
   TrackPoints,
-  IDrawTrackSettings,
   IAnimateSingleTrackSettings,
   IAnimateIntervalTrackSettings,
 } from './TrackInterfaces';
 
 class TrackView {
   public $element?: null | JQuery;
+  public $parent?: null | JQuery;
   public $filledTrack?: null | JQuery;
   private _parentWidth: number;
   private _parentHeight: number;
@@ -19,6 +19,7 @@ class TrackView {
 
   constructor (options: TrackViewOptions) {
     this.$element = null;
+    this.$parent = options.$parent;
     this.$filledTrack = null;
     this._parentWidth = options._parentWidth;
     this._parentHeight = options._parentHeight;
@@ -26,13 +27,11 @@ class TrackView {
     this._runnerHeight = options._runnerHeight;
     this.type = options.type;
     this.orientation = options.orientation;
+    this.drawTrack();
   }
 
-  public drawTrack ({
-    $parent,
-    startValueCoefficient,
-    endValueCoefficient,
-  }: IDrawTrackSettings): void {
+  public drawTrack (): void {
+    if (!this.$parent) return;
 
     const trackModifierName: string = this.orientation === 'horizontal'
       ? ''
@@ -50,13 +49,7 @@ class TrackView {
       class: `slider__track-full${filledTrackModifierName}`,
     }).appendTo(this.$element);
 
-    this.$element.prependTo($parent);
-
-    this.animateTrack(startValueCoefficient, 'start');
-
-    if (this.type === 'interval') {
-      this.animateTrack(endValueCoefficient, 'end');
-    }
+    this.$element.prependTo(this.$parent);
   }
 
   public animateTrack (coefficient: number, animatedPointName: string): void | false {

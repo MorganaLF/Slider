@@ -1,9 +1,20 @@
-export type ScaleViewOptions = {
-  el?: null | JQuery,
+type PrivateScaleViewOptions = {
   parentWidth: number,
   parentHeight: number,
   orientation: string,
 };
+
+type PublicScaleViewOptions = {
+  $element?: null | JQuery,
+  $parent?: null | JQuery,
+  marksQuantity: number,
+};
+
+export type ScaleViewOptions = PrivateScaleViewOptions & PublicScaleViewOptions;
+
+export interface IScaleView extends PublicScaleViewOptions {
+  drawScale ({}: IDrawScaleSettings): void;
+}
 
 export interface IDrawMarkSettings {
   markText: number;

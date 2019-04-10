@@ -6,6 +6,7 @@ import {
 
 class RunnerView {
   public $element?: null | JQuery;
+  public $parent?: null | JQuery;
   public shiftX: number = 0;
   public shiftY: number = 0;
   readonly orientation: string;
@@ -16,6 +17,7 @@ class RunnerView {
 
   constructor(options: RunnerViewOptions) {
     this.$element = null;
+    this.$parent = options.$parent;
     this.shiftX = 0;
     this.shiftY = 0;
     this.orientation = options.orientation;
@@ -23,24 +25,23 @@ class RunnerView {
     this.parentRightPoint = options.parentRightPoint;
     this.parentTopPoint = options.parentTopPoint;
     this.parentBottomPoint = options.parentBottomPoint;
+    this.drawRunner();
   }
 
-  public drawRunner(parent: JQuery, coefficient: number): void {
+  public drawRunner(): void {
+    if (!this.$parent) return;
+
     const runnerClass: string = this.orientation === 'horizontal'
       ? ''
       : ' slider__runner_vertical';
 
     this.$element = $('<div/>', {
       class: `slider__runner${runnerClass}`,
-    }).appendTo(parent);
-
-    this.setRunnerPosition(coefficient);
+    }).appendTo(this.$parent);
   }
 
-  public setRunnerPosition(coefficient: number): void | false {
-    if (!this.$element) {
-      return false;
-    }
+  public setRunnerPosition(coefficient: number): void {
+    if (!this.$element) return;
 
     const parentSize: number = this.orientation === 'horizontal'
       ? this._getParentWidth()

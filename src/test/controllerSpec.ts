@@ -1,7 +1,7 @@
 //import $ from 'jquery';
 import $ = require('jquery');
-import SliderView from '../plugin/SliderView';
-import SliderModel from '../plugin/SliderModel';
+import SliderView from '../plugin/SliderView/SliderView';
+import SliderModel from '../plugin/SliderModel/SliderModel';
 import SliderController from "../plugin/SliderController";
 
 describe('SliderController', function () {

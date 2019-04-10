@@ -6,9 +6,7 @@ export type TrackPoints = {
   [key: string]: number,
 };
 
-export type TrackViewOptions = {
-  el?: null | JQuery,
-  trackFull?: null | JQuery,
+type PrivateTrackViewOptions = {
   _parentWidth: number,
   _parentHeight: number,
   _runnerWidth: number,
@@ -16,6 +14,19 @@ export type TrackViewOptions = {
   type: string,
   orientation: string,
 };
+
+type PublicTrackViewOptions = {
+  $element?: null | JQuery,
+  $parent?: null | JQuery,
+  $filledTrack?: null | JQuery,
+};
+
+export type TrackViewOptions = PrivateTrackViewOptions & PublicTrackViewOptions;
+
+export interface ITrackView extends PublicTrackViewOptions {
+  drawTrack ({}: IDrawTrackSettings): void;
+  animateTrack (coefficient: number, pointName: string): void;
+}
 
 export interface IDrawTrackSettings {
   $parent: JQuery;

@@ -6,7 +6,8 @@
     "jsRules": {},
     "rules": {
         "function-name": false,
-        "variable-name": false
+        "variable-name": false,
+        "space-before-function-paren": [true, "never"]
     },
     "rulesDirectory": []
 }

@@ -6,23 +6,27 @@ import {
 
 class ScaleView {
   public $element?: null | JQuery;
+  public $parent?: null | JQuery;
+  public marksQuantity: number;
   readonly parentWidth: number;
   readonly parentHeight: number;
   readonly orientation: string;
 
   constructor (options: ScaleViewOptions) {
     this.$element = null;
+    this.$parent = options.$parent;
+    this.marksQuantity = options.marksQuantity;
     this.parentWidth = options.parentWidth;
     this.parentHeight = options.parentHeight;
     this.orientation = options.orientation;
   }
 
   public drawScale ({
-    $parent,
     minValue,
     maxValue,
-    marksQuantity,
   }: IDrawScaleSettings): void {
+    if (!this.$parent) return;
+
     const scaleClass: string = this._getOrientationBasedValue(
       '',
       ' slider__scale_vertical',
@@ -32,11 +36,11 @@ class ScaleView {
       class: `slider__scale ${scaleClass}`,
     })
       .css(this._getSizePropertyName(), this._getParentSize())
-      .appendTo($parent);
+      .appendTo(this.$parent);
 
     const roundedMaxValue: number = Math.round(maxValue);
     const roundedMinValue: number = Math.round(minValue);
-    const roundedMarksQuantity: number = Math.round(marksQuantity);
+    const roundedMarksQuantity: number = Math.round(this.marksQuantity);
     const step: number = (roundedMaxValue - roundedMinValue) / roundedMarksQuantity;
     const roundedStep: number = Number(step.toFixed(10));
 

@@ -1,7 +1,7 @@
 //import $ from 'jquery';
 import $ = require('jquery');
-import SliderView from './SliderView';
-import SliderModel from './SliderModel';
+import SliderView from './SliderView/SliderView';
+import SliderModel from './SliderModel/SliderModel';
 import SliderController from './SliderController';
 import {ISliderModel} from './interfaces';
 import {ISliderView} from "./interfaces";
@@ -17,8 +17,8 @@ export default class SliderApp {
   private type: string;
   public orientation: string;
   private step: number;
-  private isTip: boolean;
-  public isScale: boolean;
+  private withTip: boolean;
+  public withScale: boolean;
   public scaleItemsQuantity: number;
   public sliderModel: null | ISliderModel;
   public sliderView: null | ISliderView;
@@ -33,8 +33,8 @@ export default class SliderApp {
     this.type = 'single';
     this.orientation = 'horizontal';
     this.step = 0;
-    this.isTip = true;
-    this.isScale = false;
+    this.withTip = true;
+    this.withScale = false;
     this.scaleItemsQuantity = 10;
     this.sliderModel = null;
     this.sliderView = null;
@@ -102,22 +102,22 @@ export default class SliderApp {
   }
 
   public showTip (): void {
-    this.isTip = true;
+    this.withTip = true;
     this.init();
   }
 
   public hideTip (): void {
-    this.isTip = false;
+    this.withTip = false;
     this.init();
   }
 
   public showScale (): void {
-    this.isScale = true;
+    this.withScale = true;
     this.init();
   }
 
   public hideScale (): void {
-    this.isScale = false;
+    this.withScale = false;
     this.init();
   }
 
@@ -145,13 +145,12 @@ export default class SliderApp {
     });
 
     this.sliderView = new SliderView({
-      el: this.el,
+      $element: this.el,
       type: this.type,
       orientation: this.orientation,
-      model: this.sliderModel,
-      isTip: this.isTip,
-      isScale: this.isScale,
-      scaleItemsQuantity: this.scaleItemsQuantity
+      withTip: this.withTip,
+      withScale: this.withScale,
+      scaleMarksQuantity: this.scaleItemsQuantity,
     });
 
     if (this.sliderView && this.sliderModel) {

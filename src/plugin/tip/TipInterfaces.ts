@@ -1,5 +1,6 @@
 export type TipViewOptions = {
-  el?: null | JQuery,
+  $element?: null | JQuery,
+  $parent: null | JQuery,
   orientation: string,
 };
 

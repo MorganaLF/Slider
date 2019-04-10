@@ -16,6 +16,7 @@ export interface IDispatchMoveEventSettings {
 
 export type RunnerViewOptions = {
   $element?: null | JQuery,
+  $parent?: null | JQuery,
   shiftX?: number,
   shiftY?: number,
   orientation: string,

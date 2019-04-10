@@ -7,22 +7,22 @@ import {ITrackView} from './interfaces';
 import {ITipView} from './interfaces';
 
 export default class SliderController {
-  private isTip: boolean;
-  public runner1?: null | IRunnerView;
-  public runner2?: null | IRunnerView;
-  public tip1?: null | ITipView;
-  public tip2?: null | ITipView;
+  private withTip: boolean;
+  public startValueRunner?: null | IRunnerView;
+  public endValueRunner?: null | IRunnerView;
+  public startValueTip?: null | ITipView;
+  public endValueTip?: null | ITipView;
   public track?: null | ITrackView;
   private type: string;
   private _onmousedown?: (e: JQuery.MouseDownEvent) => void;
   private _onmouseup?: (e: JQuery.MouseUpEvent) => void;
 
   constructor (private view: ISliderView, private model: ISliderModel) {
-    this.isTip = view.isTip;
-    this.runner1 = view.runner1;
-    this.runner2 = view.runner2;
-    this.tip1 = view.tip1;
-    this.tip2 = view.tip2;
+    this.withTip = view.withTip;
+    this.startValueRunner = view.startValueRunner;
+    this.endValueRunner = view.endValueRunner;
+    this.startValueTip = view.startValueTip;
+    this.endValueTip = view.endValueTip;
     this.track = view.track;
     this.type = view.type;
   }
@@ -30,7 +30,7 @@ export default class SliderController {
   private mousedown (runner: IRunnerView, e: JQuery.MouseDownEvent): void {
       e.preventDefault();
 
-      let runnerType: string = runner === this.view.runner1 ? 'startValue' : 'endValue';
+      let runnerType: string = runner === this.view.startValueRunner ? 'startValue' : 'endValue';
 
       runner.setRunnerShiftX(e);
       runner.setRunnerShiftY(e);
@@ -61,17 +61,42 @@ export default class SliderController {
   }
 
   private changevalue (runner: IRunnerView, tip: ITipView | false, point: string, e: JQuery.TriggeredEvent): void {
-      if ((<any>e).detail.model !== this.model) {
+    if ((<any>e).detail.model !== this.model) {
         return;
       }
+
       runner.setRunnerPosition((<any>e).detail.coefficient);
-      if (tip) {
+
+    if (tip) {
         tip.updateTip((<any>e).detail.value);
       }
+
       if (this.view.track) {
           this.view.track.animateTrack((<any>e).detail.coefficient, point);
       }
+  }
 
+  private setvalue (runner: IRunnerView, tip: ITipView | false, point: string, e: JQuery.TriggeredEvent): void {
+    if ((<any>e).detail.model !== this.model) {
+      return;
+    }
+
+    runner.setRunnerPosition((<any>e).detail.coefficient);
+
+    if (tip) {
+      tip.updateTip((<any>e).detail.value);
+    }
+
+    if (this.view.track) {
+      this.view.track.animateTrack((<any>e).detail.coefficient, point);
+    }
+
+    if (this.view.scale) {
+      this.view.scale.drawScale({
+        minValue: this.model.minVal,
+        maxValue: this.model.maxVal,
+      });
+    }
   }
 
   private mousemove (runner: IRunnerView, e: JQuery.MouseMoveEvent): void {
@@ -92,18 +117,19 @@ export default class SliderController {
   private resize (): void {
       this.view.updateSlider();
 
-      this.runner1 = this.view.runner1;
-      this.runner2 = this.view.runner2;
-      this.tip1 = this.view.tip1;
-      this.tip2 = this.view.tip2;
+      this.startValueRunner = this.view.startValueRunner;
+      this.endValueRunner = this.view.endValueRunner;
+      this.startValueTip = this.view.startValueTip;
+      this.endValueTip = this.view.endValueTip;
       this.track = this.view.track;
 
       this._checkoutHandlers();
   }
 
-  private _addHandlers (runner: IRunnerView, tip: ITipView | false, changeevent: string, point: string): void {
+  private _addHandlers (runner: IRunnerView, tip: ITipView | false, changeevent: string, setevent: string, point: string): void {
     let onmousedown = this._onmousedown = this.mousedown.bind(this, runner);
     let changevalue = this.changevalue.bind(this, runner, tip, point);
+    let setvalue = this.setvalue.bind(this, runner, tip, point);
 
       if (typeof document.body.ontouchstart !== "undefined") {
           (<any>runner).$element.on( 'touchstart', onmousedown );
@@ -112,17 +138,18 @@ export default class SliderController {
       }
 
     $('body').on(changeevent, changevalue);
+    $('body').on(setevent, setvalue);
   }
 
   private _checkoutHandlers () {
-      let tip1 = this.isTip && this.tip1 ? this.tip1 : false;
-      let tip2 = this.isTip && this.tip2 ? this.tip2 : false;
+      let startValueTip = this.withTip && this.startValueTip ? this.startValueTip : false;
+      let endValueTip = this.withTip && this.endValueTip ? this.endValueTip : false;
 
-      if (this.runner1) {
-          this._addHandlers(this.runner1, tip1, 'changestartvalue', 'start');
+      if (this.startValueRunner) {
+          this._addHandlers(this.startValueRunner, startValueTip, 'changestartvalue', 'setstartvalue', 'start');
       }
-      if (this.type === 'interval' && this.runner2 && this.tip2) {
-          this._addHandlers(this.runner2, tip2, 'changeendvalue', 'end');
+      if (this.type === 'interval' && this.endValueRunner && this.endValueTip) {
+          this._addHandlers(this.endValueRunner, endValueTip, 'changeendvalue', 'setendvalue', 'end');
       }
   }
 
