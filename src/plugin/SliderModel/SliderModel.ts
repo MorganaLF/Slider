@@ -1,182 +1,205 @@
-//import $ from 'jquery';
-import $ = require('jquery');
-import {SliderModelOptions} from '../interfaces';
+import { SliderModelOptions } from './SliderModelInterfaces';
 
-export default class SliderModel {
+class SliderModel {
   [key: string]: any;
   public startValue: number;
   public endValue: number;
-  public minVal: number;
-  public maxVal: number;
+  public minValue: number;
+  public maxValue: number;
   public type: string;
-  public step: number;
+  public stepSize: number;
 
-  constructor (options: SliderModelOptions) {
-    this.startValue = 0;
-    this.endValue = 100;
-    this.minVal = 0;
-    this.maxVal = 100;
-    this.type = 'single';
-    this.step = 0;
-
-    $.extend(this, options);
-
-    this._validateConstructor();
-
-    setTimeout(() => {
-      this._dispatchChangeValue('setstartvalue', this.startValue);
-      this._dispatchChangeValue('setendvalue', this.endValue);
-    }, 500)
+  constructor(options: SliderModelOptions) {
+    this.startValue = options.startValue || 0;
+    this.endValue = options.endValue || 100;
+    this.minValue = options.minValue || 0;
+    this.maxValue = options.maxValue || 100;
+    this.type = options.type || 'single';
+    this.stepSize = options.stepSize || 0;
+    this._validateConstructorOptions();
   }
 
-  public get currentRoundValue (): number {
-    return this._calculateRoundValue(this.startValue);
+  public initValues() {
+    this._dispatchValueChange('setstartvalue', this.startValue);
+    this._dispatchValueChange('setendvalue', this.endValue);
   }
 
-  public get currentRoundEndValue (): number {
-    return this._calculateRoundValue(this.endValue);
+  public getCurrentRoundedValue(): number {
+    return this._calculateRoundedValue(this.startValue);
   }
 
-  public set currentValue (val: number) {
-    this.startValue = val;
-    this._checkIsNumber('startValue');
+  public getCurrentRoundedEndValue(): number {
+    return this._calculateRoundedValue(this.endValue);
+  }
+
+  public setCurrentValue(value: number) {
+    this.startValue = value;
+    this._checkNumber('startValue');
     this._checkCurrentValue('startValue');
-    this._checkStepValue ('startValue');
+    this._checkStepValue('startValue');
+
     if (this.type === 'interval') {
       this._checkIntervalValues('startValue');
     }
-    this._dispatchChangeValue('changestartvalue', this.startValue);
+
+    this._dispatchValueChange('changestartvalue', this.startValue);
   }
 
-  public set currentMaxValue (val: number) {
+  public setCurrentEndValue(value: number) {
     if (this.type === 'single') {
       return;
     }
-    this.endValue = val;
-    this._checkIsNumber('endValue');
+
+    this.endValue = value;
+    this._checkNumber('endValue');
     this._checkCurrentValue('endValue');
-    this._checkStepValue ('endValue');
+    this._checkStepValue('endValue');
     this._checkIntervalValues('endValue');
-    this._dispatchChangeValue('changeendvalue', this.endValue);
+    this._dispatchValueChange('changeendvalue', this.endValue);
   }
 
-  private _validateConstructor (): void {
-    this._checkIsNumber('startValue');
-    this._checkIsNumber('endValue');
-    this._checkIsNumber('minVal');
-    this._checkIsNumber('maxVal');
-    this._checkIsNumber('step');
-    this._checkExtremeValues();
-    this._checkPositiveNumber('minVal');
-    this._checkPositiveNumber('maxVal');
-    this._checkCurrentValue('startValue');
-    this._checkCurrentValue('endValue');
-    this._checkStepValue ('minVal');
-    this._checkStepValue ('maxVal');
-    this._checkStepValue ('startValue');
-    this._checkStepValue ('endValue');
-  }
+  public setCurrentValueByRatio(ratio: number, valueKeyName: string): void | boolean {
 
-  private _checkIsNumber (prop: string): void {
-    if (isNaN(this[prop])) {
-      if (prop === 'startValue' || prop === 'minVal' || prop === 'step') {
-          this[prop] = 0;
-      } else if (prop === 'endValue' || prop === 'maxVal') {
-          this[prop] = 100;
-      }
-    }
-  }
-
-  private _checkPositiveNumber (prop: string): void {
-    if (this[prop] < 0) {
-      this[prop] = Math.abs(this[prop]);
-    }
-  }
-
-  private _checkExtremeValues (): void {
-    if (this.minVal > this.maxVal) {
-      if (this.step === 0) {
-          this.minVal = this.maxVal - 1;
-      } else {
-          this.minVal = this.maxVal - this.step;
-      }
-    }
-  }
-
-  private _checkCurrentValue (prop: string): void {
-    if (this[prop] < this.minVal) {
-      this[prop] = this.minVal;
+    if (this.stepSize === 0) {
+      this[valueKeyName] = (this.maxValue - this.minValue) / ratio + this.minValue;
+    } else {
+      this[valueKeyName] = this._calculateStepValueByRatio(ratio) + this.minValue;
     }
 
-    if (this[prop] > this.maxVal) {
-      this[prop] = this.maxVal;
-    }
-  }
+    const isIntervalValueInvalid: boolean = this.type === 'interval'
+      && !this._checkIntervalValues(valueKeyName);
 
-  private _checkStepValue (prop: string): void {
-    if (this.step && this[prop] % this.step !== 0) {
-      this[prop] = Math.round(this[prop] / this.step) * this.step
-    }
-  }
-
-  private _checkIntervalValues (valueName: string): boolean {
-    if (this.startValue > this.endValue && this[valueName] === this.startValue) {
-      this.startValue = this.endValue;
-      this._dispatchChangeValue('changestartvalue', this.startValue);
+    if (isIntervalValueInvalid) {
       return false;
     }
 
-    if (this.endValue < this.startValue && this[valueName] === this.endValue) {
+    if (this[valueKeyName] === this.startValue) {
+      this._dispatchValueChange('changestartvalue', this.startValue);
+    }
+
+    const isChangingEndValue: boolean = this[valueKeyName] === this.endValue
+      && this.type === 'interval';
+
+    if (isChangingEndValue) {
+      this._dispatchValueChange('changeendvalue', this.endValue);
+    }
+  }
+
+  public calculateCoefficient(currentValue: number): number {
+    return (this.maxValue - this.minValue) / (currentValue - this.minValue);
+  }
+
+  private _validateConstructorOptions(): void {
+    this._checkNumber('startValue');
+    this._checkNumber('endValue');
+    this._checkNumber('minValue');
+    this._checkNumber('maxValue');
+    this._checkNumber('stepSize');
+    this._checkExtremeValues();
+    this._checkPositiveNumber('minValue');
+    this._checkPositiveNumber('maxValue');
+    this._checkCurrentValue('startValue');
+    this._checkCurrentValue('endValue');
+    this._checkStepValue('minValue');
+    this._checkStepValue('maxValue');
+    this._checkStepValue('startValue');
+    this._checkStepValue('endValue');
+  }
+
+  private _checkNumber(valueKeyName: string): void {
+    if ((<any>Number).isNaN(this[valueKeyName])) {
+      const isDefaultValueFromKeyZero = valueKeyName === 'startValue'
+        || valueKeyName === 'minValue'
+        || valueKeyName === 'stepSize';
+
+      const isDefaultValueFromKeyHundred = valueKeyName === 'endValue'
+        || valueKeyName === 'maxValue';
+
+      if (isDefaultValueFromKeyZero) {
+        this[valueKeyName] = 0;
+      } else if (isDefaultValueFromKeyHundred) {
+        this[valueKeyName] = 100;
+      }
+    }
+  }
+
+  private _checkPositiveNumber(valueKeyName: string): void {
+    if (this[valueKeyName] < 0) {
+      this[valueKeyName] = Math.abs(this[valueKeyName]);
+    }
+  }
+
+  private _checkExtremeValues(): void {
+    if (this.minValue > this.maxValue) {
+      if (this.stepSize === 0) {
+        this.minValue = this.maxValue - 1;
+      } else {
+        this.minValue = this.maxValue - this.stepSize;
+      }
+    }
+  }
+
+  private _checkCurrentValue(valueKeyName: string): void {
+    if (this[valueKeyName] < this.minValue) {
+      this[valueKeyName] = this.minValue;
+    }
+
+    if (this[valueKeyName] > this.maxValue) {
+      this[valueKeyName] = this.maxValue;
+    }
+  }
+
+  private _checkStepValue(valueKeyName: string): void {
+    const shouldStepValueBeRounded: boolean = (this.stepSize !== 0)
+      && (this[valueKeyName] % this.stepSize !== 0);
+
+    if (shouldStepValueBeRounded) {
+      this[valueKeyName] = Math.round(this[valueKeyName] / this.stepSize) * this.stepSize;
+    }
+  }
+
+  private _checkIntervalValues(valueKeyName: string): boolean {
+    console.log('validate interval')
+    const isStartValueExceedsEndValue: boolean = (this.startValue > this.endValue)
+      && (this[valueKeyName] === this.startValue);
+
+    if (isStartValueExceedsEndValue) {
+      this.startValue = this.endValue;
+      this._dispatchValueChange('changestartvalue', this.startValue);
+      return false;
+    }
+
+    const isEndValueExceedsStartValue: boolean = (this.endValue < this.startValue)
+      && (this[valueKeyName] === this.endValue);
+
+    if (isEndValueExceedsStartValue) {
       this.endValue = this.startValue;
-      this._dispatchChangeValue('changeendvalue', this.endValue);
+      this._dispatchValueChange('changeendvalue', this.endValue);
       return false;
     }
 
     return true;
   }
 
-  private _dispatchChangeValue (type: string, value: number): void {
-    let changeValueEvent = $.Event( type, { detail: {
-            model: this,
-            value: this._calculateRoundValue(value),
-            coefficient: this.calculateCoefficient(value)
-        }
-    } );
-    $(document.body).trigger(changeValueEvent);
+  private _calculateRoundedValue(value: number): number {
+    return Math.round(value);
   }
 
-  private _calculateRoundValue (val: number): number {
-    return Math.round(val);
+  private _calculateStepValueByRatio(ratio: number): number {
+    return (Math.round((this.maxValue - this.minValue) / ratio / this.stepSize)) * this.stepSize;
   }
 
-  private _calculateStepValue (val: number): number {
-    return (Math.round((this.maxVal - this.minVal) / val / this.step)) * this.step;
+  private _dispatchValueChange(type: string, value: number): void {
+    const changeValueEvent = $.Event(type, { detail: {
+      model: this,
+      value: this._calculateRoundedValue(value),
+      coefficient: this.calculateCoefficient(value),
+    },
+    });
+
+    const $body = $(document.body);
+    $body.trigger(changeValueEvent);
   }
-
-  public calculateCoefficient (point: number): number {
-    return (this.maxVal - this.minVal) / (point - this.minVal);
-  }
-
-  public calculateValue (val: number, valueName: string): void | boolean {
-
-    if (this.step === 0) {
-      this[valueName] = (this.maxVal - this.minVal) / val + this.minVal;
-    } else {
-      this[valueName] = this._calculateStepValue(val) + this.minVal;
-    }
-
-    if (this.type === 'interval' && !this._checkIntervalValues(valueName)) {
-      return false;
-    }
-
-    if (this[valueName] === this.startValue) {
-      this._dispatchChangeValue('changestartvalue', this.startValue);
-    }
-
-    if (this[valueName] === this.endValue && this.type === 'interval') {
-      this._dispatchChangeValue('changeendvalue', this.endValue);
-    }
-
-  }
-
 }
+
+export default SliderModel;

@@ -36,10 +36,10 @@ class SliderView {
     this.track = null;
     this.scale = null;
     this.type = options.type || 'single';
-    this.withTip = options.withTip || false; // Todo fix bug with true option
+    this.withTip = options.withTip !== false;
     this.scaleMarksQuantity = options.scaleMarksQuantity || 10;
     this.orientation = options.orientation || 'horizontal';
-    this.withScale = options.withScale || false;
+    this.withScale = options.withScale !== false;
   }
 
   public updateSlider(): void | false {

@@ -1,10 +1,10 @@
 export type SliderModelOptions = {
   startValue: number,
   endValue: number,
-  minVal: number,
-  maxVal: number,
+  minValue: number,
+  maxValue: number,
   type: string,
-  step: number,
+  stepSize: number,
 };
 
 export interface ISliderModel extends SliderModelOptions{

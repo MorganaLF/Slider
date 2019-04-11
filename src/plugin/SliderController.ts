@@ -56,7 +56,7 @@ export default class SliderController {
 
   private move (runnerType: string, e: JQuery.TriggeredEvent): void {
       if (e.detail) {
-          this.model.calculateValue((<any>e).detail.ratio, runnerType);
+          this.model.setCurrentValueByRatio((<any>e).detail.ratio, runnerType);
       }
   }
 
@@ -93,8 +93,8 @@ export default class SliderController {
 
     if (this.view.scale) {
       this.view.scale.drawScale({
-        minValue: this.model.minVal,
-        maxValue: this.model.maxVal,
+        minValue: this.model.minValue,
+        maxValue: this.model.maxValue,
       });
     }
   }
@@ -148,7 +148,7 @@ export default class SliderController {
       if (this.startValueRunner) {
           this._addHandlers(this.startValueRunner, startValueTip, 'changestartvalue', 'setstartvalue', 'start');
       }
-      if (this.type === 'interval' && this.endValueRunner && this.endValueTip) {
+      if (this.type === 'interval' && this.endValueRunner) {
           this._addHandlers(this.endValueRunner, endValueTip, 'changeendvalue', 'setendvalue', 'end');
       }
   }

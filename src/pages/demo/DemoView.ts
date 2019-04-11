@@ -209,8 +209,8 @@ export default class DemoView {
 
     $('.slider_simple').customSlider();
     $('.slider_istip').customSlider({
-      isTip: false,
-      isScale: true
+      withTip: false,
+      withScale: true
     });
     $('.slider_interval').customSlider({
       type: 'interval',
@@ -219,10 +219,10 @@ export default class DemoView {
     });
     $('.slider_step').customSlider({
       type: 'single',
-      minVal: 16,
+      minValue: 16,
       startValue: 20,
       endValue: 80,
-      step: 20
+      stepSize: 20
     });
 
     this._updateInputValues();

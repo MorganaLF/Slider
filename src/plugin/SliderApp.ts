@@ -12,11 +12,11 @@ export default class SliderApp {
   private el?: JQuery;
   private startValue: number;
   private endValue: number;
-  private minVal: number;
-  private maxVal: number;
+  private minValue: number;
+  private maxValue: number;
   private type: string;
   public orientation: string;
-  private step: number;
+  private stepSize: number;
   private withTip: boolean;
   public withScale: boolean;
   public scaleItemsQuantity: number;
@@ -28,11 +28,11 @@ export default class SliderApp {
     this.el = options.el;
     this.startValue = 0;
     this.endValue = 100;
-    this.minVal = 0;
-    this.maxVal = 100;
+    this.minValue = 0;
+    this.maxValue = 100;
     this.type = 'single';
     this.orientation = 'horizontal';
-    this.step = 0;
+    this.stepSize = 0;
     this.withTip = true;
     this.withScale = false;
     this.scaleItemsQuantity = 10;
@@ -44,23 +44,23 @@ export default class SliderApp {
   }
 
   public getCurrentValue (): number {
-    return this.sliderModel ? this.sliderModel.currentRoundValue : 0;
+    return this.sliderModel ? this.sliderModel.getCurrentRoundedValue() : 0;
   }
 
   public getCurrentMaxValue (): number {
-    return this.sliderModel ? this.sliderModel.currentRoundEndValue : 0;
+    return this.sliderModel ? this.sliderModel.getCurrentRoundedEndValue() : 0;
   }
 
   public getMinValue (): number {
-    return this.sliderModel ? this.sliderModel.minVal : 0;
+    return this.sliderModel ? this.sliderModel.minValue : 0;
   }
 
   public getMaxValue (): number {
-    return this.sliderModel ? this.sliderModel.maxVal : 0;
+    return this.sliderModel ? this.sliderModel.maxValue : 0;
   }
 
   public getStepSize (): number {
-    return this.sliderModel ? this.sliderModel.step : 0;
+    return this.sliderModel ? this.sliderModel.stepSize : 0;
   }
 
   public getScaleItemsQuantity (): number {
@@ -68,12 +68,12 @@ export default class SliderApp {
   }
 
   public setMinValue (val: number | string): void {
-    this.minVal = typeof val === 'string' ? parseInt(val) : val;
+    this.minValue = typeof val === 'string' ? parseInt(val) : val;
     this.init();
   }
 
   public setMaxValue (val: number | string): void {
-    this.maxVal = typeof val === 'string' ? parseInt(val) : val;
+    this.maxValue = typeof val === 'string' ? parseInt(val) : val;
     this.init();
   }
 
@@ -81,18 +81,18 @@ export default class SliderApp {
     if (!this.sliderModel) {
       return false;
     }
-    this.sliderModel.currentValue = val;
+    this.sliderModel.setCurrentValue(val);
   }
 
   public setCurrentMaxValue (val: number): void | false{
       if (!this.sliderModel) {
           return false;
       }
-    this.sliderModel.currentMaxValue = val;
+    this.sliderModel.setCurrentEndValue(val);
   }
 
   public setStepSize (val: number): void {
-    this.step = val;
+    this.stepSize = val;
     this.init();
   }
 
@@ -138,9 +138,9 @@ export default class SliderApp {
     this.sliderModel = new SliderModel({
       startValue: this.startValue,
       endValue: this.endValue,
-      minVal: this.minVal,
-      maxVal: this.maxVal,
-      step: this.step,
+      minValue: this.minValue,
+      maxValue: this.maxValue,
+      stepSize: this.stepSize,
       type: this.type
     });
 
@@ -159,6 +159,7 @@ export default class SliderApp {
         if (this.sliderController) {
             this.sliderController.init();
         }
+      this.sliderModel.initValues();
     }
   }
 }

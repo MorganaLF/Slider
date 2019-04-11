@@ -15,13 +15,13 @@ $.fn.customSlider = function(options: SliderAppOptions): (method: string, arg: s
       let dataConfig: {} = {
         startValue: $(this).data('start-value'),
         endValue: $(this).data('end-value'),
-        minVal: $(this).data('min-value'),
-        maxVal: $(this).data('max-value'),
+        minValue: $(this).data('min-value'),
+        maxValue: $(this).data('max-value'),
         type: $(this).data('type'),
         orientation: $(this).data('orientation'),
-        step: $(this).data('step'),
-        isTip: $(this).data('tip'),
-        isScale: $(this).data('scale')
+        stepSize: $(this).data('step'),
+        withTip: $(this).data('tip'),
+        withScale: $(this).data('scale')
       };
 
       options = $.extend({el: $(this)}, options, dataConfig);
