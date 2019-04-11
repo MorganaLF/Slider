@@ -24,8 +24,6 @@ export interface IDrawMarkSettings {
 }
 
 export interface IDrawScaleSettings {
-  $parent: JQuery;
   minValue: number;
   maxValue: number;
-  marksQuantity: number;
 }

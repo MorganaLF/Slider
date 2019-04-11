@@ -2,7 +2,7 @@
 import $ = require('jquery');
 import SliderView from '../plugin/SliderView/SliderView';
 import SliderModel from '../plugin/SliderModel/SliderModel';
-import SliderController from "../plugin/SliderController";
+import SliderController from "../plugin/SliderController/SliderController";
 
 describe('SliderController', function () {
   let element,

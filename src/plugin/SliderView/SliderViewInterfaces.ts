@@ -8,7 +8,6 @@ type PrivateSliderViewOptions = {
   scaleMarksQuantity: number,
   orientation: string,
   progressFull?: null | JQuery,
-  scale?: null | IScaleView,
   withScale: boolean,
 };
 
@@ -19,6 +18,7 @@ type PublicSliderViewOptions = {
   startValueTip?: null | ITipView,
   endValueTip?: null | ITipView,
   track?: null | ITrackView,
+  scale?: null | IScaleView,
   type: string,
   withTip: boolean,
 };

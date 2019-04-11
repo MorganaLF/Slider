@@ -24,7 +24,3 @@ declare global {
 export interface ISliderApp {
   init (): void;
 }
-
-export interface ISliderController {
-  init(): void;
-}

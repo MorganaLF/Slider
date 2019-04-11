@@ -12,6 +12,6 @@ export interface ISliderModel extends SliderModelOptions{
   currentRoundEndValue: number;
   currentValue: number;
   currentMaxValue: number;
-  calculateCoefficient (point: number): number;
-  calculateValue (val: number, valueName: string): void | boolean;
+  calculateCoefficient(point: number): number;
+  setCurrentValueByRatio(ratio: number, valueKeyName: string): void | boolean;
 }
