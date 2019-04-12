@@ -1,21 +1,50 @@
-//import $ from "jquery";
-import $ = require('jquery');
-import SliderApp from '../../plugin/SliderApp/SliderApp';
-import {SliderAppOptions} from '../../plugin/interfaces';
-let result: (method: string, arg: string) => void;
-
-export default class DemoView {
-  constructor () {
-
+class DemoView {
+  constructor() {
+    this.init();
   }
 
-  private _createDemoPage (): void {
-    let demoTemplate: JQuery = $(
-        `<div class="page">
+  public init(): void {
+    this._createDemoPage();
+
+    const $simpleSlider: JQuery = $('.js-slider_simple');
+    $simpleSlider.customSlider();
+
+    const $sliderWithScale: JQuery = $('.js-slider_with-scale');
+
+    $sliderWithScale.customSlider({
+      withTip: false,
+      withScale: true,
+    });
+
+    const $intervalSlider: JQuery = $('.js-slider_interval');
+
+    $intervalSlider.customSlider({
+      type: 'interval',
+      startValue: 20,
+      endValue: 80,
+    });
+
+    const $sliderWithStep: JQuery = $('.js-slider_with-step');
+
+    $sliderWithStep.customSlider({
+      type: 'single',
+      minValue: 16,
+      startValue: 20,
+      endValue: 80,
+      stepSize: 20,
+    });
+
+    this._updateInputValues();
+    this._addHandlers();
+  }
+
+  private _createDemoPage(): void {
+    const $demoTemplate: JQuery = $(
+      `<div class="page">
           <h1 class="subheading">Simple slider</h1>
           <div class="page__row">
             <div class="page__col">
-              <div class="slider slider_simple"></div>
+              <div class="slider js-slider_simple"></div>
             </div>
             <div class="page__col page__options-col">
               <form class="options">
@@ -34,23 +63,35 @@ export default class DemoView {
                     <div class="checkboxes">
                         <label for="">Show tip</label>
                         <label class="tick-box" for="tip">
-                          <input class="tick-box__input" type="checkbox" name="tip" id="tip" checked>
+                          <input
+                            class="tick-box__input"
+                            type="checkbox"
+                            name="tip"
+                            id="tip" checked>
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
                     <div class="checkboxes">
                         <label for="">Show scale</label>
                         <label class="tick-box" for="scale">
-                          <input class="tick-box__input" type="checkbox" name="scale" id="scale">
+                          <input
+                            class="tick-box__input"
+                            type="checkbox"
+                            name="scale"
+                            id="scale">
                           <div class="tick-box__round"></div>
-                        </label> 
+                        </label>
                     </div>
                     <div class="checkboxes">
                         <label for="">Vertical orientation</label>
                         <label class="tick-box" for="orientation">
-                          <input class="tick-box__input" type="checkbox" name="orientation" id="orientation">
+                          <input
+                            class="tick-box__input"
+                            type="checkbox"
+                            name="orientation"
+                            id="orientation">
                           <div class="tick-box__round"></div>
-                        </label> 
+                        </label>
                     </div>
                   </div>
                 </div>
@@ -78,36 +119,49 @@ export default class DemoView {
                     <div class="checkboxes">
                         <label for="">Show tip</label>
                         <label class="tick-box" for="tip2">
-                          <input class="tick-box__input" type="checkbox" name="tip" id="tip2">
+                          <input
+                            class="tick-box__input"
+                            type="checkbox"
+                            name="tip"
+                            id="tip2">
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
                     <div class="checkboxes">
                         <label for="">Show scale</label>
                         <label class="tick-box" for="scale2">
-                          <input class="tick-box__input" type="checkbox" name="scale" id="scale2" checked>
+                          <input
+                            class="tick-box__input"
+                            type="checkbox"
+                            name="scale"
+                            id="scale2"
+                            checked>
                           <div class="tick-box__round"></div>
-                        </label> 
+                        </label>
                     </div>
                     <div class="checkboxes">
                         <label for="">Vertical orientation</label>
                         <label class="tick-box" for="orientation2">
-                          <input class="tick-box__input" type="checkbox" name="orientation" id="orientation2">
+                          <input
+                            class="tick-box__input"
+                            type="checkbox"
+                            name="orientation"
+                            id="orientation2">
                           <div class="tick-box__round"></div>
-                        </label> 
+                        </label>
                     </div>
                   </div>
                 </div>
               </form>
             </div>
             <div class="page__col">
-              <div class="slider slider_istip"></div>
+              <div class="slider js-slider_with-scale"></div>
             </div>
           </div>
           <h2 class="subheading">Interval slider</h2>
           <div class="page__row">
             <div class="page__col">
-              <div class="slider slider_interval"></div>
+              <div class="slider js-slider_interval"></div>
             </div>
             <div class="page__col page__options-col">
               <form class="options">
@@ -128,23 +182,36 @@ export default class DemoView {
                     <div class="checkboxes">
                         <label for="">Show tip</label>
                         <label class="tick-box" for="tip3">
-                          <input class="tick-box__input" type="checkbox" name="tip" id="tip3" checked>
+                          <input
+                            class="tick-box__input"
+                            type="checkbox"
+                            name="tip"
+                            id="tip3"
+                            checked>
                           <div class="tick-box__round"></div>
-                        </label>  
+                        </label>
                     </div>
                     <div class="checkboxes">
                         <label for="">Show scale</label>
                         <label class="tick-box" for="scale3">
-                          <input class="tick-box__input" type="checkbox" name="scale" id="scale3">
+                          <input
+                            class="tick-box__input"
+                            type="checkbox"
+                            name="scale"
+                            id="scale3">
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
                     <div class="checkboxes">
                         <label for="">Vertical orientation</label>
                         <label class="tick-box" for="orientation3">
-                          <input class="tick-box__input" type="checkbox" name="orientation" id="orientation3">
+                          <input
+                            class="tick-box__input"
+                            type="checkbox"
+                            name="orientation"
+                            id="orientation3">
                           <div class="tick-box__round"></div>
-                        </label> 
+                        </label>
                     </div>
                   </div>
                 </div>
@@ -172,86 +239,106 @@ export default class DemoView {
                     <div class="checkboxes">
                         <label for="">Show tip</label>
                         <label class="tick-box" for="tip4">
-                          <input class="tick-box__input" type="checkbox" name="tip" id="tip4" checked>
+                          <input
+                            class="tick-box__input"
+                            type="checkbox"
+                            name="tip"
+                            id="tip4"
+                            checked>
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
                     <div class="checkboxes">
                         <label for="">Show scale</label>
                         <label class="tick-box" for="scale4">
-                          <input class="tick-box__input" type="checkbox" name="scale" id="scale4">
+                          <input
+                            class="tick-box__input"
+                            type="checkbox"
+                            name="scale"
+                            id="scale4">
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
                     <div class="checkboxes">
                         <label for="">Vertical orientation</label>
                         <label class="tick-box" for="orientation4">
-                          <input class="tick-box__input" type="checkbox" name="orientation" id="orientation4">
+                          <input
+                            class="tick-box__input"
+                            type="checkbox"
+                            name="orientation"
+                            id="orientation4">
                           <div class="tick-box__round"></div>
-                        </label> 
+                        </label>
                     </div>
                   </div>
                 </div>
               </form>
             </div>
             <div class="page__col">
-              <div class="slider slider_step"></div>
+              <div class="slider js-slider_with-step"></div>
             </div>
           </div>
-         </div>`
+         </div>`,
     );
 
-    demoTemplate.appendTo($('body'));
+    const $body: JQuery = $('body');
+    $demoTemplate.appendTo($body);
   }
 
-  public init (): void {
-    this._createDemoPage();
+  private _updateSlider($element: JQuery, methodName: string): void {
+    $element
+      .closest('.page__row')
+      .find('.slider')
+      .customSlider(methodName, $element.val());
+  }
 
-    $('.slider_simple').customSlider();
-    $('.slider_istip').customSlider({
-      withTip: false,
-      withScale: true
-    });
-    $('.slider_interval').customSlider({
-      type: 'interval',
-      startValue: 20,
-      endValue: 80
-    });
-    $('.slider_step').customSlider({
-      type: 'single',
-      minValue: 16,
-      startValue: 20,
-      endValue: 80,
-      stepSize: 20
-    });
+  private _addBodyHandlers(): void {
+    const $body: JQuery = $('body');
 
+    $body // TODO event namespace
+      .on('changestartvalue.DemoView', this._updateInputValues.bind(this))
+      .on('changeendvalue.DemoView', this._updateInputValues.bind(this));
+  }
+
+  private _addTextInputHandlers(inputName: string, methodName: string): void {
+    const $textInput: JQuery = $(`input[name="${inputName}"]`); // TODO event namespace
+    $textInput.on('change.DemoView', this._handleTextInputChange.bind(this, methodName));
+  }
+
+  private _handleTextInputChange(methodName: string, event: JQuery.TriggeredEvent): void {
+    const $currentInput: JQuery = $(event.target);
+    this._updateSlider($currentInput, methodName);
     this._updateInputValues();
-    this._addHandlers();
   }
 
-  private _addBodyHandlers (): void {
-    $('body').on('changestartvalue', () => {
-      this._updateInputValues();
-    });
-    $('body').on('changeendvalue', () => {
-      this._updateInputValues();
-    });
+  private _addCheckboxHandlers(
+    checkboxName: string,
+    onMethodName: string,
+    offMethodName: string,
+  ): void {
+    const $checkbox: JQuery = $(`input[name="${checkboxName}"]`);
+
+    $checkbox.on(
+      'change.DemoView', // TODO event namespace
+      this._handleCheckboxChange.bind(this, onMethodName, offMethodName),
+    );
   }
 
-  private _addTextInputHandlers (name: string, method: string): void {
-    $(`input[name="${name}"]`).on('change', (e) => {
-      this._updateSlider($(e.target), method);
-      this._updateInputValues();
-    });
+  private _handleCheckboxChange(
+    onMethodName: string,
+    offMethodName: string,
+    event: JQuery.TriggeredEvent,
+  ): void {
+    const $element: JQuery = $(event.target);
+
+    if ($element.prop('checked')) {
+      this._makeSliderMethod($element, onMethodName);
+    } else {
+      this._makeSliderMethod($element, offMethodName);
+    }
   }
 
-  private _addCheckboxHandlers (name: string, on: string, off: string): void {
-    $(`input[name="${name}"]`).on('change', (e) => {
-      this._updateCheckboxes($(e.target), on, off);
-    });
-  }
-
-  private _addHandlers (): void {
+  private _addHandlers(): void {
     this._addBodyHandlers();
     this._addTextInputHandlers('min-value', 'setMinValue');
     this._addTextInputHandlers('max-value', 'setMaxValue');
@@ -259,48 +346,58 @@ export default class DemoView {
     this._addTextInputHandlers('current-max-value', 'setCurrentMaxValue');
     this._addTextInputHandlers('step-size', 'setStepSize');
     this._addTextInputHandlers('scale-items', 'setScaleMarksQuantity');
-    this._addCheckboxHandlers('tip', 'showTip', 'hideTip');
-    this._addCheckboxHandlers('scale', 'showScale', 'hideScale');
-    this._addCheckboxHandlers('orientation', 'setVerticalOrientation', 'setHorizontalOrientation');
+
+    this._addCheckboxHandlers(
+      'tip',
+      'showTip',
+      'hideTip',
+    );
+
+    this._addCheckboxHandlers(
+      'scale',
+      'showScale',
+      'hideScale',
+    );
+
+    this._addCheckboxHandlers(
+      'orientation',
+      'setVerticalOrientation',
+      'setHorizontalOrientation',
+    );
   }
 
-  private _getSliderMethod (el: JQuery, method: string): number {
-    return el
+  private _makeSliderMethod($element: JQuery, methodName: string): number {
+    return $element
                 .closest('.page__row')
                 .find('.slider')
-                .customSlider(method);
+                .customSlider(methodName);
   }
 
-  private _updateSlider (el: JQuery, method: string): void {
-    el
-        .closest('.page__row')
-        .find('.slider')
-        .customSlider(method, el.val());
-  }
+  private _setInputValue(inputName: string, methodName: string): void {
+    const makeSliderMethod: (
+      $element: JQuery,
+      methodName: string,
+    ) => number = this._makeSliderMethod;
 
-  private _setInputVal (name: string, method: string): void {
-    let self = this;
-    $(`input[name="${name}"]`).each(function () {
-      let currentValue: number = self._getSliderMethod($(this), method);
-      $(this).val(currentValue);
+    const $input: JQuery = $(`input[name="${inputName}"]`);
+
+    $input.each(function() {
+      const $this: JQuery = $(this);
+      const currentValue: number = makeSliderMethod($this, methodName);
+      $this.val(currentValue);
     });
   }
 
-  private _updateInputValues (): void {
-    this._setInputVal('current-value', 'getCurrentValue');
-    this._setInputVal('current-max-value', 'getCurrentMaxValue');
-    this._setInputVal('min-value', 'getMinValue');
-    this._setInputVal('max-value', 'getMaxValue');
-    this._setInputVal('step-size', 'getStepSize');
-    this._setInputVal('scale-items', 'getScaleMarksQuantity');
-  }
-
-  private _updateCheckboxes (el: JQuery, on: string, off: string): void {
-      if (el.prop('checked')) {
-        this._getSliderMethod(el, on);
-      } else {
-        this._getSliderMethod(el, off);
-      }
+  private _updateInputValues(): void {
+    this._setInputValue('current-value', 'getCurrentValue');
+    this._setInputValue('current-max-value', 'getCurrentMaxValue');
+    this._setInputValue('min-value', 'getMinValue');
+    this._setInputValue('max-value', 'getMaxValue');
+    this._setInputValue('step-size', 'getStepSize');
+    this._setInputValue('scale-items', 'getScaleMarksQuantity');
   }
 }
 
+new DemoView();
+
+export default DemoView;
