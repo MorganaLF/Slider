@@ -2,6 +2,12 @@ import { ISliderModel } from '../SliderModel/SliderModelInterfaces';
 import { ISliderView } from '../SliderView/SliderViewInterfaces';
 import { ISliderController } from '../SliderController/SliderControllerInterfaces';
 
+declare global {
+  interface JQuery {
+    customSlider: (...rest: any[]) => any;
+  }
+}
+
 export type SliderAppOptions = {
   $element?: JQuery,
   startValue?: number,

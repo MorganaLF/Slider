@@ -1,39 +1,30 @@
-//import $ from "jquery";
-import $ = require('jquery');
 import SliderApp from './SliderApp/SliderApp';
-import {SliderAppOptions} from './interfaces';
+import { SliderAppOptions } from './SliderApp/SliderAppInterfaces';
 
-let result: (method: string, arg: string) => void;
+$.fn.customSlider = function(options: SliderAppOptions | string, ...args) {
+  const $this = $(this);
+  const isSliderInitialized = typeof options === 'object' || !options;
 
-$.fn.customSlider = function(options: SliderAppOptions): (method: string, arg: string) => void {
+  if (isSliderInitialized) {
+    const dataConfig = {
+      startValue: $this.data('start-value'),
+      endValue: $this.data('end-value'),
+      minValue: $this.data('min-value'),
+      maxValue: $this.data('max-value'),
+      type: $this.data('type'),
+      orientation: $this.data('orientation'),
+      stepSize: $this.data('step'),
+      withTip: $this.data('tip'),
+      withScale: $this.data('scale'),
+    };
 
-  let args = arguments;
+    const extendedOptions = $.extend({ $element: $this }, options, dataConfig);
+    $this.data('constructor', new SliderApp(extendedOptions));
 
-  this.each(function () {
+    return $this.data('constructor').init();
+  }
 
-    if (typeof options === 'object' || ! options) {
-      let dataConfig: {} = {
-        startValue: $(this).data('start-value'),
-        endValue: $(this).data('end-value'),
-        minValue: $(this).data('min-value'),
-        maxValue: $(this).data('max-value'),
-        type: $(this).data('type'),
-        orientation: $(this).data('orientation'),
-        stepSize: $(this).data('step'),
-        withTip: $(this).data('tip'),
-        withScale: $(this).data('scale')
-      };
-
-      options = $.extend({$element: $(this)}, options, dataConfig);
-      $(this).data('constructor', new SliderApp(options));
-      result = $(this).data('constructor').init();
-
-    } else if (typeof options === 'string') {
-
-      result = $(this).data('constructor')[options].apply($(this).data('constructor'), Array.prototype.slice.call( args, 1 ));
-    }
-
-  });
-
-  return result;
+  if (typeof options === 'string') {
+    return $this.data('constructor')[options](...args);
+  }
 };
