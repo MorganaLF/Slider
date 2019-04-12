@@ -1,6 +1,6 @@
 //import $ from "jquery";
 import $ = require('jquery');
-import SliderApp from '../../plugin/SliderApp';
+import SliderApp from '../../plugin/SliderApp/SliderApp';
 import {SliderAppOptions} from '../../plugin/interfaces';
 let result: (method: string, arg: string) => void;
 
@@ -258,10 +258,10 @@ export default class DemoView {
     this._addTextInputHandlers('current-value', 'setCurrentValue');
     this._addTextInputHandlers('current-max-value', 'setCurrentMaxValue');
     this._addTextInputHandlers('step-size', 'setStepSize');
-    this._addTextInputHandlers('scale-items', 'setScaleItemsQuantity');
+    this._addTextInputHandlers('scale-items', 'setScaleMarksQuantity');
     this._addCheckboxHandlers('tip', 'showTip', 'hideTip');
     this._addCheckboxHandlers('scale', 'showScale', 'hideScale');
-    this._addCheckboxHandlers('orientation', 'setVeticalOrientation', 'setHorisontalOrientation');
+    this._addCheckboxHandlers('orientation', 'setVerticalOrientation', 'setHorizontalOrientation');
   }
 
   private _getSliderMethod (el: JQuery, method: string): number {
@@ -292,7 +292,7 @@ export default class DemoView {
     this._setInputVal('min-value', 'getMinValue');
     this._setInputVal('max-value', 'getMaxValue');
     this._setInputVal('step-size', 'getStepSize');
-    this._setInputVal('scale-items', 'getScaleItemsQuantity');
+    this._setInputVal('scale-items', 'getScaleMarksQuantity');
   }
 
   private _updateCheckboxes (el: JQuery, on: string, off: string): void {

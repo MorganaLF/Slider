@@ -1,6 +1,6 @@
 //import $ from "jquery";
 import $ = require('jquery');
-import SliderApp from "../plugin/SliderApp";
+import SliderApp from "../plugin/SliderApp/SliderApp";
 
 describe('Функция customSlider', function () {
   let el: JQuery;

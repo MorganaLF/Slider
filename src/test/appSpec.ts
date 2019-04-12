@@ -3,7 +3,7 @@ import $ = require('jquery');
 import SliderView from '../plugin/SliderView/SliderView';
 import SliderModel from '../plugin/SliderModel/SliderModel';
 import SliderController from "../plugin/SliderController/SliderController";
-import SliderApp from '../plugin/SliderApp';
+import SliderApp from '../plugin/SliderApp/SliderApp';
 
 describe('SliderApp', function () {
   it('Создает экземпляр класса SliderApp', function () {

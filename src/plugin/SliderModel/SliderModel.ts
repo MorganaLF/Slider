@@ -19,7 +19,7 @@ class SliderModel {
     this._validateConstructorOptions();
   }
 
-  public initValues() {
+  public initValues(): void {
     this._dispatchValueChange('setstartvalue', this.startValue);
     this._dispatchValueChange('setendvalue', this.endValue);
   }
@@ -32,7 +32,7 @@ class SliderModel {
     return this._calculateRoundedValue(this.endValue);
   }
 
-  public setCurrentValue(value: number) {
+  public setCurrentValue(value: number): void {
     this.startValue = value;
     this._checkNumber('startValue');
     this._checkCurrentValue('startValue');
@@ -45,7 +45,7 @@ class SliderModel {
     this._dispatchValueChange('changestartvalue', this.startValue);
   }
 
-  public setCurrentEndValue(value: number) {
+  public setCurrentEndValue(value: number): void {
     if (this.type === 'single') {
       return;
     }

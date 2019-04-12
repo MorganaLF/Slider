@@ -8,10 +8,11 @@ export type SliderModelOptions = {
 };
 
 export interface ISliderModel extends SliderModelOptions{
-  currentRoundValue: number;
-  currentRoundEndValue: number;
-  currentValue: number;
-  currentMaxValue: number;
+  initValues(): void;
+  getCurrentRoundedValue(): number;
+  getCurrentRoundedEndValue(): number;
+  setCurrentValue(value: number): void;
+  setCurrentEndValue(value: number): void;
   calculateCoefficient(point: number): number;
   setCurrentValueByRatio(ratio: number, valueKeyName: string): void | boolean;
 }
