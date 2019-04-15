@@ -6,5 +6,3 @@ import './plugin/SliderModel/SliderModel';
 import './plugin/SliderController/SliderController';
 import './plugin/runner/RunnerView';
 import './pages/demo/DemoView';
-//import jasmine from 'jasmine';
-//import 'jasmine-jquery';
