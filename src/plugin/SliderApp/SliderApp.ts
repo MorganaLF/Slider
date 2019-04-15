@@ -17,7 +17,7 @@ class SliderApp {
   public withTip: boolean;
   public withScale: boolean;
   public scaleMarksQuantity: number;
-  readonly $element?: JQuery;
+  readonly $element: JQuery;
   readonly startValue: number;
   readonly endValue: number;
   readonly type: string;
@@ -51,11 +51,11 @@ class SliderApp {
     this.sliderModel.setCurrentValue(val);
   }
 
-  public getCurrentMaxValue(): number {
+  public getCurrentEndValue(): number {
     return this.sliderModel ? this.sliderModel.getCurrentRoundedEndValue() : 0;
   }
 
-  public setCurrentMaxValue(val: number): void | false {
+  public setCurrentEndValue(val: number): void | false {
     if (!this.sliderModel) {
       return false;
     }
@@ -130,10 +130,6 @@ class SliderApp {
   }
 
   public init(): void | false {
-    if (!this.$element) {
-      return false;
-    }
-
     this.sliderModel = new SliderModel({
       startValue: this.startValue,
       endValue: this.endValue,
@@ -152,17 +148,10 @@ class SliderApp {
       scaleMarksQuantity: this.scaleMarksQuantity,
     });
 
-    if (this.sliderView && this.sliderModel) {
-      this.sliderView.updateSlider();
-
-      this.sliderController = new SliderController(this.sliderView, this.sliderModel);
-
-      if (this.sliderController) {
-        this.sliderController.init();
-      }
-
-      this.sliderModel.initValues();
-    }
+    this.sliderView.updateSlider();
+    this.sliderController = new SliderController(this.sliderView, this.sliderModel);
+    this.sliderController.init();
+    this.sliderModel.initValues();
   }
 }
 

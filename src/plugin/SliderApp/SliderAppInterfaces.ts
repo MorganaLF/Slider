@@ -9,7 +9,7 @@ declare global {
 }
 
 export type SliderAppOptions = {
-  $element?: JQuery,
+  $element: JQuery,
   startValue?: number,
   endValue?: number,
   minValue?: number,
@@ -20,11 +20,29 @@ export type SliderAppOptions = {
   withTip?: boolean,
   withScale?: boolean,
   scaleMarksQuantity?: number,
-  sliderModel?: ISliderModel,
-  sliderView?: ISliderView,
-  sliderController?: ISliderController,
+  sliderModel?: ISliderModel | null,
+  sliderView?: ISliderView | null,
+  sliderController?: ISliderController | null,
 };
 
-export interface ISliderApp {
-  init(): void;
+export interface ISliderApp extends SliderAppOptions {
+  init(): void | false;
+  getCurrentValue(): number;
+  getCurrentEndValue(): number;
+  getMinValue(): number;
+  getMaxValue(): number;
+  getStepSize(): number;
+  getScaleMarksQuantity(): number;
+  setMinValue(val: number | string): void;
+  setMaxValue(val: number | string): void;
+  setCurrentValue(val: number): void | false;
+  setCurrentEndValue(val: number): void | false;
+  setStepSize(val: number): void;
+  setScaleMarksQuantity(val: number): void;
+  showTip(): void;
+  hideTip(): void;
+  showScale(): void;
+  hideScale(): void;
+  setVerticalOrientation(): void;
+  setHorizontalOrientation(): void;
 }

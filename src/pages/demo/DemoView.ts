@@ -343,7 +343,7 @@ class DemoView {
     this._addTextInputHandlers('min-value', 'setMinValue');
     this._addTextInputHandlers('max-value', 'setMaxValue');
     this._addTextInputHandlers('current-value', 'setCurrentValue');
-    this._addTextInputHandlers('current-max-value', 'setCurrentMaxValue');
+    this._addTextInputHandlers('current-max-value', 'setCurrentEndValue');
     this._addTextInputHandlers('step-size', 'setStepSize');
     this._addTextInputHandlers('scale-items', 'setScaleMarksQuantity');
 
@@ -390,7 +390,7 @@ class DemoView {
 
   private _updateInputValues(): void {
     this._setInputValue('current-value', 'getCurrentValue');
-    this._setInputValue('current-max-value', 'getCurrentMaxValue');
+    this._setInputValue('current-max-value', 'getCurrentEndValue');
     this._setInputValue('min-value', 'getMinValue');
     this._setInputValue('max-value', 'getMaxValue');
     this._setInputValue('step-size', 'getStepSize');

@@ -5,7 +5,6 @@ import { ITipView } from '../tip/TipInterfaces';
 import { ITrackView } from '../track/TrackInterfaces';
 
 type PrivateSliderViewOptions = {
-  scaleMarksQuantity: number,
   orientation: string,
   progressFull?: null | JQuery,
   withScale: boolean,
@@ -21,6 +20,7 @@ type PublicSliderViewOptions = {
   scale?: null | IScaleView,
   type: string,
   withTip: boolean,
+  scaleMarksQuantity: number,
 };
 
 export type SliderViewOptions = PrivateSliderViewOptions & PublicSliderViewOptions;
