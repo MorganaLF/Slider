@@ -159,7 +159,6 @@ class SliderModel {
   }
 
   private _checkIntervalValues(valueKeyName: string): boolean {
-    console.log('validate interval')
     const isStartValueExceedsEndValue: boolean = (this.startValue > this.endValue)
       && (this[valueKeyName] === this.startValue);
 
