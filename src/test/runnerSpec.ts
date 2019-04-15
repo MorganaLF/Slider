@@ -1,5 +1,3 @@
-// import $ from 'jquery';
-import jquery = require('jquery');
 import RunnerView from '../plugin/runner/RunnerView';
 
 describe('RunnerView', function () {
@@ -7,7 +5,6 @@ describe('RunnerView', function () {
 
   beforeEach(function () {
     runnerView = new RunnerView({
-      type: 'single',
       orientation: 'horizontal',
       parentLeftPoint: 0,
       parentRightPoint: 350,
@@ -30,14 +27,13 @@ describe('RunnerView. Функция drawRunner', function () {
     setFixtures('<div class="slider"></div>');
     parent = $('.slider');
     runnerView = new RunnerView({
-      type: 'single',
       orientation: 'horizontal',
       parentLeftPoint: 0,
       parentRightPoint: 350,
       parentTopPoint: 0,
       parentBottomPoint: 350,
     });
-    runnerView.drawRunner(parent, 2);
+    runnerView.drawRunner();
   });
 
   it('Должна создавать элемент slider__runner внутри элемента slider', function () {
@@ -46,20 +42,19 @@ describe('RunnerView. Функция drawRunner', function () {
 
   it('При вертикальном положении добавляет класс slider__runner_vertical', function () {
     runnerView = new RunnerView({
-      type: 'single',
       orientation: 'vertical',
       parentLeftPoint: 0,
       parentRightPoint: 350,
       parentTopPoint: 0,
       parentBottomPoint: 350,
     });
-    runnerView.drawRunner(parent, 2);
+    runnerView.drawRunner();
     expect($('.slider .slider__runner_vertical')).toExist();
   });
 
   it('Должна вызывать метод setRunnerPosition и передавать в него коэффициент', function () {
     const spy =  spyOn(runnerView, 'setRunnerPosition');
-    runnerView.drawRunner(parent, 2);
+    runnerView.drawRunner();
     expect(spy).toHaveBeenCalled();
     expect(spy).toHaveBeenCalledWith(2);
   });
@@ -75,14 +70,13 @@ describe('RunnerView. Функция setRunnerPosition', function () {
     parent = $('.slider');
 
     runnerView = new RunnerView({
-      type: 'single',
       orientation: 'horizontal',
       parentLeftPoint: 0,
       parentRightPoint: 350,
       parentTopPoint: 0,
       parentBottomPoint: 350,
     });
-    runnerView.drawRunner(parent, 1);
+    runnerView.drawRunner();
     runnerView.$element!.css('position', 'absolute');
   });
 
@@ -99,14 +93,13 @@ describe('RunnerView. Функция setRunnerPosition', function () {
 
   it('Вертикальному ползунку задается положение top', function () {
     runnerView = new RunnerView({
-      type: 'single',
       orientation: 'vertical',
       parentLeftPoint: 0,
       parentRightPoint: 350,
       parentTopPoint: 0,
       parentBottomPoint: 350,
     });
-    runnerView.drawRunner(parent, 1);
+    runnerView.drawRunner();
     runnerView.$element!.css('height', '50px');
     runnerView.setRunnerPosition(2);
     expect(runnerView.$element!.css('top')).toEqual('150px');
@@ -123,14 +116,13 @@ describe('RunnerView. Функция setRunnerShiftX', function () {
     parent = $('.slider');
 
     runnerView = new RunnerView({
-      type: 'single',
       orientation: 'horizontal',
       parentLeftPoint: 0,
       parentRightPoint: 350,
       parentTopPoint: 0,
       parentBottomPoint: 350,
     });
-    runnerView.drawRunner(parent, 1);
+    runnerView.drawRunner();
   });
 
   it('Если элемент неопределен, возвращает false', function () {
@@ -155,14 +147,13 @@ describe('RunnerView. Функция setRunnerShiftY', function () {
     parent = $('.slider');
 
     runnerView = new RunnerView({
-      type: 'single',
       orientation: 'horizontal',
       parentLeftPoint: 0,
       parentRightPoint: 350,
       parentTopPoint: 0,
       parentBottomPoint: 350,
     });
-    runnerView.drawRunner(parent, 1);
+    runnerView.drawRunner();
   });
 
   it('Если элемент неопределен, возвращает false', function () {
@@ -189,14 +180,13 @@ describe('RunnerView. Функция moveRunner', function () {
     parent = $('.slider');
 
     runnerView = new RunnerView({
-      type: 'single',
       orientation: 'horizontal',
       parentLeftPoint: 0,
       parentRightPoint: 350,
       parentTopPoint: 0,
       parentBottomPoint: 250,
     });
-    runnerView.drawRunner(parent, 1);
+    runnerView.drawRunner();
     runner = $('.slider__runner');
     $('.slider__runner').css('width', '50px');
     $('.slider__runner').css('height', '50px');
@@ -223,14 +213,13 @@ describe('RunnerView. Функция moveRunner', function () {
 
   it('Поддерживает вертикальный вид', function () {
     runnerView = new RunnerView({
-      type: 'single',
       orientation: 'vertical',
       parentLeftPoint: 0,
       parentRightPoint: 350,
       parentTopPoint: 0,
       parentBottomPoint: 250,
     });
-    runnerView.drawRunner(parent, 1);
+    runnerView.drawRunner();
     spyOnEvent('.slider__runner', 'move');
 
     $('.slider__runner').on('move', function (e) {
@@ -246,14 +235,13 @@ describe('RunnerView. Функция moveRunner', function () {
 
   it('Проверяет, не выходит ли координата за крайнюю левую точку', function () {
     runnerView = new RunnerView({
-      type: 'single',
       orientation: 'horizontal',
       parentLeftPoint: 30,
       parentRightPoint: 380,
       parentTopPoint: 30,
       parentBottomPoint: 280,
     });
-    runnerView.drawRunner(parent, 1);
+    runnerView.drawRunner();
     runner = $('.slider__runner');
     $('.slider__runner').css('width', '50px');
     $('.slider__runner').css('height', '50px');
@@ -287,14 +275,13 @@ describe('RunnerView. Функция moveRunner', function () {
 
   it('Проверяет, не выходит ли координата за крайнюю верхнюю точку', function () {
     runnerView = new RunnerView({
-      type: 'single',
       orientation: 'vertical',
       parentLeftPoint: 0,
       parentRightPoint: 350,
       parentTopPoint: 30,
       parentBottomPoint: 280,
     });
-    runnerView.drawRunner(parent, 1);
+    runnerView.drawRunner();
     runner = $('.slider__runner');
     $('.slider__runner').css('width', '50px');
     $('.slider__runner').css('height', '50px');
@@ -314,14 +301,13 @@ describe('RunnerView. Функция moveRunner', function () {
 
   it('Проверяет, не выходит ли координата за крайнюю нижнюю точку', function () {
     runnerView = new RunnerView({
-      type: 'single',
       orientation: 'vertical',
       parentLeftPoint: 0,
       parentRightPoint: 350,
       parentTopPoint: 30,
       parentBottomPoint: 280,
     });
-    runnerView.drawRunner(parent, 1);
+    runnerView.drawRunner();
     spyOnEvent('.slider__runner', 'move');
 
     $('.slider__runner').on('move', function (e) {

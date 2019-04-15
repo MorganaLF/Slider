@@ -40,8 +40,8 @@ class RunnerView {
     }).appendTo(this.$parent);
   }
 
-  public setRunnerPosition(coefficient: number): void {
-    if (!this.$element) return;
+  public setRunnerPosition(coefficient: number): void | false {
+    if (!this.$element) return false;
 
     const parentSize: number = this.orientation === 'horizontal'
       ? this._getParentWidth()

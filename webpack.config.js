@@ -1,4 +1,5 @@
-let path = require('path');
+const webpack = require('webpack');
+const path = require('path');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -13,16 +14,16 @@ const conf = {
     }
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery',
+    }),
     new HtmlWebpackPlugin({
       filename: 'index.html',
       template: path.resolve(__dirname, './src/pages/demo/demo.pug')
     }),
     new ExtractTextPlugin('styles.css'),
     new CopyWebpackPlugin([
-      {
-        from: './src/fonts',
-        to: './fonts'
-      },
       {
         from: './src/**/*.jpg',
         to: './images',
