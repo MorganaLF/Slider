@@ -107,7 +107,7 @@ class SliderModel {
   }
 
   private _checkNumber(valueKeyName: string): void {
-    if ((<any>Number).isNaN(this[valueKeyName])) {
+    if (isNaN(this[valueKeyName])) {
       const isDefaultValueFromKeyZero = valueKeyName === 'startValue'
         || valueKeyName === 'minValue'
         || valueKeyName === 'stepSize';
