@@ -1,33 +1,38 @@
-//import $ from "jquery";
-import $ = require('jquery');
-import SliderApp from "../plugin/SliderApp/SliderApp";
+import SliderApp from '../plugin/SliderApp/SliderApp';
 
-describe('Функция customSlider', function () {
-  let el: JQuery;
-  beforeEach(function () {
+describe('Функция customSlider', () => {
+  let $element: JQuery;
+
+  beforeEach(() => {
     setFixtures('<div class="slider"></div>');
-    el = $('.slider');
-    el.customSlider();
-  });
-  it('При инициализации сохраняет экземпляр класса SliderApp в data элемента', function () {
-    el.customSlider();
-    expect(el.data('constructor') instanceof SliderApp).toBeTruthy();
+    $element = $('.slider');
+    $element.customSlider();
   });
 
-  it('Поддерживает data-аттрибуты', function () {
+  it('При инициализации сохраняет экземпляр класса SliderApp в data элемента', () => {
+    $element.customSlider();
+
+    expect($element.data('constructor') instanceof SliderApp).toBeTruthy();
+  });
+
+  it('Поддерживает data-аттрибуты', () => {
     setFixtures('<div class="slider" data-start-value="33"></div>');
-    el = $('.slider');
-    el.customSlider();
-    expect(el.data('constructor').startValue).toEqual(33);
+
+    $element = $('.slider');
+    $element.customSlider();
+
+    expect($element.data('constructor').startValue).toEqual(33);
   });
 
-  it('При вызове с аргументами вызывает соответствующий метод SliderApp', function () {
-    let spy = spyOn(el.data('constructor'), 'getCurrentValue');
-    el.customSlider('getCurrentValue');
-    expect(spy).toHaveBeenCalled();
+  it('При вызове с аргументами вызывает соответствующий метод SliderApp', () => {
+    const spyOnGetter = spyOn($element.data('constructor'), 'getCurrentValue');
+    $element.customSlider('getCurrentValue');
 
-    let spy2 = spyOn(el.data('constructor'), 'setMinValue');
-    el.customSlider('setMinValue', 10);
-    expect(spy2).toHaveBeenCalled();
+    expect(spyOnGetter).toHaveBeenCalled();
+
+    const spyOnSetter = spyOn($element.data('constructor'), 'setMinValue');
+    $element.customSlider('setMinValue', 10);
+
+    expect(spyOnSetter).toHaveBeenCalled();
   });
 });
