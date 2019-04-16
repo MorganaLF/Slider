@@ -1,10 +1,11 @@
 import TipView from '../plugin/tip/TipView';
 
-describe('TipView', function() {
+describe('TipView', () => {
   let tipView: TipView;
 
-  beforeEach(function() {
+  beforeEach(() => {
     setFixtures('<div class="slider"><div class="slider__runner"></div></div>');
+
     const $parent = $('.slider__runner');
 
     tipView = new TipView({
@@ -13,58 +14,37 @@ describe('TipView', function() {
     });
   });
 
-  it('Создается экземпляр класса RunnerView', function() {
+  it('Создается экземпляр класса RunnerView', () => {
     expect(tipView).toBeDefined();
   });
 
-});
-
-describe('TipView. Функция drawTip', function() {
-  let tipView: TipView,
-    $parent: JQuery;
-
-  beforeEach(function() {
-    setFixtures('<div class="slider"><div class="slider__runner"></div></div>');
-    $parent = $('.slider__runner');
-    tipView = new TipView({
-      $parent,
-      orientation: 'horizontal',
+  describe('Функция drawTip', () => {
+    beforeEach(() => {
+      tipView.drawTip();
     });
-    tipView.drawTip();
-  });
 
-  it('Должна создавать элемент slider__tip внутри элемента slider__runner', function() {
-    expect($('.slider .slider__runner .slider__tip')).toExist();
-  });
+    it('Должна создавать элемент slider__tip внутри элемента slider__runner', () => {
+      const $tip = $('.slider .slider__runner .slider__tip');
 
-  it('Добавляет класс slider__tip_vertical, если имеет вертикальный вид', function() {
-    tipView = new TipView({
-      $parent,
-      orientation: 'vertical',
+      expect($tip).toExist();
     });
-    tipView.drawTip();
-    expect($('.slider .slider__runner .slider__tip_vertical')).toExist();
-  });
 
-});
+    it('Добавляет класс slider__tip_vertical, если имеет вертикальный вид', () => {
+      (<any>tipView).orientation = 'vertical';
+      tipView.drawTip();
+      const $verticalTip = $('.slider .slider__runner .slider__tip_vertical');
 
-describe('TipView. Функция updateTip', function() {
-  let tipView: TipView,
-    $parent: JQuery;
-
-  beforeEach(function() {
-    setFixtures('<div class="slider"><div class="slider__runner"></div></div>');
-    $parent = $('.slider__runner');
-    tipView = new TipView({
-      $parent,
-      orientation: 'horizontal',
+      expect($verticalTip).toExist();
     });
-    tipView.drawTip();
+
   });
 
-  it('Должна обновлять значение внутри подсказки', function() {
-    tipView.updateTip(15);
-    expect($('.slider .slider__runner .slider__tip').text()).toEqual('15');
-  });
+  describe('Функция updateTip', () => {
+    it('Должна обновлять значение внутри подсказки', () => {
+      tipView.updateTip(15);
+      const $tip = $('.slider .slider__runner .slider__tip');
 
+      expect($tip.text()).toEqual('15');
+    });
+  });
 });

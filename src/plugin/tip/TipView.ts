@@ -2,7 +2,7 @@ import { TipViewOptions } from './TipInterfaces';
 
 class TipView {
   public $element: null | JQuery;
-  public $parent: null | JQuery;
+  public $parent: JQuery;
   readonly orientation: string;
 
   constructor (options : TipViewOptions) {
@@ -12,9 +12,7 @@ class TipView {
     this.drawTip();
   }
 
-  public drawTip (): void {
-    if (!this.$parent) return;
-
+  public drawTip (): void | false {
     const classModifierName: string = this.orientation === 'horizontal'
       ? ''
       : ' slider__tip_vertical';
