@@ -6,7 +6,7 @@ import {
 
 class RunnerView {
   public $element?: null | JQuery;
-  public $parent?: null | JQuery;
+  public $parent: JQuery;
   public shiftX: number = 0;
   public shiftY: number = 0;
   readonly orientation: string;
@@ -29,8 +29,6 @@ class RunnerView {
   }
 
   public drawRunner(): void {
-    if (!this.$parent) return;
-
     const runnerClass: string = this.orientation === 'horizontal'
       ? ''
       : ' slider__runner_vertical';
