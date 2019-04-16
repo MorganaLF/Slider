@@ -7,7 +7,7 @@ import {
 
 class TrackView {
   public $element?: null | JQuery;
-  public $parent?: null | JQuery;
+  public $parent: JQuery;
   public $filledTrack?: null | JQuery;
   private _parentWidth: number;
   private _parentHeight: number;
@@ -31,8 +31,6 @@ class TrackView {
   }
 
   public drawTrack (): void {
-    if (!this.$parent) return;
-
     const trackModifierName: string = this.orientation === 'horizontal'
       ? ''
       : ' slider__track_vertical';
@@ -133,10 +131,8 @@ class TrackView {
     sizeProperty,
     sizeKey,
     runnerSizeKey,
-  }: IAnimateSingleTrackSettings): void {
-    if (!this.$filledTrack) {
-      return;
-    }
+  }: IAnimateSingleTrackSettings): void | false {
+    if (!this.$filledTrack) return false;
 
     if (coefficient !== 0) {
       const filledTrackSize: number = this[sizeKey] / coefficient + this[runnerSizeKey] / 2;
@@ -154,10 +150,8 @@ class TrackView {
     size,
     runnerSizeKey,
     animatedPointName,
-  }: IAnimateIntervalTrackSettings): void {
-    if (!this.$filledTrack) {
-      return;
-    }
+  }: IAnimateIntervalTrackSettings): void | false {
+    if (!this.$filledTrack) return false;
 
     const roundedSize: number = Math.floor(size);
     const roundedRunnerSize: number = Math.floor(this[runnerSizeKey]);

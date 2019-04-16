@@ -17,7 +17,7 @@ type PrivateTrackViewOptions = {
 
 type PublicTrackViewOptions = {
   $element?: null | JQuery,
-  $parent?: null | JQuery,
+  $parent: JQuery,
   $filledTrack?: null | JQuery,
 };
 
