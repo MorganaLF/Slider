@@ -6,7 +6,7 @@ type PrivateScaleViewOptions = {
 
 type PublicScaleViewOptions = {
   $element?: null | JQuery,
-  $parent?: null | JQuery,
+  $parent: JQuery,
   marksQuantity: number,
 };
 

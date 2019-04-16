@@ -6,7 +6,7 @@ import {
 
 class ScaleView {
   public $element?: null | JQuery;
-  public $parent?: null | JQuery;
+  public $parent: JQuery;
   public marksQuantity: number;
   readonly parentWidth: number;
   readonly parentHeight: number;
@@ -25,8 +25,6 @@ class ScaleView {
     minValue,
     maxValue,
   }: IDrawScaleSettings): void {
-    if (!this.$parent) return;
-
     const scaleClass: string = this._getOrientationBasedValue(
       '',
       ' slider__scale_vertical',
