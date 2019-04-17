@@ -10,12 +10,15 @@ import {
 } from './SliderControllerInterfaces';
 
 class SliderController {
+  [key: string]: any;
   public startValueRunner?: null | IRunnerView;
   public endValueRunner?: null | IRunnerView;
   public startValueTip?: null | ITipView;
   public endValueTip?: null | ITipView;
   public track?: null | ITrackView;
-  private _boundMouseUpHandler?: (e: JQuery.MouseUpEvent) => void;
+  private _boundMouseUpHandler?: (event: JQuery.MouseUpEvent) => void;
+  private _setStartValueHandler?: any;
+  private _setEndValueHandler?: any;
   readonly withTip: boolean;
   readonly type: string;
 
@@ -36,6 +39,14 @@ class SliderController {
     const resizeHandler = this._handleWindowResize.bind(this);
 
     $window.on('resize.CustomSlider', resizeHandler);
+  }
+
+  public destroy() {
+    const $body = $('body');
+
+    $body
+      .off('setstartvalue.CustomSlider', this._setStartValueHandler)
+      .off('setendvalue.CustomSlider', this._setEndValueHandler);
   }
 
   private _handleRunnerMouseDown(
@@ -128,8 +139,8 @@ class SliderController {
 
     if (this.view.scale) {
       this.view.scale.drawScale({
-        minValue: this.model.minValue,
-        maxValue: this.model.maxValue,
+        minValue: this.model.minValue!,
+        maxValue: this.model.maxValue!,
       });
     }
   }
@@ -188,14 +199,20 @@ class SliderController {
       { runner, tip, valueType },
     );
 
-    const setValueHandler = this._handleBodySetValue.bind(
+    const setValueHandler = runner === this.startValueRunner
+      ? '_setStartValueHandler'
+      : '_setEndValueHandler';
+
+    this[setValueHandler] = this._handleBodySetValue.bind(
       this,
       { runner, tip, valueType },
     );
 
-    $('body')
+    const $body = $('body');
+
+    $body
       .on(changeEvent, changeValueHandler)
-      .on(setEvent, setValueHandler);
+      .on(setEvent, this[setValueHandler]);
   }
 
   private _checkoutHandlers() {

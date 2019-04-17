@@ -31,7 +31,7 @@ class ScaleView {
     );
 
     this.$element = $('<ul/>', {
-      class: `slider__scale ${scaleClass}`,
+      class: `slider__scale${scaleClass}`,
     })
       .css(this._getSizePropertyName(), this._getParentSize())
       .appendTo(this.$parent);

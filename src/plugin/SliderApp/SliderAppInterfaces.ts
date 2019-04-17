@@ -27,6 +27,7 @@ export type SliderAppOptions = {
 
 export interface ISliderApp extends SliderAppOptions {
   init(): void | false;
+  updateSliderView(): void;
   getCurrentValue(): number;
   getCurrentEndValue(): number;
   getMinValue(): number;

@@ -185,8 +185,8 @@ describe('SliderApp', () => {
       expect(sliderApp.scaleMarksQuantity).toEqual(27);
     });
 
-    it('Инициализирует плагин заново', () => {
-      const spy = spyOn(sliderApp, 'init');
+    it('Перерисовывает вид', () => {
+      const spy = spyOn(sliderApp, 'updateSliderView');
       sliderApp.setScaleMarksQuantity(10);
       expect(spy).toHaveBeenCalled();
     });
@@ -198,8 +198,8 @@ describe('SliderApp', () => {
       expect(sliderApp.sliderView!.withTip).toBeTruthy();
     });
 
-    it('Инициализирует плагин заново', () => {
-      const spy = spyOn(sliderApp, 'init');
+    it('Перерисовывает вид', () => {
+      const spy = spyOn(sliderApp, 'updateSliderView');
       sliderApp.showTip();
       expect(spy).toHaveBeenCalled();
     });
@@ -211,8 +211,8 @@ describe('SliderApp', () => {
       expect(sliderApp.sliderView!.withTip).toBeFalsy();
     });
 
-    it('Инициализирует плагин заново', () => {
-      const spy = spyOn(sliderApp, 'init');
+    it('Перерисовывает вид', () => {
+      const spy = spyOn(sliderApp, 'updateSliderView');
       sliderApp.hideTip();
       expect(spy).toHaveBeenCalled();
     });
@@ -224,8 +224,8 @@ describe('SliderApp', () => {
       expect(sliderApp.withScale).toBeTruthy();
     });
 
-    it('Инициализирует плагин заново', () => {
-      const spy = spyOn(sliderApp, 'init');
+    it('Перерисовывает вид', () => {
+      const spy = spyOn(sliderApp, 'updateSliderView');
       sliderApp.showScale();
       expect(spy).toHaveBeenCalled();
     });
@@ -237,8 +237,8 @@ describe('SliderApp', () => {
       expect(sliderApp.withScale).toBeFalsy();
     });
 
-    it('Инициализирует плагин заново', () => {
-      const spy = spyOn(sliderApp, 'init');
+    it('Перерисовывает вид', () => {
+      const spy = spyOn(sliderApp, 'updateSliderView');
       sliderApp.hideScale();
       expect(spy).toHaveBeenCalled();
     });
@@ -250,8 +250,8 @@ describe('SliderApp', () => {
       expect(sliderApp.orientation).toEqual('vertical');
     });
 
-    it('Инициализирует плагин заново', () => {
-      const spy = spyOn(sliderApp, 'init');
+    it('Перерисовывает вид', () => {
+      const spy = spyOn(sliderApp, 'updateSliderView');
       sliderApp.setVerticalOrientation();
       expect(spy).toHaveBeenCalled();
     });
@@ -263,8 +263,8 @@ describe('SliderApp', () => {
       expect(sliderApp.orientation).toEqual('horizontal');
     });
 
-    it('Инициализирует плагин заново', () => {
-      const spy = spyOn(sliderApp, 'init');
+    it('Перерисовывает вид', () => {
+      const spy = spyOn(sliderApp, 'updateSliderView');
       sliderApp.setHorizontalOrientation();
       expect(spy).toHaveBeenCalled();
     });

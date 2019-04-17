@@ -23,4 +23,5 @@ export interface IHandleWindowMouseUp {
 
 export interface ISliderController {
   init(): void;
+  destroy(): void;
 }

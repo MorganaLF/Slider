@@ -44,9 +44,7 @@ class SliderApp {
   }
 
   public setCurrentValue(val: number): void | false {
-    if (!this.sliderModel) {
-      return false;
-    }
+    if (!this.sliderModel) return false;
 
     this.sliderModel.setCurrentValue(val);
   }
@@ -56,15 +54,13 @@ class SliderApp {
   }
 
   public setCurrentEndValue(val: number): void | false {
-    if (!this.sliderModel) {
-      return false;
-    }
+    if (!this.sliderModel) return false;
 
     this.sliderModel.setCurrentEndValue(val);
   }
 
   public getMinValue(): number {
-    return this.sliderModel ? this.sliderModel.minValue : 0;
+    return this.sliderModel ? this.sliderModel.minValue! : 0;
   }
 
   public setMinValue(val: number | string): void {
@@ -73,7 +69,7 @@ class SliderApp {
   }
 
   public getMaxValue(): number {
-    return this.sliderModel ? this.sliderModel.maxValue : 0;
+    return this.sliderModel ? this.sliderModel.maxValue! : 0;
   }
 
   public setMaxValue(val: number | string): void {
@@ -82,7 +78,7 @@ class SliderApp {
   }
 
   public getStepSize(): number {
-    return this.sliderModel ? this.sliderModel.stepSize : 0;
+    return this.sliderModel ? this.sliderModel.stepSize! : 0;
   }
 
   public setStepSize(val: number): void {
@@ -96,40 +92,70 @@ class SliderApp {
 
   public setScaleMarksQuantity(val: number): void {
     this.scaleMarksQuantity = val;
-    this.init();
+    this.updateSliderView();
   }
 
   public setVerticalOrientation(): void {
     this.orientation = 'vertical';
-    this.init();
+    this.updateSliderView();
   }
 
   public setHorizontalOrientation(): void {
     this.orientation = 'horizontal';
-    this.init();
+    this.updateSliderView();
   }
 
   public showTip(): void {
     this.withTip = true;
-    this.init();
+    this.updateSliderView();
   }
 
   public hideTip(): void {
     this.withTip = false;
-    this.init();
+    this.updateSliderView();
   }
 
   public showScale(): void {
     this.withScale = true;
-    this.init();
+    this.updateSliderView();
   }
 
   public hideScale(): void {
     this.withScale = false;
-    this.init();
+    this.updateSliderView();
+  }
+
+  public updateSliderView(): void {
+    if (this.sliderController) {
+      this.sliderController.destroy();
+      this.sliderController = null;
+    }
+
+    this._createSliderViewInstance();
+
+    if (this.sliderModel !== null) {
+      this.sliderView!.updateSlider();
+      this.sliderController = new SliderController(this.sliderView!, this.sliderModel);
+    }
+
+    this.sliderController!.init();
+
+    if (this.sliderModel !== null) this.sliderModel.initValues();
   }
 
   public init(): void | false {
+    this._createSliderModelInstance();
+    this._createSliderViewInstance();
+
+    this.sliderView!.updateSlider();
+
+    this.sliderController = new SliderController(this.sliderView!, this.sliderModel!);
+    this.sliderController.init();
+
+    this.sliderModel!.initValues();
+  }
+
+  private _createSliderModelInstance() {
     this.sliderModel = new SliderModel({
       startValue: this.startValue,
       endValue: this.endValue,
@@ -138,7 +164,9 @@ class SliderApp {
       stepSize: this.stepSize,
       type: this.type,
     });
+  }
 
+  private _createSliderViewInstance() {
     this.sliderView = new SliderView({
       $element: this.$element,
       type: this.type,
@@ -147,11 +175,6 @@ class SliderApp {
       withScale: this.withScale,
       scaleMarksQuantity: this.scaleMarksQuantity,
     });
-
-    this.sliderView.updateSlider();
-    this.sliderController = new SliderController(this.sliderView, this.sliderModel);
-    this.sliderController.init();
-    this.sliderModel.initValues();
   }
 }
 
