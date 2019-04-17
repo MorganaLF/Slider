@@ -14,7 +14,7 @@ import {
 
 class SliderView {
   [key: string]: any;
-  public $element: null | JQuery;
+  public $element: JQuery;
   public startValueRunner?: null | IRunnerView;
   public endValueRunner?: null | IRunnerView;
   public startValueTip?: null | ITipView;
@@ -43,24 +43,11 @@ class SliderView {
   }
 
   public updateSlider(): void | false {
-    if (!this.$element) {
-      return false;
-    }
-
     this.$element.html('');
     this._drawSlider();
   }
 
   private _getExtremePoints(): IExtremePoints {
-    if (!this.$element) {
-      return {
-        left: 0,
-        top: 0,
-        right: 0,
-        bottom: 0,
-      };
-    }
-
     return {
       left: this.$element.offset()!.left,
       top: this.$element.offset()!.top,
@@ -70,9 +57,7 @@ class SliderView {
   }
 
   private _getSliderInnerSize(): ISize {
-    const isElementsDefined = this.$element
-      && this.startValueRunner
-      && this.startValueRunner.$element;
+    const isElementsDefined = this.startValueRunner && this.startValueRunner.$element;
 
     if (!isElementsDefined) {
       return {
@@ -123,10 +108,6 @@ class SliderView {
   }
 
   private _createTrack(): void {
-    if (!this.$element) {
-      return;
-    }
-
     this.track = new TrackView({
       $parent: this.$element,
       type: this.type,
@@ -139,10 +120,6 @@ class SliderView {
   }
 
   private _createScale(): void {
-    if (!this.$element) {
-      return;
-    }
-
     this.scale = new ScaleView({
       $parent:  this.$element,
       marksQuantity: this.scaleMarksQuantity,
@@ -153,10 +130,6 @@ class SliderView {
   }
 
   private _drawSlider(): void {
-    if (!this.$element) {
-      return;
-    }
-
     if (this.orientation === 'vertical') {
       this.$element.addClass('slider_vertical');
     } else {

@@ -11,7 +11,7 @@ type PrivateSliderViewOptions = {
 };
 
 type PublicSliderViewOptions = {
-  $element: null | JQuery,
+  $element: JQuery,
   startValueRunner?: null | IRunnerView,
   endValueRunner?: null | IRunnerView,
   startValueTip?: null | ITipView,
