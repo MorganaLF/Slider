@@ -47,49 +47,47 @@ class DemoView {
               <div class="slider js-slider_simple"></div>
             </div>
             <div class="page__col page__options-col">
-              <form class="options">
+              <form class="options" action="mock-address/change-me" method="post">
                 <div class="options__row">
                   <div class="options__col">
-                    <label for="">Min value</label>
-                    <input class="input" type="text" name="min-value">
-                    <label for="">Max value</label>
-                    <input class="input" type="text" name="max-value">
+                    <label class="page__label">Min value</label>
+                    <input class="input" type="number" name="min-value">
+                    <label class="page__label">Max value</label>
+                    <input class="input" type="number" name="max-value">
                   </div>
                   <div class="options__col">
-                    <label for="">Current value</label>
-                    <input class="input" type="text" name="current-value">
+                    <label class="page__label">Current value</label>
+                    <input class="input" type="number" name="current-value">
                   </div>
                   <div class="options__col">
                     <div class="checkboxes">
-                        <label for="">Show tip</label>
-                        <label class="tick-box" for="tip">
+                        <label class="page__label">Show tip</label>
+                        <label class="tick-box">
                           <input
                             class="tick-box__input"
                             type="checkbox"
                             name="tip"
-                            id="tip" checked>
+                            checked>
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
                     <div class="checkboxes">
-                        <label for="">Show scale</label>
-                        <label class="tick-box" for="scale">
+                        <label class="page__label">Show scale</label>
+                        <label class="tick-box">
                           <input
                             class="tick-box__input"
                             type="checkbox"
-                            name="scale"
-                            id="scale">
+                            name="scale">
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
                     <div class="checkboxes">
-                        <label for="">Vertical orientation</label>
-                        <label class="tick-box" for="orientation">
+                        <label class="page__label">Vertical orientation</label>
+                        <label class="tick-box">
                           <input
                             class="tick-box__input"
                             type="checkbox"
-                            name="orientation"
-                            id="orientation">
+                            name="orientation">
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
@@ -101,52 +99,49 @@ class DemoView {
           <h2 class="subheading">Slider with scale</h2>
           <div class="page__row">
             <div class="page__col page__options-col">
-              <form class="options">
+              <form class="options" action="mock-address/change-me" method="post">
                 <div class="options__row">
                   <div class="options__col">
-                    <label for="">Min value</label>
-                    <input class="input" type="text" name="min-value">
-                    <label for="">Max value</label>
-                    <input class="input" type="text" name="max-value">
+                    <label class="page__label">Min value</label>
+                    <input class="input" type="number" name="min-value">
+                    <label class="page__label">Max value</label>
+                    <input class="input" type="number" name="max-value">
                   </div>
                   <div class="options__col">
-                    <label for="">Current value</label>
-                    <input class="input" type="text" name="current-value">
-                    <label for="">Quantity of scale parts </label>
-                    <input class="input" type="text" name="scale-items">
+                    <label class="page__label">Current value</label>
+                    <input class="input" type="number" name="current-value">
+                    <label class="page__label">Quantity of scale parts </label>
+                    <input class="input" type="number" name="scale-items">
                   </div>
                   <div class="options__col">
                     <div class="checkboxes">
-                        <label for="">Show tip</label>
-                        <label class="tick-box" for="tip2">
+                        <label class="page__label">Show tip</label>
+                        <label class="tick-box">
                           <input
                             class="tick-box__input"
                             type="checkbox"
-                            name="tip"
-                            id="tip2">
+                            name="tip">
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
                     <div class="checkboxes">
-                        <label for="">Show scale</label>
-                        <label class="tick-box" for="scale2">
+                        <label class="page__label">Show scale</label>
+                        <label class="tick-box">
                           <input
                             class="tick-box__input"
                             type="checkbox"
                             name="scale"
-                            id="scale2"
                             checked>
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
                     <div class="checkboxes">
-                        <label for="">Vertical orientation</label>
-                        <label class="tick-box" for="orientation2">
+                        <label class="page__label">Vertical orientation</label>
+                        <label class="tick-box">
                           <input
                             class="tick-box__input"
                             type="checkbox"
-                            name="orientation"
-                            id="orientation2">
+                            name="orientation">
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
@@ -164,52 +159,49 @@ class DemoView {
               <div class="slider js-slider_interval"></div>
             </div>
             <div class="page__col page__options-col">
-              <form class="options">
+              <form class="options" action="mock-address/change-me" method="post">
                 <div class="options__row">
                   <div class="options__col">
-                    <label for="">Min value</label>
-                    <input class="input" type="text" name="min-value">
-                    <label for="">Max value</label>
-                    <input class="input" type="text" name="max-value">
+                    <label class="page__label">Min value</label>
+                    <input class="input" type="number" name="min-value">
+                    <label class="page__label">Max value</label>
+                    <input class="input" type="number" name="max-value">
                   </div>
                   <div class="options__col">
-                    <label for="">Current min value</label>
-                    <input class="input" type="text" name="current-value">
-                    <label for="">Current max value</label>
-                    <input class="input" type="text" name="current-max-value">
+                    <label class="page__label">Current min value</label>
+                    <input class="input" type="number" name="current-value">
+                    <label class="page__label">Current max value</label>
+                    <input class="input" type="number" name="current-max-value">
                   </div>
                   <div class="options__col">
                     <div class="checkboxes">
-                        <label for="">Show tip</label>
-                        <label class="tick-box" for="tip3">
+                        <label class="page__label">Show tip</label>
+                        <label class="tick-box">
                           <input
                             class="tick-box__input"
                             type="checkbox"
                             name="tip"
-                            id="tip3"
                             checked>
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
                     <div class="checkboxes">
-                        <label for="">Show scale</label>
-                        <label class="tick-box" for="scale3">
+                        <label class="page__label">Show scale</label>
+                        <label class="tick-box">
                           <input
                             class="tick-box__input"
                             type="checkbox"
-                            name="scale"
-                            id="scale3">
+                            name="scale">
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
                     <div class="checkboxes">
-                        <label for="">Vertical orientation</label>
-                        <label class="tick-box" for="orientation3">
+                        <label class="page__label">Vertical orientation</label>
+                        <label class="tick-box">
                           <input
                             class="tick-box__input"
                             type="checkbox"
-                            name="orientation"
-                            id="orientation3">
+                            name="orientation">
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
@@ -221,52 +213,49 @@ class DemoView {
           <h2 class="subheading">Slider with step value</h2>
           <div class="page__row">
             <div class="page__col page__options-col">
-              <form class="options">
+              <form class="options" action="mock-address/change-me" method="post">
                 <div class="options__row">
                   <div class="options__col">
-                    <label for="">Min value</label>
-                    <input class="input" type="text" name="min-value">
-                    <label for="">Max value</label>
-                    <input class="input" type="text" name="max-value">
+                    <label class="page__label">Min value</label>
+                    <input class="input" type="number" name="min-value">
+                    <label class="page__label">Max value</label>
+                    <input class="input" type="number" name="max-value">
                   </div>
                   <div class="options__col">
-                    <label for="">Current min value</label>
-                    <input class="input" type="text" name="current-value">
-                    <label for="">Step size</label>
-                    <input class="input" type="text" name="step-size">
+                    <label class="page__label">Current min value</label>
+                    <input class="input" type="number" name="current-value">
+                    <label class="page__label">Step size</label>
+                    <input class="input" type="number" name="step-size">
                   </div>
                   <div class="options__col">
                     <div class="checkboxes">
-                        <label for="">Show tip</label>
-                        <label class="tick-box" for="tip4">
+                        <label class="page__label">Show tip</label>
+                        <label class="tick-box">
                           <input
                             class="tick-box__input"
                             type="checkbox"
                             name="tip"
-                            id="tip4"
                             checked>
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
                     <div class="checkboxes">
-                        <label for="">Show scale</label>
-                        <label class="tick-box" for="scale4">
+                        <label class="page__label">Show scale</label>
+                        <label class="tick-box">
                           <input
                             class="tick-box__input"
                             type="checkbox"
-                            name="scale"
-                            id="scale4">
+                            name="scale">
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
                     <div class="checkboxes">
-                        <label for="">Vertical orientation</label>
-                        <label class="tick-box" for="orientation4">
+                        <label class="page__label">Vertical orientation</label>
+                        <label class="tick-box">
                           <input
                             class="tick-box__input"
                             type="checkbox"
-                            name="orientation"
-                            id="orientation4">
+                            name="orientation">
                           <div class="tick-box__round"></div>
                         </label>
                     </div>

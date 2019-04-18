@@ -38,11 +38,14 @@ const conf = {
         from: './src/**/*.svg',
         to: './images',
         flatten: true
-      }
+      },
+      {
+        from: './src/favicons/**/*.*',
+        to: './',
+        flatten: true,
+      },
     ]),
     new CheckerPlugin(),
-    require('autoprefixer'),
-    //require('cssnano')
   ]
 
 };
