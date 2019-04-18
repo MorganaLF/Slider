@@ -1,5 +1,5 @@
 import { IRunnerView } from '../RunnerView/RunnerViewInterfaces';
-import { ITipView } from '../tip/TipInterfaces';
+import { ITipView } from '../TipView/TipViewInterfaces';
 
 export type changeValueSettings = {
   runner: IRunnerView;

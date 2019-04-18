@@ -1,4 +1,4 @@
-import TipView from '../plugin/tip/TipView';
+import TipView from '../plugin/TipView/TipView';
 
 describe('TipView', () => {
   let tipView: TipView;

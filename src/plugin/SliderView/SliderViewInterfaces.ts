@@ -1,6 +1,6 @@
 import { IScaleView } from '../ScaleView/ScaleViewInterfaces';
 import { IRunnerView } from '../RunnerView/RunnerViewInterfaces';
-import { ITipView } from '../tip/TipInterfaces';
+import { ITipView } from '../TipView/TipViewInterfaces';
 import { ITrackView } from '../track/TrackInterfaces';
 
 export interface IExtremePoints {

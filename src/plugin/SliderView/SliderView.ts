@@ -1,7 +1,7 @@
 import RunnerView from '../RunnerView/RunnerView';
 import { IRunnerView } from '../RunnerView/RunnerViewInterfaces';
-import TipView from '../tip/TipView';
-import { ITipView } from '../tip/TipInterfaces';
+import TipView from '../TipView/TipView';
+import { ITipView } from '../TipView/TipViewInterfaces';
 import TrackView from '../track/TrackView';
 import { ITrackView } from '../track/TrackInterfaces';
 import ScaleView from '../ScaleView/ScaleView';

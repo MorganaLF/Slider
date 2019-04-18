@@ -1,7 +1,7 @@
 import RunnerView from '../plugin/RunnerView/RunnerView';
 import ScaleView from '../plugin/ScaleView/ScaleView';
 import SliderView from '../plugin/SliderView/SliderView';
-import TipView from '../plugin/tip/TipView';
+import TipView from '../plugin/TipView/TipView';
 import TrackView from '../plugin/track/TrackView';
 
 

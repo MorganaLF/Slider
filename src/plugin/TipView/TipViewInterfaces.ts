@@ -1,9 +1,9 @@
 export type TipViewOptions = {
-  $element?: null | JQuery,
+  $element?: JQuery,
   $parent: JQuery,
   orientation: string,
 };
 
 export interface ITipView {
-  updateTip (val: number): void;
+  updateTip(val: number): void;
 }
