@@ -1,5 +1,5 @@
 import { ISliderModel } from '../SliderModel/SliderModelInterfaces';
-import { IScaleView } from '../scale/ScaleInterfaces';
+import { IScaleView } from '../ScaleView/ScaleViewInterfaces';
 import { IRunnerView } from '../RunnerView/RunnerViewInterfaces';
 import { ITipView } from '../tip/TipInterfaces';
 import { ITrackView } from '../track/TrackInterfaces';

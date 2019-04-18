@@ -4,8 +4,8 @@ import TipView from '../tip/TipView';
 import { ITipView } from '../tip/TipInterfaces';
 import TrackView from '../track/TrackView';
 import { ITrackView } from '../track/TrackInterfaces';
-import ScaleView from '../scale/ScaleView';
-import { IScaleView } from '../scale/ScaleInterfaces';
+import ScaleView from '../ScaleView/ScaleView';
+import { IScaleView } from '../ScaleView/ScaleViewInterfaces';
 import {
   SliderViewOptions,
   IExtremePoints,

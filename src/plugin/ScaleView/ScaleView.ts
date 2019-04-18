@@ -1,30 +1,30 @@
 import {
   ScaleViewOptions,
-  IDrawMarkSettings,
-  IDrawScaleSettings,
-} from './ScaleInterfaces';
+  drawMarkSettings,
+  drawScaleSettings,
+} from './ScaleViewInterfaces';
 
 class ScaleView {
-  public $element?: null | JQuery;
+  public $element: null | JQuery;
   public $parent: JQuery;
   public marksQuantity: number;
   readonly parentWidth: number;
   readonly parentHeight: number;
   readonly orientation: string;
 
-  constructor (options: ScaleViewOptions) {
-    this.$element = null;
+  constructor(options: ScaleViewOptions) {
     this.$parent = options.$parent;
     this.marksQuantity = options.marksQuantity;
     this.parentWidth = options.parentWidth;
     this.parentHeight = options.parentHeight;
     this.orientation = options.orientation;
+    this.$element = null;
   }
 
-  public drawScale ({
+  public drawScale({
     minValue,
     maxValue,
-  }: IDrawScaleSettings): void {
+  }: drawScaleSettings): void {
     const scaleClass: string = this._getOrientationBasedValue(
       '',
       ' slider__scale_vertical',
@@ -58,32 +58,32 @@ class ScaleView {
     }
   }
 
-  private _getSizePropertyName (): string {
+  private _getSizePropertyName(): string {
     return this._getOrientationBasedValue('width', 'height');
   }
 
-  private _getPositionPropertyName (): string {
+  private _getPositionPropertyName(): string {
     return this._getOrientationBasedValue('left', 'top');
   }
 
-  private _getInnerSize ($element: JQuery): number {
+  private _getInnerSize($element: JQuery): number {
     return this._getOrientationBasedValue($element.innerWidth(), $element.innerHeight());
   }
 
-  private _getParentSize (): number {
+  private _getParentSize(): number {
     return this._getOrientationBasedValue(this.parentWidth, this.parentHeight);
   }
 
-  private _getOrientationBasedValue (horizontalValue: any, verticalValue: any): any {
+  private _getOrientationBasedValue(horizontalValue: any, verticalValue: any): any {
     return this.orientation === 'horizontal' ? horizontalValue : verticalValue;
   }
 
-  private _drawMark ({
+  private _drawMark({
     markText,
     markIndex,
     marksQuantity,
     positionProperty,
-  }: IDrawMarkSettings): void | false {
+  }: drawMarkSettings): void | false {
     if (!this.$element) {
       return false;
     }
