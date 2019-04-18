@@ -16,7 +16,7 @@ class TipView {
       ? ''
       : ' slider__tip_vertical';
 
-    return this.$element = $('<div/>', {
+    return $('<div/>', {
       class: `slider__tip${classModifierName}`,
     }).appendTo(this.$parent);
   }

@@ -1,4 +1,4 @@
-import TrackView from '../plugin/track/TrackView';
+import TrackView from '../plugin/TrackView/TrackView';
 
 describe('TrackView', () => {
   const $body = $('.body');
@@ -55,12 +55,6 @@ describe('TrackView', () => {
     beforeEach(() => {
       $body.css('padding', '0');
       $parent.css({ width: '350px', height: '350px' });
-    });
-
-    it('Возвращает false, если элемент неопределен', () => {
-      trackView.$element = null;
-
-      expect(trackView.animateTrack(2, 'start')).toEqual(false);
     });
 
     it('Устанавливает ширину дорожки, если тип слайдера single', () => {

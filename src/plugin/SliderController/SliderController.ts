@@ -2,7 +2,7 @@ import { IRunnerView } from '../RunnerView/RunnerViewInterfaces';
 import { ISliderModel } from '../SliderModel/SliderModelInterfaces';
 import { ISliderView } from '../SliderView/SliderViewInterfaces';
 import { ITipView } from '../TipView/TipViewInterfaces';
-import { ITrackView } from '../track/TrackInterfaces';
+import { ITrackView } from '../TrackView/TrackViewInterfaces';
 import {
   addHandlersSettings,
   changeValueSettings,

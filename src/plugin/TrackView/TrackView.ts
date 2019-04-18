@@ -1,14 +1,14 @@
 import {
   TrackViewOptions,
   TrackPoints,
-  IAnimateSingleTrackSettings,
-  IAnimateIntervalTrackSettings,
-} from './TrackInterfaces';
+  animateSingleTrackSettings,
+  animateIntervalTrackSettings,
+} from './TrackViewInterfaces';
 
 class TrackView {
-  public $element?: null | JQuery;
+  public $element: JQuery;
   public $parent: JQuery;
-  public $filledTrack?: null | JQuery;
+  public $filledTrack: JQuery;
   private _parentWidth: number;
   private _parentHeight: number;
   private _runnerWidth: number;
@@ -17,44 +17,41 @@ class TrackView {
   readonly orientation: string;
   [key: string]: any;
 
-  constructor (options: TrackViewOptions) {
-    this.$element = null;
+  constructor(options: TrackViewOptions) {
     this.$parent = options.$parent;
-    this.$filledTrack = null;
     this._parentWidth = options._parentWidth;
     this._parentHeight = options._parentHeight;
     this._runnerWidth = options._runnerWidth;
     this._runnerHeight = options._runnerHeight;
     this.type = options.type;
     this.orientation = options.orientation;
-    this.drawTrack();
+    this.$element = this.drawTrack();
+    this.$filledTrack = this.drawFilledTrack();
   }
 
-  public drawTrack (): void {
+  public drawTrack(): JQuery {
     const trackModifierName: string = this.orientation === 'horizontal'
       ? ''
       : ' slider__track_vertical';
 
-    this.$element = $('<div/>', {
+    const $track = $('<div/>', {
       class: `slider__track${trackModifierName}`,
     });
 
+    return $track.prependTo(this.$parent);
+  }
+
+  public drawFilledTrack(): JQuery {
     const filledTrackModifierName: string = this.orientation === 'horizontal'
       ? ''
       : ' slider__track-full_vertical';
 
-    this.$filledTrack = $('<div/>', {
+    return $('<div/>', {
       class: `slider__track-full${filledTrackModifierName}`,
     }).appendTo(this.$element);
-
-    this.$element.prependTo(this.$parent);
   }
 
-  public animateTrack (coefficient: number, animatedPointName: string): void | false {
-    if (!this.$element) {
-      return false;
-    }
-
+  public animateTrack(coefficient: number, animatedPointName: string): void {
     if (this.type === 'interval') {
       if (this.orientation === 'horizontal') {
         this._animateIntervalTrack({
@@ -96,44 +93,34 @@ class TrackView {
     }
   }
 
-  private _getTrackPoints (pointName: string): number {
-    if (this.$element) {
-      const trackPoints: TrackPoints = {
-        left: this.$element.offset()!.left,
-        top: this.$element.offset()!.top,
-        right: this.$element.offset()!.left + this.$element.innerWidth()!,
-        bottom: this.$element.offset()!.top + this.$element.innerHeight()!,
-      };
+  private _getTrackPoints(pointName: string): number {
+    const trackPoints: TrackPoints = {
+      left: this.$element.offset()!.left,
+      top: this.$element.offset()!.top,
+      right: this.$element.offset()!.left + this.$element.innerWidth()!,
+      bottom: this.$element.offset()!.top + this.$element.innerHeight()!,
+    };
 
-      return trackPoints[pointName];
-    }
-
-    return 0;
+    return trackPoints[pointName];
   }
 
-  private _getFilledTrackPoints (pointName: string): number {
-    if (this.$filledTrack) {
-      const filledTrackPoints: TrackPoints = {
-        left: this.$filledTrack.offset()!.left,
-        top: this.$filledTrack.offset()!.top,
-        right: this.$filledTrack.offset()!.left + this.$filledTrack.innerWidth()!,
-        bottom: this.$filledTrack.offset()!.top + this.$filledTrack.innerHeight()!,
-      };
+  private _getFilledTrackPoints(pointName: string): number {
+    const filledTrackPoints: TrackPoints = {
+      left: this.$filledTrack.offset()!.left,
+      top: this.$filledTrack.offset()!.top,
+      right: this.$filledTrack.offset()!.left + this.$filledTrack.innerWidth()!,
+      bottom: this.$filledTrack.offset()!.top + this.$filledTrack.innerHeight()!,
+    };
 
-      return filledTrackPoints[pointName];
-    }
-
-    return 0;
+    return filledTrackPoints[pointName];
   }
 
-  private _animateSingleTrack ({
+  private _animateSingleTrack({
     coefficient,
     sizeProperty,
     sizeKey,
     runnerSizeKey,
-  }: IAnimateSingleTrackSettings): void | false {
-    if (!this.$filledTrack) return false;
-
+  }: animateSingleTrackSettings): void {
     if (coefficient !== 0) {
       const filledTrackSize: number = this[sizeKey] / coefficient + this[runnerSizeKey] / 2;
       this.$filledTrack.css(sizeProperty, `${filledTrackSize}px`);
@@ -142,7 +129,7 @@ class TrackView {
     }
   }
 
-  private _animateIntervalTrack ({
+  private _animateIntervalTrack({
     coefficient,
     startPointName,
     endPointName,
@@ -150,9 +137,7 @@ class TrackView {
     size,
     runnerSizeKey,
     animatedPointName,
-  }: IAnimateIntervalTrackSettings): void | false {
-    if (!this.$filledTrack) return false;
-
+  }: animateIntervalTrackSettings): void {
     const roundedSize: number = Math.floor(size);
     const roundedRunnerSize: number = Math.floor(this[runnerSizeKey]);
     const innerSize: number = roundedSize - roundedRunnerSize;
