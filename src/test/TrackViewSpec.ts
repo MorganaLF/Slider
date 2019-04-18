@@ -36,7 +36,7 @@ describe('TrackView', () => {
     });
 
     it('Создает элемент slider__track-full внутри slider__track', () => {
-      const $filledTrack = $('.slider .slider__track .slider__track-full');
+      const $filledTrack = $('.slider .slider__track .slider__filled-track');
 
       expect($filledTrack).toExist();
     });

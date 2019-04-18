@@ -89,7 +89,7 @@ class ScaleView {
     }
 
     const $mark: JQuery = $('<li/>', {
-      class: 'slider__scale-item',
+      class: 'slider__scale-mark',
       text: Math.round(markText),
     }).appendTo(this.$element);
 

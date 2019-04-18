@@ -1,97 +1,117 @@
+@import '../styles/variables.styl'
+
 .slider
-  position: relative
+  position relative
+
   &_vertical
-    height: 300px
+    height 300px
+
   &__track
-    position: relative
+    position relative
     left 0
-    height: rem(5px)
+    height rem(5px)
     background-color light-grey
+
     &_vertical
-      width: rem(5px)
-      height: 100%
-  &__track-full
-    position: relative
-    width: 100%
-    height: 100%
+      width rem(5px)
+      height 100%
+
+  &__filled-track
+    position absolute
+    top 0
+    left 0
+    height 100%
     background-color primary-color
+
     &_vertical
-      width: 100%
-      height: 50%
+      width 100%
+
   &__runner
-    position: absolute
-    top: rem(-7.5px)
-    left: 0
-    width: rem(20px)
-    height: rem(20px)
-    border-radius: 50%
-    background: primary-color
-    border none
-    cursor: pointer
+    position absolute
+    top 50%
+    width rem(20px)
+    height rem(20px)
+    border-radius 50%
+    background primary-color
+    transform translate(0, -50%)
+    transition background 0.3s ease
+    cursor pointer
+
+    &:hover
+    &:hover .slider__tip
+      background darker-primary-color
+
     &_vertical
-      top: 0
-      left: rem(-7.5px)
-  &_progress-bg_secondary .ui-slider-range
-  &_progress-bg_secondary .ui-slider-handle
-    background: secondary-color
+      top 0
+      left 50%
+      transform translate(-50%, 0)
+
+  &__tip
+    position absolute
+    top rem(-8px)
+    left 50%
+    transform translate(-50%, -100%)
+    padding rem(5px) rem(10px) rem(5px)
+    border-radius 5px
+    font-size rem(13px)
+    text-align center
+    letter-spacing rem(0.65px)
+    line-height 1
+    font-family 'Lato', 'Arial', sans-serif
+    color #fff
+    background primary-color
+    cursor pointer
+    transition background 0.3s ease
+
+    &_vertical
+      top 50%
+      transform translate(0, -50%)
+      left rem(26px)
+
+    &:after
+      content ''
+      position absolute
+      bottom 0
+      left 50%
+      width rem(7px)
+      height rem(7px)
+      background primary-color
+      transform translate(-50%, 50%) rotate(45deg)
+
+    &_vertical:after
+      top 50%
+      left 0
+      transform translate(-50%, -50%) rotate(45deg)
+
   &__scale
-    position: absolute
-    top: rem(15px)
-    right: 0
-    left: 0
-    display: flex
-    justify-content: space-between
-    margin: 0 auto
-    padding-left: 0
+    position absolute
+    top rem(15px)
+    right 0
+    left 0
+    display flex
+    justify-content space-between
+    margin 0 auto
+    padding-left 0
     list-style-type none
     font-size rem(11px)
-    font-weight: 900
+    font-weight 900
     letter-spacing rem(0.55px)
     color light-grey-text
+
     &_vertical
-      top: 0
-      bottom: 0
-      left: rem(-15px)
-      height: 100%
-      flex-direction: column
-      justify-content: flex-start
-      align-items: flex-end
-      width: 0
-      margin: auto 0
-      text-align: right
-    &-item
+      top 0
+      bottom 0
+      left rem(-15px)
+      height 100%
+      flex-direction column
+      justify-content flex-start
+      align-items flex-end
+      width 0
+      margin auto 0
+      text-align right
+
+    &-mark
       position absolute
-  &__tip
-    position: absolute
-    top: rem(-31px)
-    left: 50%
-    transform: translate(-50%, 0)
-    padding: rem(5px) rem(10px) rem(5px)
-    border-radius: 5px
-    font-weight: 900
-    font-size rem(13px)
-    text-align: center
-    letter-spacing rem(0.65px)
-    font-family: Lato
-    color #fff
-    background: primary-color
-    cursor: pointer
-    &_vertical
-      top: 50%
-      transform: translate(0, -50%)
-      left: rem(26px)
-    &:after
-      content: ''
-      position: absolute
-      bottom: rem(-3px)
-      left: 'calc(50% - %s)' % rem(3.5px)
-      width: rem(7px)
-      height: rem(7px)
-      transform rotate(45deg)
-      background: primary-color
-    &_vertical:after
-      top: 'calc(50% - %s)' % rem(3.5px)
-      left: rem(-3px)
 
 
 

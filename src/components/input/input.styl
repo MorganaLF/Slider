@@ -1,18 +1,26 @@
+@import '../../styles/variables.styl'
+
 .input
-  display: block
+  inline-display block
   width 100%
-  box-sizing: border-box
-  margin-bottom: 20px
-  padding: 6px 12px
-  border: none
+  box-sizing border-box
+  margin-bottom 20px
+  padding rem(5px) rem(12px)
+  border 1px solid transparent
   background-color light-grey
-  font-size 14px
-  font-family: Source Sans Pro
-  font-weight: 400
-  letter-spacing 0.14px
-  border-radius: 3px
+  font-size rem(14px)
+  font-family 'Source Sans Pro', 'Arial', sans-serif
+  letter-spacing rem(0.14px)
+  text-overflow ellipsis
+
+  &:hover
+  &:focus
+    outline none
+    border 1px solid primary-color
+
   +placeholder()
     color dark-grey-text
     transition color 0.3s ease
+
   +placeholder-focus()
-    color: transparent
+    color transparent

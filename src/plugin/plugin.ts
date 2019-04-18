@@ -28,3 +28,5 @@ $.fn.customSlider = function(options: SliderAppOptions | string, ...args) {
     return $this.data('constructor')[options](...args);
   }
 };
+
+export default $.fn.customSlider;

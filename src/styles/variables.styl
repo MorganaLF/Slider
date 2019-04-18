@@ -34,19 +34,19 @@ rem(size)
 /* Media mixin */
 
 md()
-  @media screen and (max-width: $md)
+  @media screen and (max-width $md)
     {block}
 
 sm()
-  @media screen and (max-width: $sm)
+  @media screen and (max-width $sm)
     {block}
 
 xs()
-  @media screen and (max-width: $xs)
+  @media screen and (max-width $xs)
     {block}
 
 xxs()
-  @media screen and (max-width: $xxs)
+  @media screen and (max-width $xxs)
     {block}
 
 /* Font-Face */
@@ -84,20 +84,3 @@ placeholder-focus()
     {block}
   &:focus:-ms-input-placeholder
     {block}
-
-/* input */
-
-input()
-  padding: 6px 12px
-  border: none
-  background-color light-grey
-  font-size 14px
-  font-family: Source Sans Pro
-  font-weight: 400
-  letter-spacing 0.14px
-  border-radius: 3px
-  +placeholder()
-    color dark-grey-text
-    transition color 0.3s ease
-  +placeholder-focus()
-    color: transparent

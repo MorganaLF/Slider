@@ -29,7 +29,7 @@ describe('SliderView', () => {
     slider.updateSlider();
 
     $track = $('.slider .slider__track');
-    $filledTrack = $('.slider .slider__track .slider__track-full');
+    $filledTrack = $('.slider .slider__track .slider__filled-track');
     $runner = $('.slider .slider__runner');
     $tip = $('.slider .slider__runner .slider__tip');
   });

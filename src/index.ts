@@ -1,8 +1,5 @@
-import './styles/main.styl';
-import './plugin/plugin';
-import './plugin/SliderApp/SliderApp';
-import './plugin/SliderView/SliderView';
-import './plugin/SliderModel/SliderModel';
-import './plugin/SliderController/SliderController';
-import './plugin/RunnerView/RunnerView';
-import './pages/demo/DemoView';
+function requireAll(requireContext: any) {
+  return requireContext.keys().map(requireContext);
+}
+
+requireAll(require.context('./', true, /^(?!.*(?:Spec.ts$)).*\.ts|.styl$/));

@@ -44,10 +44,10 @@ class TrackView {
   public drawFilledTrack(): JQuery {
     const filledTrackModifierName: string = this.orientation === 'horizontal'
       ? ''
-      : ' slider__track-full_vertical';
+      : ' slider__filled-track_vertical';
 
     return $('<div/>', {
-      class: `slider__track-full${filledTrackModifierName}`,
+      class: `slider__filled-track${filledTrackModifierName}`,
     }).appendTo(this.$element);
   }
 

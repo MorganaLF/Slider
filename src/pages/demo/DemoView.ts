@@ -1,3 +1,5 @@
+import '../../plugin/plugin';
+
 class DemoView {
   constructor() {
     this.init();
@@ -40,28 +42,28 @@ class DemoView {
 
   private _createDemoPage(): void {
     const $demoTemplate: JQuery = $(
-      `<div class="page">
+      `<div class="demo-page">
           <h1 class="subheading">Simple slider</h1>
-          <div class="page__row">
-            <div class="page__col">
+          <div class="demo-page__row">
+            <div class="demo-page__column">
               <div class="slider js-slider_simple"></div>
             </div>
-            <div class="page__col page__options-col">
+            <div class="demo-page__column demo-page__options-column">
               <form class="options" action="mock-address/change-me" method="post">
                 <div class="options__row">
-                  <div class="options__col">
-                    <label class="page__label">Min value</label>
+                  <div class="options__column">
+                    <label class="options__label">Min value</label>
                     <input class="input" type="number" name="min-value">
-                    <label class="page__label">Max value</label>
+                    <label class="options__label">Max value</label>
                     <input class="input" type="number" name="max-value">
                   </div>
-                  <div class="options__col">
-                    <label class="page__label">Current value</label>
+                  <div class="options__column">
+                    <label class="options__label">Current value</label>
                     <input class="input" type="number" name="current-value">
                   </div>
-                  <div class="options__col">
-                    <div class="checkboxes">
-                        <label class="page__label">Show tip</label>
+                  <div class="options__column">
+                    <div class="options__checkboxes-container">
+                        <label class="options__label">Show tip</label>
                         <label class="tick-box">
                           <input
                             class="tick-box__input"
@@ -71,8 +73,8 @@ class DemoView {
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
-                    <div class="checkboxes">
-                        <label class="page__label">Show scale</label>
+                    <div class="options__checkboxes-container">
+                        <label class="options__label">Show scale</label>
                         <label class="tick-box">
                           <input
                             class="tick-box__input"
@@ -81,8 +83,8 @@ class DemoView {
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
-                    <div class="checkboxes">
-                        <label class="page__label">Vertical orientation</label>
+                    <div class="options__checkboxes-container">
+                        <label class="options__label">Vertical orientation</label>
                         <label class="tick-box">
                           <input
                             class="tick-box__input"
@@ -97,25 +99,25 @@ class DemoView {
             </div>
           </div>
           <h2 class="subheading">Slider with scale</h2>
-          <div class="page__row">
-            <div class="page__col page__options-col">
+          <div class="demo-page__row">
+            <div class="demo-page__column demo-page__options-column">
               <form class="options" action="mock-address/change-me" method="post">
                 <div class="options__row">
-                  <div class="options__col">
-                    <label class="page__label">Min value</label>
+                  <div class="options__column">
+                    <label class="options__label">Min value</label>
                     <input class="input" type="number" name="min-value">
-                    <label class="page__label">Max value</label>
+                    <label class="options__label">Max value</label>
                     <input class="input" type="number" name="max-value">
                   </div>
-                  <div class="options__col">
-                    <label class="page__label">Current value</label>
+                  <div class="options__column">
+                    <label class="options__label">Current value</label>
                     <input class="input" type="number" name="current-value">
-                    <label class="page__label">Quantity of scale parts </label>
+                    <label class="options__label">Quantity of scale parts </label>
                     <input class="input" type="number" name="scale-items">
                   </div>
-                  <div class="options__col">
-                    <div class="checkboxes">
-                        <label class="page__label">Show tip</label>
+                  <div class="options__column">
+                    <div class="options__checkboxes-container">
+                        <label class="options__label">Show tip</label>
                         <label class="tick-box">
                           <input
                             class="tick-box__input"
@@ -124,8 +126,8 @@ class DemoView {
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
-                    <div class="checkboxes">
-                        <label class="page__label">Show scale</label>
+                    <div class="options__checkboxes-container">
+                        <label class="options__label">Show scale</label>
                         <label class="tick-box">
                           <input
                             class="tick-box__input"
@@ -135,8 +137,8 @@ class DemoView {
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
-                    <div class="checkboxes">
-                        <label class="page__label">Vertical orientation</label>
+                    <div class="options__checkboxes-container">
+                        <label class="options__label">Vertical orientation</label>
                         <label class="tick-box">
                           <input
                             class="tick-box__input"
@@ -149,33 +151,33 @@ class DemoView {
                 </div>
               </form>
             </div>
-            <div class="page__col">
+            <div class="demo-page__column">
               <div class="slider js-slider_with-scale"></div>
             </div>
           </div>
           <h2 class="subheading">Interval slider</h2>
-          <div class="page__row">
-            <div class="page__col">
+          <div class="demo-page__row">
+            <div class="demo-page__column">
               <div class="slider js-slider_interval"></div>
             </div>
-            <div class="page__col page__options-col">
+            <div class="demo-page__column demo-page__options-column">
               <form class="options" action="mock-address/change-me" method="post">
                 <div class="options__row">
-                  <div class="options__col">
-                    <label class="page__label">Min value</label>
+                  <div class="options__column">
+                    <label class="options__label">Min value</label>
                     <input class="input" type="number" name="min-value">
-                    <label class="page__label">Max value</label>
+                    <label class="options__label">Max value</label>
                     <input class="input" type="number" name="max-value">
                   </div>
-                  <div class="options__col">
-                    <label class="page__label">Current min value</label>
+                  <div class="options__column">
+                    <label class="options__label">Current min value</label>
                     <input class="input" type="number" name="current-value">
-                    <label class="page__label">Current max value</label>
+                    <label class="options__label">Current max value</label>
                     <input class="input" type="number" name="current-max-value">
                   </div>
-                  <div class="options__col">
-                    <div class="checkboxes">
-                        <label class="page__label">Show tip</label>
+                  <div class="options__column">
+                    <div class="options__checkboxes-container">
+                        <label class="options__label">Show tip</label>
                         <label class="tick-box">
                           <input
                             class="tick-box__input"
@@ -185,8 +187,8 @@ class DemoView {
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
-                    <div class="checkboxes">
-                        <label class="page__label">Show scale</label>
+                    <div class="options__checkboxes-container">
+                        <label class="options__label">Show scale</label>
                         <label class="tick-box">
                           <input
                             class="tick-box__input"
@@ -195,8 +197,8 @@ class DemoView {
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
-                    <div class="checkboxes">
-                        <label class="page__label">Vertical orientation</label>
+                    <div class="options__checkboxes-container">
+                        <label class="options__label">Vertical orientation</label>
                         <label class="tick-box">
                           <input
                             class="tick-box__input"
@@ -211,25 +213,25 @@ class DemoView {
             </div>
           </div>
           <h2 class="subheading">Slider with step value</h2>
-          <div class="page__row">
-            <div class="page__col page__options-col">
+          <div class="demo-page__row">
+            <div class="demo-page__column demo-page__options-column">
               <form class="options" action="mock-address/change-me" method="post">
                 <div class="options__row">
-                  <div class="options__col">
-                    <label class="page__label">Min value</label>
+                  <div class="options__column">
+                    <label class="options__label">Min value</label>
                     <input class="input" type="number" name="min-value">
-                    <label class="page__label">Max value</label>
+                    <label class="options__label">Max value</label>
                     <input class="input" type="number" name="max-value">
                   </div>
-                  <div class="options__col">
-                    <label class="page__label">Current min value</label>
+                  <div class="options__column">
+                    <label class="options__label">Current min value</label>
                     <input class="input" type="number" name="current-value">
-                    <label class="page__label">Step size</label>
+                    <label class="options__label">Step size</label>
                     <input class="input" type="number" name="step-size">
                   </div>
-                  <div class="options__col">
-                    <div class="checkboxes">
-                        <label class="page__label">Show tip</label>
+                  <div class="options__column">
+                    <div class="options__checkboxes-container">
+                        <label class="options__label">Show tip</label>
                         <label class="tick-box">
                           <input
                             class="tick-box__input"
@@ -239,8 +241,8 @@ class DemoView {
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
-                    <div class="checkboxes">
-                        <label class="page__label">Show scale</label>
+                    <div class="options__checkboxes-container">
+                        <label class="options__label">Show scale</label>
                         <label class="tick-box">
                           <input
                             class="tick-box__input"
@@ -249,8 +251,8 @@ class DemoView {
                           <div class="tick-box__round"></div>
                         </label>
                     </div>
-                    <div class="checkboxes">
-                        <label class="page__label">Vertical orientation</label>
+                    <div class="options__checkboxes-container">
+                        <label class="options__label">Vertical orientation</label>
                         <label class="tick-box">
                           <input
                             class="tick-box__input"
@@ -263,7 +265,7 @@ class DemoView {
                 </div>
               </form>
             </div>
-            <div class="page__col">
+            <div class="demo-page__column">
               <div class="slider js-slider_with-step"></div>
             </div>
           </div>
@@ -276,7 +278,7 @@ class DemoView {
 
   private _updateSlider($element: JQuery, methodName: string): void {
     $element
-      .closest('.page__row')
+      .closest('.demo-page__row')
       .find('.slider')
       .customSlider(methodName, $element.val());
   }
@@ -357,7 +359,7 @@ class DemoView {
 
   private _makeSliderMethod($element: JQuery, methodName: string): number {
     return $element
-                .closest('.page__row')
+                .closest('.demo-page__row')
                 .find('.slider')
                 .customSlider(methodName);
   }

@@ -26,7 +26,7 @@ describe('ScaleView', () => {
   describe('Функция drawScale', () => {
     beforeEach(() => {
       scaleView.drawScale({ minValue: 5, maxValue: 25 });
-      $scaleItem = $('.slider .slider__scale .slider__scale-item');
+      $scaleItem = $('.slider .slider__scale .slider__scale-mark');
     });
 
     it('Не создает вложенные элементы, если корневой элемент неопределен', () => {
