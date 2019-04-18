@@ -4,9 +4,9 @@ import { ISliderView } from '../SliderView/SliderViewInterfaces';
 import { ITipView } from '../tip/TipInterfaces';
 import { ITrackView } from '../track/TrackInterfaces';
 import {
-  IAddHandlersSettings,
-  IChangeValueSettings,
-  IHandleWindowMouseUp,
+  addHandlersSettings,
+  changeValueSettings,
+  handleWindowMouseUpSettings,
 } from './SliderControllerInterfaces';
 
 class SliderController {
@@ -101,7 +101,7 @@ class SliderController {
   }
 
   private _handleBodyChangeValue(
-    { runner, tip, valueType }: IChangeValueSettings,
+    { runner, tip, valueType }: changeValueSettings,
     event: JQuery.TriggeredEvent,
   ): void {
     if ((<any>event).detail.model !== this.model) {
@@ -120,7 +120,7 @@ class SliderController {
   }
 
   private _handleBodySetValue(
-    { runner, tip, valueType }: IChangeValueSettings,
+    { runner, tip, valueType }: changeValueSettings,
     event: JQuery.TriggeredEvent,
   ): void {
     if ((<any>event).detail.model !== this.model) {
@@ -156,7 +156,7 @@ class SliderController {
     mouseMoveHandler,
     moveHandler,
     runner,
-  }: IHandleWindowMouseUp): void {
+  }: handleWindowMouseUpSettings): void {
     const $window = $(window);
     const isDeviceSupportsTouchMove: boolean = typeof document.body.ontouchmove !== 'undefined';
 
@@ -197,7 +197,7 @@ class SliderController {
     changeEvent,
     setEvent,
     valueType,
-  }: IAddHandlersSettings): void {
+  }: addHandlersSettings): void {
     const mouseDownHandler = this._handleRunnerMouseDown.bind(this, runner);
     const isDeviceSupportsTouchStart: boolean = typeof document.body.ontouchstart !== 'undefined';
 
@@ -252,7 +252,7 @@ class SliderController {
 
     if (isEndValueRunnerExist) {
       this._addHandlers({
-        runner: this.endValueRunner!, // TODO fix ts error
+        runner: this.endValueRunner!,
         tip: endValueTip,
         changeEvent: 'changeendvalue.CustomSlider',
         setEvent: 'setendvalue.CustomSlider',

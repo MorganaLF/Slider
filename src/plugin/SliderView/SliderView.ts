@@ -23,9 +23,9 @@ class SliderView {
   public scale?: null | IScaleView;
   public type: string;
   public withTip: boolean;
+  public withScale: boolean;
   readonly scaleMarksQuantity: number;
   readonly orientation: string;
-  readonly withScale: boolean;
 
   constructor(options: SliderViewOptions) {
     this.$element = options.$element;
