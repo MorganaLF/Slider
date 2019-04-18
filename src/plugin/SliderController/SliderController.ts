@@ -158,10 +158,21 @@ class SliderController {
     runner,
   }: IHandleWindowMouseUp): void {
     const $window = $(window);
+    const isDeviceSupportsTouchMove: boolean = typeof document.body.ontouchmove !== 'undefined';
 
-    (<any>$window)
-      .off('mousemove.CustomSlider', mouseMoveHandler)
-      .off('mouseup.CustomSlider', this._boundMouseUpHandler);
+    if (isDeviceSupportsTouchMove) {
+      (<any>$window).off('touchmove.CustomSlider', mouseMoveHandler);
+    } else {
+      (<any>$window).off('mousemove.CustomSlider', mouseMoveHandler);
+    }
+
+    const isDeviceSupportsTouchEnd: boolean = typeof document.body.ontouchend !== 'undefined';
+
+    if (isDeviceSupportsTouchEnd) {
+      (<any>$window).off('touchend.CustomSlider', this._boundMouseUpHandler);
+    } else {
+      (<any>$window).off('mouseup.CustomSlider', this._boundMouseUpHandler);
+    }
 
     runner.$element.off('move.CustomSlider', moveHandler);
   }
@@ -176,6 +187,8 @@ class SliderController {
     this.track = this.view.track;
 
     this._checkoutHandlers();
+
+    this.model.initValues();
   }
 
   private _addHandlers({
