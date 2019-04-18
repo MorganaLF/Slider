@@ -23,13 +23,13 @@ class SliderController {
   readonly type: string;
 
   constructor(private view: ISliderView, private model: ISliderModel) {
-    this.withTip = view.withTip;
     this.startValueRunner = view.startValueRunner;
     this.endValueRunner = view.endValueRunner;
     this.startValueTip = view.startValueTip;
     this.endValueTip = view.endValueTip;
     this.track = view.track;
-    this.type = view.type;
+    this.withTip = view.withTip!;
+    this.type = view.type!;
   }
 
   public init(): void {

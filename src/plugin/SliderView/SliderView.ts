@@ -24,8 +24,8 @@ class SliderView {
   public type: string;
   public withTip: boolean;
   public withScale: boolean;
-  readonly scaleMarksQuantity: number;
-  readonly orientation: string;
+  public scaleMarksQuantity: number;
+  public orientation: string;
 
   constructor(options: SliderViewOptions) {
     this.$element = options.$element;
@@ -37,9 +37,9 @@ class SliderView {
     this.scale = null;
     this.type = options.type || 'single';
     this.withTip = options.withTip !== false;
+    this.withScale = options.withScale !== false;
     this.scaleMarksQuantity = options.scaleMarksQuantity || 10;
     this.orientation = options.orientation || 'horizontal';
-    this.withScale = options.withScale !== false;
   }
 
   public updateSlider(): void | false {
