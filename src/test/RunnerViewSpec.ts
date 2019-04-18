@@ -1,4 +1,4 @@
-import RunnerView from '../plugin/runner/RunnerView';
+import RunnerView from '../plugin/RunnerView/RunnerView';
 
 describe('RunnerView', () => {
   let runnerView: RunnerView;
@@ -46,12 +46,6 @@ describe('RunnerView', () => {
       runnerView.drawRunner();
     });
 
-    it('Если элемент неопределен, возвращает false', () => {
-      runnerView.$element = null;
-
-      expect(runnerView.setRunnerPosition(2)).toEqual(false);
-    });
-
     it('Горизонтальному ползунку задается положение left', () => {
       runnerView.$element!.css('width', '50px');
       runnerView.setRunnerPosition(2);
@@ -71,12 +65,6 @@ describe('RunnerView', () => {
   });
 
   describe('Функция setRunnerShiftX', () => {
-    it('Если элемент неопределен, возвращает false', () => {
-      runnerView.$element = null;
-
-      expect(runnerView.setRunnerShiftX((<any>{ pageX: 10 }))).toEqual(false);
-    });
-
     it('Сохраняет смещение курсора относительно ползунка', () => {
       runnerView.setRunnerShiftX((<any>{ pageX: 10 }));
       const shift = 10 - runnerView.$element!.offset()!.left;
@@ -86,12 +74,6 @@ describe('RunnerView', () => {
   });
 
   describe('Функция setRunnerShiftY', () => {
-    it('Если элемент неопределен, возвращает false', () => {
-      runnerView.$element = null;
-
-      expect(runnerView.setRunnerShiftY((<any>{ pageY: 10 }))).toEqual(false);
-    });
-
     it('Сохраняет смещение курсора относительно ползунка', () => {
       runnerView.setRunnerShiftY((<any>{ pageY: 10 }));
       const shift = 10 - runnerView.$element!.offset()!.top;
@@ -110,12 +92,6 @@ describe('RunnerView', () => {
       $runner
         .css('width', '50px')
         .css('height', '50px');
-    });
-
-    it('Если элемент неопределен, возвращает false', () => {
-      runnerView.$element = null;
-
-      expect(runnerView.moveRunner((<any>{ pageX: 30, pageY: 10 }))).toEqual(false);
     });
 
     it('Генерирует событие, отправляя коэффициент и тип ползунка', () => {

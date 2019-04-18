@@ -1,4 +1,4 @@
-import RunnerView from '../plugin/runner/RunnerView';
+import RunnerView from '../plugin/RunnerView/RunnerView';
 import ScaleView from '../plugin/scale/ScaleView';
 import SliderView from '../plugin/SliderView/SliderView';
 import TipView from '../plugin/tip/TipView';

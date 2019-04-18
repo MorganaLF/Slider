@@ -1,11 +1,11 @@
 import {
-  ICheckCursorPositionSettings,
-  IDispatchMoveEventSettings,
+  checkCursorPositionSettings,
+  dispatchMoveEventSettings,
   RunnerViewOptions,
-} from './RunnerInterfaces';
+} from './RunnerViewInterfaces';
 
 class RunnerView {
-  public $element?: null | JQuery;
+  public $element: JQuery;
   public $parent: JQuery;
   public shiftX: number = 0;
   public shiftY: number = 0;
@@ -16,7 +16,6 @@ class RunnerView {
   readonly parentBottomPoint: number;
 
   constructor(options: RunnerViewOptions) {
-    this.$element = null;
     this.$parent = options.$parent;
     this.shiftX = 0;
     this.shiftY = 0;
@@ -25,22 +24,20 @@ class RunnerView {
     this.parentRightPoint = options.parentRightPoint;
     this.parentTopPoint = options.parentTopPoint;
     this.parentBottomPoint = options.parentBottomPoint;
-    this.drawRunner();
+    this.$element = this.drawRunner();
   }
 
-  public drawRunner(): void {
+  public drawRunner(): JQuery {
     const runnerClass: string = this.orientation === 'horizontal'
       ? ''
       : ' slider__runner_vertical';
 
-    this.$element = $('<div/>', {
+    return this.$element = $('<div/>', {
       class: `slider__runner${runnerClass}`,
     }).appendTo(this.$parent);
   }
 
-  public setRunnerPosition(coefficient: number): void | false {
-    if (!this.$element) return false;
-
+  public setRunnerPosition(coefficient: number): void {
     const parentSize: number = this.orientation === 'horizontal'
       ? this._getParentWidth()
       : this._getParentHeight();
@@ -57,11 +54,7 @@ class RunnerView {
     }
   }
 
-  public moveRunner(e: JQuery.MouseMoveEvent): void | false {
-    if (!this.$element) {
-      return false;
-    }
-
+  public moveRunner(e: JQuery.MouseMoveEvent): void {
     if (this.orientation === 'horizontal') {
       const pageX: number = (<any>e).targetTouches
         ? (<any>e).targetTouches[0].pageX
@@ -89,11 +82,7 @@ class RunnerView {
     }
   }
 
-  public setRunnerShiftX(event: JQuery.MouseDownEvent): void | false {
-    if (!this.$element) {
-      return false;
-    }
-
+  public setRunnerShiftX(event: JQuery.MouseDownEvent): void {
     const pageX: number = (<any>event).targetTouches
       ? (<any>event).targetTouches[0].pageX
       : event.pageX;
@@ -101,11 +90,7 @@ class RunnerView {
     this.shiftX = pageX - this.$element.offset()!.left;
   }
 
-  public setRunnerShiftY(event: JQuery.MouseDownEvent): void | false {
-    if (!this.$element) {
-      return false;
-    }
-
+  public setRunnerShiftY(event: JQuery.MouseDownEvent): void {
     const pageY: number = (<any>event).targetTouches
       ? (<any>event).targetTouches[0].pageY
       : event.pageY;
@@ -127,7 +112,7 @@ class RunnerView {
     endPoint,
     shift,
     runnerSize,
-  }: ICheckCursorPositionSettings): number {
+  }: checkCursorPositionSettings): number {
 
     const isCoordinateLessThanLeftPoint: boolean = coordinate < (startPoint + shift);
     const isCoordinateGreaterThanEndPoint: boolean = coordinate > (endPoint - runnerSize + shift);
@@ -150,11 +135,7 @@ class RunnerView {
     endPoint,
     shift,
     runnerSize,
-  }: IDispatchMoveEventSettings): void {
-    if (!this.$element) {
-      return;
-    }
-
+  }: dispatchMoveEventSettings): void {
     const newCoordinate: number = this._checkCursorPosition({
       coordinate,
       startPoint,

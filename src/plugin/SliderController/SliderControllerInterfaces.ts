@@ -1,4 +1,4 @@
-import { IRunnerView } from '../runner/RunnerInterfaces';
+import { IRunnerView } from '../RunnerView/RunnerViewInterfaces';
 import { ITipView } from '../tip/TipInterfaces';
 
 export interface IChangeValueSettings {
