@@ -67,9 +67,8 @@ class SliderView {
     }
 
     return {
-      width: this.$element!.innerWidth()! - this.startValueRunner!.$element.innerWidth()!,
-      // TODO fix ts errors
-      height: this.$element!.innerHeight()! - this.startValueRunner!.$element.innerHeight()!,
+      width: this.$element.innerWidth()! - this.startValueRunner!.$element.innerWidth()!,
+      height: this.$element.innerHeight()! - this.startValueRunner!.$element.innerHeight()!,
     };
   }
 
@@ -84,7 +83,7 @@ class SliderView {
     }
 
     return {
-      width: this.startValueRunner!.$element.innerWidth()!, // TODO fix ts errors
+      width: this.startValueRunner!.$element.innerWidth()!,
       height: this.startValueRunner!.$element.innerHeight()!,
     };
   }

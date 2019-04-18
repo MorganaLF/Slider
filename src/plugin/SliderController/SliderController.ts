@@ -78,7 +78,7 @@ class SliderController {
     const isDeviceSupportsTouchMove: boolean = typeof document.body.ontouchmove !== 'undefined';
 
     if (isDeviceSupportsTouchMove) {
-      (<any>$window).on('touchmove.CustomSlider', mouseMoveHandler); // TODO unique namespaces
+      (<any>$window).on('touchmove.CustomSlider', mouseMoveHandler);
     } else {
       (<any>$window).on('mousemove.CustomSlider', mouseMoveHandler);
     }

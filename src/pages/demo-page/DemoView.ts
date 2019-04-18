@@ -34,6 +34,7 @@ class DemoView {
       startValue: 20,
       endValue: 80,
       stepSize: 20,
+      scaleMarksQuantity: 4,
     });
 
     this._updateInputValues();
@@ -286,13 +287,13 @@ class DemoView {
   private _addBodyHandlers(): void {
     const $body: JQuery = $('body');
 
-    $body // TODO event namespace
+    $body
       .on('changestartvalue.DemoView', this._updateInputValues.bind(this))
       .on('changeendvalue.DemoView', this._updateInputValues.bind(this));
   }
 
   private _addTextInputHandlers(inputName: string, methodName: string): void {
-    const $textInput: JQuery = $(`input[name="${inputName}"]`); // TODO event namespace
+    const $textInput: JQuery = $(`input[name="${inputName}"]`);
     $textInput.on('change.DemoView', this._handleTextInputChange.bind(this, methodName));
   }
 
@@ -310,7 +311,7 @@ class DemoView {
     const $checkbox: JQuery = $(`input[name="${checkboxName}"]`);
 
     $checkbox.on(
-      'change.DemoView', // TODO event namespace
+      'change.DemoView',
       this._handleCheckboxChange.bind(this, onMethodName, offMethodName),
     );
   }

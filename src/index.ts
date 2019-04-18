@@ -1,3 +1,5 @@
+declare var require: any;
+
 function requireAll(requireContext: any) {
   return requireContext.keys().map(requireContext);
 }
