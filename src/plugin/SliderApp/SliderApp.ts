@@ -17,10 +17,10 @@ class SliderApp {
   public withTip: boolean;
   public withScale: boolean;
   public scaleMarksQuantity: number;
+  public startValue: number;
+  public endValue: number;
+  public type: string;
   readonly $element: JQuery;
-  readonly startValue: number;
-  readonly endValue: number;
-  readonly type: string;
 
   constructor(options: SliderAppOptions) {
     this.sliderModel = null;
@@ -143,7 +143,7 @@ class SliderApp {
     if (this.sliderModel !== null) this.sliderModel.initValues();
   }
 
-  public init(): void | false {
+  public init(): void {
     this._createSliderModelInstance();
     this._createSliderViewInstance();
 

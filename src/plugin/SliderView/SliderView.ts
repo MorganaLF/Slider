@@ -42,7 +42,7 @@ class SliderView {
     this.orientation = options.orientation || 'horizontal';
   }
 
-  public updateSlider(): void | false {
+  public updateSlider(): void {
     this.$element.html('');
     this._drawSlider();
   }

@@ -8,9 +8,9 @@ class ScaleView {
   public $element: null | JQuery;
   public $parent: JQuery;
   public marksQuantity: number;
+  public orientation: string;
   readonly parentWidth: number;
   readonly parentHeight: number;
-  readonly orientation: string;
 
   constructor(options: ScaleViewOptions) {
     this.$parent = options.$parent;

@@ -41,7 +41,7 @@ class SliderController {
     $window.on('resize.CustomSlider', resizeHandler);
   }
 
-  public destroy() {
+  public destroy(): void {
     const $body = $('body');
 
     $body
