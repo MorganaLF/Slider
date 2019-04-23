@@ -40,21 +40,21 @@ class ScaleView {
     const roundedMinValue: number = Math.round(minValue);
     const roundedMarksQuantity: number = Math.round(this.marksQuantity);
     const step: number = (roundedMaxValue - roundedMinValue) / roundedMarksQuantity;
-    const roundedStep: number = Number(step.toFixed(10));
+    const roundedStep: number = Math.floor(step * 1000) / 1000;
 
     for (
-      let i: number = roundedMinValue;
+      let i: number = roundedMinValue, markIndex: number = 0;
       i <= roundedMaxValue;
-      i = Number((roundedStep + i).toFixed(10))
+      i += roundedStep
     ) {
-      const markIndex: number = (i - roundedMinValue) / step;
-
       this._drawMark({
         markIndex,
         markText: i,
         marksQuantity: roundedMarksQuantity,
         positionProperty: this._getPositionPropertyName(),
       });
+
+      markIndex += 1;
     }
   }
 
