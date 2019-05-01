@@ -39,6 +39,7 @@
 
     &:hover
     &:hover .slider__tip
+    &:hover .slider__tip:after
       background darker-primary-color
 
     &_vertical
@@ -77,6 +78,7 @@
       height 7px
       background primary-color
       transform translate(-50%, 50%) rotate(45deg)
+      transition background 0.3s ease
 
     &_vertical:after
       top 50%
