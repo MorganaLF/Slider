@@ -8,7 +8,7 @@ const { CheckerPlugin } = require('awesome-typescript-loader');
 module.exports = (env, options) => {
   const production = options.mode === 'production';
   const cssMap = !production;
-  const publicDir = production ? 'https://morganalf.github.io/Slider/dist/' : '/';
+  const publicDir = production ? 'https://morganalf.github.io/Slider/' : '/';
 
   return {
     entry: './src/index.ts',
