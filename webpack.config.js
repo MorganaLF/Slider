@@ -71,10 +71,28 @@ module.exports = (env, options) => {
                       return [
                         require('autoprefixer'),
                         require('cssnano'),
+                        require('postcss-pxtorem')({
+                          rootValue: 14,
+                          unitPrecision: 5,
+                          propList: ['*', '!max-width', '!min-width'],
+                          selectorBlackList: ['html'],
+                          replace: true,
+                          mediaQuery: false,
+                          minPixelValue: 0,
+                        }),
                       ];
                     }
                     return [
                       require('autoprefixer'),
+                      require('postcss-pxtorem')({
+                        rootValue: 14,
+                        unitPrecision: 5,
+                        propList: ['*', '!max-width', '!min-width'],
+                        selectorBlackList: ['html'],
+                        replace: true,
+                        mediaQuery: false,
+                        minPixelValue: 0,
+                      }),
                     ];
                   },
                 },
