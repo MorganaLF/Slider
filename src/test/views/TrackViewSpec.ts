@@ -1,4 +1,4 @@
-import TrackView from '../plugin/TrackView/TrackView';
+import TrackView from '../../plugin/views/TrackView/TrackView';
 
 describe('TrackView', () => {
   const $body = $('.body');

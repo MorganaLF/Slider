@@ -1,271 +1,271 @@
-import SliderApp from '../plugin/SliderApp/SliderApp';
-import { ISliderApp } from '../plugin/SliderApp/SliderAppInterfaces';
-import SliderModel from '../plugin/SliderModel/SliderModel';
-import SliderController from '../plugin/SliderController/SliderController';
-import SliderView from '../plugin/SliderView/SliderView';
+import App from '../plugin/App/App';
+import { IApp } from '../plugin/App/AppInterfaces';
+import Model from '../plugin/Model/Model';
+import Controller from '../plugin/Controller/Controller';
+import View from '../plugin/views/View/View';
 
-describe('SliderApp', () => {
-  let sliderApp: ISliderApp;
+describe('App', () => {
+  let app: IApp;
   let $element: JQuery;
 
   beforeEach(() => {
     setFixtures('<div class="slider"></div>');
     $element = $('.slider');
-    sliderApp = new SliderApp({ $element });
-    sliderApp.init();
+    app = new App({ $element });
+    app.init();
   });
 
-  it('Создает экземпляр класса SliderApp', () => {
-    expect(sliderApp).toBeDefined();
+  it('Создает экземпляр класса App', () => {
+    expect(app).toBeDefined();
   });
 
   describe('Метод init', () => {
-    it('Создает экземпляр класса SliderModel', () => {
-      expect(sliderApp.sliderModel instanceof SliderModel).toBeTruthy();
+    it('Создает экземпляр класса Model', () => {
+      expect(app.model instanceof Model).toBeTruthy();
     });
 
-    it('Создает экземпляр класса SliderView', () => {
-      expect(sliderApp.sliderView instanceof SliderView).toBeTruthy();
+    it('Создает экземпляр класса View', () => {
+      expect(app.view instanceof View).toBeTruthy();
     });
 
     it('Обновляет вид', () => {
-      expect(sliderApp.sliderView!.startValueRunner).toBeDefined();
-      expect(sliderApp.sliderView!.track).toBeDefined();
+      expect(app.view!.startValueRunner).toBeDefined();
+      expect(app.view!.track).toBeDefined();
     });
 
-    it('Создает экземпляр класса SliderController', () => {
-      expect(sliderApp.sliderController instanceof SliderController).toBeTruthy();
+    it('Создает экземпляр класса Controller', () => {
+      expect(app.controller instanceof Controller).toBeTruthy();
     });
   });
 
   describe('Метод getCurrentValue', () => {
     it('Возвращает округленное значение startValue модели', () => {
-      sliderApp.sliderModel!.startValue = 30.154;
-      expect(sliderApp.getCurrentValue()).toEqual(30);
+      app.model!.startValue = 30.154;
+      expect(app.getCurrentValue()).toEqual(30);
     });
 
     it('Возвращает 0, если модель не определена', () => {
-      sliderApp.sliderModel = null;
-      expect(sliderApp.getCurrentValue()).toEqual(0);
+      app.model = null;
+      expect(app.getCurrentValue()).toEqual(0);
     });
   });
 
   describe('Метод getCurrentEndValue', () => {
     it('Возвращает округленное значение endValue модели', () => {
-      sliderApp.sliderModel!.endValue = 70.954;
-      expect(sliderApp.getCurrentEndValue()).toEqual(71);
+      app.model!.endValue = 70.954;
+      expect(app.getCurrentEndValue()).toEqual(71);
     });
 
     it('Возвращает 0, если модель не определена', () => {
-      sliderApp.sliderModel = null;
-      expect(sliderApp.getCurrentEndValue()).toEqual(0);
+      app.model = null;
+      expect(app.getCurrentEndValue()).toEqual(0);
     });
   });
 
   describe('Метод getMinValue', () => {
     it('Возвращает значение minVal модели', () => {
-      sliderApp.sliderModel!.minValue = 10;
-      expect(sliderApp.getMinValue()).toEqual(10);
+      app.model!.minValue = 10;
+      expect(app.getMinValue()).toEqual(10);
     });
 
     it('Возвращает 0, если модель не определена', () => {
-      sliderApp.sliderModel = null;
-      expect(sliderApp.getMinValue()).toEqual(0);
+      app.model = null;
+      expect(app.getMinValue()).toEqual(0);
     });
   });
 
   describe('Метод getMaxValue', () => {
     it('Возвращает значение maxValue модели', () => {
-      sliderApp.sliderModel!.maxValue = 80;
-      expect(sliderApp.getMaxValue()).toEqual(80);
+      app.model!.maxValue = 80;
+      expect(app.getMaxValue()).toEqual(80);
     });
 
     it('Возвращает 0, если модель не определена', () => {
-      sliderApp.sliderModel = null;
-      expect(sliderApp.getMaxValue()).toEqual(0);
+      app.model = null;
+      expect(app.getMaxValue()).toEqual(0);
     });
   });
 
   describe('Метод getStepSize', () => {
     it('Возвращает значение stepSize модели', () => {
-      sliderApp.sliderModel!.stepSize = 15;
-      expect(sliderApp.getStepSize()).toEqual(15);
+      app.model!.stepSize = 15;
+      expect(app.getStepSize()).toEqual(15);
     });
 
     it('Возвращает 0, если модель не определена', () => {
-      sliderApp.sliderModel = null;
-      expect(sliderApp.getStepSize()).toEqual(0);
+      app.model = null;
+      expect(app.getStepSize()).toEqual(0);
     });
   });
 
   describe('Метод getScaleMarksQuantity', () => {
     it('Возвращает значение scaleMarksQuantity', () => {
-      sliderApp.scaleMarksQuantity = 5;
-      expect(sliderApp.getScaleMarksQuantity()).toEqual(5);
+      app.scaleMarksQuantity = 5;
+      expect(app.getScaleMarksQuantity()).toEqual(5);
     });
   });
 
   describe('Метод setMinValue', () => {
     it('Устанавливает значение minValue модели', () => {
-      sliderApp.setMinValue(5);
-      expect(sliderApp.sliderModel!.minValue).toEqual(5);
+      app.setMinValue(5);
+      expect(app.model!.minValue).toEqual(5);
     });
 
     it('Заменяет строку на число', () => {
-      sliderApp.setMinValue('15');
-      expect(sliderApp.sliderModel!.minValue).toEqual(15);
+      app.setMinValue('15');
+      expect(app.model!.minValue).toEqual(15);
     });
 
     it('Инициализирует плагин заново', () => {
-      const spy = spyOn(sliderApp, 'init');
-      sliderApp.setMinValue(5);
+      const spy = spyOn(app, 'init');
+      app.setMinValue(5);
       expect(spy).toHaveBeenCalled();
     });
   });
 
   describe('Метод setMaxValue', () => {
     it('Устанавливает значение maxValue модели', () => {
-      sliderApp.setMaxValue(75);
-      expect(sliderApp.sliderModel!.maxValue).toEqual(75);
+      app.setMaxValue(75);
+      expect(app.model!.maxValue).toEqual(75);
     });
 
     it('Заменяет строку на число', () => {
-      sliderApp.setMaxValue('65');
-      expect(sliderApp.sliderModel!.maxValue).toEqual(65);
+      app.setMaxValue('65');
+      expect(app.model!.maxValue).toEqual(65);
     });
 
     it('Инициализирует плагин заново', () => {
-      const spy = spyOn(sliderApp, 'init');
-      sliderApp.setMaxValue(95);
+      const spy = spyOn(app, 'init');
+      app.setMaxValue(95);
       expect(spy).toHaveBeenCalled();
     });
   });
 
   describe('Метод setCurrentValue', () => {
     it('Устанавливает значение startValue модели', () => {
-      sliderApp.setCurrentValue(20);
-      expect(sliderApp.sliderModel!.startValue).toEqual(20);
+      app.setCurrentValue(20);
+      expect(app.model!.startValue).toEqual(20);
     });
 
     it('Если модель не определена, возвращает false', () => {
-      sliderApp.sliderModel = null;
-      expect(sliderApp.setCurrentValue(20)).toEqual(false);
+      app.model = null;
+      expect(app.setCurrentValue(20)).toEqual(false);
     });
   });
 
   describe('Метод setCurrentEndValue', () => {
     it('Устанавливает значение endValue модели', () => {
-      sliderApp.sliderModel!.type = 'interval';
-      sliderApp.setCurrentEndValue(60);
-      expect(sliderApp.sliderModel!.endValue).toEqual(60);
+      app.model!.type = 'interval';
+      app.setCurrentEndValue(60);
+      expect(app.model!.endValue).toEqual(60);
     });
 
     it('Если модель не определена, возвращает false', () => {
-      sliderApp.sliderModel = null;
-      expect(sliderApp.setCurrentEndValue(60)).toEqual(false);
+      app.model = null;
+      expect(app.setCurrentEndValue(60)).toEqual(false);
     });
   });
 
   describe('Метод setStepSize', () => {
     it('Устанавливает значение stepSize модели', () => {
-      sliderApp.setStepSize(7);
-      expect(sliderApp.sliderModel!.stepSize).toEqual(7);
+      app.setStepSize(7);
+      expect(app.model!.stepSize).toEqual(7);
     });
 
     it('Инициализирует плагин заново', () => {
-      const spy = spyOn(sliderApp, 'init');
-      sliderApp.setStepSize(7);
+      const spy = spyOn(app, 'init');
+      app.setStepSize(7);
       expect(spy).toHaveBeenCalled();
     });
   });
 
   describe('Метод setScaleMarksQuantity', () => {
     it('Устанавливает значение scaleMarksQuantity', () => {
-      sliderApp.setScaleMarksQuantity(27);
-      expect(sliderApp.scaleMarksQuantity).toEqual(27);
+      app.setScaleMarksQuantity(27);
+      expect(app.scaleMarksQuantity).toEqual(27);
     });
 
     it('Перерисовывает вид', () => {
-      const spy = spyOn(sliderApp, 'updateSliderView');
-      sliderApp.setScaleMarksQuantity(10);
+      const spy = spyOn(app, 'updateView');
+      app.setScaleMarksQuantity(10);
       expect(spy).toHaveBeenCalled();
     });
   });
 
   describe('Метод showTip', () => {
     it('Устанавливает значение withTip вида в положение true', () => {
-      sliderApp.showTip();
-      expect(sliderApp.sliderView!.withTip).toBeTruthy();
+      app.showTip();
+      expect(app.view!.withTip).toBeTruthy();
     });
 
     it('Перерисовывает вид', () => {
-      const spy = spyOn(sliderApp, 'updateSliderView');
-      sliderApp.showTip();
+      const spy = spyOn(app, 'updateView');
+      app.showTip();
       expect(spy).toHaveBeenCalled();
     });
   });
 
   describe('Метод hideTip', () => {
     it('Устанавливает значение withTip вида в положение false', () => {
-      sliderApp.hideTip();
-      expect(sliderApp.sliderView!.withTip).toBeFalsy();
+      app.hideTip();
+      expect(app.view!.withTip).toBeFalsy();
     });
 
     it('Перерисовывает вид', () => {
-      const spy = spyOn(sliderApp, 'updateSliderView');
-      sliderApp.hideTip();
+      const spy = spyOn(app, 'updateView');
+      app.hideTip();
       expect(spy).toHaveBeenCalled();
     });
   });
 
   describe('Метод showScale', () => {
     it('Устанавливает значение withScale вида в положение true', () => {
-      sliderApp.showScale();
-      expect(sliderApp.withScale).toBeTruthy();
+      app.showScale();
+      expect(app.withScale).toBeTruthy();
     });
 
     it('Перерисовывает вид', () => {
-      const spy = spyOn(sliderApp, 'updateSliderView');
-      sliderApp.showScale();
+      const spy = spyOn(app, 'updateView');
+      app.showScale();
       expect(spy).toHaveBeenCalled();
     });
   });
 
   describe('Метод hideScale', () => {
     it('Устанавливает значение withScale вида в положение false', () => {
-      sliderApp.hideScale();
-      expect(sliderApp.withScale).toBeFalsy();
+      app.hideScale();
+      expect(app.withScale).toBeFalsy();
     });
 
     it('Перерисовывает вид', () => {
-      const spy = spyOn(sliderApp, 'updateSliderView');
-      sliderApp.hideScale();
+      const spy = spyOn(app, 'updateView');
+      app.hideScale();
       expect(spy).toHaveBeenCalled();
     });
   });
 
   describe('Метод setVerticalOrientation', () => {
     it('Устанавливает вертикальное положение слайдера', () => {
-      sliderApp.setVerticalOrientation();
-      expect(sliderApp.orientation).toEqual('vertical');
+      app.setVerticalOrientation();
+      expect(app.orientation).toEqual('vertical');
     });
 
     it('Перерисовывает вид', () => {
-      const spy = spyOn(sliderApp, 'updateSliderView');
-      sliderApp.setVerticalOrientation();
+      const spy = spyOn(app, 'updateView');
+      app.setVerticalOrientation();
       expect(spy).toHaveBeenCalled();
     });
   });
 
   describe('Метод setHorizontalOrientation', () => {
     it('Устанавливает горизонтальное положение слайдера', () => {
-      sliderApp.setHorizontalOrientation();
-      expect(sliderApp.orientation).toEqual('horizontal');
+      app.setHorizontalOrientation();
+      expect(app.orientation).toEqual('horizontal');
     });
 
     it('Перерисовывает вид', () => {
-      const spy = spyOn(sliderApp, 'updateSliderView');
-      sliderApp.setHorizontalOrientation();
+      const spy = spyOn(app, 'updateView');
+      app.setHorizontalOrientation();
       expect(spy).toHaveBeenCalled();
     });
   });

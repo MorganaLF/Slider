@@ -1,4 +1,4 @@
-export type SliderModelOptions = {
+export type ModelOptions = {
   startValue?: number,
   endValue?: number,
   minValue?: number,
@@ -7,7 +7,7 @@ export type SliderModelOptions = {
   stepSize?: number,
 };
 
-export interface ISliderModel extends SliderModelOptions{
+export interface IModel extends ModelOptions{
   initValues(): void;
   getCurrentRoundedValue(): number;
   getCurrentRoundedEndValue(): number;

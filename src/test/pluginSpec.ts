@@ -1,4 +1,4 @@
-import SliderApp from '../plugin/SliderApp/SliderApp';
+import App from '../plugin/App/App';
 
 describe('Функция customSlider', () => {
   let $element: JQuery;
@@ -9,10 +9,10 @@ describe('Функция customSlider', () => {
     $element.customSlider();
   });
 
-  it('При инициализации сохраняет экземпляр класса SliderApp в data элемента', () => {
+  it('При инициализации сохраняет экземпляр класса App в data элемента', () => {
     $element.customSlider();
 
-    expect($element.data('constructor') instanceof SliderApp).toBeTruthy();
+    expect($element.data('constructor') instanceof App).toBeTruthy();
   });
 
   it('Поддерживает data-аттрибуты', () => {
@@ -24,7 +24,7 @@ describe('Функция customSlider', () => {
     expect($element.data('constructor').startValue).toEqual(33);
   });
 
-  it('При вызове с аргументами вызывает соответствующий метод SliderApp', () => {
+  it('При вызове с аргументами вызывает соответствующий метод App', () => {
     const spyOnGetter = spyOn($element.data('constructor'), 'getCurrentValue');
     $element.customSlider('getCurrentValue');
 

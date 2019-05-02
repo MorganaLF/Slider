@@ -1,7 +1,7 @@
-import SliderApp from './SliderApp/SliderApp';
-import { SliderAppOptions } from './SliderApp/SliderAppInterfaces';
+import App from './App/App';
+import { AppOptions } from './App/AppInterfaces';
 
-$.fn.customSlider = function(options: SliderAppOptions | string, ...args) {
+$.fn.customSlider = function(options: AppOptions | string, ...args) {
   const $this = $(this);
   const isSliderInitialized = typeof options === 'object' || !options;
 
@@ -19,7 +19,7 @@ $.fn.customSlider = function(options: SliderAppOptions | string, ...args) {
     };
 
     const extendedOptions = $.extend({ $element: $this }, options, dataConfig);
-    $this.data('constructor', new SliderApp(extendedOptions));
+    $this.data('constructor', new App(extendedOptions));
 
     return $this.data('constructor').init();
   }

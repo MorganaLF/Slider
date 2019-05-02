@@ -7,12 +7,12 @@ import { ITrackView } from '../TrackView/TrackViewInterfaces';
 import ScaleView from '../ScaleView/ScaleView';
 import { IScaleView } from '../ScaleView/ScaleViewInterfaces';
 import {
-  SliderViewOptions,
+  ViewOptions,
   IExtremePoints,
   ISize,
-} from './SliderViewInterfaces';
+} from './ViewInterfaces';
 
-class SliderView {
+class View {
   [key: string]: any;
   public $element: JQuery;
   public startValueRunner?: null | IRunnerView;
@@ -27,7 +27,7 @@ class SliderView {
   public scaleMarksQuantity: number;
   public orientation: string;
 
-  constructor(options: SliderViewOptions) {
+  constructor(options: ViewOptions) {
     this.$element = options.$element;
     this.startValueRunner = null;
     this.endValueRunner = null;
@@ -157,4 +157,4 @@ class SliderView {
   }
 }
 
-export default SliderView;
+export default View;

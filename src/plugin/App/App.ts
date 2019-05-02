@@ -1,15 +1,15 @@
-import { SliderAppOptions } from './SliderAppInterfaces';
-import SliderController from '../SliderController/SliderController';
-import { ISliderController } from '../SliderController/SliderControllerInterfaces';
-import SliderModel from '../SliderModel/SliderModel';
-import { ISliderModel } from '../SliderModel/SliderModelInterfaces';
-import SliderView from '../SliderView/SliderView';
-import { ISliderView } from '../SliderView/SliderViewInterfaces';
+import { AppOptions } from './AppInterfaces';
+import Controller from '../Controller/Controller';
+import { IController } from '../Controller/ControllerInterfaces';
+import Model from '../Model/Model';
+import { IModel } from '../Model/ModelInterfaces';
+import View from '../views/View/View';
+import { IView } from '../views/View/ViewInterfaces';
 
-class SliderApp {
-  public sliderModel: null | ISliderModel;
-  public sliderView: null | ISliderView;
-  public sliderController: null | ISliderController;
+class App {
+  public model: null | IModel;
+  public view: null | IView;
+  public controller: null | IController;
   public minValue: number;
   public maxValue: number;
   public stepSize: number;
@@ -22,10 +22,10 @@ class SliderApp {
   public type: string;
   readonly $element: JQuery;
 
-  constructor(options: SliderAppOptions) {
-    this.sliderModel = null;
-    this.sliderView = null;
-    this.sliderController = null;
+  constructor(options: AppOptions) {
+    this.model = null;
+    this.view = null;
+    this.controller = null;
     this.minValue = options.minValue || 0;
     this.maxValue = options.maxValue || 100;
     this.stepSize = options.stepSize || 0;
@@ -40,27 +40,27 @@ class SliderApp {
   }
 
   public getCurrentValue(): number {
-    return this.sliderModel ? this.sliderModel.getCurrentRoundedValue() : 0;
+    return this.model ? this.model.getCurrentRoundedValue() : 0;
   }
 
   public setCurrentValue(val: number): void | false {
-    if (!this.sliderModel) return false;
+    if (!this.model) return false;
 
-    this.sliderModel.setCurrentValue(val);
+    this.model.setCurrentValue(val);
   }
 
   public getCurrentEndValue(): number {
-    return this.sliderModel ? this.sliderModel.getCurrentRoundedEndValue() : 0;
+    return this.model ? this.model.getCurrentRoundedEndValue() : 0;
   }
 
   public setCurrentEndValue(val: number): void | false {
-    if (!this.sliderModel) return false;
+    if (!this.model) return false;
 
-    this.sliderModel.setCurrentEndValue(val);
+    this.model.setCurrentEndValue(val);
   }
 
   public getMinValue(): number {
-    return this.sliderModel ? this.sliderModel.minValue! : 0;
+    return this.model ? this.model.minValue! : 0;
   }
 
   public setMinValue(val: number | string): void {
@@ -69,7 +69,7 @@ class SliderApp {
   }
 
   public getMaxValue(): number {
-    return this.sliderModel ? this.sliderModel.maxValue! : 0;
+    return this.model ? this.model.maxValue! : 0;
   }
 
   public setMaxValue(val: number | string): void {
@@ -78,7 +78,7 @@ class SliderApp {
   }
 
   public getStepSize(): number {
-    return this.sliderModel ? this.sliderModel.stepSize! : 0;
+    return this.model ? this.model.stepSize! : 0;
   }
 
   public setStepSize(val: number): void {
@@ -92,71 +92,71 @@ class SliderApp {
 
   public setScaleMarksQuantity(val: number): void {
     this.scaleMarksQuantity = val;
-    this.updateSliderView();
+    this.updateView();
   }
 
   public setVerticalOrientation(): void {
     this.orientation = 'vertical';
-    this.updateSliderView();
+    this.updateView();
   }
 
   public setHorizontalOrientation(): void {
     this.orientation = 'horizontal';
-    this.updateSliderView();
+    this.updateView();
   }
 
   public showTip(): void {
     this.withTip = true;
-    this.updateSliderView();
+    this.updateView();
   }
 
   public hideTip(): void {
     this.withTip = false;
-    this.updateSliderView();
+    this.updateView();
   }
 
   public showScale(): void {
     this.withScale = true;
-    this.updateSliderView();
+    this.updateView();
   }
 
   public hideScale(): void {
     this.withScale = false;
-    this.updateSliderView();
+    this.updateView();
   }
 
-  public updateSliderView(): void {
-    if (this.sliderController) {
-      this.sliderController.destroy();
-      this.sliderController = null;
+  public updateView(): void {
+    if (this.controller) {
+      this.controller.destroy();
+      this.controller = null;
     }
 
-    this._createSliderViewInstance();
+    this._createViewInstance();
 
-    if (this.sliderModel !== null) {
-      this.sliderView!.updateSlider();
-      this.sliderController = new SliderController(this.sliderView!, this.sliderModel);
+    if (this.model !== null) {
+      this.view!.updateSlider();
+      this.controller = new Controller(this.view!, this.model);
     }
 
-    this.sliderController!.init();
+    this.controller!.init();
 
-    if (this.sliderModel !== null) this.sliderModel.initValues();
+    if (this.model !== null) this.model.initValues();
   }
 
   public init(): void {
-    this._createSliderModelInstance();
-    this._createSliderViewInstance();
+    this._createModelInstance();
+    this._createViewInstance();
 
-    this.sliderView!.updateSlider();
+    this.view!.updateSlider();
 
-    this.sliderController = new SliderController(this.sliderView!, this.sliderModel!);
-    this.sliderController.init();
+    this.controller = new Controller(this.view!, this.model!);
+    this.controller.init();
 
-    this.sliderModel!.initValues();
+    this.model!.initValues();
   }
 
-  private _createSliderModelInstance() {
-    this.sliderModel = new SliderModel({
+  private _createModelInstance() {
+    this.model = new Model({
       startValue: this.startValue,
       endValue: this.endValue,
       minValue: this.minValue,
@@ -166,8 +166,8 @@ class SliderApp {
     });
   }
 
-  private _createSliderViewInstance() {
-    this.sliderView = new SliderView({
+  private _createViewInstance() {
+    this.view = new View({
       $element: this.$element,
       type: this.type,
       orientation: this.orientation,
@@ -178,4 +178,4 @@ class SliderApp {
   }
 }
 
-export default SliderApp;
+export default App;

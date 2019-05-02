@@ -1,6 +1,6 @@
-import { ISliderModel } from '../SliderModel/SliderModelInterfaces';
-import { ISliderView } from '../SliderView/SliderViewInterfaces';
-import { ISliderController } from '../SliderController/SliderControllerInterfaces';
+import { IModel } from '../Model/ModelInterfaces';
+import { IView } from '../views/View/ViewInterfaces';
+import { IController } from '../Controller/ControllerInterfaces';
 
 declare global {
   interface JQuery {
@@ -8,7 +8,7 @@ declare global {
   }
 }
 
-export type SliderAppOptions = {
+export type AppOptions = {
   $element: JQuery,
   startValue?: number,
   endValue?: number,
@@ -20,14 +20,14 @@ export type SliderAppOptions = {
   withTip?: boolean,
   withScale?: boolean,
   scaleMarksQuantity?: number,
-  sliderModel?: ISliderModel | null,
-  sliderView?: ISliderView | null,
-  sliderController?: ISliderController | null,
+  model?: IModel | null,
+  view?: IView | null,
+  controller?: IController | null,
 };
 
-export interface ISliderApp extends SliderAppOptions {
+export interface IApp extends AppOptions {
   init(): void | false;
-  updateSliderView(): void;
+  updateView(): void;
   getCurrentValue(): number;
   getCurrentEndValue(): number;
   getMinValue(): number;

@@ -1,23 +1,23 @@
-import RunnerView from '../plugin/RunnerView/RunnerView';
-import ScaleView from '../plugin/ScaleView/ScaleView';
-import SliderView from '../plugin/SliderView/SliderView';
-import TipView from '../plugin/TipView/TipView';
-import TrackView from '../plugin/TrackView/TrackView';
+import RunnerView from '../../plugin/views/RunnerView/RunnerView';
+import ScaleView from '../../plugin/views/ScaleView/ScaleView';
+import View from '../../plugin/views/View/View';
+import TipView from '../../plugin/views/TipView/TipView';
+import TrackView from '../../plugin/views/TrackView/TrackView';
 
 
-describe('SliderView', () => {
+describe('View', () => {
   let $element: JQuery;
   let $track: JQuery;
   let $filledTrack: JQuery;
   let $runner: JQuery;
   let $tip: JQuery;
-  let slider: SliderView;
+  let view: View;
 
   beforeEach(() => {
     setFixtures('<div class="slider"></div>');
     $element = $('.slider');
 
-    slider = new SliderView({
+    view = new View({
       $element,
       type: 'single',
       orientation: 'horizontal',
@@ -26,7 +26,7 @@ describe('SliderView', () => {
       scaleMarksQuantity: 10,
     });
 
-    slider.updateSlider();
+    view.updateSlider();
 
     $track = $('.slider .slider__track');
     $filledTrack = $('.slider .slider__track .slider__filled-track');
@@ -34,23 +34,23 @@ describe('SliderView', () => {
     $tip = $('.slider .slider__runner .slider__tip');
   });
 
-  it('Создает экземпляр класса SliderView', () => {
-    expect(slider).toBeDefined();
+  it('Создает экземпляр класса View', () => {
+    expect(view).toBeDefined();
   });
 
   describe('Функция updateSlider', () => {
     it('Добавляет корневому элементу класс vertical, если ориентация вертикальная', () => {
-      (<any>slider).orientation = 'vertical';
-      slider.updateSlider();
+      (<any>view).orientation = 'vertical';
+      view.updateSlider();
 
-      const $verticalSlider = $('.slider_vertical');
+      const $verticalSlider = $('.view_vertical');
 
       expect($verticalSlider).toExist();
     });
 
     it('Удаляет у корневого элемента класс vertical, если ориентация горизонтальная', () => {
-      (<any>slider).orientation = 'horizontal';
-      slider.updateSlider();
+      (<any>view).orientation = 'horizontal';
+      view.updateSlider();
 
       const $verticalSlider = $('.slider_vertical');
 
@@ -70,8 +70,8 @@ describe('SliderView', () => {
     });
 
     it('Создает два элемента slider__runner, если тип слайдера "interval"', () => {
-      slider.type = 'interval';
-      slider.updateSlider();
+      view.type = 'interval';
+      view.updateSlider();
 
       const $runner = $('.slider .slider__runner');
 
@@ -83,8 +83,8 @@ describe('SliderView', () => {
     });
 
     it('Создает два элемента slider__tip, если тип слайдера "interval"', () => {
-      slider.type = 'interval';
-      slider.updateSlider();
+      view.type = 'interval';
+      view.updateSlider();
 
       const $tip = $('.slider .slider__runner .slider__tip');
 
@@ -92,9 +92,9 @@ describe('SliderView', () => {
     });
 
     it('Должна рисовать слайдер только один раз', () => {
-      slider.updateSlider();
-      slider.updateSlider();
-      slider.updateSlider();
+      view.updateSlider();
+      view.updateSlider();
+      view.updateSlider();
 
       expect($track.length).toEqual(1);
     });
@@ -103,45 +103,45 @@ describe('SliderView', () => {
       $('.slider').html('<div class="test"></div>');
       expect($('.slider .test')).toExist();
 
-      slider.updateSlider();
+      view.updateSlider();
       expect($('.slider .test')).not.toExist();
     });
 
     it('Записывает экземпляр класса RunnerView в свойство startValueRunner', () => {
-      expect(slider.startValueRunner instanceof RunnerView).toEqual(true);
+      expect(view.startValueRunner instanceof RunnerView).toEqual(true);
     });
 
     it(
       `Записывает экземпляр класса RunnerView в свойство endValueRunner,
       если тип слайдера interval`,
       () => {
-        slider.type = 'interval';
-        slider.updateSlider();
+        view.type = 'interval';
+        view.updateSlider();
 
-        expect(slider.endValueRunner instanceof RunnerView).toEqual(true);
+        expect(view.endValueRunner instanceof RunnerView).toEqual(true);
       });
 
     it('Записывает экземпляр класса TipView в свойство startValueTip', () => {
-      expect(slider.startValueTip instanceof TipView).toEqual(true);
+      expect(view.startValueTip instanceof TipView).toEqual(true);
     });
 
     it(
       'Записывает экземпляр класса TipView в свойство endValueTip, если тип слайдера interval',
       () => {
-        slider.type = 'interval';
-        slider.updateSlider();
+        view.type = 'interval';
+        view.updateSlider();
 
-        expect(slider.endValueTip instanceof TipView).toEqual(true);
+        expect(view.endValueTip instanceof TipView).toEqual(true);
       });
 
     it('Записывает экземпляр класса TrackView в свойство track', () => {
-      expect(slider.track instanceof TrackView).toEqual(true);
+      expect(view.track instanceof TrackView).toEqual(true);
     });
 
     it('Записывает экземпляр класса ScaleView в свойство scale', () => {
-      slider.updateSlider();
+      view.updateSlider();
 
-      expect(slider.scale instanceof ScaleView).toEqual(true);
+      expect(view.scale instanceof ScaleView).toEqual(true);
     });
   });
 });

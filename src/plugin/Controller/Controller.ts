@@ -1,15 +1,15 @@
-import { IRunnerView } from '../RunnerView/RunnerViewInterfaces';
-import { ISliderModel } from '../SliderModel/SliderModelInterfaces';
-import { ISliderView } from '../SliderView/SliderViewInterfaces';
-import { ITipView } from '../TipView/TipViewInterfaces';
-import { ITrackView } from '../TrackView/TrackViewInterfaces';
+import { IRunnerView } from '../views/RunnerView/RunnerViewInterfaces';
+import { IModel } from '../Model/ModelInterfaces';
+import { IView } from '../views/View/ViewInterfaces';
+import { ITipView } from '../views/TipView/TipViewInterfaces';
+import { ITrackView } from '../views/TrackView/TrackViewInterfaces';
 import {
   addHandlersSettings,
   changeValueSettings,
   handleWindowMouseUpSettings,
-} from './SliderControllerInterfaces';
+} from './ControllerInterfaces';
 
-class SliderController {
+class Controller {
   [key: string]: any;
   public startValueRunner?: null | IRunnerView;
   public endValueRunner?: null | IRunnerView;
@@ -22,7 +22,7 @@ class SliderController {
   readonly withTip: boolean;
   readonly type: string;
 
-  constructor(private view: ISliderView, private model: ISliderModel) {
+  constructor(private view: IView, private model: IModel) {
     this.startValueRunner = view.startValueRunner;
     this.endValueRunner = view.endValueRunner;
     this.startValueTip = view.startValueTip;
@@ -262,4 +262,4 @@ class SliderController {
   }
 }
 
-export default SliderController;
+export default Controller;

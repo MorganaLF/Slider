@@ -1,6 +1,6 @@
-import { SliderModelOptions } from './SliderModelInterfaces';
+import { ModelOptions } from './ModelInterfaces';
 
-class SliderModel {
+class Model {
   [key: string]: any;
   public startValue: number;
   public endValue: number;
@@ -9,7 +9,7 @@ class SliderModel {
   public type: string;
   public stepSize: number;
 
-  constructor(options: SliderModelOptions) {
+  constructor(options: ModelOptions) {
     this.startValue = options.startValue || 0;
     this.endValue = options.endValue || 100;
     this.minValue = options.minValue || 0;
@@ -201,4 +201,4 @@ class SliderModel {
   }
 }
 
-export default SliderModel;
+export default Model;

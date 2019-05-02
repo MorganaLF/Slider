@@ -1,4 +1,4 @@
-import RunnerView from '../plugin/RunnerView/RunnerView';
+import RunnerView from '../../plugin/views/RunnerView/RunnerView';
 
 describe('RunnerView', () => {
   let runnerView: RunnerView;

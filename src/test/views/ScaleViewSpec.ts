@@ -1,4 +1,4 @@
-import ScaleView from '../plugin/ScaleView/ScaleView';
+import ScaleView from '../../plugin/views/ScaleView/ScaleView';
 
 describe('ScaleView', () => {
   let scaleView: ScaleView;

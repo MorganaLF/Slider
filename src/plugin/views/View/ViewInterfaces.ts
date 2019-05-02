@@ -15,7 +15,7 @@ export interface ISize {
   height: number;
 }
 
-export type SliderViewOptions = {
+export type ViewOptions = {
   $element: JQuery,
   startValueRunner?: null | IRunnerView,
   endValueRunner?: null | IRunnerView,
@@ -30,6 +30,6 @@ export type SliderViewOptions = {
   orientation?: string,
 };
 
-export interface ISliderView extends SliderViewOptions{
+export interface IView extends ViewOptions{
   updateSlider(): void;
 }

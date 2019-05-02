@@ -1,5 +1,5 @@
-import { IRunnerView } from '../RunnerView/RunnerViewInterfaces';
-import { ITipView } from '../TipView/TipViewInterfaces';
+import { IRunnerView } from '../views/RunnerView/RunnerViewInterfaces';
+import { ITipView } from '../views/TipView/TipViewInterfaces';
 
 export type changeValueSettings = {
   runner: IRunnerView;
@@ -21,7 +21,7 @@ export type handleWindowMouseUpSettings = {
   runner: IRunnerView;
 };
 
-export interface ISliderController {
+export interface IController {
   init(): void;
   destroy(): void;
 }

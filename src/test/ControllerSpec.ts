@@ -1,15 +1,15 @@
-import SliderController from '../plugin/SliderController/SliderController';
-import SliderModel from '../plugin/SliderModel/SliderModel';
-import SliderView from '../plugin/SliderView/SliderView';
+import Controller from '../plugin/Controller/Controller';
+import Model from '../plugin/Model/Model';
+import View from '../plugin/views/View/View';
 
-describe('SliderController', () => {
+describe('Controller', () => {
   const $body = $('body');
   const $window = $(window);
   let $element: JQuery;
   let $runner: JQuery;
-  let sliderView: SliderView;
-  let sliderModel: SliderModel;
-  let sliderController: SliderController;
+  let view: View;
+  let model: Model;
+  let controller: Controller;
   let spy: (obj: JQuery, func: any) => void;
   let spyOnCustomEvent: (obj: any, func: any, event: string) => void;
 
@@ -17,7 +17,7 @@ describe('SliderController', () => {
     setFixtures('<div class="slider"></div>');
     $element = $('.slider');
 
-    sliderModel = new SliderModel({
+    model = new Model({
       startValue: 0,
       endValue: 100,
       minValue: 0,
@@ -26,7 +26,7 @@ describe('SliderController', () => {
       type: 'interval',
     });
 
-    sliderView = new SliderView({
+    view = new View({
       $element,
       type: 'interval',
       orientation: 'horizontal',
@@ -35,27 +35,27 @@ describe('SliderController', () => {
       scaleMarksQuantity: 10,
     });
 
-    sliderView.updateSlider();
-    sliderController = new SliderController(sliderView, sliderModel);
-    sliderController.init();
+    view.updateSlider();
+    controller = new Controller(view, model);
+    controller.init();
 
     $runner = $('.slider__runner');
 
     spyOnCustomEvent = function(obj, func, event) {
       spy = spyOn(obj, func);
       spyOnEvent('body', event);
-      const e = $.Event(event, { detail: { model: sliderModel } });
+      const e = $.Event(event, { detail: { model } });
       $body.trigger(e);
     };
   });
 
-  it('Создается экземпляр класса SliderController', () => {
-    expect(sliderController).toBeDefined();
+  it('Создается экземпляр класса Controller', () => {
+    expect(controller).toBeDefined();
   });
 
   describe('Метод init', () => {
     it('При клике на runner и движении мыши пересчитывается значение модели', () => {
-      const spy = spyOn(sliderModel, 'setCurrentValueByRatio');
+      const spy = spyOn(model, 'setCurrentValueByRatio');
       $runner.mousedown();
       $window.mousemove();
 
@@ -64,12 +64,12 @@ describe('SliderController', () => {
 
     it('При клике на runner устанавливается shift бегунка', () => {
       const spyOnShiftX = spyOn(
-        sliderController.startValueRunner,
+        controller.startValueRunner,
         (<never>'setRunnerShiftX'),
       );
 
       const spyOnShiftY = spyOn(
-        sliderController.startValueRunner,
+        controller.startValueRunner,
         (<never>'setRunnerShiftY'),
       );
 
@@ -81,7 +81,7 @@ describe('SliderController', () => {
 
     it('При событии changestartvalue устанавливается новое положение бегунка', () => {
       spyOnCustomEvent(
-        sliderController.startValueRunner,
+        controller.startValueRunner,
         'setRunnerPosition',
         'changestartvalue',
       );
@@ -92,7 +92,7 @@ describe('SliderController', () => {
 
     it('При событии changestartvalue обновляется подсказка', () => {
       spyOnCustomEvent(
-        sliderController.startValueTip,
+        controller.startValueTip,
         'updateTip',
         'changestartvalue',
       );
@@ -103,7 +103,7 @@ describe('SliderController', () => {
 
     it('При событии changestartvalue обновляется дорожка слайдера', () => {
       spyOnCustomEvent(
-        sliderController.track,
+        controller.track,
         'animateTrack',
         'changestartvalue',
       );
@@ -114,7 +114,7 @@ describe('SliderController', () => {
 
     it('При событии changeendvalue устанавливается новое положение второго бегунка', () => {
       spyOnCustomEvent(
-        sliderController.endValueRunner,
+        controller.endValueRunner,
         'setRunnerPosition',
         'changeendvalue',
       );
@@ -125,7 +125,7 @@ describe('SliderController', () => {
 
     it('При событии changeendvalue обновляется подсказка', () => {
       spyOnCustomEvent(
-        sliderController.endValueTip,
+        controller.endValueTip,
         'updateTip',
         'changeendvalue',
       );
@@ -136,7 +136,7 @@ describe('SliderController', () => {
 
     it('При событии changeendvalue обновляется дорожка слайдера', () => {
       spyOnCustomEvent(
-        sliderController.track,
+        controller.track,
         'animateTrack',
         'changeendvalue',
       );
@@ -147,7 +147,7 @@ describe('SliderController', () => {
 
     it('При событии setstartvalue устанавливается новое положение бегунка', () => {
       spyOnCustomEvent(
-        sliderController.startValueRunner,
+        controller.startValueRunner,
         'setRunnerPosition',
         'setstartvalue',
       );
@@ -158,7 +158,7 @@ describe('SliderController', () => {
 
     it('При событии setstartvalue обновляется подсказка', () => {
       spyOnCustomEvent(
-        sliderController.startValueTip,
+        controller.startValueTip,
         'updateTip',
         'setstartvalue',
       );
@@ -169,7 +169,7 @@ describe('SliderController', () => {
 
     it('При событии setstartvalue обновляется дорожка слайдера', () => {
       spyOnCustomEvent(
-        sliderController.track,
+        controller.track,
         'animateTrack',
         'setstartvalue',
       );
@@ -180,7 +180,7 @@ describe('SliderController', () => {
 
     it('При событии setendvalue устанавливается новое положение второго бегунка', () => {
       spyOnCustomEvent(
-        sliderController.endValueRunner,
+        controller.endValueRunner,
         'setRunnerPosition',
         'setendvalue',
       );
@@ -191,7 +191,7 @@ describe('SliderController', () => {
 
     it('При событии setendvalue обновляется подсказка', () => {
       spyOnCustomEvent(
-        sliderController.endValueTip,
+        controller.endValueTip,
         'updateTip',
         'setendvalue',
       );
@@ -202,7 +202,7 @@ describe('SliderController', () => {
 
     it('При событии setendvalue обновляется дорожка слайдера', () => {
       spyOnCustomEvent(
-        sliderController.track,
+        controller.track,
         'animateTrack',
         'setendvalue',
       );
@@ -212,20 +212,20 @@ describe('SliderController', () => {
     });
 
     it('При событии mouseup обработчики удаляются', () => {
-      const spyOnWindowMouseMove = spyOn(<any>sliderController, '_handleWindowMouseMove');
+      const spyOnWindowMouseMove = spyOn(<any>controller, '_handleWindowMouseMove');
       $window.mouseup();
       $window.mousemove();
 
       expect(spyOnWindowMouseMove).not.toHaveBeenCalled();
 
-      const spyOnRunnerMove = spyOn(<any>sliderController, '_handleRunnerMove');
+      const spyOnRunnerMove = spyOn(<any>controller, '_handleRunnerMove');
       $runner.trigger('move');
 
       expect(spyOnRunnerMove).not.toHaveBeenCalled();
     });
 
     it('При событии resize обновляется вид слайдера', () => {
-      const spy = spyOn((<any>sliderController).view, 'updateSlider');
+      const spy = spyOn((<any>controller).view, 'updateSlider');
       $window.trigger('resize');
 
       expect(spy).toHaveBeenCalled();
