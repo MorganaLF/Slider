@@ -138,31 +138,29 @@ class TrackView {
     runnerSizeKey,
     animatedPointName,
   }: animateIntervalTrackSettings): void {
-    const roundedSize: number = Math.floor(size);
-    const roundedRunnerSize: number = Math.floor(this[runnerSizeKey]);
-    const innerSize: number = roundedSize - roundedRunnerSize;
-    const roundedEndPoint: number = Math.floor(this._getTrackPoints(endPointName));
-    const roundedFilledEndPoint: number = Math.floor(this._getFilledTrackPoints(endPointName));
+    const runnerSize: number = this[runnerSizeKey];
+    const innerSize: number = size - runnerSize;
+    const endPoint: number = this._getTrackPoints(endPointName);
+    const filledEndPoint: number = this._getFilledTrackPoints(endPointName);
     let startIndent: number;
     let endIndent: number;
 
     if (animatedPointName === 'start') {
-      startIndent = Math.floor((roundedSize - roundedRunnerSize) / coefficient);
-      endIndent = roundedEndPoint - roundedFilledEndPoint - roundedRunnerSize;
-      const filledTrackOffset: number = startIndent + roundedRunnerSize / 2;
+      startIndent = (size - runnerSize) / coefficient;
+      endIndent = endPoint - filledEndPoint - runnerSize;
+      const filledTrackOffset: number = startIndent + runnerSize / 2;
 
       this.$filledTrack.css(startPointName, `${filledTrackOffset}px`);
     } else {
       const trackStartPoint: number = this._getTrackPoints(startPointName);
       const filledTrackStartPoint: number = this._getFilledTrackPoints(startPointName);
 
-      startIndent = filledTrackStartPoint - trackStartPoint - roundedRunnerSize;
+      startIndent = filledTrackStartPoint - trackStartPoint - runnerSize;
       endIndent = innerSize - innerSize / coefficient;
     }
 
-    const filledTrackSize: number = innerSize - startIndent - endIndent - roundedRunnerSize / 2;
-    const roundedFilledTrackSize: number = Math.floor(filledTrackSize);
-    this.$filledTrack.css(sizeProperty, `${roundedFilledTrackSize}px`);
+    const filledTrackSize: number = innerSize - startIndent - endIndent - runnerSize / 2;
+    this.$filledTrack.css(sizeProperty, `${filledTrackSize}px`);
   }
 }
 
