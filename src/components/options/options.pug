@@ -1,0 +1,33 @@
+include ../input/input
+include ../tick-box/tick-box
+
+mixin options({ isScale, isTip, isInterval, isStep })
+  form.options(action="mock-address/change-me" method="post")
+    .options__row
+      .options__column
+        label.options__label Min value
+        +input({name: "min-value"})
+        label.options__label Max value
+        +input({name: "max-value"})
+      .options__column
+        label.options__label Current value
+        +input({name: "current-value"})
+        if(isInterval)
+          label.options__label Current max value
+          +input({name: "current-max-value"})
+        if(isScale)
+          label.options__label Quantity of scale parts
+          +input({name: "scale-items"})
+        if(isStep)
+          label.options__label Step size
+          +input({name: "step-size"})
+      .options__column
+        .options__checkboxes
+          label.options__label Show tip
+          +tick-box({ name: "tip",  isChecked: isTip })
+        .options__checkboxes
+          label.options__label Show scale
+          +tick-box({ name: "scale",  isChecked: isScale })
+        .options__checkboxes
+          label.options__label Vertical orientation
+          +tick-box({ name: "orientation" })

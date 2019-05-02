@@ -3,6 +3,7 @@
 .options
   &__row
     display flex
+
     +xs()
       flex-wrap wrap
 
@@ -10,13 +11,16 @@
     flex-grow 1
     padding 0 10px
     box-sizing border-box
+
     +xs()
       width: 100%
 
     &:nth-child(3)
       flex-shrink 0
+
   &__label
     margin-right 20px
+
   &__label, .tick-box
     display block
     margin-bottom 10px

@@ -7,24 +7,28 @@
   &__row
     display flex
     align-items center
+
     +md()
       flex-wrap wrap
 
   &__column
     padding 20px
 
+    &_with-options
+      flex-grow 1
+
+      +md()
+        order -1
+
     .slider
       width: 500px
+
       +md()
         width 100%
 
     .slider_vertical
       margin 0 50px
       width auto
+
     +md()
       width 100%
-
-  &__options-column
-    flex-grow 1
-    +md()
-      order -1
