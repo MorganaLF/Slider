@@ -13,23 +13,18 @@
       flex-wrap wrap
 
   &__column
-    padding 20px
-
-    &_with-options
-      flex-grow 1
-
-      +md()
-        order -1
-
-    .slider
-      width: 500px
+    &_with-slider
+      display flex
+      justify-content center
+      padding 50px
+      width 40%
 
       +md()
         width 100%
 
-    .slider_vertical
-      margin 0 50px
-      width auto
+    &_with-options
+      flex-grow 1
+      padding 50px 20px
 
-    +md()
-      width 100%
+      +md()
+        order -1

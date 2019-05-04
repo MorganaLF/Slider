@@ -1,9 +1,11 @@
 @import '../styles/variables.styl'
 
 .slider
+  width 100%
   position relative
 
   &_vertical
+    width 0
     height 300px
 
   &__track
@@ -44,7 +46,7 @@
 
     &_vertical
       top 0
-      left 50%
+      left calc(50% + 2.5px)
       transform translate(-50%, 0)
 
   &__tip

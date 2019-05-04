@@ -22,32 +22,28 @@ html
     .demo-page
       .demo-page__content
         +subheading({ title: "Simple slider", tag: "h1" })
-        .demo-page__row
-          .demo-page__column
-            .demo-page__slider
-              +slider({ modifier: "simple" })
+        .demo-page__row.js-demo-page__row
+          .demo-page__column.demo-page__column_with-slider
+            +slider({ modifier: "simple" })
           .demo-page__column.demo-page__column_with-options
             +options({ isTip: true })
         +subheading({title: "Slider with scale"})
-        .demo-page__row
+        .demo-page__row.js-demo-page__row
           .demo-page__column.demo-page__column_with-options
             +options({ isScale: true })
-          .demo-page__column
-            .demo-page__slider
-              +slider({ modifier: "with-scale" })
+          .demo-page__column.demo-page__column_with-slider
+            +slider({ modifier: "with-scale" })
         +subheading({title: "Interval slider"})
-        .demo-page__row
-            .demo-page__column
-              .demo-page__slider
-                +slider({ modifier: "interval" })
+        .demo-page__row.js-demo-page__row
+            .demo-page__column.demo-page__column_with-slider
+              +slider({ modifier: "interval" })
             .demo-page__column.demo-page__column_with-options
               +options({ isTip: true, isInterval: true })
         +subheading({title: "Interval slider"})
-        .demo-page__row
+        .demo-page__row.js-demo-page__row
           .demo-page__column.demo-page__column_with-options
             +options({ isTip: true, isStep: true })
-          .demo-page__column
-            .demo-page__slider
-              +slider({ modifier: "with-step" })
+          .demo-page__column.demo-page__column_with-slider
+            +slider({ modifier: "with-step" })
 
 
