@@ -7,32 +7,41 @@ class DemoView {
 
   public init(): void {
     const $simpleSlider: JQuery = $('.js-slider_simple');
-    $simpleSlider.customSlider();
+
+    $simpleSlider.each((index, item) => {
+      $(item).customSlider();
+    });
 
     const $sliderWithScale: JQuery = $('.js-slider_with-scale');
 
-    $sliderWithScale.customSlider({
-      withTip: false,
-      withScale: true,
+    $sliderWithScale.each((index, item) => {
+      $(item).customSlider({
+        withTip: false,
+        withScale: true,
+      });
     });
 
     const $intervalSlider: JQuery = $('.js-slider_interval');
 
-    $intervalSlider.customSlider({
-      type: 'interval',
-      startValue: 20,
-      endValue: 80,
+    $intervalSlider.each((index, item) => {
+      $(item).customSlider({
+        type: 'interval',
+        startValue: 20,
+        endValue: 80,
+      });
     });
 
     const $sliderWithStep: JQuery = $('.js-slider_with-step');
 
-    $sliderWithStep.customSlider({
-      type: 'single',
-      minValue: 16,
-      startValue: 20,
-      endValue: 80,
-      stepSize: 20,
-      scaleMarksQuantity: 4,
+    $sliderWithStep.each((index, item) => {
+      $(item).customSlider({
+        type: 'single',
+        minValue: 16,
+        startValue: 20,
+        endValue: 80,
+        stepSize: 20,
+        scaleMarksQuantity: 4,
+      });
     });
 
     this._updateInputValues();
@@ -127,7 +136,7 @@ class DemoView {
                 .customSlider(methodName);
   }
 
-  private _setInputValue(inputName: string, methodName: string): void {
+  private _setInputValue(inputName: string, methodName: string, isCheckbox = false): void {
     const makeSliderMethod: (
       $element: JQuery,
       methodName: string,
@@ -138,7 +147,12 @@ class DemoView {
     $input.each(function() {
       const $this: JQuery = $(this);
       const currentValue: number = makeSliderMethod($this, methodName);
-      $this.val(currentValue);
+
+      if (isCheckbox) {
+        $this.prop('checked', currentValue);
+      } else {
+        $this.val(currentValue);
+      }
     });
   }
 
@@ -149,6 +163,8 @@ class DemoView {
     this._setInputValue('max-value', 'getMaxValue');
     this._setInputValue('step-size', 'getStepSize');
     this._setInputValue('scale-items', 'getScaleMarksQuantity');
+    this._setInputValue('tip', 'isTipShown', true);
+    this._setInputValue('scale', 'isScaleShown', true);
   }
 }
 

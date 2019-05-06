@@ -105,6 +105,10 @@ class App {
     this.updateView();
   }
 
+  public isTipShown(): boolean {
+    return this.withTip;
+  }
+
   public showTip(): void {
     this.withTip = true;
     this.updateView();
@@ -113,6 +117,10 @@ class App {
   public hideTip(): void {
     this.withTip = false;
     this.updateView();
+  }
+
+  public isScaleShown(): boolean {
+    return this.withScale;
   }
 
   public showScale(): void {
