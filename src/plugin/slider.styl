@@ -94,9 +94,7 @@
     left 0
     display flex
     justify-content space-between
-    margin 0 auto
-    padding-left 10px
-    padding-right 10px
+    padding 0 10px
     list-style-type none
     font-size 11px
     font-weight 900
@@ -109,11 +107,13 @@
       left -15px
       height 100%
       flex-direction column
-      justify-content flex-start
       align-items flex-end
       width 0
-      margin auto 0
+      padding 10px 0
       text-align right
+
+      & ^[0]__scale-mark-text
+        transform translate(-100%, -50%)
 
     &-mark
       position relative
