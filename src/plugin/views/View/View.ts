@@ -122,8 +122,6 @@ class View {
     this.scale = new ScaleView({
       $parent:  this.$element,
       marksQuantity: this.scaleMarksQuantity,
-      parentWidth: this._getSliderInnerSize().width,
-      parentHeight: this._getSliderInnerSize().height,
       orientation: this.orientation,
     });
   }

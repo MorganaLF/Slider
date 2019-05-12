@@ -1,8 +1,5 @@
 export type drawMarkSettings = {
   markText: number;
-  markIndex: number;
-  marksQuantity: number;
-  positionProperty: string;
 };
 
 export type drawScaleSettings = {
@@ -13,8 +10,6 @@ export type drawScaleSettings = {
 export type ScaleViewOptions = {
   $element?: JQuery,
   $parent: JQuery,
-  parentWidth: number,
-  parentHeight: number,
   orientation: string,
   marksQuantity: number,
 };

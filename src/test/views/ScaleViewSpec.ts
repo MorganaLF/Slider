@@ -12,8 +12,6 @@ describe('ScaleView', () => {
 
     scaleView = new ScaleView({
       $parent,
-      parentWidth: 300,
-      parentHeight: 300,
       orientation: 'horizontal',
       marksQuantity: 4,
     });
@@ -34,9 +32,6 @@ describe('ScaleView', () => {
 
       expect((<any>scaleView)._drawMark({
         markText: 1,
-        markIndex: 2,
-        marksQuantity: 3,
-        positionProperty: '',
       })).toEqual(false);
     });
 
