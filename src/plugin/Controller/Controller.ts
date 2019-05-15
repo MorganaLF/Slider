@@ -8,6 +8,7 @@ import {
   changeValueSettings,
   handleWindowMouseUpSettings,
 } from './ControllerInterfaces';
+import { run } from 'tslint/lib/runner';
 
 class Controller {
   [key: string]: any;
@@ -108,6 +109,8 @@ class Controller {
       return;
     }
 
+    this._checkoutActiveRunner(runner);
+
     runner.setRunnerPosition((<any>event).detail.coefficient);
 
     if (tip) {
@@ -116,6 +119,30 @@ class Controller {
 
     if (this.view.track) {
       this.view.track.animateTrack((<any>event).detail.coefficient, valueType);
+    }
+  }
+
+  private _checkoutActiveRunner(runner: IRunnerView): void {
+    const isRunnersAtTheEndOfSlider = this.type === 'interval'
+      && this.startValueRunner
+      && this.endValueRunner
+      && this.model.startValue === this.model.maxValue;
+
+    const isRunnersAtTheStartOfSlider = this.type === 'interval'
+      && this.startValueRunner
+      && this.endValueRunner
+      && this.model.endValue === this.model.minValue;
+
+    if (isRunnersAtTheEndOfSlider) {
+      this.startValueRunner!.placeRunnerOnHigherLayer();
+      this.endValueRunner!.placeRunnerOnLowerLayer();
+    } else if (isRunnersAtTheStartOfSlider) {
+      this.endValueRunner!.placeRunnerOnHigherLayer();
+      this.startValueRunner!.placeRunnerOnLowerLayer();
+    } else if (this.type === 'interval') {
+      this.startValueRunner!.placeRunnerOnLowerLayer();
+      this.endValueRunner!.placeRunnerOnLowerLayer();
+      runner.placeRunnerOnHigherLayer();
     }
   }
 

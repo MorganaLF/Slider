@@ -63,7 +63,7 @@ class Model {
     if (this.stepSize === 0) {
       this[valueKeyName] = (this.maxValue - this.minValue) / ratio + this.minValue;
     } else {
-      this[valueKeyName] = this._calculateStepValueByRatio(ratio) + this.minValue;
+      this[valueKeyName] = this._calculateStepValueByRatio(ratio, valueKeyName);
     }
 
     const isIntervalValueInvalid: boolean = this.type === 'interval'
@@ -73,11 +73,13 @@ class Model {
       return false;
     }
 
-    if (this[valueKeyName] === this.startValue) {
+    this._checkCurrentValue(valueKeyName);
+
+    if (valueKeyName === 'startValue') {
       this._dispatchValueChange('changestartvalue', this.startValue);
     }
 
-    const isChangingEndValue: boolean = this[valueKeyName] === this.endValue
+    const isChangingEndValue: boolean = valueKeyName === 'endValue'
       && this.type === 'interval';
 
     if (isChangingEndValue) {
@@ -100,8 +102,6 @@ class Model {
     this._checkPositiveNumber('maxValue');
     this._checkCurrentValue('startValue');
     this._checkCurrentValue('endValue');
-    this._checkStepValue('minValue');
-    this._checkStepValue('maxValue');
     this._checkStepValue('startValue');
     this._checkStepValue('endValue');
   }
@@ -151,10 +151,13 @@ class Model {
 
   private _checkStepValue(valueKeyName: string): void {
     const shouldStepValueBeRounded: boolean = (this.stepSize !== 0)
-      && (this[valueKeyName] % this.stepSize !== 0);
+      && ((this[valueKeyName] - this.minValue) % this.stepSize !== this.minValue);
+
+    const roundedStepValue = Math.round((this[valueKeyName] - this.minValue) / this.stepSize)
+      * this.stepSize;
 
     if (shouldStepValueBeRounded) {
-      this[valueKeyName] = Math.round(this[valueKeyName] / this.stepSize) * this.stepSize;
+      this[valueKeyName] = roundedStepValue  + this.minValue;
     }
   }
 
@@ -184,8 +187,20 @@ class Model {
     return Math.round(value);
   }
 
-  private _calculateStepValueByRatio(ratio: number): number {
-    return (Math.round((this.maxValue - this.minValue) / ratio / this.stepSize)) * this.stepSize;
+  private _calculateStepValueByRatio(ratio: number, valueKeyName: string): number {
+    const currentValue: number = (this.maxValue - this.minValue) / ratio + this.minValue;
+    const isValueIncreasing: boolean = currentValue > this[valueKeyName] + this.stepSize;
+    const isValueDecreasing: boolean = currentValue < this[valueKeyName] - this.stepSize;
+
+    if (currentValue > this.maxValue) return this.maxValue;
+
+    if (currentValue < this.minValue) return this.minValue;
+
+    if (isValueIncreasing) return this[valueKeyName] + this.stepSize;
+
+    if (isValueDecreasing) return this[valueKeyName] - this.stepSize;
+
+    return this[valueKeyName];
   }
 
   private _dispatchValueChange(type: string, value: number): void {

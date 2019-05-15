@@ -98,35 +98,20 @@ class RunnerView {
     this.shiftY = pageY - this.$element.offset()!.top;
   }
 
+  public placeRunnerOnHigherLayer(): void {
+    this.$element.css('zIndex', '1');
+  }
+
+  public placeRunnerOnLowerLayer(): void {
+    this.$element.css('zIndex', '0');
+  }
+
   private _getParentWidth(): number {
     return this.parentRightPoint - this.parentLeftPoint;
   }
 
   private _getParentHeight(): number {
     return this.parentBottomPoint - this.parentTopPoint;
-  }
-
-  private _checkCursorPosition({
-    coordinate,
-    startPoint,
-    endPoint,
-    shift,
-    runnerSize,
-  }: checkCursorPositionSettings): number {
-
-    const isCoordinateLessThanLeftPoint: boolean = coordinate < (startPoint + shift);
-    const isCoordinateGreaterThanEndPoint: boolean = coordinate > (endPoint - runnerSize + shift);
-    let newCoordinate: number;
-
-    if (isCoordinateLessThanLeftPoint) {
-      newCoordinate = 0;
-    } else if (isCoordinateGreaterThanEndPoint) {
-      newCoordinate = endPoint - startPoint - runnerSize;
-    } else {
-      newCoordinate = coordinate - startPoint - shift;
-    }
-
-    return newCoordinate;
   }
 
   private _dispatchMoveEvent({
@@ -136,14 +121,7 @@ class RunnerView {
     shift,
     runnerSize,
   }: dispatchMoveEventSettings): void {
-    const newCoordinate: number = this._checkCursorPosition({
-      coordinate,
-      startPoint,
-      endPoint,
-      shift,
-      runnerSize,
-    });
-
+    const newCoordinate: number = coordinate - startPoint - shift;
     const ratio: number = (endPoint - startPoint - runnerSize) / newCoordinate;
     const $moveEvent = $.Event('move', { detail: { ratio } });
     this.$element.trigger($moveEvent);

@@ -39,6 +39,10 @@ class App {
     this.type = options.type || 'single';
   }
 
+  public getSliderType(): string {
+    return this.type;
+  }
+
   public getCurrentValue(): number {
     return this.model ? this.model.getCurrentRoundedValue() : 0;
   }
@@ -65,6 +69,8 @@ class App {
 
   public setMinValue(val: number | string): void {
     this.minValue = typeof val === 'string' ? parseInt(val, 10) : val;
+    this.startValue = this.getCurrentValue();
+    this.endValue = this.getCurrentEndValue();
     this.init();
   }
 
@@ -74,6 +80,8 @@ class App {
 
   public setMaxValue(val: number | string): void {
     this.maxValue = typeof val === 'string' ? parseInt(val, 10) : val;
+    this.startValue = this.getCurrentValue();
+    this.endValue = this.getCurrentEndValue();
     this.init();
   }
 
@@ -81,8 +89,8 @@ class App {
     return this.model ? this.model.stepSize! : 0;
   }
 
-  public setStepSize(val: number): void {
-    this.stepSize = val;
+  public setStepSize(val: number | string): void {
+    this.stepSize = typeof val === 'string' ? parseInt(val, 10) : val;
     this.init();
   }
 

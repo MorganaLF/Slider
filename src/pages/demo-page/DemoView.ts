@@ -38,7 +38,6 @@ class DemoView {
         type: 'single',
         minValue: 16,
         startValue: 20,
-        endValue: 80,
         stepSize: 20,
         scaleMarksQuantity: 4,
       });
@@ -137,10 +136,7 @@ class DemoView {
   }
 
   private _setInputValue(inputName: string, methodName: string, isCheckbox = false): void {
-    const makeSliderMethod: (
-      $element: JQuery,
-      methodName: string,
-    ) => number = this._makeSliderMethod;
+    const makeSliderMethod: any = this._makeSliderMethod;
 
     const $input: JQuery = $(`input[name="${inputName}"]`);
 
@@ -151,7 +147,48 @@ class DemoView {
       if (isCheckbox) {
         $this.prop('checked', currentValue);
       } else {
-        $this.val(currentValue);
+        const isStepInput: boolean = inputName === 'step-size';
+        const isScaleItemsInput: boolean = inputName === 'scale-items';
+        const isSliderValueInput: boolean = !isStepInput && !isScaleItemsInput;
+
+        const stepSize: number = isSliderValueInput
+          ? makeSliderMethod($this, 'getStepSize') || 1
+          : 0;
+
+        if (inputName === 'min-value') {
+          $this.attr({
+            min: 0,
+            max: makeSliderMethod($this, 'getMaxValue') - stepSize,
+          });
+        } else if (inputName === 'max-value') {
+          $this.attr({
+            min: makeSliderMethod($this, 'getMinValue') + stepSize,
+          });
+        } else if (inputName === 'current-value') {
+          const max = makeSliderMethod($this, 'getSliderType') === 'interval'
+            ? makeSliderMethod($this, 'getCurrentEndValue')
+            : makeSliderMethod($this, 'getMaxValue');
+
+          $this.attr({
+            max,
+            min: makeSliderMethod($this, 'getMinValue'),
+          });
+        } else if (inputName === 'current-max-value') {
+          $this.attr({
+            min: makeSliderMethod($this, 'getCurrentValue'),
+            max: makeSliderMethod($this, 'getMaxValue'),
+          });
+        } else {
+          $this.attr({
+            min: 0,
+          });
+        }
+
+        $this
+          .val(currentValue)
+          .attr({
+            step: stepSize,
+          });
       }
     });
   }

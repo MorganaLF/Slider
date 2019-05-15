@@ -32,5 +32,7 @@ export interface IRunnerView{
   setRunnerShiftX(e: JQuery.MouseDownEvent): void;
   setRunnerShiftY(e: JQuery.MouseDownEvent): void;
   setRunnerPosition(coefficient: number): void;
+  placeRunnerOnHigherLayer(): void;
+  placeRunnerOnLowerLayer(): void;
   moveRunner(e: JQuery.MouseMoveEvent): void;
 }
