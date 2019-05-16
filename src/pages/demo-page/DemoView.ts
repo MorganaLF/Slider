@@ -58,8 +58,16 @@ class DemoView {
     const $body: JQuery = $('body');
 
     $body
-      .on('changestartvalue.DemoView', this._updateInputValues.bind(this))
-      .on('changeendvalue.DemoView', this._updateInputValues.bind(this));
+      .on('changestartvalue.DemoView', this._handleBodyChangeStartValue.bind(this))
+      .on('changeendvalue.DemoView', this._handleBodyChangeEndValue.bind(this));
+  }
+
+  private _handleBodyChangeStartValue() {
+    this._updateInputValues();
+  }
+
+  private _handleBodyChangeEndValue() {
+    this._updateInputValues();
   }
 
   private _addTextInputHandlers(inputName: string, methodName: string): void {

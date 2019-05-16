@@ -6,9 +6,8 @@ import { ITrackView } from '../views/TrackView/TrackViewInterfaces';
 import {
   addHandlersSettings,
   changeValueSettings,
-  handleWindowMouseUpSettings,
+  removeEventListenersSettings,
 } from './ControllerInterfaces';
-import { run } from 'tslint/lib/runner';
 
 class Controller {
   [key: string]: any;
@@ -17,7 +16,7 @@ class Controller {
   public startValueTip?: null | ITipView;
   public endValueTip?: null | ITipView;
   public track?: null | ITrackView;
-  private _boundMouseUpHandler?: (event: JQuery.MouseUpEvent) => void;
+  private _handleWindowMouseUp?: (event: JQuery.MouseUpEvent) => void;
   private _setStartValueHandler?: any;
   private _setEndValueHandler?: any;
   readonly withTip: boolean;
@@ -37,9 +36,9 @@ class Controller {
     this._checkoutHandlers();
 
     const $window = $(window);
-    const resizeHandler = this._handleWindowResize.bind(this);
+    const handleWindowResize = this._handleWindowResize.bind(this);
 
-    $window.on('resize.CustomSlider', resizeHandler);
+    $window.on('resize.CustomSlider', handleWindowResize);
   }
 
   public destroy(): void {
@@ -63,15 +62,15 @@ class Controller {
       ? 'startValue'
       : 'endValue';
 
-    const moveHandler = this._handleRunnerMove.bind(this, valueType);
-    const mouseMoveHandler = this._handleWindowMouseMove.bind(this, runner);
+    const handleRunnerMove = this._handleRunnerMove.bind(this, valueType);
+    const handleWindowMouseMove = this._handleWindowMouseMove.bind(this, runner);
 
-    this._boundMouseUpHandler = this._handleWindowMouseUp.bind(
+    this._handleWindowMouseUp = this._removeEventListeners.bind(
       this,
       {
         runner,
-        mouseMoveHandler,
-        moveHandler,
+        handleWindowMouseMove,
+        handleRunnerMove,
       },
     );
 
@@ -79,20 +78,20 @@ class Controller {
     const isDeviceSupportsTouchMove: boolean = typeof document.body.ontouchmove !== 'undefined';
 
     if (isDeviceSupportsTouchMove) {
-      (<any>$window).on('touchmove.CustomSlider', mouseMoveHandler);
+      (<any>$window).on('touchmove.CustomSlider', handleWindowMouseMove);
     } else {
-      (<any>$window).on('mousemove.CustomSlider', mouseMoveHandler);
+      (<any>$window).on('mousemove.CustomSlider', handleWindowMouseMove);
     }
 
     const isDeviceSupportsTouchEnd: boolean = typeof document.body.ontouchend !== 'undefined';
 
     if (isDeviceSupportsTouchEnd) {
-      (<any>$window).on('touchend.CustomSlider', this._boundMouseUpHandler);
+      (<any>$window).on('touchend.CustomSlider', this._handleWindowMouseUp);
     } else {
-      (<any>$window).on('mouseup.CustomSlider', this._boundMouseUpHandler);
+      (<any>$window).on('mouseup.CustomSlider', this._handleWindowMouseUp);
     }
 
-    runner.$element.on('move', moveHandler);
+    runner.$element.on('move', handleRunnerMove);
   }
 
   private _handleRunnerMove(valueType: string, event: JQuery.TriggeredEvent): void {
@@ -179,29 +178,29 @@ class Controller {
     runner.moveRunner(event);
   }
 
-  private _handleWindowMouseUp({
-    mouseMoveHandler,
-    moveHandler,
+  private _removeEventListeners({
+    handleWindowMouseMove,
+    handleRunnerMove,
     runner,
-  }: handleWindowMouseUpSettings): void {
+  }: removeEventListenersSettings): void {
     const $window = $(window);
     const isDeviceSupportsTouchMove: boolean = typeof document.body.ontouchmove !== 'undefined';
 
     if (isDeviceSupportsTouchMove) {
-      (<any>$window).off('touchmove.CustomSlider', mouseMoveHandler);
+      (<any>$window).off('touchmove.CustomSlider', handleWindowMouseMove);
     } else {
-      (<any>$window).off('mousemove.CustomSlider', mouseMoveHandler);
+      (<any>$window).off('mousemove.CustomSlider', handleWindowMouseMove);
     }
 
     const isDeviceSupportsTouchEnd: boolean = typeof document.body.ontouchend !== 'undefined';
 
     if (isDeviceSupportsTouchEnd) {
-      (<any>$window).off('touchend.CustomSlider', this._boundMouseUpHandler);
+      (<any>$window).off('touchend.CustomSlider', this._handleWindowMouseUp);
     } else {
-      (<any>$window).off('mouseup.CustomSlider', this._boundMouseUpHandler);
+      (<any>$window).off('mouseup.CustomSlider', this._handleWindowMouseUp);
     }
 
-    runner.$element.off('move.CustomSlider', moveHandler);
+    runner.$element.off('move.CustomSlider', handleRunnerMove);
   }
 
   private _handleWindowResize(): void {
@@ -225,25 +224,25 @@ class Controller {
     setEvent,
     valueType,
   }: addHandlersSettings): void {
-    const mouseDownHandler = this._handleRunnerMouseDown.bind(this, runner);
+    const handleRunnerMouseDown = this._handleRunnerMouseDown.bind(this, runner);
     const isDeviceSupportsTouchStart: boolean = typeof document.body.ontouchstart !== 'undefined';
 
     if (isDeviceSupportsTouchStart) {
-      (<any>runner).$element.on('touchstart.CustomSlider', mouseDownHandler);
+      (<any>runner).$element.on('touchstart.CustomSlider', handleRunnerMouseDown);
     } else {
-      (<any>runner).$element.on('mousedown.CustomSlider', mouseDownHandler);
+      (<any>runner).$element.on('mousedown.CustomSlider', handleRunnerMouseDown);
     }
 
-    const changeValueHandler = this._handleBodyChangeValue.bind(
+    const handleBodyChangeValue = this._handleBodyChangeValue.bind(
       this,
       { runner, tip, valueType },
     );
 
-    const setValueHandler = runner === this.startValueRunner
+    const handleBodySetValue = runner === this.startValueRunner
       ? '_setStartValueHandler'
       : '_setEndValueHandler';
 
-    this[setValueHandler] = this._handleBodySetValue.bind(
+    this[handleBodySetValue] = this._handleBodySetValue.bind(
       this,
       { runner, tip, valueType },
     );
@@ -251,8 +250,8 @@ class Controller {
     const $body = $('body');
 
     $body
-      .on(changeEvent, changeValueHandler)
-      .on(setEvent, this[setValueHandler]);
+      .on(changeEvent, handleBodyChangeValue)
+      .on(setEvent, this[handleBodySetValue]);
   }
 
   private _checkoutHandlers() {

@@ -15,9 +15,9 @@ export type addHandlersSettings = {
   valueType: string;
 };
 
-export type handleWindowMouseUpSettings = {
-  mouseMoveHandler: (event: JQuery.MouseMoveEvent) => void;
-  moveHandler: (event: JQuery.TriggeredEvent) => void;
+export type removeEventListenersSettings = {
+  handleWindowMouseMove: (event: JQuery.MouseMoveEvent) => void;
+  handleRunnerMove: (event: JQuery.TriggeredEvent) => void;
   runner: IRunnerView;
 };
 
