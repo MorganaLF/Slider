@@ -189,15 +189,21 @@ class Model {
 
   private _calculateStepValueByRatio(ratio: number, valueKeyName: string): number {
     const currentValue: number = (this.maxValue - this.minValue) / ratio + this.minValue;
+    const reminderOfStepSlider: number = (this.maxValue - this.minValue) % this.stepSize;
+
+    const isEndOfStepSlider: boolean = this.stepSize !== 0
+      && reminderOfStepSlider !== 0
+      && currentValue < this[valueKeyName] - reminderOfStepSlider
+      && this[valueKeyName] === this.maxValue
+    ;
+
     const isValueIncreasing: boolean = currentValue > this[valueKeyName] + this.stepSize;
     const isValueDecreasing: boolean = currentValue < this[valueKeyName] - this.stepSize;
 
     if (currentValue > this.maxValue) return this.maxValue;
-
     if (currentValue < this.minValue) return this.minValue;
-
     if (isValueIncreasing) return this[valueKeyName] + this.stepSize;
-
+    if (isEndOfStepSlider) return this[valueKeyName] - reminderOfStepSlider;
     if (isValueDecreasing) return this[valueKeyName] - this.stepSize;
 
     return this[valueKeyName];
