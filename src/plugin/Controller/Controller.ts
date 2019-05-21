@@ -22,7 +22,7 @@ class Controller {
   readonly withTip: boolean;
   readonly type: string;
 
-  constructor(private view: IView, private model: IModel) {
+  constructor(private elementIndex: number, private view: IView, private model: IModel) {
     this.startValueRunner = view.startValueRunner;
     this.endValueRunner = view.endValueRunner;
     this.startValueTip = view.startValueTip;
@@ -38,15 +38,15 @@ class Controller {
     const $window = $(window);
     const handleWindowResize = this._handleWindowResize.bind(this);
 
-    $window.on('resize.CustomSlider', handleWindowResize);
+    $window.on(`resize.CustomSlider${this.elementIndex}`, handleWindowResize);
   }
 
   public destroy(): void {
     const $body = $('body');
 
     $body
-      .off('setstartvalue.CustomSlider', this._setStartValueHandler)
-      .off('setendvalue.CustomSlider', this._setEndValueHandler);
+      .off(`setstartvalue.CustomSlider${this.elementIndex}`, this._setStartValueHandler)
+      .off(`setendvalue.CustomSlider${this.elementIndex}`, this._setEndValueHandler);
   }
 
   private _handleRunnerMouseDown(
@@ -78,20 +78,20 @@ class Controller {
     const isDeviceSupportsTouchMove: boolean = typeof document.body.ontouchmove !== 'undefined';
 
     if (isDeviceSupportsTouchMove) {
-      (<any>$window).on('touchmove.CustomSlider', handleWindowMouseMove);
+      (<any>$window).on(`touchmove.CustomSlider${this.elementIndex}`, handleWindowMouseMove);
     } else {
-      (<any>$window).on('mousemove.CustomSlider', handleWindowMouseMove);
+      (<any>$window).on(`mousemove.CustomSlider${this.elementIndex}`, handleWindowMouseMove);
     }
 
     const isDeviceSupportsTouchEnd: boolean = typeof document.body.ontouchend !== 'undefined';
 
     if (isDeviceSupportsTouchEnd) {
-      (<any>$window).on('touchend.CustomSlider', this._handleWindowMouseUp);
+      (<any>$window).on(`touchend.CustomSlider${this.elementIndex}`, this._handleWindowMouseUp);
     } else {
-      (<any>$window).on('mouseup.CustomSlider', this._handleWindowMouseUp);
+      (<any>$window).on(`mouseup.CustomSlider${this.elementIndex}`, this._handleWindowMouseUp);
     }
 
-    runner.$element.on('move', handleRunnerMove);
+    runner.$element.on(`move.CustomSlider${this.elementIndex}`, handleRunnerMove);
   }
 
   private _handleRunnerMove(valueType: string, event: JQuery.TriggeredEvent): void {
@@ -187,20 +187,20 @@ class Controller {
     const isDeviceSupportsTouchMove: boolean = typeof document.body.ontouchmove !== 'undefined';
 
     if (isDeviceSupportsTouchMove) {
-      (<any>$window).off('touchmove.CustomSlider', handleWindowMouseMove);
+      (<any>$window).off(`touchmove.CustomSlider${this.elementIndex}`, handleWindowMouseMove);
     } else {
-      (<any>$window).off('mousemove.CustomSlider', handleWindowMouseMove);
+      (<any>$window).off(`mousemove.CustomSlider${this.elementIndex}`, handleWindowMouseMove);
     }
 
     const isDeviceSupportsTouchEnd: boolean = typeof document.body.ontouchend !== 'undefined';
 
     if (isDeviceSupportsTouchEnd) {
-      (<any>$window).off('touchend.CustomSlider', this._handleWindowMouseUp);
+      (<any>$window).off(`touchend.CustomSlider${this.elementIndex}`, this._handleWindowMouseUp);
     } else {
-      (<any>$window).off('mouseup.CustomSlider', this._handleWindowMouseUp);
+      (<any>$window).off(`mouseup.CustomSlider${this.elementIndex}`, this._handleWindowMouseUp);
     }
 
-    runner.$element.off('move.CustomSlider', handleRunnerMove);
+    runner.$element.off(`move.CustomSlider${this.elementIndex}`, handleRunnerMove);
   }
 
   private _handleWindowResize(): void {
@@ -228,9 +228,15 @@ class Controller {
     const isDeviceSupportsTouchStart: boolean = typeof document.body.ontouchstart !== 'undefined';
 
     if (isDeviceSupportsTouchStart) {
-      (<any>runner).$element.on('touchstart.CustomSlider', handleRunnerMouseDown);
+      (<any>runner).$element.on(
+        `touchstart.CustomSlider${this.elementIndex}`,
+        handleRunnerMouseDown,
+      );
     } else {
-      (<any>runner).$element.on('mousedown.CustomSlider', handleRunnerMouseDown);
+      (<any>runner).$element.on(
+        `mousedown.CustomSlider${this.elementIndex}`,
+        handleRunnerMouseDown,
+      );
     }
 
     const handleBodyChangeValue = this._handleBodyChangeValue.bind(
@@ -263,8 +269,8 @@ class Controller {
       this._addHandlers({
         runner: this.startValueRunner,
         tip: startValueTip,
-        changeEvent: 'changestartvalue.CustomSlider',
-        setEvent: 'setstartvalue.CustomSlider',
+        changeEvent: `changestartvalue.CustomSlider${this.elementIndex}`,
+        setEvent: `setstartvalue.CustomSlider${this.elementIndex}`,
         valueType: 'start',
       });
     }
@@ -280,8 +286,8 @@ class Controller {
       this._addHandlers({
         runner: this.endValueRunner!,
         tip: endValueTip,
-        changeEvent: 'changeendvalue.CustomSlider',
-        setEvent: 'setendvalue.CustomSlider',
+        changeEvent: `changeendvalue.CustomSlider${this.elementIndex}`,
+        setEvent: `setendvalue.CustomSlider${this.elementIndex}`,
         valueType: 'end',
       });
     }

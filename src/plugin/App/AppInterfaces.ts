@@ -9,6 +9,7 @@ declare global {
 }
 
 export type AppOptions = {
+  elementIndex?: number,
   $element: JQuery,
   startValue?: number,
   endValue?: number,

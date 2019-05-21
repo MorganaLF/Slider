@@ -36,7 +36,7 @@ describe('Controller', () => {
     });
 
     view.updateSlider();
-    controller = new Controller(view, model);
+    controller = new Controller(0, view, model);
     controller.init();
 
     $runner = $('.slider__runner');

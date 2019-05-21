@@ -8,14 +8,15 @@ class DemoView {
   public init(): void {
     const $simpleSlider: JQuery = $('.js-slider_simple');
 
-    $simpleSlider.each((index, item) => {
-      $(item).customSlider();
+    $simpleSlider.each((elementIndex, item) => {
+      $(item).customSlider({ elementIndex });
     });
 
     const $sliderWithScale: JQuery = $('.js-slider_with-scale');
 
-    $sliderWithScale.each((index, item) => {
+    $sliderWithScale.each((elementIndex, item) => {
       $(item).customSlider({
+        elementIndex,
         withTip: false,
         withScale: true,
       });
@@ -23,8 +24,9 @@ class DemoView {
 
     const $intervalSlider: JQuery = $('.js-slider_interval');
 
-    $intervalSlider.each((index, item) => {
+    $intervalSlider.each((elementIndex, item) => {
       $(item).customSlider({
+        elementIndex,
         type: 'interval',
         startValue: 20,
         endValue: 80,
@@ -33,8 +35,9 @@ class DemoView {
 
     const $sliderWithStep: JQuery = $('.js-slider_with-step');
 
-    $sliderWithStep.each((index, item) => {
+    $sliderWithStep.each((elementIndex, item) => {
       $(item).customSlider({
+        elementIndex,
         type: 'single',
         minValue: 16,
         startValue: 20,

@@ -7,6 +7,7 @@ import View from '../views/View/View';
 import { IView } from '../views/View/ViewInterfaces';
 
 class App {
+  public elementIndex: number;
   public model: null | IModel;
   public view: null | IView;
   public controller: null | IController;
@@ -23,6 +24,7 @@ class App {
   readonly $element: JQuery;
 
   constructor(options: AppOptions) {
+    this.elementIndex = options.elementIndex || 0;
     this.model = null;
     this.view = null;
     this.controller = null;
@@ -151,7 +153,7 @@ class App {
 
     if (this.model !== null) {
       this.view!.updateSlider();
-      this.controller = new Controller(this.view!, this.model);
+      this.controller = new Controller(this.elementIndex, this.view!, this.model);
     }
 
     this.controller!.init();
@@ -165,7 +167,7 @@ class App {
 
     this.view!.updateSlider();
 
-    this.controller = new Controller(this.view!, this.model!);
+    this.controller = new Controller(this.elementIndex, this.view!, this.model!);
     this.controller.init();
 
     this.model!.initValues();
