@@ -35,8 +35,8 @@ class Model {
   public setCurrentValue(value: number): void {
     this.startValue = value;
     this._checkNumber('startValue');
-    this._checkCurrentValue('startValue');
     this._checkStepValue('startValue');
+    this._checkCurrentValue('startValue');
 
     if (this.type === 'interval') {
       this._checkIntervalValues('startValue');
@@ -52,8 +52,8 @@ class Model {
 
     this.endValue = value;
     this._checkNumber('endValue');
-    this._checkCurrentValue('endValue');
     this._checkStepValue('endValue');
+    this._checkCurrentValue('endValue');
     this._checkIntervalValues('endValue');
     this._dispatchValueChange('changeendvalue', this.endValue);
   }
@@ -151,7 +151,8 @@ class Model {
 
   private _checkStepValue(valueKeyName: string): void {
     const shouldStepValueBeRounded: boolean = (this.stepSize !== 0)
-      && ((this[valueKeyName] - this.minValue) % this.stepSize !== this.minValue);
+      && this[valueKeyName] !== 0
+      && ((this[valueKeyName] - this.minValue) % this.stepSize !== 0);
 
     const roundedStepValue = Math.round((this[valueKeyName] - this.minValue) / this.stepSize)
       * this.stepSize;

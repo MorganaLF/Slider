@@ -24,7 +24,6 @@ class View {
   public type: string;
   public withTip: boolean;
   public withScale: boolean;
-  public scaleMarksQuantity: number;
   public orientation: string;
 
   constructor(options: ViewOptions) {
@@ -38,7 +37,6 @@ class View {
     this.type = options.type || 'single';
     this.withTip = options.withTip !== false;
     this.withScale = options.withScale !== false;
-    this.scaleMarksQuantity = options.scaleMarksQuantity || 10;
     this.orientation = options.orientation || 'horizontal';
   }
 
@@ -121,7 +119,6 @@ class View {
   private _createScale(): void {
     this.scale = new ScaleView({
       $parent:  this.$element,
-      marksQuantity: this.scaleMarksQuantity,
       orientation: this.orientation,
     });
   }

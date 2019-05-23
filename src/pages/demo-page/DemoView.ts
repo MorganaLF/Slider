@@ -19,6 +19,7 @@ class DemoView {
         elementIndex,
         withTip: false,
         withScale: true,
+        stepSize: 10,
       });
     });
 
@@ -39,10 +40,9 @@ class DemoView {
       $(item).customSlider({
         elementIndex,
         type: 'single',
-        minValue: 16,
+        minValue: 10,
         startValue: 20,
         stepSize: 20,
-        scaleMarksQuantity: 4,
       });
     });
 

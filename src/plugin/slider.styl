@@ -90,10 +90,10 @@
   &__scale
     position absolute
     top 15px
-    right 0
     left 0
     display flex
-    justify-content space-between
+    justify-content flex-start
+    width 100%
     padding 0 10px
     list-style-type none
     font-size 11px
@@ -118,6 +118,8 @@
     &-mark
       position relative
       width 0
+      cursor pointer
+      user-select none
 
       &-text
         position absolute

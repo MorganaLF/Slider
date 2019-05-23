@@ -13,7 +13,6 @@ describe('ScaleView', () => {
     scaleView = new ScaleView({
       $parent,
       orientation: 'horizontal',
-      marksQuantity: 4,
     });
   });
 
@@ -23,7 +22,7 @@ describe('ScaleView', () => {
 
   describe('Функция drawScale', () => {
     beforeEach(() => {
-      scaleView.drawScale({ minValue: 5, maxValue: 25 });
+      scaleView.drawScale({ stepSize: 5, minValue: 5, maxValue: 25 });
       $scaleItem = $('.slider .slider__scale .slider__scale-mark');
     });
 
@@ -32,6 +31,7 @@ describe('ScaleView', () => {
 
       expect((<any>scaleView)._drawMark({
         markText: 1,
+        markIndent: 10,
       })).toEqual(false);
     });
 
@@ -43,7 +43,7 @@ describe('ScaleView', () => {
 
     it('Поддерживает вертикальный вид', () => {
       (<any>scaleView).orientation = 'vertical';
-      scaleView.drawScale({ minValue: 5, maxValue: 25 });
+      scaleView.drawScale({ stepSize: 5, minValue: 5, maxValue: 25 });
       const $verticalScale = $('.slider .slider__scale_vertical');
 
       expect($verticalScale).toExist();

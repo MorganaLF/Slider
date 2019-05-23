@@ -30,6 +30,7 @@ class Controller {
     this.track = view.track;
     this.withTip = view.withTip!;
     this.type = view.type!;
+    this.scale = view.scale;
   }
 
   public init(): void {
@@ -165,9 +166,25 @@ class Controller {
 
     if (this.view.scale) {
       this.view.scale.drawScale({
+        stepSize: this.model.stepSize!,
         minValue: this.model.minValue!,
         maxValue: this.model.maxValue!,
       });
+    }
+  }
+
+  private _handleBodyClickOnScale(event: JQuery.TriggeredEvent) {
+    const value: number = (<any>event).detail.markText;
+
+    const isClickNearByStartRunner: boolean = this.type === 'interval'
+      && (Math.abs(value - this.model.startValue!)
+      > Math.abs(value - this.model.endValue!)
+      || value === this.model.endValue!);
+
+    if (isClickNearByStartRunner) {
+      this.model.setCurrentEndValue(value);
+    } else {
+      this.model.setCurrentValue(value);
     }
   }
 
@@ -258,6 +275,15 @@ class Controller {
     $body
       .on(changeEvent, handleBodyChangeValue)
       .on(setEvent, this[handleBodySetValue]);
+
+    setTimeout(
+      () => {
+        if (this.scale) {
+          this.scale.$element.on('clickOnMark', this._handleBodyClickOnScale.bind(this));
+        }
+      },
+      1,
+    );
   }
 
   private _checkoutHandlers() {

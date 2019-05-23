@@ -20,7 +20,6 @@ export type AppOptions = {
   stepSize?: number,
   withTip?: boolean,
   withScale?: boolean,
-  scaleMarksQuantity?: number,
   model?: IModel | null,
   view?: IView | null,
   controller?: IController | null,
@@ -34,13 +33,11 @@ export interface IApp extends AppOptions {
   getMinValue(): number;
   getMaxValue(): number;
   getStepSize(): number;
-  getScaleMarksQuantity(): number;
   setMinValue(val: number | string): void;
   setMaxValue(val: number | string): void;
   setCurrentValue(val: number): void | false;
   setCurrentEndValue(val: number): void | false;
   setStepSize(val: number): void;
-  setScaleMarksQuantity(val: number): void;
   showTip(): void;
   hideTip(): void;
   showScale(): void;

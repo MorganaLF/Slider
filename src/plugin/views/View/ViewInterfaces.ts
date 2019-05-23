@@ -26,7 +26,6 @@ export type ViewOptions = {
   type?: string,
   withTip?: boolean,
   withScale?: boolean,
-  scaleMarksQuantity?: number,
   orientation?: string,
 };
 

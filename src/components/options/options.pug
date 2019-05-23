@@ -19,14 +19,9 @@ mixin options({ isScale, isTip, isInterval, isStep })
           label.options__label Current max value
           .options__input
             +input({name: "current-max-value"})
-        if(isScale)
-          label.options__label Quantity of scale parts
-          .options__input
-            +input({name: "scale-items"})
-        if(isStep)
-          label.options__label Step size
-          .options__input
-            +input({name: "step-size"})
+        label.options__label Step size
+        .options__input
+          +input({name: "step-size"})
       .options__column
         .options__checkboxes
           label.options__label Show tip

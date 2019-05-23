@@ -23,7 +23,6 @@ describe('View', () => {
       orientation: 'horizontal',
       withTip: true,
       withScale: true,
-      scaleMarksQuantity: 10,
     });
 
     view.updateSlider();

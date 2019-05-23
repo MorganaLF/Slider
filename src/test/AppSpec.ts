@@ -98,13 +98,6 @@ describe('App', () => {
     });
   });
 
-  describe('Метод getScaleMarksQuantity', () => {
-    it('Возвращает значение scaleMarksQuantity', () => {
-      app.scaleMarksQuantity = 5;
-      expect(app.getScaleMarksQuantity()).toEqual(5);
-    });
-  });
-
   describe('Метод setMinValue', () => {
     it('Устанавливает значение minValue модели', () => {
       app.setMinValue(5);
@@ -175,19 +168,6 @@ describe('App', () => {
     it('Инициализирует плагин заново', () => {
       const spy = spyOn(app, 'init');
       app.setStepSize(7);
-      expect(spy).toHaveBeenCalled();
-    });
-  });
-
-  describe('Метод setScaleMarksQuantity', () => {
-    it('Устанавливает значение scaleMarksQuantity', () => {
-      app.setScaleMarksQuantity(27);
-      expect(app.scaleMarksQuantity).toEqual(27);
-    });
-
-    it('Перерисовывает вид', () => {
-      const spy = spyOn(app, 'updateView');
-      app.setScaleMarksQuantity(10);
       expect(spy).toHaveBeenCalled();
     });
   });

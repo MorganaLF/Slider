@@ -17,7 +17,6 @@ class App {
   public orientation: string;
   public withTip: boolean;
   public withScale: boolean;
-  public scaleMarksQuantity: number;
   public startValue: number;
   public endValue: number;
   public type: string;
@@ -34,7 +33,6 @@ class App {
     this.orientation = options.orientation || 'horizontal';
     this.withTip = options.withTip !== false;
     this.withScale = options.withScale === true;
-    this.scaleMarksQuantity = options.scaleMarksQuantity || 10;
     this.$element = options.$element;
     this.startValue = options.startValue || 0;
     this.endValue = options.endValue || 100;
@@ -94,15 +92,6 @@ class App {
   public setStepSize(val: number | string): void {
     this.stepSize = typeof val === 'string' ? parseInt(val, 10) : val;
     this.init();
-  }
-
-  public getScaleMarksQuantity(): number {
-    return this.scaleMarksQuantity;
-  }
-
-  public setScaleMarksQuantity(val: number): void {
-    this.scaleMarksQuantity = val;
-    this.updateView();
   }
 
   public setVerticalOrientation(): void {
@@ -191,7 +180,6 @@ class App {
       orientation: this.orientation,
       withTip: this.withTip,
       withScale: this.withScale,
-      scaleMarksQuantity: this.scaleMarksQuantity,
     });
   }
 }
