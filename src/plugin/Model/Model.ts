@@ -100,10 +100,10 @@ class Model {
     this._checkExtremeValues();
     this._checkPositiveNumber('minValue');
     this._checkPositiveNumber('maxValue');
-    this._checkCurrentValue('startValue');
-    this._checkCurrentValue('endValue');
     this._checkStepValue('startValue');
     this._checkStepValue('endValue');
+    this._checkCurrentValue('startValue');
+    this._checkCurrentValue('endValue');
   }
 
   private _checkNumber(valueKeyName: string): void {
@@ -152,6 +152,7 @@ class Model {
   private _checkStepValue(valueKeyName: string): void {
     const shouldStepValueBeRounded: boolean = (this.stepSize !== 0)
       && this[valueKeyName] !== 0
+      && this[valueKeyName] !== this.maxValue
       && ((this[valueKeyName] - this.minValue) % this.stepSize !== 0);
 
     const roundedStepValue = Math.round((this[valueKeyName] - this.minValue) / this.stepSize)
