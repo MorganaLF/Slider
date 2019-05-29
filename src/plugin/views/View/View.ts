@@ -1,3 +1,4 @@
+import ObservableSubject from '../../ObservableSubject/ObservableSubject';
 import RunnerView from '../RunnerView/RunnerView';
 import { IRunnerView } from '../RunnerView/RunnerViewInterfaces';
 import TipView from '../TipView/TipView';
@@ -5,8 +6,12 @@ import { ITipView } from '../TipView/TipViewInterfaces';
 import TrackView from '../TrackView/TrackView';
 import { ITrackView } from '../TrackView/TrackViewInterfaces';
 import ScaleView from '../ScaleView/ScaleView';
-import { IScaleView } from '../ScaleView/ScaleViewInterfaces';
 import {
+  IScaleView,
+  drawScaleSettings,
+} from '../ScaleView/ScaleViewInterfaces';
+import {
+  updateSettings,
   ViewOptions,
   IExtremePoints,
   ISize,
@@ -14,6 +19,11 @@ import {
 
 class View {
   [key: string]: any;
+  public observableSubject = new ObservableSubject();
+  public startRunnerObservableSubject = new ObservableSubject();
+  public endRunnerObservableSubject = new ObservableSubject();
+  public scaleObservableSubject = new ObservableSubject();
+  public elementIndex: number;
   public $element: JQuery;
   public startValueRunner?: null | IRunnerView;
   public endValueRunner?: null | IRunnerView;
@@ -25,8 +35,12 @@ class View {
   public withTip: boolean;
   public withScale: boolean;
   public orientation: string;
+  readonly dispatchStartRunnerMove = this._dispatchStartRunnerMove.bind(this);
+  readonly dispatchEndRunnerMove = this._dispatchEndRunnerMove.bind(this);
+  readonly dispatchClickOnScale = this._dispatchClickOnScale.bind(this);
 
   constructor(options: ViewOptions) {
+    this.elementIndex = options.elementIndex;
     this.$element = options.$element;
     this.startValueRunner = null;
     this.endValueRunner = null;
@@ -40,9 +54,50 @@ class View {
     this.orientation = options.orientation || 'horizontal';
   }
 
-  public updateSlider(): void {
+  public reinitialize(): void {
+    this._removeObservers();
     this.$element.html('');
     this._drawSlider();
+    this._addHandlers();
+  }
+
+  public update({
+                  valueType,
+                  coefficient,
+                  value,
+                  isRunnersAtTheEndOfSlider,
+                  isRunnersAtTheStartOfSlider,
+  }: updateSettings): void {
+    const runner = valueType === 'start' ? this.startValueRunner : this.endValueRunner;
+    const tip = valueType === 'start' ? this.startValueTip : this.endValueTip;
+
+    if (runner) runner.setRunnerPosition(coefficient);
+
+    const isRunnersExist = this.startValueRunner && this.endValueRunner;
+
+    if (isRunnersAtTheEndOfSlider && isRunnersExist) {
+      this.startValueRunner!.placeRunnerOnHigherLayer();
+      this.endValueRunner!.placeRunnerOnLowerLayer();
+    } else if (isRunnersAtTheStartOfSlider && isRunnersExist) {
+      this.endValueRunner!.placeRunnerOnHigherLayer();
+      this.startValueRunner!.placeRunnerOnLowerLayer();
+    } else if (this.type === 'interval' && isRunnersExist) {
+      this.startValueRunner!.placeRunnerOnLowerLayer();
+      this.endValueRunner!.placeRunnerOnLowerLayer();
+      runner!.placeRunnerOnHigherLayer();
+    }
+
+    if (this.withTip && tip) {
+      tip.updateTip(value);
+    }
+
+    if (this.track) {
+      this.track.animateTrack(coefficient, valueType);
+    }
+  }
+
+  public drawScale(options: drawScaleSettings): void {
+    if (this.scale) this.scale.drawScale(options);
   }
 
   private _getExtremePoints(): IExtremePoints {
@@ -88,6 +143,7 @@ class View {
 
   private _createRunner(runnerKeyName: string): void {
     this[runnerKeyName] = new RunnerView({
+      elementIndex: this.elementIndex,
       $parent: this.$element,
       orientation: this.orientation,
       parentLeftPoint: this._getExtremePoints().left,
@@ -148,6 +204,56 @@ class View {
 
     if (this.withScale) {
       this._createScale();
+    }
+  }
+
+  private _dispatchStartRunnerMove(ratio: number) {
+    this.startRunnerObservableSubject.notifyObservers(ratio);
+  }
+
+  private _dispatchEndRunnerMove(ratio: number) {
+    this.endRunnerObservableSubject.notifyObservers(ratio);
+  }
+
+  private _dispatchClickOnScale(value: number) {
+    this.scaleObservableSubject.notifyObservers(value);
+  }
+
+  private _handleWindowResize(): void {
+    this.reinitialize();
+    this.observableSubject.notifyObservers();
+  }
+
+  private _addHandlers(): void {
+    const $window = $(window);
+    const handleWindowResize = this._handleWindowResize.bind(this);
+
+    $window.on(`resize.CustomSlider${this.elementIndex}`, handleWindowResize);
+
+    if (this.startValueRunner) {
+      this.startValueRunner.observableSubject.addObserver(this.dispatchStartRunnerMove);
+    }
+
+    if (this.endValueRunner) {
+      this.endValueRunner.observableSubject.addObserver(this.dispatchEndRunnerMove);
+    }
+
+    if (this.scale) {
+      this.scale.observableSubject.addObserver(this.dispatchClickOnScale);
+    }
+  }
+
+  private _removeObservers(): void {
+    if (this.startValueRunner) {
+      this.startValueRunner.observableSubject.removeObserver(this.dispatchStartRunnerMove);
+    }
+
+    if (this.endValueRunner) {
+      this.endValueRunner.observableSubject.removeObserver(this.dispatchEndRunnerMove);
+    }
+
+    if (this.scale) {
+      this.scale.observableSubject.removeObserver(this.dispatchClickOnScale);
     }
   }
 }

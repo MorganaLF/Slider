@@ -1,3 +1,5 @@
+import { IObservableSubject } from '../ObservableSubject/ObservableSubjectInterfaces';
+
 export type ModelOptions = {
   startValue?: number,
   endValue?: number,
@@ -8,6 +10,7 @@ export type ModelOptions = {
 };
 
 export interface IModel extends ModelOptions{
+  observableSubject: IObservableSubject;
   initValues(): void;
   getCurrentRoundedValue(): number;
   getCurrentRoundedEndValue(): number;

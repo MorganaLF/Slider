@@ -20,8 +20,6 @@ $.fn.customSlider = function(options: AppOptions | string, ...args) {
 
     const extendedOptions = $.extend({ $element: $this }, options, dataConfig);
     $this.data('constructor', new App(extendedOptions));
-
-    return $this.data('constructor').init();
   }
 
   if (typeof options === 'string') {

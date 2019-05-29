@@ -1,10 +1,4 @@
-export type checkCursorPositionSettings = {
-  coordinate: number;
-  startPoint: number;
-  endPoint: number;
-  shift: number;
-  runnerSize: number;
-};
+import { IObservableSubject } from '../../ObservableSubject/ObservableSubjectInterfaces';
 
 export type dispatchMoveEventSettings = {
   coordinate: number;
@@ -15,6 +9,8 @@ export type dispatchMoveEventSettings = {
 };
 
 export type RunnerViewOptions = {
+  observableSubject?: IObservableSubject,
+  elementIndex: number,
   $element?: JQuery,
   $parent: JQuery,
   shiftX?: number,
@@ -27,6 +23,7 @@ export type RunnerViewOptions = {
 };
 
 export interface IRunnerView{
+  observableSubject: IObservableSubject;
   $element: JQuery;
   drawRunner(parent: JQuery, coefficient: number): JQuery;
   setRunnerShiftX(e: JQuery.MouseDownEvent): void;

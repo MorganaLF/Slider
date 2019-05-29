@@ -37,6 +37,7 @@ class App {
     this.startValue = options.startValue || 0;
     this.endValue = options.endValue || 100;
     this.type = options.type || 'single';
+    this.init();
   }
 
   public getSliderType(): string {
@@ -71,7 +72,7 @@ class App {
     this.minValue = typeof val === 'string' ? parseInt(val, 10) : val;
     this.startValue = this.getCurrentValue();
     this.endValue = this.getCurrentEndValue();
-    this.init();
+    this._updateModel();
   }
 
   public getMaxValue(): number {
@@ -82,7 +83,7 @@ class App {
     this.maxValue = typeof val === 'string' ? parseInt(val, 10) : val;
     this.startValue = this.getCurrentValue();
     this.endValue = this.getCurrentEndValue();
-    this.init();
+    this._updateModel();
   }
 
   public getStepSize(): number {
@@ -91,7 +92,7 @@ class App {
 
   public setStepSize(val: number | string): void {
     this.stepSize = typeof val === 'string' ? parseInt(val, 10) : val;
-    this.init();
+    this._updateModel();
   }
 
   public setVerticalOrientation(): void {
@@ -132,6 +133,12 @@ class App {
     this.updateView();
   }
 
+  public observeChangeValue(func: () => void): void {
+    if (this.model) {
+      this.model.observableSubject.addObserver(func);
+    }
+  }
+
   public updateView(): void {
     if (this.controller) {
       this.controller.destroy();
@@ -141,8 +148,8 @@ class App {
     this._createViewInstance();
 
     if (this.model !== null) {
-      this.view!.updateSlider();
-      this.controller = new Controller(this.elementIndex, this.view!, this.model);
+      this.view!.reinitialize();
+      this.controller = new Controller(this.view!, this.model);
     }
 
     this.controller!.init();
@@ -151,12 +158,16 @@ class App {
   }
 
   public init(): void {
-    this._createModelInstance();
     this._createViewInstance();
+    this._updateModel();
+  }
 
-    this.view!.updateSlider();
+  private _updateModel(): void {
+    this._createModelInstance();
 
-    this.controller = new Controller(this.elementIndex, this.view!, this.model!);
+    this.view!.reinitialize();
+
+    this.controller = new Controller(this.view!, this.model!);
     this.controller.init();
 
     this.model!.initValues();
@@ -175,6 +186,7 @@ class App {
 
   private _createViewInstance() {
     this.view = new View({
+      elementIndex: this.elementIndex,
       $element: this.$element,
       type: this.type,
       orientation: this.orientation,

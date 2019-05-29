@@ -1,7 +1,9 @@
+import ObservableSubject from '../ObservableSubject/ObservableSubject';
 import { ModelOptions } from './ModelInterfaces';
 
 class Model {
   [key: string]: any;
+  public observableSubject = new ObservableSubject();
   public startValue: number;
   public endValue: number;
   public minValue: number;
@@ -211,16 +213,12 @@ class Model {
     return this[valueKeyName];
   }
 
-  private _dispatchValueChange(type: string, value: number): void {
-    const changeValueEvent = $.Event(type, { detail: {
-      model: this,
+  private _dispatchValueChange(eventType: string, value: number): void {
+    this.observableSubject.notifyObservers({
+      eventType,
       value: this._calculateRoundedValue(value),
       coefficient: this.calculateCoefficient(value),
-    },
     });
-
-    const $body = $(document.body);
-    $body.trigger(changeValueEvent);
   }
 }
 

@@ -1,3 +1,4 @@
+import ObservableSubject from '../../ObservableSubject/ObservableSubject';
 import {
   ScaleViewOptions,
   drawMarkSettings,
@@ -8,6 +9,7 @@ class ScaleView {
   public $element: null | JQuery;
   public $parent: JQuery;
   public orientation: string;
+  public observableSubject = new ObservableSubject();
 
   constructor(options: ScaleViewOptions) {
     this.$parent = options.$parent;
@@ -27,7 +29,13 @@ class ScaleView {
     const partsQuantity: number = Math.ceil(valuesInterval / newStepSize);
 
     this.$element = $('<ul/>', { class: `slider__scale${scaleClass}` }).appendTo(this.$parent);
-    const singleValueWidth: number = this.$element.width()! / valuesInterval;
+
+    const scaleWidth: number = this._getOrientationBasedValue(
+      this.$element.width(),
+      this.$element.height(),
+    );
+
+    const singleValueWidth: number = scaleWidth / valuesInterval;
 
     for (let i: number = 0; i <= partsQuantity; i += 1) {
       const isReminderValue = reminder > 0 && i === partsQuantity;
@@ -55,9 +63,11 @@ class ScaleView {
       return false;
     }
 
+    const indentProperty = this._getOrientationBasedValue('margin-left', 'margin-top');
+
     const $mark: JQuery = $('<li/>', {
       class: 'slider__scale-mark',
-      style: `margin-left: ${markIndent}px`,
+      style: `${indentProperty}: ${markIndent}px`,
     });
 
     $('<span/>', {
@@ -66,7 +76,7 @@ class ScaleView {
     }).appendTo($mark);
 
     $mark.appendTo(this.$element);
-    (<any>$mark).on(`click.CustomSlider`, this._handleMarkClick);
+    (<any>$mark).on('click.CustomSlider', this._handleMarkClick.bind(this));
   }
 
   private _handleMarkClick(event: JQuery.ClickEvent): void {
@@ -75,10 +85,9 @@ class ScaleView {
       .find('.slider__scale-mark-text')
       .html();
 
-    this.$element = $(event.target).closest('.slider__scale');
+    const value = parseInt(markText, 10);
 
-    const $clickEvent = $.Event('clickOnMark', { detail: { markText: parseInt(markText, 10) } });
-    this.$element!.trigger($clickEvent);
+    this.observableSubject.notifyObservers(value);
   }
 }
 

@@ -6,10 +6,15 @@ class DemoView {
   }
 
   public init(): void {
+    const observeChangeValue = () => {
+      this._updateInputValues();
+    };
+
     const $simpleSlider: JQuery = $('.js-slider_simple');
 
     $simpleSlider.each((elementIndex, item) => {
       $(item).customSlider({ elementIndex });
+      $(item).customSlider('observeChangeValue', observeChangeValue);
     });
 
     const $sliderWithScale: JQuery = $('.js-slider_with-scale');
@@ -21,6 +26,8 @@ class DemoView {
         withScale: true,
         stepSize: 10,
       });
+
+      $(item).customSlider('observeChangeValue', observeChangeValue);
     });
 
     const $intervalSlider: JQuery = $('.js-slider_interval');
@@ -32,6 +39,8 @@ class DemoView {
         startValue: 20,
         endValue: 80,
       });
+
+      $(item).customSlider('observeChangeValue', observeChangeValue);
     });
 
     const $sliderWithStep: JQuery = $('.js-slider_with-step');
@@ -44,6 +53,8 @@ class DemoView {
         startValue: 20,
         stepSize: 20,
       });
+
+      $(item).customSlider('observeChangeValue', observeChangeValue);
     });
 
     this._updateInputValues();
@@ -55,22 +66,6 @@ class DemoView {
       .closest('.demo-page__row')
       .find('.slider')
       .customSlider(methodName, $element.val());
-  }
-
-  private _addBodyHandlers(): void {
-    const $body: JQuery = $('body');
-
-    $body
-      .on('changestartvalue.DemoView', this._handleBodyChangeStartValue.bind(this))
-      .on('changeendvalue.DemoView', this._handleBodyChangeEndValue.bind(this));
-  }
-
-  private _handleBodyChangeStartValue() {
-    this._updateInputValues();
-  }
-
-  private _handleBodyChangeEndValue() {
-    this._updateInputValues();
   }
 
   private _addTextInputHandlers(inputName: string, methodName: string): void {
@@ -112,7 +107,6 @@ class DemoView {
   }
 
   private _addHandlers(): void {
-    this._addBodyHandlers();
     this._addTextInputHandlers('min-value', 'setMinValue');
     this._addTextInputHandlers('max-value', 'setMaxValue');
     this._addTextInputHandlers('current-value', 'setCurrentValue');

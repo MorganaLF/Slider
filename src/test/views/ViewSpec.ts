@@ -19,6 +19,7 @@ describe('View', () => {
 
     view = new View({
       $element,
+      elementIndex: 0,
       type: 'single',
       orientation: 'horizontal',
       withTip: true,

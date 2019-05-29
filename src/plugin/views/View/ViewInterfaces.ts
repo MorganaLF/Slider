@@ -1,3 +1,4 @@
+import { IObservableSubject } from '../../ObservableSubject/ObservableSubjectInterfaces';
 import { IScaleView } from '../ScaleView/ScaleViewInterfaces';
 import { IRunnerView } from '../RunnerView/RunnerViewInterfaces';
 import { ITipView } from '../TipView/TipViewInterfaces';
@@ -15,7 +16,22 @@ export interface ISize {
   height: number;
 }
 
+export type drawScaleSettings = {
+  stepSize: number,
+  minValue: number,
+  maxValue: number,
+};
+
+export type updateSettings = {
+  valueType: string,
+  coefficient: number,
+  value: number,
+  isRunnersAtTheEndOfSlider: boolean,
+  isRunnersAtTheStartOfSlider: boolean,
+};
+
 export type ViewOptions = {
+  elementIndex: number,
   $element: JQuery,
   startValueRunner?: null | IRunnerView,
   endValueRunner?: null | IRunnerView,
@@ -30,5 +46,11 @@ export type ViewOptions = {
 };
 
 export interface IView extends ViewOptions{
-  updateSlider(): void;
+  observableSubject: IObservableSubject;
+  startRunnerObservableSubject: IObservableSubject;
+  endRunnerObservableSubject: IObservableSubject;
+  scaleObservableSubject: IObservableSubject;
+  reinitialize(): void;
+  update({}: updateSettings): void;
+  drawScale({}: drawScaleSettings): void;
 }

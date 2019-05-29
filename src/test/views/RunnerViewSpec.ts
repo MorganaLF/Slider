@@ -11,6 +11,7 @@ describe('RunnerView', () => {
 
     runnerView = new RunnerView({
       $parent,
+      elementIndex: 0,
       orientation: 'horizontal',
       parentLeftPoint: 0,
       parentRightPoint: 350,
@@ -112,6 +113,7 @@ describe('RunnerView', () => {
     it('Поддерживает вертикальный вид', () => {
       runnerView = new RunnerView({
         $parent,
+        elementIndex: 0,
         orientation: 'vertical',
         parentLeftPoint: 0,
         parentRightPoint: 350,
@@ -139,6 +141,7 @@ describe('RunnerView', () => {
     it('Проверяет, не выходит ли координата за крайнюю левую точку', () => {
       runnerView = new RunnerView({
         $parent,
+        elementIndex: 0,
         orientation: 'horizontal',
         parentLeftPoint: 30,
         parentRightPoint: 380,
@@ -186,6 +189,7 @@ describe('RunnerView', () => {
     it('Проверяет, не выходит ли координата за крайнюю верхнюю точку', () => {
       runnerView = new RunnerView({
         $parent,
+        elementIndex: 0,
         orientation: 'vertical',
         parentLeftPoint: 0,
         parentRightPoint: 350,
@@ -218,6 +222,7 @@ describe('RunnerView', () => {
     it('Проверяет, не выходит ли координата за крайнюю нижнюю точку', () => {
       runnerView = new RunnerView({
         $parent,
+        elementIndex: 0,
         orientation: 'vertical',
         parentLeftPoint: 0,
         parentRightPoint: 350,

@@ -1,21 +1,25 @@
+import ObservableSubject from '../../ObservableSubject/ObservableSubject';
 import {
-  checkCursorPositionSettings,
   dispatchMoveEventSettings,
   RunnerViewOptions,
 } from './RunnerViewInterfaces';
 
 class RunnerView {
+  public observableSubject = new ObservableSubject();
   public $element: JQuery;
   public $parent: JQuery;
   public shiftX: number = 0;
   public shiftY: number = 0;
+  readonly elementIndex: number;
   readonly orientation: string;
   readonly parentLeftPoint: number;
   readonly parentRightPoint: number;
   readonly parentTopPoint: number;
   readonly parentBottomPoint: number;
+  private _handleWindowMouseUp?: (event: JQuery.MouseUpEvent) => void;
 
   constructor(options: RunnerViewOptions) {
+    this.elementIndex = options.elementIndex;
     this.$parent = options.$parent;
     this.shiftX = 0;
     this.shiftY = 0;
@@ -25,6 +29,7 @@ class RunnerView {
     this.parentTopPoint = options.parentTopPoint;
     this.parentBottomPoint = options.parentBottomPoint;
     this.$element = this.drawRunner();
+    this._addHandlers();
   }
 
   public drawRunner(): JQuery {
@@ -114,6 +119,73 @@ class RunnerView {
     return this.parentBottomPoint - this.parentTopPoint;
   }
 
+  private _handleRunnerMouseDown(event: JQuery.MouseDownEvent): void {
+    event.preventDefault();
+
+    this.setRunnerShiftX(event);
+    this.setRunnerShiftY(event);
+
+    const handleWindowMouseMove = this._handleWindowMouseMove.bind(this);
+
+    this._handleWindowMouseUp = this._removeEventListeners.bind(this, handleWindowMouseMove);
+
+    const $window = $(window);
+    const isDeviceSupportsTouchMove: boolean = typeof document.body.ontouchmove !== 'undefined';
+
+    if (isDeviceSupportsTouchMove) {
+      (<any>$window).on(`touchmove.CustomSlider${this.elementIndex}`, handleWindowMouseMove);
+    } else {
+      (<any>$window).on(`mousemove.CustomSlider${this.elementIndex}`, handleWindowMouseMove);
+    }
+
+    const isDeviceSupportsTouchEnd: boolean = typeof document.body.ontouchend !== 'undefined';
+
+    if (isDeviceSupportsTouchEnd) {
+      (<any>$window).on(`touchend.CustomSlider${this.elementIndex}`, this._handleWindowMouseUp);
+    } else {
+      (<any>$window).on(`mouseup.CustomSlider${this.elementIndex}`, this._handleWindowMouseUp);
+    }
+  }
+
+  private _handleWindowMouseMove(event: JQuery.MouseMoveEvent): void {
+    this.moveRunner(event);
+  }
+
+  private _addHandlers() {
+    const isDeviceSupportsTouchStart: boolean = typeof document.body.ontouchstart !== 'undefined';
+
+    if (isDeviceSupportsTouchStart) {
+      (<any>this.$element).on(
+        `touchstart.CustomSlider${this.elementIndex}`,
+        this._handleRunnerMouseDown.bind(this),
+      );
+    } else {
+      (<any>this.$element).on(
+        `mousedown.CustomSlider${this.elementIndex}`,
+        this._handleRunnerMouseDown.bind(this),
+      );
+    }
+  }
+
+  private _removeEventListeners(handleWindowMouseMove: (e: JQuery.MouseMoveEvent) => void): void {
+    const $window = $(window);
+    const isDeviceSupportsTouchMove: boolean = typeof document.body.ontouchmove !== 'undefined';
+
+    if (isDeviceSupportsTouchMove) {
+      (<any>$window).off(`touchmove.CustomSlider${this.elementIndex}`, handleWindowMouseMove);
+    } else {
+      (<any>$window).off(`mousemove.CustomSlider${this.elementIndex}`, handleWindowMouseMove);
+    }
+
+    const isDeviceSupportsTouchEnd: boolean = typeof document.body.ontouchend !== 'undefined';
+
+    if (isDeviceSupportsTouchEnd) {
+      (<any>$window).off(`touchend.CustomSlider${this.elementIndex}`, this._handleWindowMouseUp);
+    } else {
+      (<any>$window).off(`mouseup.CustomSlider${this.elementIndex}`, this._handleWindowMouseUp);
+    }
+  }
+
   private _dispatchMoveEvent({
     coordinate,
     startPoint,
@@ -123,8 +195,7 @@ class RunnerView {
   }: dispatchMoveEventSettings): void {
     const newCoordinate: number = coordinate - startPoint - shift;
     const ratio: number = (endPoint - startPoint - runnerSize) / newCoordinate;
-    const $moveEvent = $.Event('move', { detail: { ratio } });
-    this.$element.trigger($moveEvent);
+    this.observableSubject.notifyObservers(ratio);
   }
 }
 
