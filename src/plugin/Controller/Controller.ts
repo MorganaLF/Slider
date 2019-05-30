@@ -1,5 +1,5 @@
 import { IModel } from '../Model/ModelInterfaces';
-import { IView } from '../views/View/ViewInterfaces';
+import { IMainView } from '../View/MainView/MainViewInterfaces';
 import { changeValueSettings } from './ControllerInterfaces';
 
 class Controller {
@@ -11,7 +11,7 @@ class Controller {
   readonly observeEndRunnerMove = this._observeEndRunnerMove.bind(this);
   readonly observeClickOnScale = this._observeClickOnScale.bind(this);
 
-  constructor(private view: IView, private model: IModel) {
+  constructor(private view: IMainView, private model: IModel) {
     this.withScale = view.withScale!;
     this.type = view.type!;
   }

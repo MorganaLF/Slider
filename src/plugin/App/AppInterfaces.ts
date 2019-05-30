@@ -1,5 +1,5 @@
 import { IModel } from '../Model/ModelInterfaces';
-import { IView } from '../views/View/ViewInterfaces';
+import { IMainView } from '../View/MainView/MainViewInterfaces';
 import { IController } from '../Controller/ControllerInterfaces';
 
 declare global {
@@ -21,7 +21,7 @@ export type AppOptions = {
   withTip?: boolean,
   withScale?: boolean,
   model?: IModel | null,
-  view?: IView | null,
+  view?: IMainView | null,
   controller?: IController | null,
 };
 

@@ -12,12 +12,12 @@ import {
 } from '../ScaleView/ScaleViewInterfaces';
 import {
   updateSettings,
-  ViewOptions,
+  MainViewOptions,
   IExtremePoints,
   ISize,
-} from './ViewInterfaces';
+} from './MainViewInterfaces';
 
-class View {
+class MainView {
   [key: string]: any;
   public observableSubject = new ObservableSubject();
   public startRunnerObservableSubject = new ObservableSubject();
@@ -39,7 +39,7 @@ class View {
   readonly dispatchEndRunnerMove = this._dispatchEndRunnerMove.bind(this);
   readonly dispatchClickOnScale = this._dispatchClickOnScale.bind(this);
 
-  constructor(options: ViewOptions) {
+  constructor(options: MainViewOptions) {
     this.elementIndex = options.elementIndex;
     this.$element = options.$element;
     this.startValueRunner = null;
@@ -258,4 +258,4 @@ class View {
   }
 }
 
-export default View;
+export default MainView;

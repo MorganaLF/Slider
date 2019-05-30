@@ -3,13 +3,13 @@ import Controller from '../Controller/Controller';
 import { IController } from '../Controller/ControllerInterfaces';
 import Model from '../Model/Model';
 import { IModel } from '../Model/ModelInterfaces';
-import View from '../views/View/View';
-import { IView } from '../views/View/ViewInterfaces';
+import MainView from '../View/MainView/MainView';
+import { IMainView } from '../View/MainView/MainViewInterfaces';
 
 class App {
   public elementIndex: number;
   public model: null | IModel;
-  public view: null | IView;
+  public view: null | IMainView;
   public controller: null | IController;
   public minValue: number;
   public maxValue: number;
@@ -185,7 +185,7 @@ class App {
   }
 
   private _createViewInstance() {
-    this.view = new View({
+    this.view = new MainView({
       elementIndex: this.elementIndex,
       $element: this.$element,
       type: this.type,

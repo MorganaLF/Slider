@@ -1,23 +1,22 @@
-import RunnerView from '../../plugin/views/RunnerView/RunnerView';
-import ScaleView from '../../plugin/views/ScaleView/ScaleView';
-import View from '../../plugin/views/View/View';
-import TipView from '../../plugin/views/TipView/TipView';
-import TrackView from '../../plugin/views/TrackView/TrackView';
+import RunnerView from '../../plugin/View/RunnerView/RunnerView';
+import ScaleView from '../../plugin/View/ScaleView/ScaleView';
+import MainView from '../../plugin/View/MainView/MainView';
+import TipView from '../../plugin/View/TipView/TipView';
+import TrackView from '../../plugin/View/TrackView/TrackView';
 
-
-describe('View', () => {
+describe('MainView', () => {
   let $element: JQuery;
   let $track: JQuery;
   let $filledTrack: JQuery;
   let $runner: JQuery;
   let $tip: JQuery;
-  let view: View;
+  let view: MainView;
 
   beforeEach(() => {
     setFixtures('<div class="slider"></div>');
     $element = $('.slider');
 
-    view = new View({
+    view = new MainView({
       $element,
       elementIndex: 0,
       type: 'single',

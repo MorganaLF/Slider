@@ -1,13 +1,13 @@
 import Controller from '../plugin/Controller/Controller';
 import Model from '../plugin/Model/Model';
-import View from '../plugin/views/View/View';
+import MainView from '../plugin/View/MainView/MainView';
 
 describe('Controller', () => {
   const $body = $('body');
   const $window = $(window);
   let $element: JQuery;
   let $runner: JQuery;
-  let view: View;
+  let view: MainView;
   let model: Model;
   let controller: Controller;
   let spy: (obj: JQuery, func: any) => void;
@@ -26,7 +26,7 @@ describe('Controller', () => {
       type: 'interval',
     });
 
-    view = new View({
+    view = new MainView({
       $element,
       type: 'interval',
       orientation: 'horizontal',

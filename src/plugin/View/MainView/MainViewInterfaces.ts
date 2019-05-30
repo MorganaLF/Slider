@@ -30,7 +30,7 @@ export type updateSettings = {
   isRunnersAtTheStartOfSlider: boolean,
 };
 
-export type ViewOptions = {
+export type MainViewOptions = {
   elementIndex: number,
   $element: JQuery,
   startValueRunner?: null | IRunnerView,
@@ -45,7 +45,7 @@ export type ViewOptions = {
   orientation?: string,
 };
 
-export interface IView extends ViewOptions{
+export interface IMainView extends MainViewOptions{
   observableSubject: IObservableSubject;
   startRunnerObservableSubject: IObservableSubject;
   endRunnerObservableSubject: IObservableSubject;

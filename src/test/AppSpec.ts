@@ -2,7 +2,7 @@ import App from '../plugin/App/App';
 import { IApp } from '../plugin/App/AppInterfaces';
 import Model from '../plugin/Model/Model';
 import Controller from '../plugin/Controller/Controller';
-import View from '../plugin/views/View/View';
+import MainView from '../plugin/View/MainView/MainView';
 
 describe('App', () => {
   let app: IApp;
@@ -25,7 +25,7 @@ describe('App', () => {
     });
 
     it('Создает экземпляр класса View', () => {
-      expect(app.view instanceof View).toBeTruthy();
+      expect(app.view instanceof MainView).toBeTruthy();
     });
 
     it('Обновляет вид', () => {
