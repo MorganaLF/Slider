@@ -45,6 +45,15 @@ export type MainViewOptions = {
   orientation?: string,
 };
 
+export type MainViewConfig = {
+  $element: JQuery,
+  elementIndex: number,
+  type: string,
+  withTip: boolean,
+  withScale: boolean,
+  orientation: string,
+};
+
 export interface IMainView extends MainViewOptions{
   observableSubject: IObservableSubject;
   startRunnerObservableSubject: IObservableSubject;

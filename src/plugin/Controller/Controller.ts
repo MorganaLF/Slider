@@ -14,6 +14,7 @@ class Controller {
   constructor(private view: IMainView, private model: IModel) {
     this.withScale = view.withScale!;
     this.type = view.type!;
+    this.init();
   }
 
   public init(): void {
@@ -30,6 +31,34 @@ class Controller {
     this.view.startRunnerObservableSubject.removeObserver(this.observeStartRunnerMove);
     this.view.endRunnerObservableSubject.removeObserver(this.observeEndRunnerMove);
     this.view.scaleObservableSubject.removeObserver(this.observeClickOnScale);
+  }
+
+  public initValues(): void {
+    this.model.initValues();
+  }
+
+  public reinitializeView(): void {
+    this.view.reinitialize();
+  }
+
+  public getCurrentValue(): number {
+    return this.model.getCurrentRoundedValue();
+  }
+
+  public setCurrentValue(val: number): void {
+    this.model.setCurrentValue(val);
+  }
+
+  public getCurrentEndValue(): number {
+    return this.model.getCurrentRoundedEndValue();
+  }
+
+  public setCurrentEndValue(val: number): void {
+    this.model.setCurrentEndValue(val);
+  }
+
+  public addChangeValueObserver(func: () => void): void {
+    this.model.observableSubject.addObserver(func);
   }
 
   private _observeResize(): void {

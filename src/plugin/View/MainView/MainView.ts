@@ -25,12 +25,12 @@ class MainView {
   public scaleObservableSubject = new ObservableSubject();
   public elementIndex: number;
   public $element: JQuery;
-  public startValueRunner?: null | IRunnerView;
-  public endValueRunner?: null | IRunnerView;
-  public startValueTip?: null | ITipView;
-  public endValueTip?: null | ITipView;
-  public track?: null | ITrackView;
-  public scale?: null | IScaleView;
+  public startValueRunner?: null | IRunnerView = null;
+  public endValueRunner?: null | IRunnerView = null;
+  public startValueTip?: null | ITipView = null;
+  public endValueTip?: null | ITipView = null;
+  public track?: null | ITrackView = null;
+  public scale?: null | IScaleView = null;
   public type: string;
   public withTip: boolean;
   public withScale: boolean;
@@ -42,16 +42,11 @@ class MainView {
   constructor(options: MainViewOptions) {
     this.elementIndex = options.elementIndex;
     this.$element = options.$element;
-    this.startValueRunner = null;
-    this.endValueRunner = null;
-    this.startValueTip = null;
-    this.endValueTip = null;
-    this.track = null;
-    this.scale = null;
     this.type = options.type || 'single';
     this.withTip = options.withTip !== false;
     this.withScale = options.withScale !== false;
     this.orientation = options.orientation || 'horizontal';
+    this.reinitialize();
   }
 
   public reinitialize(): void {

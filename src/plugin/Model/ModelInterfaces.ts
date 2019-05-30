@@ -9,6 +9,15 @@ export type ModelOptions = {
   stepSize?: number,
 };
 
+export type ModelConfig = {
+  startValue: number,
+  endValue: number,
+  minValue: number,
+  maxValue: number,
+  type: string,
+  stepSize: number,
+};
+
 export interface IModel extends ModelOptions{
   observableSubject: IObservableSubject;
   initValues(): void;

@@ -2,197 +2,143 @@ import { AppOptions } from './AppInterfaces';
 import Controller from '../Controller/Controller';
 import { IController } from '../Controller/ControllerInterfaces';
 import Model from '../Model/Model';
-import { IModel } from '../Model/ModelInterfaces';
+import modelConfig from '../Model/modelConfig';
+import { IModel, ModelConfig } from '../Model/ModelInterfaces';
 import MainView from '../View/MainView/MainView';
-import { IMainView } from '../View/MainView/MainViewInterfaces';
+import mainViewConfig from '../View/MainView/mainViewConfig';
+import { IMainView, MainViewConfig } from '../View/MainView/MainViewInterfaces';
 
 class App {
-  public elementIndex: number;
-  public model: null | IModel;
-  public view: null | IMainView;
-  public controller: null | IController;
-  public minValue: number;
-  public maxValue: number;
-  public stepSize: number;
-  public orientation: string;
-  public withTip: boolean;
-  public withScale: boolean;
-  public startValue: number;
-  public endValue: number;
-  public type: string;
-  readonly $element: JQuery;
+  public model: IModel;
+  public view: IMainView;
+  public controller: IController;
+  readonly modelConfig: ModelConfig;
+  readonly viewConfig: MainViewConfig;
 
   constructor(options: AppOptions) {
-    this.elementIndex = options.elementIndex || 0;
-    this.model = null;
-    this.view = null;
-    this.controller = null;
-    this.minValue = options.minValue || 0;
-    this.maxValue = options.maxValue || 100;
-    this.stepSize = options.stepSize || 0;
-    this.orientation = options.orientation || 'horizontal';
-    this.withTip = options.withTip !== false;
-    this.withScale = options.withScale === true;
-    this.$element = options.$element;
-    this.startValue = options.startValue || 0;
-    this.endValue = options.endValue || 100;
-    this.type = options.type || 'single';
-    this.init();
+    this.modelConfig = { ...modelConfig, ...options };
+    this.viewConfig = { ...mainViewConfig, ...options };
+    this.model = this._createModelInstance();
+    this.view = this._createViewInstance();
+    this.controller = new Controller(this.view, this.model);
+    this.controller.initValues();
   }
 
   public getSliderType(): string {
-    return this.type;
+    return this.modelConfig.type;
   }
 
   public getCurrentValue(): number {
-    return this.model ? this.model.getCurrentRoundedValue() : 0;
+    return this.controller.getCurrentValue();
   }
 
-  public setCurrentValue(val: number): void | false {
-    if (!this.model) return false;
-
-    this.model.setCurrentValue(val);
+  public setCurrentValue(val: number): void {
+    return this.controller.setCurrentValue(val);
   }
 
   public getCurrentEndValue(): number {
-    return this.model ? this.model.getCurrentRoundedEndValue() : 0;
+    return this.controller.getCurrentEndValue();
   }
 
-  public setCurrentEndValue(val: number): void | false {
-    if (!this.model) return false;
-
-    this.model.setCurrentEndValue(val);
+  public setCurrentEndValue(val: number): void {
+    this.controller.setCurrentEndValue(val);
   }
 
   public getMinValue(): number {
-    return this.model ? this.model.minValue! : 0;
+    return this.modelConfig.minValue;
   }
 
   public setMinValue(val: number | string): void {
-    this.minValue = typeof val === 'string' ? parseInt(val, 10) : val;
-    this.startValue = this.getCurrentValue();
-    this.endValue = this.getCurrentEndValue();
+    this.modelConfig.minValue = typeof val === 'string' ? parseInt(val, 10) : val;
+    this.modelConfig.startValue = this.getCurrentValue();
+    this.modelConfig.endValue = this.getCurrentEndValue();
     this._updateModel();
   }
 
   public getMaxValue(): number {
-    return this.model ? this.model.maxValue! : 0;
+    return this.modelConfig.maxValue;
   }
 
   public setMaxValue(val: number | string): void {
-    this.maxValue = typeof val === 'string' ? parseInt(val, 10) : val;
-    this.startValue = this.getCurrentValue();
-    this.endValue = this.getCurrentEndValue();
+    this.modelConfig.maxValue = typeof val === 'string' ? parseInt(val, 10) : val;
+    this.modelConfig.startValue = this.getCurrentValue();
+    this.modelConfig.endValue = this.getCurrentEndValue();
     this._updateModel();
   }
 
   public getStepSize(): number {
-    return this.model ? this.model.stepSize! : 0;
+    return this.modelConfig.stepSize;
   }
 
   public setStepSize(val: number | string): void {
-    this.stepSize = typeof val === 'string' ? parseInt(val, 10) : val;
+    this.modelConfig.stepSize = typeof val === 'string' ? parseInt(val, 10) : val;
+    this.modelConfig.startValue = this.getCurrentValue();
+    this.modelConfig.endValue = this.getCurrentEndValue();
     this._updateModel();
   }
 
   public setVerticalOrientation(): void {
-    this.orientation = 'vertical';
+    this.viewConfig.orientation = 'vertical';
     this.updateView();
   }
 
   public setHorizontalOrientation(): void {
-    this.orientation = 'horizontal';
+    this.viewConfig.orientation = 'horizontal';
     this.updateView();
   }
 
   public isTipShown(): boolean {
-    return this.withTip;
+    return this.viewConfig.withTip;
   }
 
   public showTip(): void {
-    this.withTip = true;
+    this.viewConfig.withTip = true;
     this.updateView();
   }
 
   public hideTip(): void {
-    this.withTip = false;
+    this.viewConfig.withTip = false;
     this.updateView();
   }
 
   public isScaleShown(): boolean {
-    return this.withScale;
+    return this.viewConfig.withScale;
   }
 
   public showScale(): void {
-    this.withScale = true;
+    this.viewConfig.withScale = true;
     this.updateView();
   }
 
   public hideScale(): void {
-    this.withScale = false;
+    this.viewConfig.withScale = false;
     this.updateView();
   }
 
   public observeChangeValue(func: () => void): void {
-    if (this.model) {
-      this.model.observableSubject.addObserver(func);
-    }
+    this.controller.addChangeValueObserver(func);
   }
 
-  public updateView(): void {
-    if (this.controller) {
-      this.controller.destroy();
-      this.controller = null;
-    }
-
+  private updateView(): void {
+    this.controller.destroy();
     this._createViewInstance();
-
-    if (this.model !== null) {
-      this.view!.reinitialize();
-      this.controller = new Controller(this.view!, this.model);
-    }
-
-    this.controller!.init();
-
-    if (this.model !== null) this.model.initValues();
-  }
-
-  public init(): void {
-    this._createViewInstance();
-    this._updateModel();
+    this.controller = new Controller(this.view, this.model);
+    this.controller.initValues();
   }
 
   private _updateModel(): void {
     this._createModelInstance();
-
-    this.view!.reinitialize();
-
-    this.controller = new Controller(this.view!, this.model!);
-    this.controller.init();
-
-    this.model!.initValues();
+    this.controller.reinitializeView();
+    this.controller = new Controller(this.view, this.model);
+    this.controller.initValues();
   }
 
-  private _createModelInstance() {
-    this.model = new Model({
-      startValue: this.startValue,
-      endValue: this.endValue,
-      minValue: this.minValue,
-      maxValue: this.maxValue,
-      stepSize: this.stepSize,
-      type: this.type,
-    });
+  private _createModelInstance(): IModel {
+    return this.model = new Model(this.modelConfig);
   }
 
-  private _createViewInstance() {
-    this.view = new MainView({
-      elementIndex: this.elementIndex,
-      $element: this.$element,
-      type: this.type,
-      orientation: this.orientation,
-      withTip: this.withTip,
-      withScale: this.withScale,
-    });
+  private _createViewInstance(): IMainView {
+    return this.view = new MainView(this.viewConfig);
   }
 }
 

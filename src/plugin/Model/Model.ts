@@ -1,5 +1,6 @@
 import ObservableSubject from '../ObservableSubject/ObservableSubject';
-import { ModelOptions } from './ModelInterfaces';
+import {ModelConfig, ModelOptions} from './ModelInterfaces';
+import modelConfig from './modelConfig';
 
 class Model {
   [key: string]: any;
@@ -10,14 +11,16 @@ class Model {
   public maxValue: number;
   public type: string;
   public stepSize: number;
+  readonly config: ModelConfig;
 
   constructor(options: ModelOptions) {
-    this.startValue = options.startValue || 0;
-    this.endValue = options.endValue || 100;
-    this.minValue = options.minValue || 0;
-    this.maxValue = options.maxValue || 100;
-    this.type = options.type || 'single';
-    this.stepSize = options.stepSize || 0;
+    this.config = { ...modelConfig, ...options };
+    this.startValue = this.config.startValue;
+    this.endValue = this.config.endValue;
+    this.minValue = this.config.minValue;
+    this.maxValue = this.config.maxValue;
+    this.type = this.config.type;
+    this.stepSize = this.config.stepSize;
     this._validateConstructorOptions();
   }
 

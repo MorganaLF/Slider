@@ -12,7 +12,6 @@ describe('App', () => {
     setFixtures('<div class="slider"></div>');
     $element = $('.slider');
     app = new App({ $element });
-    app.init();
   });
 
   it('Создает экземпляр класса App', () => {
@@ -108,12 +107,6 @@ describe('App', () => {
       app.setMinValue('15');
       expect(app.model!.minValue).toEqual(15);
     });
-
-    it('Инициализирует плагин заново', () => {
-      const spy = spyOn(app, 'init');
-      app.setMinValue(5);
-      expect(spy).toHaveBeenCalled();
-    });
   });
 
   describe('Метод setMaxValue', () => {
@@ -126,23 +119,12 @@ describe('App', () => {
       app.setMaxValue('65');
       expect(app.model!.maxValue).toEqual(65);
     });
-
-    it('Инициализирует плагин заново', () => {
-      const spy = spyOn(app, 'init');
-      app.setMaxValue(95);
-      expect(spy).toHaveBeenCalled();
-    });
   });
 
   describe('Метод setCurrentValue', () => {
     it('Устанавливает значение startValue модели', () => {
       app.setCurrentValue(20);
       expect(app.model!.startValue).toEqual(20);
-    });
-
-    it('Если модель не определена, возвращает false', () => {
-      app.model = null;
-      expect(app.setCurrentValue(20)).toEqual(false);
     });
   });
 
@@ -152,23 +134,12 @@ describe('App', () => {
       app.setCurrentEndValue(60);
       expect(app.model!.endValue).toEqual(60);
     });
-
-    it('Если модель не определена, возвращает false', () => {
-      app.model = null;
-      expect(app.setCurrentEndValue(60)).toEqual(false);
-    });
   });
 
   describe('Метод setStepSize', () => {
     it('Устанавливает значение stepSize модели', () => {
       app.setStepSize(7);
       expect(app.model!.stepSize).toEqual(7);
-    });
-
-    it('Инициализирует плагин заново', () => {
-      const spy = spyOn(app, 'init');
-      app.setStepSize(7);
-      expect(spy).toHaveBeenCalled();
     });
   });
 
@@ -177,12 +148,6 @@ describe('App', () => {
       app.showTip();
       expect(app.view!.withTip).toBeTruthy();
     });
-
-    it('Перерисовывает вид', () => {
-      const spy = spyOn(app, 'updateView');
-      app.showTip();
-      expect(spy).toHaveBeenCalled();
-    });
   });
 
   describe('Метод hideTip', () => {
@@ -190,63 +155,33 @@ describe('App', () => {
       app.hideTip();
       expect(app.view!.withTip).toBeFalsy();
     });
-
-    it('Перерисовывает вид', () => {
-      const spy = spyOn(app, 'updateView');
-      app.hideTip();
-      expect(spy).toHaveBeenCalled();
-    });
   });
 
   describe('Метод showScale', () => {
     it('Устанавливает значение withScale вида в положение true', () => {
       app.showScale();
-      expect(app.withScale).toBeTruthy();
-    });
-
-    it('Перерисовывает вид', () => {
-      const spy = spyOn(app, 'updateView');
-      app.showScale();
-      expect(spy).toHaveBeenCalled();
+      expect(app.viewConfig!.withScale).toBeTruthy();
     });
   });
 
   describe('Метод hideScale', () => {
     it('Устанавливает значение withScale вида в положение false', () => {
       app.hideScale();
-      expect(app.withScale).toBeFalsy();
-    });
-
-    it('Перерисовывает вид', () => {
-      const spy = spyOn(app, 'updateView');
-      app.hideScale();
-      expect(spy).toHaveBeenCalled();
+      expect(app.viewConfig!.withScale).toBeFalsy();
     });
   });
 
   describe('Метод setVerticalOrientation', () => {
     it('Устанавливает вертикальное положение слайдера', () => {
       app.setVerticalOrientation();
-      expect(app.orientation).toEqual('vertical');
-    });
-
-    it('Перерисовывает вид', () => {
-      const spy = spyOn(app, 'updateView');
-      app.setVerticalOrientation();
-      expect(spy).toHaveBeenCalled();
+      expect(app.viewConfig!.orientation).toEqual('vertical');
     });
   });
 
   describe('Метод setHorizontalOrientation', () => {
     it('Устанавливает горизонтальное положение слайдера', () => {
       app.setHorizontalOrientation();
-      expect(app.orientation).toEqual('horizontal');
-    });
-
-    it('Перерисовывает вид', () => {
-      const spy = spyOn(app, 'updateView');
-      app.setHorizontalOrientation();
-      expect(spy).toHaveBeenCalled();
+      expect(app.viewConfig!.orientation).toEqual('horizontal');
     });
   });
 });
