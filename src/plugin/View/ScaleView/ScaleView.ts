@@ -22,7 +22,7 @@ class ScaleView {
     minValue,
     maxValue,
   }: drawScaleSettings): void {
-    const scaleClass: string = this._getOrientationBasedValue('', ' slider__scale_vertical');
+    const scaleClass: string = this.getOrientationBasedValue('', ' slider__scale_vertical');
     const valuesInterval: number = maxValue - minValue;
     const newStepSize: number = stepSize || 1;
     const reminder: number = valuesInterval % stepSize;
@@ -30,7 +30,7 @@ class ScaleView {
 
     this.$element = $('<ul/>', { class: `slider__scale${scaleClass}` }).appendTo(this.$parent);
 
-    const scaleWidth: number = this._getOrientationBasedValue(
+    const scaleWidth: number = this.getOrientationBasedValue(
       this.$element.width(),
       this.$element.height(),
     );
@@ -47,15 +47,15 @@ class ScaleView {
         markIndent = singleValueWidth * reminder;
       }
 
-      this._drawMark({ markText, markIndent });
+      this.drawMark({ markText, markIndent });
     }
   }
 
-  private _getOrientationBasedValue(horizontalValue: any, verticalValue: any): any {
+  private getOrientationBasedValue(horizontalValue: any, verticalValue: any): any {
     return this.orientation === 'horizontal' ? horizontalValue : verticalValue;
   }
 
-  private _drawMark({
+  private drawMark({
     markText,
     markIndent,
   }: drawMarkSettings): void | false {
@@ -63,7 +63,7 @@ class ScaleView {
       return false;
     }
 
-    const indentProperty = this._getOrientationBasedValue('margin-left', 'margin-top');
+    const indentProperty = this.getOrientationBasedValue('margin-left', 'margin-top');
 
     const $mark: JQuery = $('<li/>', {
       class: 'slider__scale-mark',
@@ -76,10 +76,10 @@ class ScaleView {
     }).appendTo($mark);
 
     $mark.appendTo(this.$element);
-    (<any>$mark).on('click.CustomSlider', this._handleMarkClick.bind(this));
+    (<any>$mark).on('click.CustomSlider', this.handleMarkClick.bind(this));
   }
 
-  private _handleMarkClick(event: JQuery.ClickEvent): void {
+  private handleMarkClick(event: JQuery.ClickEvent): void {
     const markText = $(event.target)
       .closest('.slider__scale-mark')
       .find('.slider__scale-mark-text')

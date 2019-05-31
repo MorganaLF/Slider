@@ -5,11 +5,11 @@ import { changeValueSettings } from './ControllerInterfaces';
 class Controller {
   readonly withScale: boolean;
   readonly type: string;
-  readonly observeChangeValue = this._observeChangeValue.bind(this);
-  readonly observeResize = this._observeResize.bind(this);
-  readonly observeStartRunnerMove = this._observeStartRunnerMove.bind(this);
-  readonly observeEndRunnerMove = this._observeEndRunnerMove.bind(this);
-  readonly observeClickOnScale = this._observeClickOnScale.bind(this);
+  readonly changeValueObserver = this.observeChangeValue.bind(this);
+  readonly resizeObserver = this.observeResize.bind(this);
+  readonly startRunnerMoveObserver = this.observeStartRunnerMove.bind(this);
+  readonly endRunnerMoveObserver = this.observeEndRunnerMove.bind(this);
+  readonly clickOnScaleObserver = this.observeClickOnScale.bind(this);
 
   constructor(private view: IMainView, private model: IModel) {
     this.withScale = view.withScale!;
@@ -18,19 +18,19 @@ class Controller {
   }
 
   public init(): void {
-    this.model.observableSubject.addObserver(this.observeChangeValue);
-    this.view.observableSubject.addObserver(this.observeResize);
-    this.view.startRunnerObservableSubject.addObserver(this.observeStartRunnerMove);
-    this.view.endRunnerObservableSubject.addObserver(this.observeEndRunnerMove);
-    this.view.scaleObservableSubject.addObserver(this.observeClickOnScale);
+    this.model.observableSubject.addObserver(this.changeValueObserver);
+    this.view.observableSubject.addObserver(this.resizeObserver);
+    this.view.startRunnerObservableSubject.addObserver(this.startRunnerMoveObserver);
+    this.view.endRunnerObservableSubject.addObserver(this.endRunnerMoveObserver);
+    this.view.scaleObservableSubject.addObserver(this.clickOnScaleObserver);
   }
 
   public destroy(): void {
-    this.model.observableSubject.removeObserver(this.observeChangeValue);
-    this.view.observableSubject.removeObserver(this.observeResize);
-    this.view.startRunnerObservableSubject.removeObserver(this.observeStartRunnerMove);
-    this.view.endRunnerObservableSubject.removeObserver(this.observeEndRunnerMove);
-    this.view.scaleObservableSubject.removeObserver(this.observeClickOnScale);
+    this.model.observableSubject.removeObserver(this.changeValueObserver);
+    this.view.observableSubject.removeObserver(this.resizeObserver);
+    this.view.startRunnerObservableSubject.removeObserver(this.startRunnerMoveObserver);
+    this.view.endRunnerObservableSubject.removeObserver(this.endRunnerMoveObserver);
+    this.view.scaleObservableSubject.removeObserver(this.clickOnScaleObserver);
   }
 
   public initValues(): void {
@@ -61,20 +61,20 @@ class Controller {
     this.model.observableSubject.addObserver(func);
   }
 
-  private _observeResize(): void {
+  private observeResize(): void {
     this.view.reinitialize();
     this.model.initValues();
   }
 
-  private _observeStartRunnerMove(ratio: number): void {
+  private observeStartRunnerMove(ratio: number): void {
     this.model.setCurrentValueByRatio(ratio, 'startValue');
   }
 
-  private _observeEndRunnerMove(ratio: number): void {
+  private observeEndRunnerMove(ratio: number): void {
     this.model.setCurrentValueByRatio(ratio, 'endValue');
   }
 
-  private _observeChangeValue({ eventType, value, coefficient }: changeValueSettings): void {
+  private observeChangeValue({ eventType, value, coefficient }: changeValueSettings): void {
     let valueType: string;
 
     const isRunnersAtTheEndOfSlider = this.type === 'interval'
@@ -121,7 +121,7 @@ class Controller {
     }
   }
 
-  private _observeClickOnScale(value: number): void {
+  private observeClickOnScale(value: number): void {
     const isClickNearByStartRunner: boolean = this.type === 'interval'
       && (Math.abs(value - this.model.startValue!)
       > Math.abs(value - this.model.endValue!)

@@ -35,9 +35,9 @@ class MainView {
   public withTip: boolean;
   public withScale: boolean;
   public orientation: string;
-  readonly dispatchStartRunnerMove = this._dispatchStartRunnerMove.bind(this);
-  readonly dispatchEndRunnerMove = this._dispatchEndRunnerMove.bind(this);
-  readonly dispatchClickOnScale = this._dispatchClickOnScale.bind(this);
+  readonly startRunnerMovePublisher = this.dispatchStartRunnerMove.bind(this);
+  readonly endRunnerMovePublisher = this.dispatchEndRunnerMove.bind(this);
+  readonly clickOnScalePublisher = this.dispatchClickOnScale.bind(this);
 
   constructor(options: MainViewOptions) {
     this.elementIndex = options.elementIndex;
@@ -50,10 +50,10 @@ class MainView {
   }
 
   public reinitialize(): void {
-    this._removeObservers();
+    this.removeObservers();
     this.$element.html('');
-    this._drawSlider();
-    this._addHandlers();
+    this.drawSlider();
+    this.addHandlers();
   }
 
   public update({
@@ -95,7 +95,7 @@ class MainView {
     if (this.scale) this.scale.drawScale(options);
   }
 
-  private _getExtremePoints(): IExtremePoints {
+  private getExtremePoints(): IExtremePoints {
     return {
       left: this.$element.offset()!.left,
       top: this.$element.offset()!.top,
@@ -104,7 +104,7 @@ class MainView {
     };
   }
 
-  private _getSliderInnerSize(): ISize {
+  private getSliderInnerSize(): ISize {
     const isElementsDefined = this.startValueRunner && this.startValueRunner.$element;
 
     if (!isElementsDefined) {
@@ -120,7 +120,7 @@ class MainView {
     };
   }
 
-  private _getRunnerSize(): ISize {
+  private getRunnerSize(): ISize {
     const isElementsDefined = this.startValueRunner && this.startValueRunner;
 
     if (!isElementsDefined) {
@@ -136,119 +136,119 @@ class MainView {
     };
   }
 
-  private _createRunner(runnerKeyName: string): void {
+  private createRunner(runnerKeyName: string): void {
     this[runnerKeyName] = new RunnerView({
       elementIndex: this.elementIndex,
       $parent: this.$element,
       orientation: this.orientation,
-      parentLeftPoint: this._getExtremePoints().left,
-      parentRightPoint: this._getExtremePoints().right,
-      parentTopPoint: this._getExtremePoints().top,
-      parentBottomPoint: this._getExtremePoints().bottom,
+      parentLeftPoint: this.getExtremePoints().left,
+      parentRightPoint: this.getExtremePoints().right,
+      parentTopPoint: this.getExtremePoints().top,
+      parentBottomPoint: this.getExtremePoints().bottom,
     });
   }
 
-  private _createTip(tipKeyName: string, $tipParent: JQuery): void {
+  private createTip(tipKeyName: string, $tipParent: JQuery): void {
     this[tipKeyName] = new TipView({
       $parent: $tipParent,
       orientation: this.orientation,
     });
   }
 
-  private _createTrack(): void {
+  private createTrack(): void {
     this.track = new TrackView({
       $parent: this.$element,
       type: this.type,
       orientation: this.orientation,
-      _parentWidth: this._getSliderInnerSize().width,
-      _parentHeight: this._getSliderInnerSize().height,
-      _runnerWidth: this._getRunnerSize().width,
-      _runnerHeight: this._getRunnerSize().height,
+      parentWidth: this.getSliderInnerSize().width,
+      parentHeight: this.getSliderInnerSize().height,
+      runnerWidth: this.getRunnerSize().width,
+      runnerHeight: this.getRunnerSize().height,
     });
   }
 
-  private _createScale(): void {
+  private createScale(): void {
     this.scale = new ScaleView({
       $parent:  this.$element,
       orientation: this.orientation,
     });
   }
 
-  private _drawSlider(): void {
+  private drawSlider(): void {
     if (this.orientation === 'vertical') {
       this.$element.addClass('slider_vertical');
     } else {
       this.$element.removeClass('slider_vertical');
     }
 
-    this._createRunner('startValueRunner');
+    this.createRunner('startValueRunner');
 
     if (this.withTip && this.startValueRunner) {
-      this._createTip('startValueTip', this.startValueRunner.$element);
+      this.createTip('startValueTip', this.startValueRunner.$element);
     }
 
     if (this.type === 'interval') {
-      this._createRunner('endValueRunner');
+      this.createRunner('endValueRunner');
 
       if (this.withTip && this.endValueRunner) {
-        this._createTip('endValueTip', this.endValueRunner.$element);
+        this.createTip('endValueTip', this.endValueRunner.$element);
       }
     }
 
-    this._createTrack();
+    this.createTrack();
 
     if (this.withScale) {
-      this._createScale();
+      this.createScale();
     }
   }
 
-  private _dispatchStartRunnerMove(ratio: number) {
+  private dispatchStartRunnerMove(ratio: number) {
     this.startRunnerObservableSubject.notifyObservers(ratio);
   }
 
-  private _dispatchEndRunnerMove(ratio: number) {
+  private dispatchEndRunnerMove(ratio: number) {
     this.endRunnerObservableSubject.notifyObservers(ratio);
   }
 
-  private _dispatchClickOnScale(value: number) {
+  private dispatchClickOnScale(value: number) {
     this.scaleObservableSubject.notifyObservers(value);
   }
 
-  private _handleWindowResize(): void {
+  private handleWindowResize(): void {
     this.reinitialize();
     this.observableSubject.notifyObservers();
   }
 
-  private _addHandlers(): void {
+  private addHandlers(): void {
     const $window = $(window);
-    const handleWindowResize = this._handleWindowResize.bind(this);
+    const handleWindowResize = this.handleWindowResize.bind(this);
 
     $window.on(`resize.CustomSlider${this.elementIndex}`, handleWindowResize);
 
     if (this.startValueRunner) {
-      this.startValueRunner.observableSubject.addObserver(this.dispatchStartRunnerMove);
+      this.startValueRunner.observableSubject.addObserver(this.startRunnerMovePublisher);
     }
 
     if (this.endValueRunner) {
-      this.endValueRunner.observableSubject.addObserver(this.dispatchEndRunnerMove);
+      this.endValueRunner.observableSubject.addObserver(this.endRunnerMovePublisher);
     }
 
     if (this.scale) {
-      this.scale.observableSubject.addObserver(this.dispatchClickOnScale);
+      this.scale.observableSubject.addObserver(this.clickOnScalePublisher);
     }
   }
 
-  private _removeObservers(): void {
+  private removeObservers(): void {
     if (this.startValueRunner) {
-      this.startValueRunner.observableSubject.removeObserver(this.dispatchStartRunnerMove);
+      this.startValueRunner.observableSubject.removeObserver(this.startRunnerMovePublisher);
     }
 
     if (this.endValueRunner) {
-      this.endValueRunner.observableSubject.removeObserver(this.dispatchEndRunnerMove);
+      this.endValueRunner.observableSubject.removeObserver(this.endRunnerMovePublisher);
     }
 
     if (this.scale) {
-      this.scale.observableSubject.removeObserver(this.dispatchClickOnScale);
+      this.scale.observableSubject.removeObserver(this.clickOnScalePublisher);
     }
   }
 }

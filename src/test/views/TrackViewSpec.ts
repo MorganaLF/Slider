@@ -13,10 +13,10 @@ describe('TrackView', () => {
       $parent,
       orientation: 'horizontal',
       type: 'single',
-      _parentWidth: 350,
-      _parentHeight: 350,
-      _runnerWidth: 50,
-      _runnerHeight: 50,
+      parentWidth: 350,
+      parentHeight: 350,
+      runnerWidth: 50,
+      runnerHeight: 50,
     });
   });
 

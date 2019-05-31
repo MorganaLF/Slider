@@ -18,8 +18,8 @@ class App {
   constructor(options: AppOptions) {
     this.modelConfig = { ...modelConfig, ...options };
     this.viewConfig = { ...mainViewConfig, ...options };
-    this.model = this._createModelInstance();
-    this.view = this._createViewInstance();
+    this.model = this.createModelInstance();
+    this.view = this.createViewInstance();
     this.controller = new Controller(this.view, this.model);
     this.controller.initValues();
   }
@@ -52,7 +52,7 @@ class App {
     this.modelConfig.minValue = typeof val === 'string' ? parseInt(val, 10) : val;
     this.modelConfig.startValue = this.getCurrentValue();
     this.modelConfig.endValue = this.getCurrentEndValue();
-    this._updateModel();
+    this.updateModel();
   }
 
   public getMaxValue(): number {
@@ -63,7 +63,7 @@ class App {
     this.modelConfig.maxValue = typeof val === 'string' ? parseInt(val, 10) : val;
     this.modelConfig.startValue = this.getCurrentValue();
     this.modelConfig.endValue = this.getCurrentEndValue();
-    this._updateModel();
+    this.updateModel();
   }
 
   public getStepSize(): number {
@@ -74,7 +74,7 @@ class App {
     this.modelConfig.stepSize = typeof val === 'string' ? parseInt(val, 10) : val;
     this.modelConfig.startValue = this.getCurrentValue();
     this.modelConfig.endValue = this.getCurrentEndValue();
-    this._updateModel();
+    this.updateModel();
   }
 
   public setVerticalOrientation(): void {
@@ -121,23 +121,23 @@ class App {
 
   private updateView(): void {
     this.controller.destroy();
-    this._createViewInstance();
+    this.createViewInstance();
     this.controller = new Controller(this.view, this.model);
     this.controller.initValues();
   }
 
-  private _updateModel(): void {
-    this._createModelInstance();
+  private updateModel(): void {
+    this.createModelInstance();
     this.controller.reinitializeView();
     this.controller = new Controller(this.view, this.model);
     this.controller.initValues();
   }
 
-  private _createModelInstance(): IModel {
+  private createModelInstance(): IModel {
     return this.model = new Model(this.modelConfig);
   }
 
-  private _createViewInstance(): IMainView {
+  private createViewInstance(): IMainView {
     return this.view = new MainView(this.viewConfig);
   }
 }

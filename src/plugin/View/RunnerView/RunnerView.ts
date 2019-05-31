@@ -16,7 +16,7 @@ class RunnerView {
   readonly parentRightPoint: number;
   readonly parentTopPoint: number;
   readonly parentBottomPoint: number;
-  private _handleWindowMouseUp?: (event: JQuery.MouseUpEvent) => void;
+  private handleWindowMouseUp?: (event: JQuery.MouseUpEvent) => void;
 
   constructor(options: RunnerViewOptions) {
     this.elementIndex = options.elementIndex;
@@ -29,7 +29,7 @@ class RunnerView {
     this.parentTopPoint = options.parentTopPoint;
     this.parentBottomPoint = options.parentBottomPoint;
     this.$element = this.drawRunner();
-    this._addHandlers();
+    this.addHandlers();
   }
 
   public drawRunner(): JQuery {
@@ -44,8 +44,8 @@ class RunnerView {
 
   public setRunnerPosition(coefficient: number): void {
     const parentSize: number = this.orientation === 'horizontal'
-      ? this._getParentWidth()
-      : this._getParentHeight();
+      ? this.getParentWidth()
+      : this.getParentHeight();
 
     const runnerSize: number = this.orientation === 'horizontal'
       ? this.$element.innerWidth()!
@@ -65,7 +65,7 @@ class RunnerView {
         ? (<any>e).targetTouches[0].pageX
         : e.pageX;
 
-      this._dispatchMoveEvent({
+      this.dispatchMoveEvent({
         coordinate: pageX,
         startPoint: this.parentLeftPoint,
         endPoint: this.parentRightPoint,
@@ -77,7 +77,7 @@ class RunnerView {
         ? (<any>e).targetTouches[0].pageY
         : e.pageY;
 
-      this._dispatchMoveEvent({
+      this.dispatchMoveEvent({
         coordinate: pageY,
         startPoint: this.parentTopPoint,
         endPoint: this.parentBottomPoint,
@@ -111,23 +111,23 @@ class RunnerView {
     this.$element.css('zIndex', '0');
   }
 
-  private _getParentWidth(): number {
+  private getParentWidth(): number {
     return this.parentRightPoint - this.parentLeftPoint;
   }
 
-  private _getParentHeight(): number {
+  private getParentHeight(): number {
     return this.parentBottomPoint - this.parentTopPoint;
   }
 
-  private _handleRunnerMouseDown(event: JQuery.MouseDownEvent): void {
+  private handleRunnerMouseDown(event: JQuery.MouseDownEvent): void {
     event.preventDefault();
 
     this.setRunnerShiftX(event);
     this.setRunnerShiftY(event);
 
-    const handleWindowMouseMove = this._handleWindowMouseMove.bind(this);
+    const handleWindowMouseMove = this.handleWindowMouseMove.bind(this);
 
-    this._handleWindowMouseUp = this._removeEventListeners.bind(this, handleWindowMouseMove);
+    this.handleWindowMouseUp = this.removeEventListeners.bind(this, handleWindowMouseMove);
 
     const $window = $(window);
     const isDeviceSupportsTouchMove: boolean = typeof document.body.ontouchmove !== 'undefined';
@@ -141,33 +141,33 @@ class RunnerView {
     const isDeviceSupportsTouchEnd: boolean = typeof document.body.ontouchend !== 'undefined';
 
     if (isDeviceSupportsTouchEnd) {
-      (<any>$window).on(`touchend.CustomSlider${this.elementIndex}`, this._handleWindowMouseUp);
+      (<any>$window).on(`touchend.CustomSlider${this.elementIndex}`, this.handleWindowMouseUp);
     } else {
-      (<any>$window).on(`mouseup.CustomSlider${this.elementIndex}`, this._handleWindowMouseUp);
+      (<any>$window).on(`mouseup.CustomSlider${this.elementIndex}`, this.handleWindowMouseUp);
     }
   }
 
-  private _handleWindowMouseMove(event: JQuery.MouseMoveEvent): void {
+  private handleWindowMouseMove(event: JQuery.MouseMoveEvent): void {
     this.moveRunner(event);
   }
 
-  private _addHandlers() {
+  private addHandlers() {
     const isDeviceSupportsTouchStart: boolean = typeof document.body.ontouchstart !== 'undefined';
 
     if (isDeviceSupportsTouchStart) {
       (<any>this.$element).on(
         `touchstart.CustomSlider${this.elementIndex}`,
-        this._handleRunnerMouseDown.bind(this),
+        this.handleRunnerMouseDown.bind(this),
       );
     } else {
       (<any>this.$element).on(
         `mousedown.CustomSlider${this.elementIndex}`,
-        this._handleRunnerMouseDown.bind(this),
+        this.handleRunnerMouseDown.bind(this),
       );
     }
   }
 
-  private _removeEventListeners(handleWindowMouseMove: (e: JQuery.MouseMoveEvent) => void): void {
+  private removeEventListeners(handleWindowMouseMove: (e: JQuery.MouseMoveEvent) => void): void {
     const $window = $(window);
     const isDeviceSupportsTouchMove: boolean = typeof document.body.ontouchmove !== 'undefined';
 
@@ -180,13 +180,13 @@ class RunnerView {
     const isDeviceSupportsTouchEnd: boolean = typeof document.body.ontouchend !== 'undefined';
 
     if (isDeviceSupportsTouchEnd) {
-      (<any>$window).off(`touchend.CustomSlider${this.elementIndex}`, this._handleWindowMouseUp);
+      (<any>$window).off(`touchend.CustomSlider${this.elementIndex}`, this.handleWindowMouseUp);
     } else {
-      (<any>$window).off(`mouseup.CustomSlider${this.elementIndex}`, this._handleWindowMouseUp);
+      (<any>$window).off(`mouseup.CustomSlider${this.elementIndex}`, this.handleWindowMouseUp);
     }
   }
 
-  private _dispatchMoveEvent({
+  private dispatchMoveEvent({
     coordinate,
     startPoint,
     endPoint,

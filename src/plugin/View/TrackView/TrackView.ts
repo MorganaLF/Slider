@@ -9,20 +9,20 @@ class TrackView {
   public $element: JQuery;
   public $parent: JQuery;
   public $filledTrack: JQuery;
-  private _parentWidth: number;
-  private _parentHeight: number;
-  private _runnerWidth: number;
-  private _runnerHeight: number;
+  private parentWidth: number;
+  private parentHeight: number;
+  private runnerWidth: number;
+  private runnerHeight: number;
   readonly type: string;
   readonly orientation: string;
   [key: string]: any;
 
   constructor(options: TrackViewOptions) {
     this.$parent = options.$parent;
-    this._parentWidth = options._parentWidth;
-    this._parentHeight = options._parentHeight;
-    this._runnerWidth = options._runnerWidth;
-    this._runnerHeight = options._runnerHeight;
+    this.parentWidth = options.parentWidth;
+    this.parentHeight = options.parentHeight;
+    this.runnerWidth = options.runnerWidth;
+    this.runnerHeight = options.runnerHeight;
     this.type = options.type;
     this.orientation = options.orientation;
     this.$element = this.drawTrack();
@@ -54,46 +54,46 @@ class TrackView {
   public animateTrack(coefficient: number, animatedPointName: string): void {
     if (this.type === 'interval') {
       if (this.orientation === 'horizontal') {
-        this._animateIntervalTrack({
+        this.animateIntervalTrack({
           coefficient,
           animatedPointName,
           startPointName: 'left',
           endPointName: 'right',
           sizeProperty: 'width',
           size: this.$element.innerWidth()!,
-          runnerSizeKey: '_runnerWidth',
+          runnerSizeKey: 'runnerWidth',
         });
       } else {
-        this._animateIntervalTrack({
+        this.animateIntervalTrack({
           coefficient,
           animatedPointName,
           startPointName: 'top',
           endPointName: 'bottom',
           sizeProperty: 'height',
           size: this.$element.innerHeight()!,
-          runnerSizeKey: '_runnerHeight',
+          runnerSizeKey: 'runnerHeight',
         });
       }
     } else {
       if (this.orientation === 'horizontal') {
-        this._animateSingleTrack({
+        this.animateSingleTrack({
           coefficient,
           sizeProperty: 'width',
-          sizeKey: '_parentWidth',
-          runnerSizeKey: '_runnerWidth',
+          sizeKey: 'parentWidth',
+          runnerSizeKey: 'runnerWidth',
         });
       } else {
-        this._animateSingleTrack({
+        this.animateSingleTrack({
           coefficient,
           sizeProperty: 'height',
-          sizeKey: '_parentHeight',
-          runnerSizeKey: '_runnerHeight',
+          sizeKey: 'parentHeight',
+          runnerSizeKey: 'runnerHeight',
         });
       }
     }
   }
 
-  private _getTrackPoints(pointName: string): number {
+  private getTrackPoints(pointName: string): number {
     const trackPoints: TrackPoints = {
       left: this.$element.offset()!.left,
       top: this.$element.offset()!.top,
@@ -104,7 +104,7 @@ class TrackView {
     return trackPoints[pointName];
   }
 
-  private _getFilledTrackPoints(pointName: string): number {
+  private getFilledTrackPoints(pointName: string): number {
     const filledTrackPoints: TrackPoints = {
       left: this.$filledTrack.offset()!.left,
       top: this.$filledTrack.offset()!.top,
@@ -115,7 +115,7 @@ class TrackView {
     return filledTrackPoints[pointName];
   }
 
-  private _animateSingleTrack({
+  private animateSingleTrack({
     coefficient,
     sizeProperty,
     sizeKey,
@@ -129,7 +129,7 @@ class TrackView {
     }
   }
 
-  private _animateIntervalTrack({
+  private animateIntervalTrack({
     coefficient,
     startPointName,
     endPointName,
@@ -140,8 +140,8 @@ class TrackView {
   }: animateIntervalTrackSettings): void {
     const runnerSize: number = this[runnerSizeKey];
     const innerSize: number = size - runnerSize;
-    const endPoint: number = this._getTrackPoints(endPointName);
-    const filledEndPoint: number = this._getFilledTrackPoints(endPointName);
+    const endPoint: number = this.getTrackPoints(endPointName);
+    const filledEndPoint: number = this.getFilledTrackPoints(endPointName);
     let startIndent: number;
     let endIndent: number;
 
@@ -152,8 +152,8 @@ class TrackView {
 
       this.$filledTrack.css(startPointName, `${filledTrackOffset}px`);
     } else {
-      const trackStartPoint: number = this._getTrackPoints(startPointName);
-      const filledTrackStartPoint: number = this._getFilledTrackPoints(startPointName);
+      const trackStartPoint: number = this.getTrackPoints(startPointName);
+      const filledTrackStartPoint: number = this.getFilledTrackPoints(startPointName);
 
       startIndent = filledTrackStartPoint - trackStartPoint - runnerSize;
       endIndent = innerSize - innerSize / coefficient;
