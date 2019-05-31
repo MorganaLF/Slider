@@ -25,6 +25,5 @@ export interface IModel extends ModelOptions{
   getCurrentRoundedEndValue(): number;
   setCurrentValue(value: number): void;
   setCurrentEndValue(value: number): void;
-  calculateCoefficient(point: number): number;
   setCurrentValueByRatio(ratio: number, valueKeyName: string): void | boolean;
 }

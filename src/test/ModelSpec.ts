@@ -129,16 +129,6 @@ describe('Model', () => {
     expect(model.endValue).toEqual(50);
   });
 
-  describe('Метод initValues', () => {
-    it('Уведомляет об установлении начального и конечного значений', () => {
-      const spy = spyOn(model, '_dispatchValueChange');
-      model.initValues();
-
-      expect(spy).toHaveBeenCalledWith('setstartvalue', 0);
-      expect(spy).toHaveBeenCalledWith('setendvalue', 100);
-    });
-  });
-
   describe('Геттер getCurrentRoundedValue', () => {
     it('Получает округленное текущее начальное значение', () => {
       model.startValue = 1.957;
@@ -192,16 +182,6 @@ describe('Model', () => {
 
       expect(model.startValue).toEqual(20);
     });
-
-    it('Генерирует событие', () => {
-      spyOn(model, '_dispatchValueChange');
-      spyOnEvent('body', 'changestartvalue');
-
-      model.setCurrentValue(19);
-
-      expect($body).toHandle('changestartvalue');
-      expect((<any>model)._dispatchValueChange).toHaveBeenCalled();
-    });
   });
 
   describe('Сеттер setCurrentEndValue', () => {
@@ -251,16 +231,6 @@ describe('Model', () => {
 
       expect(model.endValue).toEqual(60);
     });
-
-    it('Генерирует событие', () => {
-      spyOn(model, '_dispatchValueChange');
-      spyOnEvent('body', 'changeendvalue');
-
-      model.setCurrentEndValue(49);
-
-      expect($body).toHandle('changeendvalue');
-      expect((<any>model)._dispatchValueChange).toHaveBeenCalled();
-    });
   });
 
   describe('Метод setCurrentValueByRatio', () => {
@@ -300,28 +270,6 @@ describe('Model', () => {
       model.setCurrentValueByRatio(2, 'startValue');
 
       expect(model.startValue).toEqual(60);
-    });
-
-    it('Генерирует событие при изменении свойства startValue', () => {
-      spyOnEvent('body', 'changestartvalue');
-      spyOn(model, '_dispatchValueChange');
-
-      model.setCurrentValueByRatio(2, 'startValue');
-
-      expect($('body')).toHandle('changestartvalue');
-      expect((<any>model)._dispatchValueChange).toHaveBeenCalled();
-    });
-
-    it('Генерирует событие при изменении свойства endValue', () => {
-      model.type = 'interval';
-
-      spyOnEvent('body', 'changeendvalue');
-      spyOn(model, '_dispatchValueChange');
-
-      model.setCurrentValueByRatio(2, 'endValue');
-
-      expect($('body')).toHandle('changeendvalue');
-      expect((<any>model)._dispatchValueChange).toHaveBeenCalled();
     });
   });
 });

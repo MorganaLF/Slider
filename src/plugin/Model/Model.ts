@@ -1,9 +1,8 @@
 import ObservableSubject from '../ObservableSubject/ObservableSubject';
-import {ModelConfig, ModelOptions} from './ModelInterfaces';
+import { ModelConfig, ModelOptions } from './ModelInterfaces';
 import modelConfig from './modelConfig';
 
 class Model {
-  [key: string]: any;
   public observableSubject = new ObservableSubject();
   public startValue: number;
   public endValue: number;
@@ -21,33 +20,33 @@ class Model {
     this.maxValue = this.config.maxValue;
     this.type = this.config.type;
     this.stepSize = this.config.stepSize;
-    this._validateConstructorOptions();
+    this.fixConstructorOptions();
   }
 
   public initValues(): void {
-    this._dispatchValueChange('setstartvalue', this.startValue);
-    this._dispatchValueChange('setendvalue', this.endValue);
+    this.dispatchValueChange('setstartvalue', this.startValue);
+    this.dispatchValueChange('setendvalue', this.endValue);
   }
 
   public getCurrentRoundedValue(): number {
-    return this._calculateRoundedValue(this.startValue);
+    return this.calculateRoundedValue(this.startValue);
   }
 
   public getCurrentRoundedEndValue(): number {
-    return this._calculateRoundedValue(this.endValue);
+    return this.calculateRoundedValue(this.endValue);
   }
 
   public setCurrentValue(value: number): void {
-    this.startValue = value;
-    this._checkNumber('startValue');
-    this._checkStepValue('startValue');
-    this._checkCurrentValue('startValue');
+    const fixedToNumberValue = this.fixToNumber(value, this.config.startValue);
+    const fixedToStepValue = this.fixToValueMultipleOfStep(fixedToNumberValue);
+
+    this.startValue = this.fixCurrentValue(fixedToStepValue);
 
     if (this.type === 'interval') {
-      this._checkIntervalValues('startValue');
+      this.checkAndFixIntervalValues(this.startValue);
     }
 
-    this._dispatchValueChange('changestartvalue', this.startValue);
+    this.dispatchValueChange('changestartvalue', this.startValue);
   }
 
   public setCurrentEndValue(value: number): void {
@@ -55,86 +54,78 @@ class Model {
       return;
     }
 
-    this.endValue = value;
-    this._checkNumber('endValue');
-    this._checkStepValue('endValue');
-    this._checkCurrentValue('endValue');
-    this._checkIntervalValues('endValue');
-    this._dispatchValueChange('changeendvalue', this.endValue);
+    const fixedToNumberValue = this.fixToNumber(value, this.config.endValue);
+    const fixedToStepValue = this.fixToValueMultipleOfStep(fixedToNumberValue);
+
+    this.endValue = this.fixCurrentValue(fixedToStepValue);
+
+    this.checkAndFixIntervalValues(this.endValue);
+    this.dispatchValueChange('changeendvalue', this.endValue);
   }
 
-  public setCurrentValueByRatio(ratio: number, valueKeyName: string): void | boolean {
+  public setCurrentValueByRatio(
+    ratio: number,
+    valueKeyName: 'startValue' | 'endValue',
+  ): void | boolean {
 
     if (this.stepSize === 0) {
       this[valueKeyName] = (this.maxValue - this.minValue) / ratio + this.minValue;
     } else {
-      this[valueKeyName] = this._calculateStepValueByRatio(ratio, valueKeyName);
+      this[valueKeyName] = this.calculateStepValueByRatio(ratio, this[valueKeyName]);
     }
 
     const isIntervalValueInvalid: boolean = this.type === 'interval'
-      && !this._checkIntervalValues(valueKeyName);
+      && !this.checkAndFixIntervalValues(this[valueKeyName]);
 
     if (isIntervalValueInvalid) {
       return false;
     }
 
-    this._checkCurrentValue(valueKeyName);
+    this[valueKeyName] = this.fixCurrentValue(this[valueKeyName]);
 
     if (valueKeyName === 'startValue') {
-      this._dispatchValueChange('changestartvalue', this.startValue);
+      this.dispatchValueChange('changestartvalue', this.startValue);
     }
 
     const isChangingEndValue: boolean = valueKeyName === 'endValue'
       && this.type === 'interval';
 
     if (isChangingEndValue) {
-      this._dispatchValueChange('changeendvalue', this.endValue);
+      this.dispatchValueChange('changeendvalue', this.endValue);
     }
   }
 
-  public calculateCoefficient(currentValue: number): number {
-    return (this.maxValue - this.minValue) / (currentValue - this.minValue);
+  private fixConstructorOptions(): void {
+    const fixedToNumberStartValue = this.fixToNumber(this.startValue, this.config.startValue);
+    const fixedToNumberEndValue = this.fixToNumber(this.endValue, this.config.endValue);
+    const fixedToNumberMinValue = this.fixToNumber(this.minValue, this.config.minValue);
+    const fixedToNumberMaxValue = this.fixToNumber(this.maxValue, this.config.maxValue);
+
+    this.stepSize = this.fixToNumber(this.stepSize, this.config.stepSize);
+
+    this.fixExtremeValues();
+
+    this.minValue = this.fixToPositiveNumber(fixedToNumberMinValue);
+    this.maxValue = this.fixToPositiveNumber(fixedToNumberMaxValue);
+
+    const fixedToStepStartValue = this.fixToValueMultipleOfStep(fixedToNumberStartValue);
+    const fixedToStepEndValue = this.fixToValueMultipleOfStep(fixedToNumberEndValue);
+
+    this.startValue = this.fixCurrentValue(fixedToStepStartValue);
+    this.endValue = this.fixCurrentValue(fixedToStepEndValue);
   }
 
-  private _validateConstructorOptions(): void {
-    this._checkNumber('startValue');
-    this._checkNumber('endValue');
-    this._checkNumber('minValue');
-    this._checkNumber('maxValue');
-    this._checkNumber('stepSize');
-    this._checkExtremeValues();
-    this._checkPositiveNumber('minValue');
-    this._checkPositiveNumber('maxValue');
-    this._checkStepValue('startValue');
-    this._checkStepValue('endValue');
-    this._checkCurrentValue('startValue');
-    this._checkCurrentValue('endValue');
+  private fixToNumber(value: any, defaultValue: number): number {
+    if (isNaN(value)) return defaultValue;
+    return value;
   }
 
-  private _checkNumber(valueKeyName: string): void {
-    if (isNaN(this[valueKeyName])) {
-      const isDefaultValueFromKeyZero = valueKeyName === 'startValue'
-        || valueKeyName === 'minValue'
-        || valueKeyName === 'stepSize';
-
-      const isDefaultValueFromKeyHundred = valueKeyName === 'endValue'
-        || valueKeyName === 'maxValue';
-
-      if (isDefaultValueFromKeyZero) {
-        this[valueKeyName] = 0;
-      } else if (isDefaultValueFromKeyHundred) {
-        this[valueKeyName] = 100;
-      }
-    }
+  private fixToPositiveNumber(value: number): number {
+    if (value < 0) return Math.abs(value);
+    return value;
   }
 
-  private _checkPositiveNumber(valueKeyName: string): void {
-    if (this[valueKeyName] < 0) {
-      this[valueKeyName] = Math.abs(this[valueKeyName]);
-    }
-  }
-
-  private _checkExtremeValues(): void {
+  private fixExtremeValues(): void {
     if (this.minValue > this.maxValue) {
       if (this.stepSize === 0) {
         this.minValue = this.maxValue - 1;
@@ -144,82 +135,80 @@ class Model {
     }
   }
 
-  private _checkCurrentValue(valueKeyName: string): void {
-    if (this[valueKeyName] < this.minValue) {
-      this[valueKeyName] = this.minValue;
-    }
-
-    if (this[valueKeyName] > this.maxValue) {
-      this[valueKeyName] = this.maxValue;
-    }
+  private fixCurrentValue(value: number): number {
+    if (value < this.minValue) return this.minValue;
+    if (value > this.maxValue) return this.maxValue;
+    return value;
   }
 
-  private _checkStepValue(valueKeyName: string): void {
+  private fixToValueMultipleOfStep(value: number): number {
     const shouldStepValueBeRounded: boolean = (this.stepSize !== 0)
-      && this[valueKeyName] !== 0
-      && this[valueKeyName] !== this.maxValue
-      && ((this[valueKeyName] - this.minValue) % this.stepSize !== 0);
+      && value !== 0
+      && value !== this.maxValue
+      && ((value - this.minValue) % this.stepSize !== 0);
 
-    const roundedStepValue = Math.round((this[valueKeyName] - this.minValue) / this.stepSize)
-      * this.stepSize;
+    const roundedStepValue = Math.round((value - this.minValue) / this.stepSize) * this.stepSize;
 
-    if (shouldStepValueBeRounded) {
-      this[valueKeyName] = roundedStepValue  + this.minValue;
-    }
+    if (shouldStepValueBeRounded) return roundedStepValue + this.minValue;
+    return value;
   }
 
-  private _checkIntervalValues(valueKeyName: string): boolean {
-    const isStartValueExceedsEndValue: boolean = (this.startValue > this.endValue)
-      && (this[valueKeyName] === this.startValue);
+  private checkAndFixIntervalValues(value: number): boolean {
+    const isStartValueGoesBeyondEndValue: boolean = (this.startValue > this.endValue)
+      && (value === this.startValue);
 
-    if (isStartValueExceedsEndValue) {
+    if (isStartValueGoesBeyondEndValue) {
       this.startValue = this.endValue;
-      this._dispatchValueChange('changestartvalue', this.startValue);
+      this.dispatchValueChange('changestartvalue', this.startValue);
       return false;
     }
 
-    const isEndValueExceedsStartValue: boolean = (this.endValue < this.startValue)
-      && (this[valueKeyName] === this.endValue);
+    const isEndValueGoesBeyondStartValue: boolean = (this.endValue < this.startValue)
+      && (value === this.endValue);
 
-    if (isEndValueExceedsStartValue) {
+    if (isEndValueGoesBeyondStartValue) {
       this.endValue = this.startValue;
-      this._dispatchValueChange('changeendvalue', this.endValue);
+      this.dispatchValueChange('changeendvalue', this.endValue);
       return false;
     }
 
     return true;
   }
 
-  private _calculateRoundedValue(value: number): number {
+  private calculateRoundedValue(value: number): number {
     return Math.round(value);
   }
 
-  private _calculateStepValueByRatio(ratio: number, valueKeyName: string): number {
+  private calculateCoefficient(currentValue: number): number {
+    return (this.maxValue - this.minValue) / (currentValue - this.minValue);
+  }
+
+  private calculateStepValueByRatio(ratio: number, value: number): number {
     const currentValue: number = (this.maxValue - this.minValue) / ratio + this.minValue;
     const reminderOfStepSlider: number = (this.maxValue - this.minValue) % this.stepSize;
 
     const isEndOfStepSlider: boolean = this.stepSize !== 0
       && reminderOfStepSlider !== 0
-      && currentValue < this[valueKeyName] - reminderOfStepSlider
-      && this[valueKeyName] === this.maxValue
+      && currentValue < value - reminderOfStepSlider
+      && value === this.maxValue
     ;
 
-    const isValueIncreasing: boolean = currentValue > this[valueKeyName] + this.stepSize;
-    const isValueDecreasing: boolean = currentValue < this[valueKeyName] - this.stepSize;
+    const isValueIncreasing: boolean = currentValue > value + this.stepSize;
+    const isValueDecreasing: boolean = currentValue < value - this.stepSize;
 
     if (currentValue > this.maxValue) return this.maxValue;
     if (currentValue < this.minValue) return this.minValue;
-    if (isValueIncreasing) return this[valueKeyName] + this.stepSize;
-    if (isEndOfStepSlider) return this[valueKeyName] - reminderOfStepSlider;
-    if (isValueDecreasing) return this[valueKeyName] - this.stepSize;
+    if (isValueIncreasing) return value + this.stepSize;
+    if (isEndOfStepSlider) return value - reminderOfStepSlider;
+    if (isValueDecreasing) return value - this.stepSize;
 
-    return this[valueKeyName];
+    return value;
   }
 
-  private _dispatchValueChange(eventType: string, value: number): void {
+  private dispatchValueChange(eventType: string, value: number): void {
     this.observableSubject.notifyObservers({
       eventType,
-      value: this._calculateRoundedValue(value),
+      value: this.calculateRoundedValue(value),
       coefficient: this.calculateCoefficient(value),
     });
   }
