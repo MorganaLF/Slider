@@ -55,7 +55,7 @@ describe('Controller', () => {
 
   describe('Метод init', () => {
     it('При клике на runner и движении мыши пересчитывается значение модели', () => {
-      const spy = spyOn(model, 'setCurrentValueByRatio');
+      const spy = spyOn(model, 'setRangeBoundByRatio');
       $runner.mousedown();
       $window.mousemove();
 

@@ -7,7 +7,7 @@ export type changeValueSettings = {
 export interface IController {
   init(): void;
   destroy(): void;
-  initValues(): void;
+  initRangeValues(): void;
   reinitializeView(): void;
   getCurrentValue(): number;
   setCurrentValue(val: number): void;

@@ -33,8 +33,8 @@ class Controller {
     this.view.scaleObservableSubject.removeObserver(this.clickOnScaleObserver);
   }
 
-  public initValues(): void {
-    this.model.initValues();
+  public initRangeValues(): void {
+    this.model.initRangeValues();
   }
 
   public reinitializeView(): void {
@@ -63,15 +63,15 @@ class Controller {
 
   private observeResize(): void {
     this.view.reinitialize();
-    this.model.initValues();
+    this.model.initRangeValues();
   }
 
   private observeStartRunnerMove(ratio: number): void {
-    this.model.setCurrentValueByRatio(ratio, 'startValue');
+    this.model.setRangeBoundByRatio(ratio, 'startValue');
   }
 
   private observeEndRunnerMove(ratio: number): void {
-    this.model.setCurrentValueByRatio(ratio, 'endValue');
+    this.model.setRangeBoundByRatio(ratio, 'endValue');
   }
 
   private observeChangeValue({ eventType, value, coefficient }: changeValueSettings): void {

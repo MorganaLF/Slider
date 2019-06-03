@@ -20,10 +20,10 @@ export type ModelConfig = {
 
 export interface IModel extends ModelOptions{
   observableSubject: IObservableSubject;
-  initValues(): void;
+  initRangeValues(): void;
   getCurrentRoundedValue(): number;
   getCurrentRoundedEndValue(): number;
   setCurrentValue(value: number): void;
   setCurrentEndValue(value: number): void;
-  setCurrentValueByRatio(ratio: number, valueKeyName: string): void | boolean;
+  setRangeBoundByRatio(ratio: number, valueKeyName: string): void;
 }

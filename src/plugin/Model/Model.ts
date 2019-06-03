@@ -23,101 +23,104 @@ class Model {
     this.fixConstructorOptions();
   }
 
-  public initValues(): void {
-    this.dispatchValueChange('setstartvalue', this.startValue);
-    this.dispatchValueChange('setendvalue', this.endValue);
+  public initRangeValues(): void {
+    this.dispatchRangeChange('setstartvalue', this.startValue);
+    this.dispatchRangeChange('setendvalue', this.endValue);
   }
 
   public getCurrentRoundedValue(): number {
-    return this.calculateRoundedValue(this.startValue);
+    return Math.round(this.startValue);
   }
 
   public getCurrentRoundedEndValue(): number {
-    return this.calculateRoundedValue(this.endValue);
+    return Math.round(this.endValue);
   }
 
-  public setCurrentValue(value: number): void {
-    const fixedToNumberValue = this.fixToNumber(value, this.config.startValue);
-    const fixedToStepValue = this.fixToValueMultipleOfStep(fixedToNumberValue);
+  public setCurrentValue(startBound: number): void {
+    const fixedToNumberRangeBound = this.fixToNumber(startBound, this.config.startValue);
+    const alignedToStepRangeBound = this.alignToStep(fixedToNumberRangeBound);
 
-    this.startValue = this.fixCurrentValue(fixedToStepValue);
+    this.startValue = this.clampRangeBetweenEdges(alignedToStepRangeBound);
 
-    if (this.type === 'interval') {
-      this.checkAndFixIntervalValues(this.startValue);
+    const isBoundsInWrongOrder = this.type === 'interval' && this.startValue > this.endValue;
+
+    if (isBoundsInWrongOrder) {
+      this.setBoundsInRightOrder(this.startValue);
+    } else {
+      this.dispatchRangeChange('changestartvalue', this.startValue);
     }
-
-    this.dispatchValueChange('changestartvalue', this.startValue);
   }
 
-  public setCurrentEndValue(value: number): void {
-    if (this.type === 'single') {
-      return;
+  public setCurrentEndValue(endBound: number): void {
+    if (this.type === 'single') return;
+
+    const fixedToNumberRangeBound = this.fixToNumber(endBound, this.config.endValue);
+    const alignedToStepRangeBound = this.alignToStep(fixedToNumberRangeBound);
+
+    this.endValue = this.clampRangeBetweenEdges(alignedToStepRangeBound);
+
+    if (this.startValue > this.endValue) {
+      this.setBoundsInRightOrder(this.endValue);
+    } else {
+      this.dispatchRangeChange('changeendvalue', this.endValue);
     }
-
-    const fixedToNumberValue = this.fixToNumber(value, this.config.endValue);
-    const fixedToStepValue = this.fixToValueMultipleOfStep(fixedToNumberValue);
-
-    this.endValue = this.fixCurrentValue(fixedToStepValue);
-
-    this.checkAndFixIntervalValues(this.endValue);
-    this.dispatchValueChange('changeendvalue', this.endValue);
   }
 
-  public setCurrentValueByRatio(
+  public setRangeBoundByRatio(
     ratio: number,
-    valueKeyName: 'startValue' | 'endValue',
-  ): void | boolean {
+    rangeBoundKeyName: 'startValue' | 'endValue',
+  ): void {
 
     if (this.stepSize === 0) {
-      this[valueKeyName] = (this.maxValue - this.minValue) / ratio + this.minValue;
+      this[rangeBoundKeyName] = (this.maxValue - this.minValue) / ratio + this.minValue;
     } else {
-      this[valueKeyName] = this.calculateStepValueByRatio(ratio, this[valueKeyName]);
+      this[rangeBoundKeyName] = this.calculateAndAlignToStepBound(ratio, this[rangeBoundKeyName]);
     }
 
-    const isIntervalValueInvalid: boolean = this.type === 'interval'
-      && !this.checkAndFixIntervalValues(this[valueKeyName]);
+    const isBoundsInWrongOrder: boolean = this.type === 'interval'
+      && this.startValue > this.endValue;
 
-    if (isIntervalValueInvalid) {
-      return false;
-    }
+    if (isBoundsInWrongOrder) {
+      this.setBoundsInRightOrder(this[rangeBoundKeyName]);
+    } else {
+      this[rangeBoundKeyName] = this.clampRangeBetweenEdges(this[rangeBoundKeyName]);
 
-    this[valueKeyName] = this.fixCurrentValue(this[valueKeyName]);
+      if (rangeBoundKeyName === 'startValue') {
+        this.dispatchRangeChange('changestartvalue', this.startValue);
+      }
 
-    if (valueKeyName === 'startValue') {
-      this.dispatchValueChange('changestartvalue', this.startValue);
-    }
+      const isChangingEndBound: boolean = rangeBoundKeyName === 'endValue'
+        && this.type === 'interval';
 
-    const isChangingEndValue: boolean = valueKeyName === 'endValue'
-      && this.type === 'interval';
-
-    if (isChangingEndValue) {
-      this.dispatchValueChange('changeendvalue', this.endValue);
+      if (isChangingEndBound) {
+        this.dispatchRangeChange('changeendvalue', this.endValue);
+      }
     }
   }
 
   private fixConstructorOptions(): void {
-    const fixedToNumberStartValue = this.fixToNumber(this.startValue, this.config.startValue);
-    const fixedToNumberEndValue = this.fixToNumber(this.endValue, this.config.endValue);
+    const fixedToNumberStartBound = this.fixToNumber(this.startValue, this.config.startValue);
+    const fixedToNumberEndBound = this.fixToNumber(this.endValue, this.config.endValue);
     const fixedToNumberMinValue = this.fixToNumber(this.minValue, this.config.minValue);
     const fixedToNumberMaxValue = this.fixToNumber(this.maxValue, this.config.maxValue);
 
     this.stepSize = this.fixToNumber(this.stepSize, this.config.stepSize);
 
-    this.fixExtremeValues();
+    this.setRightOrderOfExtremeValues();
 
     this.minValue = this.fixToPositiveNumber(fixedToNumberMinValue);
     this.maxValue = this.fixToPositiveNumber(fixedToNumberMaxValue);
 
-    const fixedToStepStartValue = this.fixToValueMultipleOfStep(fixedToNumberStartValue);
-    const fixedToStepEndValue = this.fixToValueMultipleOfStep(fixedToNumberEndValue);
+    const alignedToStepStartBound = this.alignToStep(fixedToNumberStartBound);
+    const alignedToStepEndBound = this.alignToStep(fixedToNumberEndBound);
 
-    this.startValue = this.fixCurrentValue(fixedToStepStartValue);
-    this.endValue = this.fixCurrentValue(fixedToStepEndValue);
+    this.startValue = this.clampRangeBetweenEdges(alignedToStepStartBound);
+    this.endValue = this.clampRangeBetweenEdges(alignedToStepEndBound);
   }
 
   private fixToNumber(value: any, defaultValue: number): number {
-    if (isNaN(value)) return defaultValue;
-    return value;
+    if (Number.isNaN(Number(value))) return defaultValue;
+    return Number(value);
   }
 
   private fixToPositiveNumber(value: number): number {
@@ -125,7 +128,7 @@ class Model {
     return value;
   }
 
-  private fixExtremeValues(): void {
+  private setRightOrderOfExtremeValues(): void {
     if (this.minValue > this.maxValue) {
       if (this.stepSize === 0) {
         this.minValue = this.maxValue - 1;
@@ -135,81 +138,67 @@ class Model {
     }
   }
 
-  private fixCurrentValue(value: number): number {
-    if (value < this.minValue) return this.minValue;
-    if (value > this.maxValue) return this.maxValue;
-    return value;
+  private clampRangeBetweenEdges(rangeBound: number): number {
+    if (rangeBound < this.minValue) return this.minValue;
+    if (rangeBound > this.maxValue) return this.maxValue;
+    return rangeBound;
   }
 
-  private fixToValueMultipleOfStep(value: number): number {
+  private alignToStep(rangeBound: number): number {
     const shouldStepValueBeRounded: boolean = (this.stepSize !== 0)
-      && value !== 0
-      && value !== this.maxValue
-      && ((value - this.minValue) % this.stepSize !== 0);
+      && rangeBound !== 0
+      && rangeBound !== this.maxValue
+      && ((rangeBound - this.minValue) % this.stepSize !== 0);
 
-    const roundedStepValue = Math.round((value - this.minValue) / this.stepSize) * this.stepSize;
+    const roundedStepValue = Math.round((rangeBound - this.minValue)
+      / this.stepSize) * this.stepSize;
 
     if (shouldStepValueBeRounded) return roundedStepValue + this.minValue;
-    return value;
+    return rangeBound;
   }
 
-  private checkAndFixIntervalValues(value: number): boolean {
-    const isStartValueGoesBeyondEndValue: boolean = (this.startValue > this.endValue)
-      && (value === this.startValue);
-
-    if (isStartValueGoesBeyondEndValue) {
+  private setBoundsInRightOrder(changingBound: number): void {
+    if (changingBound === this.startValue) {
       this.startValue = this.endValue;
-      this.dispatchValueChange('changestartvalue', this.startValue);
-      return false;
+      this.dispatchRangeChange('changestartvalue', this.startValue);
     }
 
-    const isEndValueGoesBeyondStartValue: boolean = (this.endValue < this.startValue)
-      && (value === this.endValue);
-
-    if (isEndValueGoesBeyondStartValue) {
+    if (changingBound === this.endValue) {
       this.endValue = this.startValue;
-      this.dispatchValueChange('changeendvalue', this.endValue);
-      return false;
+      this.dispatchRangeChange('changeendvalue', this.endValue);
     }
-
-    return true;
   }
 
-  private calculateRoundedValue(value: number): number {
-    return Math.round(value);
-  }
+  private calculateAndAlignToStepBound(ratio: number, newRangeBound: number): number {
+    const currentRangeBound: number = (this.maxValue - this.minValue) / ratio + this.minValue;
+    const divisionRemainderOfInterval: number = (this.maxValue - this.minValue) % this.stepSize;
 
-  private calculateCoefficient(currentValue: number): number {
-    return (this.maxValue - this.minValue) / (currentValue - this.minValue);
-  }
-
-  private calculateStepValueByRatio(ratio: number, value: number): number {
-    const currentValue: number = (this.maxValue - this.minValue) / ratio + this.minValue;
-    const reminderOfStepSlider: number = (this.maxValue - this.minValue) % this.stepSize;
-
-    const isEndOfStepSlider: boolean = this.stepSize !== 0
-      && reminderOfStepSlider !== 0
-      && currentValue < value - reminderOfStepSlider
-      && value === this.maxValue
+    const isEndOfInterval: boolean = this.stepSize !== 0
+      && divisionRemainderOfInterval !== 0
+      && currentRangeBound < newRangeBound - divisionRemainderOfInterval
+      && newRangeBound === this.maxValue
     ;
 
-    const isValueIncreasing: boolean = currentValue > value + this.stepSize;
-    const isValueDecreasing: boolean = currentValue < value - this.stepSize;
+    const isBoundIncreasing: boolean = currentRangeBound > newRangeBound + this.stepSize;
+    const isBoundDecreasing: boolean = currentRangeBound < newRangeBound - this.stepSize;
 
-    if (currentValue > this.maxValue) return this.maxValue;
-    if (currentValue < this.minValue) return this.minValue;
-    if (isValueIncreasing) return value + this.stepSize;
-    if (isEndOfStepSlider) return value - reminderOfStepSlider;
-    if (isValueDecreasing) return value - this.stepSize;
+    if (currentRangeBound > this.maxValue) return this.maxValue;
+    if (currentRangeBound < this.minValue) return this.minValue;
+    if (isBoundIncreasing) return newRangeBound + this.stepSize;
+    if (isEndOfInterval) return newRangeBound - divisionRemainderOfInterval;
+    if (isBoundDecreasing) return newRangeBound - this.stepSize;
 
-    return value;
+    return newRangeBound;
   }
 
-  private dispatchValueChange(eventType: string, value: number): void {
+  private dispatchRangeChange(eventType: string, value: number): void {
+    const ratioOfCurrentValueAndInterval = (this.maxValue - this.minValue)
+      / (value - this.minValue);
+
     this.observableSubject.notifyObservers({
       eventType,
-      value: this.calculateRoundedValue(value),
-      coefficient: this.calculateCoefficient(value),
+      value: Math.round(value),
+      coefficient: ratioOfCurrentValueAndInterval,
     });
   }
 }

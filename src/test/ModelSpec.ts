@@ -235,16 +235,16 @@ describe('Model', () => {
 
   describe('Метод setCurrentValueByRatio', () => {
     it('Считает текущее значение слайдера в зависимости от позиции курсора', () => {
-      model.setCurrentValueByRatio(2, 'startValue');
+      model.setRangeBoundByRatio(2, 'startValue');
       expect(model.startValue).toEqual(50);
 
-      model.setCurrentValueByRatio(1, 'endValue');
+      model.setRangeBoundByRatio(1, 'endValue');
       expect(model.endValue).toEqual(100);
     });
 
     it('Если установлен размер шага, устанавливается значение, кратное шагу', () => {
       model.stepSize = 40;
-      model.setCurrentValueByRatio(2, 'startValue');
+      model.setRangeBoundByRatio(2, 'startValue');
 
       expect(model.startValue).toEqual(40);
     });
@@ -252,7 +252,7 @@ describe('Model', () => {
     it('Не устанавливает максимальное значение, меньшее, чем минимальное', () => {
       model.type = 'interval';
       model.startValue = 90;
-      model.setCurrentValueByRatio(2, 'endValue');
+      model.setRangeBoundByRatio(2, 'endValue');
 
       expect(model.endValue).toEqual(90);
     });
@@ -260,14 +260,14 @@ describe('Model', () => {
     it('Не устанавливает минимальное значение, большее, чем максимальное', () => {
       model.type = 'interval';
       model.endValue = 30;
-      model.setCurrentValueByRatio(2, 'startValue');
+      model.setRangeBoundByRatio(2, 'startValue');
 
       expect(model.startValue).toEqual(30);
     });
 
     it('Позволяет посчитать текущее значение с учетом размера шага', () => {
       model.stepSize = 20;
-      model.setCurrentValueByRatio(2, 'startValue');
+      model.setRangeBoundByRatio(2, 'startValue');
 
       expect(model.startValue).toEqual(60);
     });

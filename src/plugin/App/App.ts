@@ -21,7 +21,7 @@ class App {
     this.model = this.createModelInstance();
     this.view = this.createViewInstance();
     this.controller = new Controller(this.view, this.model);
-    this.controller.initValues();
+    this.controller.initRangeValues();
   }
 
   public getSliderType(): string {
@@ -123,14 +123,14 @@ class App {
     this.controller.destroy();
     this.createViewInstance();
     this.controller = new Controller(this.view, this.model);
-    this.controller.initValues();
+    this.controller.initRangeValues();
   }
 
   private updateModel(): void {
     this.createModelInstance();
     this.controller.reinitializeView();
     this.controller = new Controller(this.view, this.model);
-    this.controller.initValues();
+    this.controller.initRangeValues();
   }
 
   private createModelInstance(): IModel {
