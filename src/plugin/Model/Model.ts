@@ -20,7 +20,7 @@ class Model {
     this.maxValue = this.config.maxValue;
     this.type = this.config.type;
     this.stepSize = this.config.stepSize;
-    this.fixConstructorOptions();
+    this.normalizeConstructorOptions();
   }
 
   public initRangeValues(): void {
@@ -37,14 +37,14 @@ class Model {
   }
 
   public setCurrentValue(startBound: number): void {
-    const fixedToNumberRangeBound = this.fixToNumber(startBound, this.config.startValue);
-    const alignedToStepRangeBound = this.alignToStep(fixedToNumberRangeBound);
+    const normalizedToNumberRangeBound = this.normalizeToNumber(startBound, this.config.startValue);
+    const alignedToStepRangeBound = this.alignToStep(normalizedToNumberRangeBound);
 
     this.startValue = this.clampRangeBetweenEdges(alignedToStepRangeBound);
 
-    const isBoundsInWrongOrder = this.type === 'interval' && this.startValue > this.endValue;
+    const areBoundsInWrongOrder = this.type === 'interval' && this.startValue > this.endValue;
 
-    if (isBoundsInWrongOrder) {
+    if (areBoundsInWrongOrder) {
       this.setBoundsInRightOrder(this.startValue);
     } else {
       this.dispatchRangeChange('changestartvalue', this.startValue);
@@ -54,8 +54,8 @@ class Model {
   public setCurrentEndValue(endBound: number): void {
     if (this.type === 'single') return;
 
-    const fixedToNumberRangeBound = this.fixToNumber(endBound, this.config.endValue);
-    const alignedToStepRangeBound = this.alignToStep(fixedToNumberRangeBound);
+    const normalizedToNumberRangeBound = this.normalizeToNumber(endBound, this.config.endValue);
+    const alignedToStepRangeBound = this.alignToStep(normalizedToNumberRangeBound);
 
     this.endValue = this.clampRangeBetweenEdges(alignedToStepRangeBound);
 
@@ -77,10 +77,10 @@ class Model {
       this[rangeBoundKeyName] = this.calculateAndAlignToStepBound(ratio, this[rangeBoundKeyName]);
     }
 
-    const isBoundsInWrongOrder: boolean = this.type === 'interval'
+    const areBoundsInWrongOrder: boolean = this.type === 'interval'
       && this.startValue > this.endValue;
 
-    if (isBoundsInWrongOrder) {
+    if (areBoundsInWrongOrder) {
       this.setBoundsInRightOrder(this[rangeBoundKeyName]);
     } else {
       this[rangeBoundKeyName] = this.clampRangeBetweenEdges(this[rangeBoundKeyName]);
@@ -98,32 +98,36 @@ class Model {
     }
   }
 
-  private fixConstructorOptions(): void {
-    const fixedToNumberStartBound = this.fixToNumber(this.startValue, this.config.startValue);
-    const fixedToNumberEndBound = this.fixToNumber(this.endValue, this.config.endValue);
-    const fixedToNumberMinValue = this.fixToNumber(this.minValue, this.config.minValue);
-    const fixedToNumberMaxValue = this.fixToNumber(this.maxValue, this.config.maxValue);
+  private normalizeConstructorOptions(): void {
+    const normalizedToNumberStartBound = this.normalizeToNumber(
+      this.startValue,
+      this.config.startValue,
+    );
 
-    this.stepSize = this.fixToNumber(this.stepSize, this.config.stepSize);
+    const normalizedToNumberEndBound = this.normalizeToNumber(this.endValue, this.config.endValue);
+    const normalizedToNumberMinValue = this.normalizeToNumber(this.minValue, this.config.minValue);
+    const normalizedToNumberMaxValue = this.normalizeToNumber(this.maxValue, this.config.maxValue);
+
+    this.stepSize = this.normalizeToNumber(this.stepSize, this.config.stepSize);
 
     this.setRightOrderOfExtremeValues();
 
-    this.minValue = this.fixToPositiveNumber(fixedToNumberMinValue);
-    this.maxValue = this.fixToPositiveNumber(fixedToNumberMaxValue);
+    this.minValue = this.normalizeToPositiveNumber(normalizedToNumberMinValue);
+    this.maxValue = this.normalizeToPositiveNumber(normalizedToNumberMaxValue);
 
-    const alignedToStepStartBound = this.alignToStep(fixedToNumberStartBound);
-    const alignedToStepEndBound = this.alignToStep(fixedToNumberEndBound);
+    const alignedToStepStartBound = this.alignToStep(normalizedToNumberStartBound);
+    const alignedToStepEndBound = this.alignToStep(normalizedToNumberEndBound);
 
     this.startValue = this.clampRangeBetweenEdges(alignedToStepStartBound);
     this.endValue = this.clampRangeBetweenEdges(alignedToStepEndBound);
   }
 
-  private fixToNumber(value: any, defaultValue: number): number {
+  private normalizeToNumber(value: any, defaultValue: number): number {
     if (Number.isNaN(Number(value))) return defaultValue;
     return Number(value);
   }
 
-  private fixToPositiveNumber(value: number): number {
+  private normalizeToPositiveNumber(value: number): number {
     if (value < 0) return Math.abs(value);
     return value;
   }
@@ -171,11 +175,11 @@ class Model {
 
   private calculateAndAlignToStepBound(ratio: number, newRangeBound: number): number {
     const currentRangeBound: number = (this.maxValue - this.minValue) / ratio + this.minValue;
-    const divisionRemainderOfInterval: number = (this.maxValue - this.minValue) % this.stepSize;
+    const intervalNotMultipleOfStep: number = (this.maxValue - this.minValue) % this.stepSize;
 
     const isEndOfInterval: boolean = this.stepSize !== 0
-      && divisionRemainderOfInterval !== 0
-      && currentRangeBound < newRangeBound - divisionRemainderOfInterval
+      && intervalNotMultipleOfStep !== 0
+      && currentRangeBound < newRangeBound - intervalNotMultipleOfStep
       && newRangeBound === this.maxValue
     ;
 
@@ -185,7 +189,7 @@ class Model {
     if (currentRangeBound > this.maxValue) return this.maxValue;
     if (currentRangeBound < this.minValue) return this.minValue;
     if (isBoundIncreasing) return newRangeBound + this.stepSize;
-    if (isEndOfInterval) return newRangeBound - divisionRemainderOfInterval;
+    if (isEndOfInterval) return newRangeBound - intervalNotMultipleOfStep;
     if (isBoundDecreasing) return newRangeBound - this.stepSize;
 
     return newRangeBound;
