@@ -10,6 +10,9 @@ class Model {
   public maxValue: number;
   public type: string;
   public stepSize: number;
+  public withTip: boolean;
+  public withScale: boolean;
+  public orientation: string;
   readonly config: ModelConfig;
 
   constructor(options: ModelOptions) {
@@ -20,6 +23,9 @@ class Model {
     this.maxValue = this.config.maxValue;
     this.type = this.config.type;
     this.stepSize = this.config.stepSize;
+    this.withTip = this.config.withTip;
+    this.withScale = this.config.withScale;
+    this.orientation = this.config.orientation;
     this.normalizeConstructorOptions();
   }
 
@@ -98,7 +104,7 @@ class Model {
     }
   }
 
-  private normalizeConstructorOptions(): void {
+  public normalizeConstructorOptions(): void {
     const normalizedToNumberStartBound = this.normalizeToNumber(
       this.startValue,
       this.config.startValue,

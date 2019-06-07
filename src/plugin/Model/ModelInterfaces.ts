@@ -7,6 +7,9 @@ export type ModelOptions = {
   maxValue?: number,
   type?: string,
   stepSize?: number,
+  withTip?: boolean,
+  withScale?: boolean,
+  orientation?: string,
 };
 
 export type ModelConfig = {
@@ -16,6 +19,9 @@ export type ModelConfig = {
   maxValue: number,
   type: string,
   stepSize: number,
+  withTip: boolean,
+  withScale: boolean,
+  orientation: string,
 };
 
 export interface IModel extends ModelOptions{

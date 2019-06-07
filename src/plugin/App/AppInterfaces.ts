@@ -1,5 +1,5 @@
-import { IModel, ModelOptions } from '../Model/ModelInterfaces';
-import { IMainView, MainViewOptions } from '../View/MainView/MainViewInterfaces';
+import { IModel } from '../Model/ModelInterfaces';
+import { IMainView } from '../View/MainView/MainViewInterfaces';
 import { IController } from '../Controller/ControllerInterfaces';
 
 declare global {
@@ -15,21 +15,17 @@ export type AppOptions = {
   maxValue?: number,
   type?: string,
   stepSize?: number,
-  elementIndex?: number,
+  elementIndex: number,
   withTip?: boolean,
   withScale?: boolean,
   orientation?: string,
   $element: JQuery,
-  modelConfig?: ModelOptions,
-  viewConfig?: MainViewOptions,
   model?: IModel | null,
   view?: IMainView | null,
   controller?: IController | null,
 };
 
 export interface IApp {
-  modelConfig?: ModelOptions,
-  viewConfig?: MainViewOptions,
   model?: IModel | null;
   view?: IMainView | null;
   controller?: IController | null;

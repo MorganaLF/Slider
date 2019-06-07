@@ -3,6 +3,7 @@ import ScaleView from '../../plugin/View/ScaleView/ScaleView';
 import MainView from '../../plugin/View/MainView/MainView';
 import TipView from '../../plugin/View/TipView/TipView';
 import TrackView from '../../plugin/View/TrackView/TrackView';
+import Model from '../../plugin/Model/Model';
 
 describe('MainView', () => {
   let $element: JQuery;
@@ -16,7 +17,10 @@ describe('MainView', () => {
     setFixtures('<div class="slider"></div>');
     $element = $('.slider');
 
+    const model = new Model({});
+
     view = new MainView({
+      model,
       $element,
       elementIndex: 0,
       type: 'single',

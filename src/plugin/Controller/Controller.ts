@@ -1,19 +1,15 @@
-import { IModel } from '../Model/ModelInterfaces';
-import { IMainView } from '../View/MainView/MainViewInterfaces';
+import Model from '../Model/Model';
+import MainView from '../View/MainView/MainView';
 import { changeValueSettings } from './ControllerInterfaces';
 
 class Controller {
-  readonly withScale: boolean;
-  readonly type: string;
   readonly changeValueObserver = this.observeChangeValue.bind(this);
-  readonly resizeObserver = this.observeResize.bind(this);
+  readonly resizeObserver = this.updateView.bind(this);
   readonly startRunnerMoveObserver = this.observeStartRunnerMove.bind(this);
   readonly endRunnerMoveObserver = this.observeEndRunnerMove.bind(this);
   readonly clickOnScaleObserver = this.observeClickOnScale.bind(this);
 
-  constructor(private view: IMainView, private model: IModel) {
-    this.withScale = view.withScale!;
-    this.type = view.type!;
+  constructor(private view: MainView, private model: Model) {
     this.init();
   }
 
@@ -23,22 +19,38 @@ class Controller {
     this.view.startRunnerObservableSubject.addObserver(this.startRunnerMoveObserver);
     this.view.endRunnerObservableSubject.addObserver(this.endRunnerMoveObserver);
     this.view.scaleObservableSubject.addObserver(this.clickOnScaleObserver);
-  }
-
-  public destroy(): void {
-    this.model.observableSubject.removeObserver(this.changeValueObserver);
-    this.view.observableSubject.removeObserver(this.resizeObserver);
-    this.view.startRunnerObservableSubject.removeObserver(this.startRunnerMoveObserver);
-    this.view.endRunnerObservableSubject.removeObserver(this.endRunnerMoveObserver);
-    this.view.scaleObservableSubject.removeObserver(this.clickOnScaleObserver);
-  }
-
-  public initRangeValues(): void {
     this.model.initRangeValues();
   }
 
-  public reinitializeView(): void {
-    this.view.reinitialize();
+  public getSliderType(): string {
+    return this.model.type;
+  }
+
+  public getMinValue(): number {
+    return this.model.minValue;
+  }
+
+  public setMinValue(val: number): void {
+    this.model.minValue = val;
+    this.updateModelConfig();
+  }
+
+  public getMaxValue(): number {
+    return this.model.maxValue;
+  }
+
+  public setMaxValue(val: number): void {
+    this.model.maxValue = val;
+    this.updateModelConfig();
+  }
+
+  public getStepSize(): number {
+    return this.model.stepSize;
+  }
+
+  public setStepSize(val: number): void {
+    this.model.stepSize = val;
+    this.updateModelConfig();
   }
 
   public getCurrentValue(): number {
@@ -57,11 +69,54 @@ class Controller {
     this.model.setCurrentEndValue(val);
   }
 
+  public setVerticalOrientation(): void {
+    this.model.orientation = 'vertical';
+    this.updateView();
+  }
+
+  public setHorizontalOrientation(): void {
+    this.model.orientation = 'horizontal';
+    this.updateView();
+  }
+
+  public isTipShown(): boolean {
+    return this.model.withTip;
+  }
+
+  public showTip(): void {
+    this.model.withTip = true;
+    this.updateView();
+  }
+
+  public hideTip(): void {
+    this.model.withTip = false;
+    this.updateView();
+  }
+
+  public isScaleShown(): boolean {
+    return this.model.withScale;
+  }
+
+  public showScale(): void {
+    this.model.withScale = true;
+    this.updateView();
+  }
+
+  public hideScale(): void {
+    this.model.withScale = false;
+    this.updateView();
+  }
+
   public addChangeValueObserver(func: () => void): void {
     this.model.observableSubject.addObserver(func);
   }
 
-  private observeResize(): void {
+  private updateModelConfig(): void {
+    this.model.normalizeConstructorOptions();
+    this.updateView();
+  }
+
+  private updateView(): void {
     this.view.reinitialize();
     this.model.initRangeValues();
   }
@@ -77,16 +132,16 @@ class Controller {
   private observeChangeValue({ eventType, value, coefficient }: changeValueSettings): void {
     let valueType: string;
 
-    const isRunnersAtTheEndOfSlider = this.type === 'interval'
+    const isRunnersAtTheEndOfSlider = this.model.type === 'interval'
       && this.model.startValue === this.model.maxValue;
 
-    const isRunnersAtTheStartOfSlider = this.type === 'interval'
+    const isRunnersAtTheStartOfSlider = this.model.type === 'interval'
       && this.model.endValue === this.model.minValue;
 
     const isStartValueChanging = eventType === 'changestartvalue' || eventType === 'setstartvalue';
 
-    const isEndValueChanging = eventType === 'changeendvalue' && this.type === 'interval'
-      || eventType === 'setendvalue' && this.type === 'interval';
+    const isEndValueChanging = eventType === 'changeendvalue' && this.model.type === 'interval'
+      || eventType === 'setendvalue' && this.model.type === 'interval';
 
     if (isStartValueChanging) {
       valueType = 'start';
@@ -110,22 +165,22 @@ class Controller {
       });
     }
 
-    const isScaleInitialized = this.withScale && eventType === 'setstartvalue';
+    const isScaleInitialized = this.model.withScale && eventType === 'setstartvalue';
 
     if (isScaleInitialized) {
       this.view.drawScale({
-        stepSize: this.model.stepSize!,
-        minValue: this.model.minValue!,
-        maxValue: this.model.maxValue!,
+        stepSize: this.model.stepSize,
+        minValue: this.model.minValue,
+        maxValue: this.model.maxValue,
       });
     }
   }
 
   private observeClickOnScale(value: number): void {
-    const isClickNearByStartRunner: boolean = this.type === 'interval'
-      && (Math.abs(value - this.model.startValue!)
-      > Math.abs(value - this.model.endValue!)
-      || value === this.model.endValue!);
+    const isClickNearByStartRunner: boolean = this.model.type === 'interval'
+      && (Math.abs(value - this.model.startValue)
+      > Math.abs(value - this.model.endValue)
+      || value === this.model.endValue);
 
     if (isClickNearByStartRunner) {
       this.model.setCurrentEndValue(value);

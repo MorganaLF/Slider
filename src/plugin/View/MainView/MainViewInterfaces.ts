@@ -3,6 +3,7 @@ import { IScaleView } from '../ScaleView/ScaleViewInterfaces';
 import { IRunnerView } from '../RunnerView/RunnerViewInterfaces';
 import { ITipView } from '../TipView/TipViewInterfaces';
 import { ITrackView } from '../TrackView/TrackViewInterfaces';
+import Model from '../../Model/Model';
 
 export interface IExtremePoints {
   left: number;
@@ -31,6 +32,7 @@ export type updateSettings = {
 };
 
 export type MainViewOptions = {
+  model: Model,
   elementIndex: number,
   $element: JQuery,
   startValueRunner?: null | IRunnerView,
@@ -43,15 +45,6 @@ export type MainViewOptions = {
   withTip?: boolean,
   withScale?: boolean,
   orientation?: string,
-};
-
-export type MainViewConfig = {
-  $element: JQuery,
-  elementIndex: number,
-  type: string,
-  withTip: boolean,
-  withScale: boolean,
-  orientation: string,
 };
 
 export interface IMainView extends MainViewOptions{

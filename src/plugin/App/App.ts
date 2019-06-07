@@ -1,31 +1,30 @@
 import { AppOptions } from './AppInterfaces';
 import Controller from '../Controller/Controller';
-import { IController } from '../Controller/ControllerInterfaces';
 import Model from '../Model/Model';
 import modelConfig from '../Model/modelConfig';
-import { IModel, ModelConfig } from '../Model/ModelInterfaces';
 import MainView from '../View/MainView/MainView';
-import mainViewConfig from '../View/MainView/mainViewConfig';
-import { IMainView, MainViewConfig } from '../View/MainView/MainViewInterfaces';
 
 class App {
-  public model: IModel;
-  public view: IMainView;
-  public controller: IController;
-  readonly modelConfig: ModelConfig;
-  readonly viewConfig: MainViewConfig;
+  public model: Model;
+  public view: MainView;
+  public controller: Controller;
+  readonly elementIndex: number;
 
   constructor(options: AppOptions) {
-    this.modelConfig = { ...modelConfig, ...options };
-    this.viewConfig = { ...mainViewConfig, ...options };
-    this.model = this.createModelInstance();
-    this.view = this.createViewInstance();
+    this.elementIndex = options.elementIndex;
+    this.model = new Model({ ...modelConfig, ...options });
+
+    this.view = new MainView({
+      $element: options.$element,
+      elementIndex: options.elementIndex,
+      model: this.model,
+    });
+
     this.controller = new Controller(this.view, this.model);
-    this.controller.initRangeValues();
   }
 
   public getSliderType(): string {
-    return this.modelConfig.type;
+    return this.controller.getSliderType();
   }
 
   public getCurrentValue(): number {
@@ -33,7 +32,7 @@ class App {
   }
 
   public setCurrentValue(val: number): void {
-    return this.controller.setCurrentValue(val);
+    this.controller.setCurrentValue(val);
   }
 
   public getCurrentEndValue(): number {
@@ -45,100 +44,63 @@ class App {
   }
 
   public getMinValue(): number {
-    return this.modelConfig.minValue;
+    return this.controller.getMinValue();
   }
 
-  public setMinValue(val: number | string): void {
-    this.modelConfig.minValue = typeof val === 'string' ? parseInt(val, 10) : val;
-    this.modelConfig.startValue = this.getCurrentValue();
-    this.modelConfig.endValue = this.getCurrentEndValue();
-    this.updateModel();
+  public setMinValue(val: number): void {
+    this.controller.setMinValue(val);
   }
 
   public getMaxValue(): number {
-    return this.modelConfig.maxValue;
+    return this.controller.getMaxValue();
   }
 
-  public setMaxValue(val: number | string): void {
-    this.modelConfig.maxValue = typeof val === 'string' ? parseInt(val, 10) : val;
-    this.modelConfig.startValue = this.getCurrentValue();
-    this.modelConfig.endValue = this.getCurrentEndValue();
-    this.updateModel();
+  public setMaxValue(val: number): void {
+    this.controller.setMaxValue(val);
   }
 
   public getStepSize(): number {
-    return this.modelConfig.stepSize;
+    return this.controller.getStepSize();
   }
 
-  public setStepSize(val: number | string): void {
-    this.modelConfig.stepSize = typeof val === 'string' ? parseInt(val, 10) : val;
-    this.modelConfig.startValue = this.getCurrentValue();
-    this.modelConfig.endValue = this.getCurrentEndValue();
-    this.updateModel();
+  public setStepSize(val: number): void {
+    this.controller.setStepSize(val);
   }
 
   public setVerticalOrientation(): void {
-    this.viewConfig.orientation = 'vertical';
-    this.updateView();
+    this.controller.setVerticalOrientation();
   }
 
   public setHorizontalOrientation(): void {
-    this.viewConfig.orientation = 'horizontal';
-    this.updateView();
+    this.controller.setHorizontalOrientation();
   }
 
   public isTipShown(): boolean {
-    return this.viewConfig.withTip;
+    return this.controller.isTipShown();
   }
 
   public showTip(): void {
-    this.viewConfig.withTip = true;
-    this.updateView();
+    this.controller.showTip();
   }
 
   public hideTip(): void {
-    this.viewConfig.withTip = false;
-    this.updateView();
+    this.controller.hideTip();
   }
 
   public isScaleShown(): boolean {
-    return this.viewConfig.withScale;
+    return this.controller.isScaleShown();
   }
 
   public showScale(): void {
-    this.viewConfig.withScale = true;
-    this.updateView();
+    this.controller.showScale();
   }
 
   public hideScale(): void {
-    this.viewConfig.withScale = false;
-    this.updateView();
+    this.controller.hideScale();
   }
 
   public observeChangeValue(func: () => void): void {
     this.controller.addChangeValueObserver(func);
-  }
-
-  private updateView(): void {
-    this.controller.destroy();
-    this.createViewInstance();
-    this.controller = new Controller(this.view, this.model);
-    this.controller.initRangeValues();
-  }
-
-  private updateModel(): void {
-    this.createModelInstance();
-    this.controller.reinitializeView();
-    this.controller = new Controller(this.view, this.model);
-    this.controller.initRangeValues();
-  }
-
-  private createModelInstance(): IModel {
-    return this.model = new Model(this.modelConfig);
-  }
-
-  private createViewInstance(): IMainView {
-    return this.view = new MainView(this.viewConfig);
   }
 }
 

@@ -27,6 +27,7 @@ describe('Controller', () => {
     });
 
     view = new MainView({
+      model,
       $element,
       type: 'interval',
       orientation: 'horizontal',

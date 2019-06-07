@@ -1,17 +1,16 @@
 import App from '../plugin/App/App';
-import { IApp } from '../plugin/App/AppInterfaces';
 import Model from '../plugin/Model/Model';
 import Controller from '../plugin/Controller/Controller';
 import MainView from '../plugin/View/MainView/MainView';
 
 describe('App', () => {
-  let app: IApp;
+  let app: App;
   let $element: JQuery;
 
   beforeEach(() => {
     setFixtures('<div class="slider"></div>');
     $element = $('.slider');
-    app = new App({ $element });
+    app = new App({ $element, elementIndex: 0 });
   });
 
   it('Создает экземпляр класса App', () => {
@@ -42,22 +41,12 @@ describe('App', () => {
       app.model!.startValue = 30.154;
       expect(app.getCurrentValue()).toEqual(30);
     });
-
-    it('Возвращает 0, если модель не определена', () => {
-      app.model = null;
-      expect(app.getCurrentValue()).toEqual(0);
-    });
   });
 
   describe('Метод getCurrentEndValue', () => {
     it('Возвращает округленное значение endValue модели', () => {
       app.model!.endValue = 70.954;
       expect(app.getCurrentEndValue()).toEqual(71);
-    });
-
-    it('Возвращает 0, если модель не определена', () => {
-      app.model = null;
-      expect(app.getCurrentEndValue()).toEqual(0);
     });
   });
 
@@ -66,22 +55,12 @@ describe('App', () => {
       app.model!.minValue = 10;
       expect(app.getMinValue()).toEqual(10);
     });
-
-    it('Возвращает 0, если модель не определена', () => {
-      app.model = null;
-      expect(app.getMinValue()).toEqual(0);
-    });
   });
 
   describe('Метод getMaxValue', () => {
     it('Возвращает значение maxValue модели', () => {
       app.model!.maxValue = 80;
       expect(app.getMaxValue()).toEqual(80);
-    });
-
-    it('Возвращает 0, если модель не определена', () => {
-      app.model = null;
-      expect(app.getMaxValue()).toEqual(0);
     });
   });
 
@@ -90,11 +69,6 @@ describe('App', () => {
       app.model!.stepSize = 15;
       expect(app.getStepSize()).toEqual(15);
     });
-
-    it('Возвращает 0, если модель не определена', () => {
-      app.model = null;
-      expect(app.getStepSize()).toEqual(0);
-    });
   });
 
   describe('Метод setMinValue', () => {
@@ -102,22 +76,12 @@ describe('App', () => {
       app.setMinValue(5);
       expect(app.model!.minValue).toEqual(5);
     });
-
-    it('Заменяет строку на число', () => {
-      app.setMinValue('15');
-      expect(app.model!.minValue).toEqual(15);
-    });
   });
 
   describe('Метод setMaxValue', () => {
     it('Устанавливает значение maxValue модели', () => {
       app.setMaxValue(75);
       expect(app.model!.maxValue).toEqual(75);
-    });
-
-    it('Заменяет строку на число', () => {
-      app.setMaxValue('65');
-      expect(app.model!.maxValue).toEqual(65);
     });
   });
 
@@ -160,28 +124,28 @@ describe('App', () => {
   describe('Метод showScale', () => {
     it('Устанавливает значение withScale вида в положение true', () => {
       app.showScale();
-      expect(app.viewConfig!.withScale).toBeTruthy();
+      expect(app.model.withScale).toBeTruthy();
     });
   });
 
   describe('Метод hideScale', () => {
     it('Устанавливает значение withScale вида в положение false', () => {
       app.hideScale();
-      expect(app.viewConfig!.withScale).toBeFalsy();
+      expect(app.model.withScale).toBeFalsy();
     });
   });
 
   describe('Метод setVerticalOrientation', () => {
     it('Устанавливает вертикальное положение слайдера', () => {
       app.setVerticalOrientation();
-      expect(app.viewConfig!.orientation).toEqual('vertical');
+      expect(app.model.orientation).toEqual('vertical');
     });
   });
 
   describe('Метод setHorizontalOrientation', () => {
     it('Устанавливает горизонтальное положение слайдера', () => {
       app.setHorizontalOrientation();
-      expect(app.viewConfig!.orientation).toEqual('horizontal');
+      expect(app.model.orientation).toEqual('horizontal');
     });
   });
 });

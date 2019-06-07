@@ -18,7 +18,7 @@ $.fn.customSlider = function(options: AppOptions | string, ...args) {
       withScale: $this.data('scale'),
     };
 
-    const extendedOptions = $.extend({ $element: $this }, options, dataConfig);
+    const extendedOptions: any = $.extend({ $element: $this }, options, dataConfig);
     $this.data('constructor', new App(extendedOptions));
   }
 

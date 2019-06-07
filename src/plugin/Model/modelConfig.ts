@@ -5,6 +5,9 @@ const modelConfig = {
   maxValue: 100,
   type: 'single',
   stepSize: 0,
+  orientation: 'horizontal',
+  withTip: true,
+  withScale: false,
 };
 
 export default modelConfig;

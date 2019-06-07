@@ -16,6 +16,7 @@ import {
   IExtremePoints,
   ISize,
 } from './MainViewInterfaces';
+import Model from '../../Model/Model';
 
 class MainView {
   [key: string]: any;
@@ -31,21 +32,15 @@ class MainView {
   public endValueTip?: null | ITipView = null;
   public track?: null | ITrackView = null;
   public scale?: null | IScaleView = null;
-  public type: string;
-  public withTip: boolean;
-  public withScale: boolean;
-  public orientation: string;
+  readonly model: Model;
   readonly startRunnerMovePublisher = this.dispatchStartRunnerMove.bind(this);
   readonly endRunnerMovePublisher = this.dispatchEndRunnerMove.bind(this);
   readonly clickOnScalePublisher = this.dispatchClickOnScale.bind(this);
 
   constructor(options: MainViewOptions) {
+    this.model = options.model;
     this.elementIndex = options.elementIndex;
     this.$element = options.$element;
-    this.type = options.type || 'single';
-    this.withTip = options.withTip !== false;
-    this.withScale = options.withScale !== false;
-    this.orientation = options.orientation || 'horizontal';
     this.reinitialize();
   }
 
@@ -76,13 +71,13 @@ class MainView {
     } else if (isRunnersAtTheStartOfSlider && isRunnersExist) {
       this.endValueRunner!.placeRunnerOnHigherLayer();
       this.startValueRunner!.placeRunnerOnLowerLayer();
-    } else if (this.type === 'interval' && isRunnersExist) {
+    } else if (this.model.type === 'interval' && isRunnersExist) {
       this.startValueRunner!.placeRunnerOnLowerLayer();
       this.endValueRunner!.placeRunnerOnLowerLayer();
       runner!.placeRunnerOnHigherLayer();
     }
 
-    if (this.withTip && tip) {
+    if (this.model.withTip && tip) {
       tip.updateTip(value);
     }
 
@@ -140,7 +135,7 @@ class MainView {
     this[runnerKeyName] = new RunnerView({
       elementIndex: this.elementIndex,
       $parent: this.$element,
-      orientation: this.orientation,
+      orientation: this.model.orientation,
       parentLeftPoint: this.getExtremePoints().left,
       parentRightPoint: this.getExtremePoints().right,
       parentTopPoint: this.getExtremePoints().top,
@@ -151,15 +146,15 @@ class MainView {
   private createTip(tipKeyName: string, $tipParent: JQuery): void {
     this[tipKeyName] = new TipView({
       $parent: $tipParent,
-      orientation: this.orientation,
+      orientation: this.model.orientation,
     });
   }
 
   private createTrack(): void {
     this.track = new TrackView({
       $parent: this.$element,
-      type: this.type,
-      orientation: this.orientation,
+      type: this.model.type,
+      orientation: this.model.orientation,
       parentWidth: this.getSliderInnerSize().width,
       parentHeight: this.getSliderInnerSize().height,
       runnerWidth: this.getRunnerSize().width,
@@ -170,12 +165,12 @@ class MainView {
   private createScale(): void {
     this.scale = new ScaleView({
       $parent:  this.$element,
-      orientation: this.orientation,
+      orientation: this.model.orientation,
     });
   }
 
   private drawSlider(): void {
-    if (this.orientation === 'vertical') {
+    if (this.model.orientation === 'vertical') {
       this.$element.addClass('slider_vertical');
     } else {
       this.$element.removeClass('slider_vertical');
@@ -183,21 +178,21 @@ class MainView {
 
     this.createRunner('startValueRunner');
 
-    if (this.withTip && this.startValueRunner) {
+    if (this.model.withTip && this.startValueRunner) {
       this.createTip('startValueTip', this.startValueRunner.$element);
     }
 
-    if (this.type === 'interval') {
+    if (this.model.type === 'interval') {
       this.createRunner('endValueRunner');
 
-      if (this.withTip && this.endValueRunner) {
+      if (this.model.withTip && this.endValueRunner) {
         this.createTip('endValueTip', this.endValueRunner.$element);
       }
     }
 
     this.createTrack();
 
-    if (this.withScale) {
+    if (this.model.withScale) {
       this.createScale();
     }
   }
