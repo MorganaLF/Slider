@@ -55,8 +55,8 @@ class MainView {
                   valueType,
                   coefficient,
                   value,
-                  isRunnersAtTheEndOfSlider,
-                  isRunnersAtTheStartOfSlider,
+                  isRangeBoundAtTheEndOfInterval,
+                  isRangeBoundAtTheStartOfInterval,
   }: updateSettings): void {
     const runner = valueType === 'start' ? this.startValueRunner : this.endValueRunner;
     const tip = valueType === 'start' ? this.startValueTip : this.endValueTip;
@@ -65,10 +65,10 @@ class MainView {
 
     const isRunnersExist = this.startValueRunner && this.endValueRunner;
 
-    if (isRunnersAtTheEndOfSlider && isRunnersExist) {
+    if (isRangeBoundAtTheEndOfInterval && isRunnersExist) {
       this.startValueRunner!.placeRunnerOnHigherLayer();
       this.endValueRunner!.placeRunnerOnLowerLayer();
-    } else if (isRunnersAtTheStartOfSlider && isRunnersExist) {
+    } else if (isRangeBoundAtTheStartOfInterval && isRunnersExist) {
       this.endValueRunner!.placeRunnerOnHigherLayer();
       this.startValueRunner!.placeRunnerOnLowerLayer();
     } else if (this.model.type === 'interval' && isRunnersExist) {

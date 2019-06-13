@@ -104,6 +104,13 @@ class Model {
     }
   }
 
+  public isSettingValeNearByStartBound(value: number): boolean {
+    return this.type === 'interval'
+      && (Math.abs(value - this.startValue)
+      > Math.abs(value - this.endValue)
+      || value === this.endValue);
+  }
+
   public normalizeConstructorOptions(): void {
     const normalizedToNumberStartBound = this.normalizeToNumber(
       this.startValue,
@@ -205,8 +212,25 @@ class Model {
     const ratioOfCurrentValueAndInterval = (this.maxValue - this.minValue)
       / (value - this.minValue);
 
+    const isRangeBoundAtTheEndOfInterval: boolean = this.type === 'interval'
+      && this.startValue === this.maxValue;
+
+    const isRangeBoundAtTheStartOfInterval: boolean = this.type === 'interval'
+      && this.endValue === this.minValue;
+
+    const isStartValueChanging = eventType === 'changestartvalue' || eventType === 'setstartvalue';
+
+    const isEndValueChanging = eventType === 'changeendvalue' && this.type === 'interval'
+      || eventType === 'setendvalue' && this.type === 'interval';
+
+    const isScaleInitialized = this.withScale && eventType === 'setstartvalue';
+
     this.observableSubject.notifyObservers({
-      eventType,
+      isStartValueChanging,
+      isEndValueChanging,
+      isRangeBoundAtTheEndOfInterval,
+      isRangeBoundAtTheStartOfInterval,
+      isScaleInitialized,
       value: Math.round(value),
       coefficient: ratioOfCurrentValueAndInterval,
     });

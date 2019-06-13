@@ -129,19 +129,16 @@ class Controller {
     this.model.setRangeBoundByRatio(ratio, 'endValue');
   }
 
-  private observeChangeValue({ eventType, value, coefficient }: changeValueSettings): void {
+  private observeChangeValue({
+                               isStartValueChanging,
+                               isEndValueChanging,
+                               isRangeBoundAtTheEndOfInterval,
+                               isRangeBoundAtTheStartOfInterval,
+                               isScaleInitialized,
+                               value,
+                               coefficient,
+  }: changeValueSettings): void {
     let valueType: string;
-
-    const isRunnersAtTheEndOfSlider = this.model.type === 'interval'
-      && this.model.startValue === this.model.maxValue;
-
-    const isRunnersAtTheStartOfSlider = this.model.type === 'interval'
-      && this.model.endValue === this.model.minValue;
-
-    const isStartValueChanging = eventType === 'changestartvalue' || eventType === 'setstartvalue';
-
-    const isEndValueChanging = eventType === 'changeendvalue' && this.model.type === 'interval'
-      || eventType === 'setendvalue' && this.model.type === 'interval';
 
     if (isStartValueChanging) {
       valueType = 'start';
@@ -150,8 +147,8 @@ class Controller {
         valueType,
         coefficient,
         value,
-        isRunnersAtTheEndOfSlider,
-        isRunnersAtTheStartOfSlider,
+        isRangeBoundAtTheEndOfInterval,
+        isRangeBoundAtTheStartOfInterval,
       });
     } else if (isEndValueChanging) {
       valueType = 'end';
@@ -160,12 +157,10 @@ class Controller {
         valueType,
         coefficient,
         value,
-        isRunnersAtTheEndOfSlider,
-        isRunnersAtTheStartOfSlider,
+        isRangeBoundAtTheEndOfInterval,
+        isRangeBoundAtTheStartOfInterval,
       });
     }
-
-    const isScaleInitialized = this.model.withScale && eventType === 'setstartvalue';
 
     if (isScaleInitialized) {
       this.view.drawScale({
@@ -177,12 +172,7 @@ class Controller {
   }
 
   private observeClickOnScale(value: number): void {
-    const isClickNearByStartRunner: boolean = this.model.type === 'interval'
-      && (Math.abs(value - this.model.startValue)
-      > Math.abs(value - this.model.endValue)
-      || value === this.model.endValue);
-
-    if (isClickNearByStartRunner) {
+    if (this.model.isSettingValeNearByStartBound(value)) {
       this.model.setCurrentEndValue(value);
     } else {
       this.model.setCurrentValue(value);

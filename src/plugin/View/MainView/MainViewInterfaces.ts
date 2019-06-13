@@ -27,8 +27,8 @@ export type updateSettings = {
   valueType: string,
   coefficient: number,
   value: number,
-  isRunnersAtTheEndOfSlider: boolean,
-  isRunnersAtTheStartOfSlider: boolean,
+  isRangeBoundAtTheEndOfInterval: boolean,
+  isRangeBoundAtTheStartOfInterval: boolean,
 };
 
 export type MainViewOptions = {

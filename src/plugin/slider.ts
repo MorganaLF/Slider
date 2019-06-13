@@ -1,7 +1,9 @@
-import App from './App/App';
-import { AppOptions } from './App/AppInterfaces';
+import Model from './Model/Model';
+import { ModelOptions } from './Model/ModelInterfaces';
+import MainView from './View/MainView/MainView';
+import Controller from './Controller/Controller';
 
-$.fn.customSlider = function(options: AppOptions | string, ...args) {
+$.fn.customSlider = function(options: ModelOptions | string, ...args) {
   const $this = $(this);
   const isSliderInitialized = typeof options === 'object' || !options;
 
@@ -18,8 +20,16 @@ $.fn.customSlider = function(options: AppOptions | string, ...args) {
       withScale: $this.data('scale'),
     };
 
-    const extendedOptions: any = $.extend({ $element: $this }, options, dataConfig);
-    $this.data('constructor', new App(extendedOptions));
+    const extendedOptions: any = $.extend(options, dataConfig);
+    const model = new Model(extendedOptions);
+
+    const view = new MainView({
+      model,
+      $element: $this,
+      elementIndex: extendedOptions.elementIndex,
+    });
+
+    $this.data('constructor', new Controller(view, model));
   }
 
   if (typeof options === 'string') {

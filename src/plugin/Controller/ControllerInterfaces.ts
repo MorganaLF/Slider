@@ -1,5 +1,9 @@
 export type changeValueSettings = {
-  eventType: string;
+  isStartValueChanging: boolean;
+  isEndValueChanging: boolean;
+  isRangeBoundAtTheEndOfInterval: boolean;
+  isRangeBoundAtTheStartOfInterval: boolean;
+  isScaleInitialized: boolean;
   value: number;
   coefficient: number;
 };

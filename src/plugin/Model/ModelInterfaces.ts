@@ -1,5 +1,11 @@
 import { IObservableSubject } from '../ObservableSubject/ObservableSubjectInterfaces';
 
+declare global {
+  interface JQuery {
+    customSlider: (...rest: any[]) => any;
+  }
+}
+
 export type ModelOptions = {
   startValue?: number,
   endValue?: number,
