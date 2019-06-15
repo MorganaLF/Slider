@@ -11,11 +11,11 @@ export type ModelOptions = {
   endValue?: number,
   minValue?: number,
   maxValue?: number,
-  type?: string,
+  type?: 'single' | 'interval',
   stepSize?: number,
   withTip?: boolean,
   withScale?: boolean,
-  orientation?: string,
+  orientation?: 'horizontal' | 'vertical',
 };
 
 export type ModelConfig = {
@@ -23,11 +23,11 @@ export type ModelConfig = {
   endValue: number,
   minValue: number,
   maxValue: number,
-  type: string,
+  type: 'single' | 'interval',
   stepSize: number,
   withTip: boolean,
   withScale: boolean,
-  orientation: string,
+  orientation: 'horizontal' | 'vertical',
 };
 
 export interface IModel extends ModelOptions{

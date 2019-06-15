@@ -4,15 +4,15 @@ import modelConfig from './modelConfig';
 
 class Model {
   public observableSubject = new ObservableSubject();
-  public startValue: number;
-  public endValue: number;
-  public minValue: number;
-  public maxValue: number;
-  public type: string;
-  public stepSize: number;
-  public withTip: boolean;
-  public withScale: boolean;
-  public orientation: string;
+  private startValue: number;
+  private endValue: number;
+  private minValue: number;
+  private maxValue: number;
+  private type: 'single' | 'interval';
+  private stepSize: number;
+  private withTip: boolean;
+  private withScale: boolean;
+  private orientation: 'horizontal' | 'vertical';
   readonly config: ModelConfig;
 
   constructor(options: ModelOptions) {
@@ -32,6 +32,37 @@ class Model {
   public initRangeValues(): void {
     this.dispatchRangeChange('setstartvalue', this.startValue);
     this.dispatchRangeChange('setendvalue', this.endValue);
+  }
+
+  public getType(): 'single' | 'interval' {
+    return this.type;
+  }
+
+  public getMinValue(): number {
+    return this.minValue;
+  }
+
+  public setMinValue(val: number): void {
+    this.minValue = val;
+    this.normalizeConstructorOptions();
+  }
+
+  public getMaxValue(): number {
+    return this.maxValue;
+  }
+
+  public setMaxValue(val: number): void {
+    this.maxValue = val;
+    this.normalizeConstructorOptions();
+  }
+
+  public getStepSize(): number {
+    return this.stepSize;
+  }
+
+  public setStepSize(val: number): void {
+    this.stepSize = val;
+    this.normalizeConstructorOptions();
   }
 
   public getCurrentRoundedValue(): number {
@@ -72,6 +103,42 @@ class Model {
     }
   }
 
+  public getOrientation(): 'horizontal' | 'vertical' {
+    return this.orientation;
+  }
+
+  public setVerticalOrientation(): void {
+    this.orientation = 'vertical';
+  }
+
+  public setHorizontalOrientation(): void {
+    this.orientation = 'horizontal';
+  }
+
+  public isTipShown(): boolean {
+    return this.withTip;
+  }
+
+  public showTip(): void {
+    this.withTip = true;
+  }
+
+  public hideTip(): void {
+    this.withTip = false;
+  }
+
+  public isScaleShown(): boolean {
+    return this.withScale;
+  }
+
+  public showScale(): void {
+    this.withScale = true;
+  }
+
+  public hideScale(): void {
+    this.withScale = false;
+  }
+
   public setRangeBoundByRatio(
     ratio: number,
     rangeBoundKeyName: 'startValue' | 'endValue',
@@ -104,7 +171,7 @@ class Model {
     }
   }
 
-  public isSettingValeNearByStartBound(value: number): boolean {
+  public isSettingValueNearByStartBound(value: number): boolean {
     return this.type === 'interval'
       && (Math.abs(value - this.startValue)
       > Math.abs(value - this.endValue)

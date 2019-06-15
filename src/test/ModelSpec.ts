@@ -29,11 +29,11 @@ describe('Model', () => {
       type: 'single',
     });
 
-    expect(model.minValue).toEqual(0);
-    expect(model.maxValue).toEqual(100);
-    expect(model.startValue).toEqual(0);
-    expect(model.endValue).toEqual(100);
-    expect(model.stepSize).toEqual(0);
+    expect(model.getMinValue()).toEqual(0);
+    expect(model.getMaxValue()).toEqual(100);
+    expect(model.getCurrentRoundedValue()).toEqual(0);
+    expect(model.getCurrentRoundedEndValue()).toEqual(100);
+    expect(model.getStepSize()).toEqual(0);
   });
 
   it('Минимальное значение не может быть меньше нуля', () => {
@@ -41,7 +41,7 @@ describe('Model', () => {
       minValue: -10,
     });
 
-    expect(model.minValue).toEqual(10);
+    expect(model.getMinValue()).toEqual(10);
   });
 
   it('Минимальное значение не может быть больше максимального', () => {
@@ -50,7 +50,7 @@ describe('Model', () => {
       maxValue: 100,
     });
 
-    expect(model.minValue).toEqual(99);
+    expect(model.getMinValue()).toEqual(99);
   });
 
   it('Минимальное значение не может быть больше максимального, с учетом размера шага', () => {
@@ -60,7 +60,7 @@ describe('Model', () => {
       stepSize: 5,
     });
 
-    expect(model.minValue).toEqual(95);
+    expect(model.getMinValue()).toEqual(95);
   });
 
   it('Максимальное значение не может быть меньше нуля', () => {
@@ -68,7 +68,7 @@ describe('Model', () => {
       maxValue: -100,
     });
 
-    expect(model.maxValue).toEqual(100);
+    expect(model.getMaxValue()).toEqual(100);
   });
 
   it('Стартовое значение не меньше, чем минимальное значение', () => {
@@ -77,7 +77,7 @@ describe('Model', () => {
       minValue: 10,
     });
 
-    expect(model.startValue).toEqual(10);
+    expect(model.getCurrentRoundedValue()).toEqual(10);
   });
 
   it('Стартовое значение не больше, чем максимальное значение', () => {
@@ -86,7 +86,7 @@ describe('Model', () => {
       maxValue: 100,
     });
 
-    expect(model.startValue).toEqual(100);
+    expect(model.getCurrentRoundedValue()).toEqual(100);
   });
 
   it('Конечное значение не больше, чем максимальное значение', () => {
@@ -95,7 +95,7 @@ describe('Model', () => {
       maxValue: 100,
     });
 
-    expect(model.endValue).toEqual(100);
+    expect(model.getCurrentRoundedEndValue()).toEqual(100);
   });
 
   it('Конечное значение не меньше, чем минимальное значение', () => {
@@ -104,7 +104,7 @@ describe('Model', () => {
       minValue: 10,
     });
 
-    expect(model.endValue).toEqual(10);
+    expect(model.getMaxValue()).toEqual(10);
   });
 
   it('Если установлен размер шага, минимальное и максимальное значение кратны этому шагу', () => {
@@ -114,8 +114,8 @@ describe('Model', () => {
       stepSize: 30,
     });
 
-    expect(model.minValue).toEqual(30);
-    expect(model.maxValue).toEqual(60);
+    expect(model.getMinValue()).toEqual(30);
+    expect(model.getMaxValue()).toEqual(60);
   });
 
   it('Если установлен размер шага, начальное и конечное значение кратны этому шагу', () => {
@@ -125,13 +125,13 @@ describe('Model', () => {
       stepSize: 25,
     });
 
-    expect(model.startValue).toEqual(25);
-    expect(model.endValue).toEqual(50);
+    expect(model.getCurrentRoundedValue()).toEqual(25);
+    expect(model.getCurrentRoundedEndValue()).toEqual(50);
   });
 
   describe('Геттер getCurrentRoundedValue', () => {
     it('Получает округленное текущее начальное значение', () => {
-      model.startValue = 1.957;
+      model.setMinValue(1.957);
 
       expect(model.getCurrentRoundedValue()).toEqual(2);
     });
@@ -139,7 +139,7 @@ describe('Model', () => {
 
   describe('Геттер getCurrentRoundedEndValue', () => {
     it('Получает округленное текущее начальное значение', () => {
-      model.endValue = 56.95627;
+      model.setMaxValue(56.95627);
 
       expect(model.getCurrentRoundedEndValue()).toEqual(57);
     });
@@ -149,21 +149,21 @@ describe('Model', () => {
     it('Устанавливает начальное значение', () => {
       model.setCurrentValue(10);
 
-      expect(model.startValue).toEqual(10);
+      expect(model.getCurrentRoundedValue()).toEqual(10);
     });
 
     it('Устанавливает только числовое значение', () => {
       model.setCurrentValue(<any>'dgsdA');
 
-      expect(model.startValue).toEqual(0);
+      expect(model.getCurrentRoundedValue()).toEqual(0);
     });
 
     it('Не устанавливает значение, большее, чем конечное', () => {
-      model.type = 'interval';
-      model.endValue = 80;
+      (<any>model).type = 'interval';
+      model.setCurrentEndValue(80);
       model.setCurrentValue(90);
 
-      expect(model.startValue).toEqual(80);
+      expect(model.getCurrentRoundedValue()).toEqual(80);
     });
 
     it('Устанавливает значение не меньше, чем минимальное', () => {
@@ -173,14 +173,14 @@ describe('Model', () => {
 
       model.setCurrentValue(10);
 
-      expect(model.startValue).toEqual(30);
+      expect(model.getCurrentRoundedValue()).toEqual(30);
     });
 
     it('Если установлен размер шага, устанавливает кратное шагу значение', () => {
-      model.stepSize = 20;
+      model.setStepSize(20);
       model.setCurrentValue(19);
 
-      expect(model.startValue).toEqual(20);
+      expect(model.getCurrentRoundedValue()).toEqual(20);
     });
   });
 
@@ -199,20 +199,20 @@ describe('Model', () => {
     it('Устанавливает конечное значение', () => {
       model.setCurrentEndValue(70);
 
-      expect(model.endValue).toEqual(70);
+      expect(model.getCurrentRoundedEndValue()).toEqual(70);
     });
 
     it('Устанавливает только числовое значение', () => {
       model.setCurrentEndValue(<any>'dgsdA');
 
-      expect(model.endValue).toEqual(100);
+      expect(model.getCurrentRoundedEndValue()).toEqual(100);
     });
 
     it('Не устанавливает значение, меньшее, чем начальное', () => {
-      model.startValue = 10;
+      model.setCurrentValue(10);
       model.setCurrentEndValue(5);
 
-      expect(model.endValue).toEqual(10);
+      expect(model.getCurrentRoundedEndValue()).toEqual(10);
     });
 
     it('Устанавливает значение не меньше, чем минимальное', () => {
@@ -222,54 +222,54 @@ describe('Model', () => {
 
       model.setCurrentEndValue(10);
 
-      expect(model.startValue).toEqual(30);
+      expect(model.getCurrentRoundedValue()).toEqual(30);
     });
 
     it('Если установлен размер шага, устанавливает кратное шагу значение', () => {
-      model.stepSize = 20;
+      model.setStepSize(20);
       model.setCurrentEndValue(56);
 
-      expect(model.endValue).toEqual(60);
+      expect(model.getCurrentRoundedEndValue()).toEqual(60);
     });
   });
 
   describe('Метод setCurrentValueByRatio', () => {
     it('Считает текущее значение слайдера в зависимости от позиции курсора', () => {
       model.setRangeBoundByRatio(2, 'startValue');
-      expect(model.startValue).toEqual(50);
+      expect(model.getCurrentRoundedValue()).toEqual(50);
 
       model.setRangeBoundByRatio(1, 'endValue');
-      expect(model.endValue).toEqual(100);
+      expect(model.getCurrentRoundedEndValue()).toEqual(100);
     });
 
     it('Если установлен размер шага, устанавливается значение, кратное шагу', () => {
-      model.stepSize = 40;
+      model.setStepSize(40);
       model.setRangeBoundByRatio(2, 'startValue');
 
-      expect(model.startValue).toEqual(40);
+      expect(model.getCurrentRoundedValue()).toEqual(40);
     });
 
     it('Не устанавливает максимальное значение, меньшее, чем минимальное', () => {
-      model.type = 'interval';
-      model.startValue = 90;
+      (<any>model).type = 'interval';
+      model.setCurrentValue(90);
       model.setRangeBoundByRatio(2, 'endValue');
 
-      expect(model.endValue).toEqual(90);
+      expect(model.getCurrentRoundedEndValue()).toEqual(90);
     });
 
     it('Не устанавливает минимальное значение, большее, чем максимальное', () => {
-      model.type = 'interval';
-      model.endValue = 30;
+      (<any>model).type = 'interval';
+      model.setCurrentEndValue(30);
       model.setRangeBoundByRatio(2, 'startValue');
 
-      expect(model.startValue).toEqual(30);
+      expect(model.getCurrentRoundedValue()).toEqual(30);
     });
 
     it('Позволяет посчитать текущее значение с учетом размера шага', () => {
-      model.stepSize = 20;
+      model.setStepSize(20);
       model.setRangeBoundByRatio(2, 'startValue');
 
-      expect(model.startValue).toEqual(60);
+      expect(model.getCurrentRoundedValue()).toEqual(60);
     });
   });
 });

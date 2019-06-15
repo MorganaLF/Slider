@@ -23,34 +23,34 @@ class Controller {
   }
 
   public getSliderType(): string {
-    return this.model.type;
+    return this.model.getType();
   }
 
   public getMinValue(): number {
-    return this.model.minValue;
+    return this.model.getMinValue();
   }
 
   public setMinValue(val: number): void {
-    this.model.minValue = val;
-    this.updateModelConfig();
+    this.model.setMinValue(val);
+    this.updateView();
   }
 
   public getMaxValue(): number {
-    return this.model.maxValue;
+    return this.model.getMaxValue();
   }
 
   public setMaxValue(val: number): void {
-    this.model.maxValue = val;
-    this.updateModelConfig();
+    this.model.setMaxValue(val);
+    this.updateView();
   }
 
   public getStepSize(): number {
-    return this.model.stepSize;
+    return this.model.getStepSize();
   }
 
   public setStepSize(val: number): void {
-    this.model.stepSize = val;
-    this.updateModelConfig();
+    this.model.setStepSize(val);
+    this.updateView();
   }
 
   public getCurrentValue(): number {
@@ -70,50 +70,45 @@ class Controller {
   }
 
   public setVerticalOrientation(): void {
-    this.model.orientation = 'vertical';
+    this.model.setVerticalOrientation();
     this.updateView();
   }
 
   public setHorizontalOrientation(): void {
-    this.model.orientation = 'horizontal';
+    this.model.setHorizontalOrientation();
     this.updateView();
   }
 
   public isTipShown(): boolean {
-    return this.model.withTip;
+    return this.model.isTipShown();
   }
 
   public showTip(): void {
-    this.model.withTip = true;
+    this.model.showTip();
     this.updateView();
   }
 
   public hideTip(): void {
-    this.model.withTip = false;
+    this.model.hideTip();
     this.updateView();
   }
 
   public isScaleShown(): boolean {
-    return this.model.withScale;
+    return this.model.isScaleShown();
   }
 
   public showScale(): void {
-    this.model.withScale = true;
+    this.model.showScale();
     this.updateView();
   }
 
   public hideScale(): void {
-    this.model.withScale = false;
+    this.model.hideScale();
     this.updateView();
   }
 
   public addChangeValueObserver(func: () => void): void {
     this.model.observableSubject.addObserver(func);
-  }
-
-  private updateModelConfig(): void {
-    this.model.normalizeConstructorOptions();
-    this.updateView();
   }
 
   private updateView(): void {
@@ -130,13 +125,13 @@ class Controller {
   }
 
   private observeChangeValue({
-                               isStartValueChanging,
-                               isEndValueChanging,
-                               isRangeBoundAtTheEndOfInterval,
-                               isRangeBoundAtTheStartOfInterval,
-                               isScaleInitialized,
-                               value,
-                               coefficient,
+    isStartValueChanging,
+    isEndValueChanging,
+    isRangeBoundAtTheEndOfInterval,
+    isRangeBoundAtTheStartOfInterval,
+    isScaleInitialized,
+    value,
+    coefficient,
   }: changeValueSettings): void {
     let valueType: string;
 
@@ -164,15 +159,15 @@ class Controller {
 
     if (isScaleInitialized) {
       this.view.drawScale({
-        stepSize: this.model.stepSize,
-        minValue: this.model.minValue,
-        maxValue: this.model.maxValue,
+        stepSize: this.model.getStepSize(),
+        minValue: this.model.getMinValue(),
+        maxValue: this.model.getMaxValue(),
       });
     }
   }
 
   private observeClickOnScale(value: number): void {
-    if (this.model.isSettingValeNearByStartBound(value)) {
+    if (this.model.isSettingValueNearByStartBound(value)) {
       this.model.setCurrentEndValue(value);
     } else {
       this.model.setCurrentValue(value);

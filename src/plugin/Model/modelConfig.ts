@@ -1,4 +1,6 @@
-const modelConfig = {
+import{ ModelConfig } from './ModelInterfaces';
+
+const modelConfig: ModelConfig = {
   startValue: 0,
   endValue: 100,
   minValue: 0,
