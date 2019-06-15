@@ -167,11 +167,7 @@ class Controller {
   }
 
   private observeClickOnScale(value: number): void {
-    if (this.model.isSettingValueNearByStartBound(value)) {
-      this.model.setCurrentEndValue(value);
-    } else {
-      this.model.setCurrentValue(value);
-    }
+    this.model.setBound(value);
   }
 }
 

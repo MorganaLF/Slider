@@ -73,6 +73,19 @@ class Model {
     return Math.round(this.endValue);
   }
 
+  public setBound(value: number): void {
+    const isSettingValueNearByStartBound = this.type === 'interval'
+    && (Math.abs(value - this.startValue)
+      > Math.abs(value - this.endValue)
+      || value === this.endValue);
+
+    if (isSettingValueNearByStartBound) {
+      this.setCurrentEndValue(value);
+    } else {
+      this.setCurrentValue(value);
+    }
+  }
+
   public setCurrentValue(startBound: number): void {
     const normalizedToNumberRangeBound = this.normalizeToNumber(startBound, this.config.startValue);
     const alignedToStepRangeBound = this.alignToStep(normalizedToNumberRangeBound);
@@ -169,13 +182,6 @@ class Model {
         this.dispatchRangeChange('changeendvalue', this.endValue);
       }
     }
-  }
-
-  public isSettingValueNearByStartBound(value: number): boolean {
-    return this.type === 'interval'
-      && (Math.abs(value - this.startValue)
-      > Math.abs(value - this.endValue)
-      || value === this.endValue);
   }
 
   public normalizeConstructorOptions(): void {
