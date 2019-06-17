@@ -14,7 +14,7 @@ class DemoView {
 
     $simpleSlider.each((elementIndex, item) => {
       $(item).customSlider({ elementIndex });
-      $(item).customSlider('observeChangeValue', observeChangeValue);
+      $(item).customSlider('addChangeValueObserver', observeChangeValue);
     });
 
     const $sliderWithScale: JQuery = $('.js-slider_with-scale');
@@ -27,7 +27,7 @@ class DemoView {
         stepSize: 10,
       });
 
-      $(item).customSlider('observeChangeValue', observeChangeValue);
+      $(item).customSlider('addChangeValueObserver', observeChangeValue);
     });
 
     const $intervalSlider: JQuery = $('.js-slider_interval');
@@ -40,7 +40,7 @@ class DemoView {
         endValue: 80,
       });
 
-      $(item).customSlider('observeChangeValue', observeChangeValue);
+      $(item).customSlider('addChangeValueObserver', observeChangeValue);
     });
 
     const $sliderWithStep: JQuery = $('.js-slider_with-step');
@@ -54,7 +54,7 @@ class DemoView {
         stepSize: 20,
       });
 
-      $(item).customSlider('observeChangeValue', observeChangeValue);
+      $(item).customSlider('addChangeValueObserver', observeChangeValue);
     });
 
     this._updateInputValues();

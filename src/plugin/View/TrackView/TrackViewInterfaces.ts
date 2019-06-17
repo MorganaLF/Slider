@@ -12,7 +12,7 @@ export type animateIntervalTrackSettings = {
   sizeProperty: string;
   size: number;
   runnerSizeKey: string;
-  animatedPointName: string;
+  isEndValueChanging: boolean;
 };
 
 export type TrackPoints = {
@@ -37,5 +37,5 @@ export type TrackViewOptions = {
 
 export interface ITrackView {
   drawTrack(): JQuery;
-  animateTrack(coefficient: number, pointName: string): void;
+  animateTrack(coefficient: number, isEndValueChanging: boolean): void;
 }

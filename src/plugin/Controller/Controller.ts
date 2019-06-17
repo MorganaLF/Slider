@@ -125,31 +125,17 @@ class Controller {
   }
 
   private observeChangeValue({
-    isStartValueChanging,
     isEndValueChanging,
     isRangeBoundAtTheEndOfInterval,
     isRangeBoundAtTheStartOfInterval,
     isScaleInitialized,
+    eventType,
     value,
     coefficient,
   }: changeValueSettings): void {
-    let valueType: string;
-
-    if (isStartValueChanging) {
-      valueType = 'start';
-
+    if (eventType === 'changevalue') {
       this.view.update({
-        valueType,
-        coefficient,
-        value,
-        isRangeBoundAtTheEndOfInterval,
-        isRangeBoundAtTheStartOfInterval,
-      });
-    } else if (isEndValueChanging) {
-      valueType = 'end';
-
-      this.view.update({
-        valueType,
+        isEndValueChanging,
         coefficient,
         value,
         isRangeBoundAtTheEndOfInterval,

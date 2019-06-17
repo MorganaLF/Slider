@@ -24,7 +24,7 @@ export type drawScaleSettings = {
 };
 
 export type updateSettings = {
-  valueType: string,
+  isEndValueChanging: boolean,
   coefficient: number,
   value: number,
   isRangeBoundAtTheEndOfInterval: boolean,

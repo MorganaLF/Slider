@@ -52,14 +52,14 @@ class MainView {
   }
 
   public update({
-    valueType,
+    isEndValueChanging,
     coefficient,
     value,
     isRangeBoundAtTheEndOfInterval,
     isRangeBoundAtTheStartOfInterval,
   }: updateSettings): void {
-    const runner = valueType === 'start' ? this.startValueRunner : this.endValueRunner;
-    const tip = valueType === 'start' ? this.startValueTip : this.endValueTip;
+    const runner = isEndValueChanging ? this.endValueRunner : this.startValueRunner;
+    const tip = isEndValueChanging ? this.endValueTip : this.startValueTip;
 
     if (runner) runner.setRunnerPosition(coefficient);
 
@@ -82,7 +82,7 @@ class MainView {
     }
 
     if (this.track) {
-      this.track.animateTrack(coefficient, valueType);
+      this.track.animateTrack(coefficient, isEndValueChanging);
     }
   }
 

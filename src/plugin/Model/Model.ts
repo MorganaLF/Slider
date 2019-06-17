@@ -31,7 +31,7 @@ class Model {
 
   public initRangeValues(): void {
     this.dispatchRangeChange('setstartvalue', this.startValue);
-    this.dispatchRangeChange('setendvalue', this.endValue);
+    if (this.type === 'interval') this.dispatchRangeChange('setendvalue', this.endValue);
   }
 
   public getType(): 'single' | 'interval' {
@@ -291,19 +291,17 @@ class Model {
     const isRangeBoundAtTheStartOfInterval: boolean = this.type === 'interval'
       && this.endValue === this.minValue;
 
-    const isStartValueChanging = eventType === 'changestartvalue' || eventType === 'setstartvalue';
-
     const isEndValueChanging = eventType === 'changeendvalue' && this.type === 'interval'
       || eventType === 'setendvalue' && this.type === 'interval';
 
     const isScaleInitialized = this.withScale && eventType === 'setstartvalue';
 
     this.observableSubject.notifyObservers({
-      isStartValueChanging,
       isEndValueChanging,
       isRangeBoundAtTheEndOfInterval,
       isRangeBoundAtTheStartOfInterval,
       isScaleInitialized,
+      eventType: 'changevalue',
       value: Math.round(value),
       coefficient: ratioOfCurrentValueAndInterval,
     });

@@ -4,6 +4,7 @@ export type changeValueSettings = {
   isRangeBoundAtTheEndOfInterval: boolean;
   isRangeBoundAtTheStartOfInterval: boolean;
   isScaleInitialized: boolean;
+  eventType: string;
   value: number;
   coefficient: number;
 };
