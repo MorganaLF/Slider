@@ -198,15 +198,15 @@ class MainView {
   }
 
   private dispatchStartRunnerMove(ratio: number) {
-    this.startRunnerObservableSubject.notifyObservers(ratio);
+    this.startBoundObservableSubject.notifyObservers(ratio);
   }
 
   private dispatchEndRunnerMove(ratio: number) {
-    this.endRunnerObservableSubject.notifyObservers(ratio);
+    this.endBoundObservableSubject.notifyObservers(ratio);
   }
 
   private dispatchClickOnScale(value: number) {
-    this.scaleObservableSubject.notifyObservers(value);
+    this.randomValueObservableSubject.notifyObservers(value);
   }
 
   private handleWindowResize(): void {
