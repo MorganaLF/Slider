@@ -1,13 +1,11 @@
 import Model from '../Model/Model';
 import MainView from '../View/MainView/MainView';
-import { changeValueSettings } from './ControllerInterfaces';
+import { changeValueSettings, observeBoundSettings } from './ControllerInterfaces';
 
 class Controller {
   readonly changeValueObserver = this.observeChangeValue.bind(this);
+  readonly changeBoundObserver = this.observeBoundChanging.bind(this);
   readonly resizeObserver = this.updateView.bind(this);
-  readonly startBoundObserver = this.observeStartBound.bind(this);
-  readonly endBoundObserver = this.observeEndBound.bind(this);
-  readonly settingRandomValueObserver = this.observeSettingRandomValue.bind(this);
 
   constructor(private view: MainView, private model: Model) {
     this.init();
@@ -15,10 +13,8 @@ class Controller {
 
   public init(): void {
     this.model.observableSubject.addObserver(this.changeValueObserver);
-    this.view.observableSubject.addObserver(this.resizeObserver);
-    this.view.startBoundObservableSubject.addObserver(this.startBoundObserver);
-    this.view.endBoundObservableSubject.addObserver(this.endBoundObserver);
-    this.view.randomValueObservableSubject.addObserver(this.settingRandomValueObserver);
+    this.view.resizeObservableSubject.addObserver(this.resizeObserver);
+    this.view.boundObservableSubject.addObserver(this.changeBoundObserver);
     this.model.initRangeValues();
   }
 
@@ -116,12 +112,14 @@ class Controller {
     this.model.initRangeValues();
   }
 
-  private observeStartBound(ratio: number): void {
-    this.model.setRangeBoundByRatio(ratio, 'startValue');
-  }
-
-  private observeEndBound(ratio: number): void {
-    this.model.setRangeBoundByRatio(ratio, 'endValue');
+  private observeBoundChanging({ ratio, value, boundType }: observeBoundSettings): void {
+    if (boundType === 'start') {
+      this.model.setRangeBoundByRatio(ratio, 'startValue');
+    } else if (boundType === 'end') {
+      this.model.setRangeBoundByRatio(ratio, 'endValue');
+    } else if (boundType === 'either') {
+      this.model.setBound(value);
+    }
   }
 
   private observeChangeValue({
@@ -150,10 +148,6 @@ class Controller {
         maxValue: this.model.getMaxValue(),
       });
     }
-  }
-
-  private observeSettingRandomValue(value: number): void {
-    this.model.setBound(value);
   }
 }
 

@@ -20,10 +20,8 @@ import Model from '../../Model/Model';
 
 class MainView {
   [key: string]: any;
-  public observableSubject = new ObservableSubject();
-  public startBoundObservableSubject = new ObservableSubject();
-  public endBoundObservableSubject = new ObservableSubject();
-  public randomValueObservableSubject = new ObservableSubject();
+  public resizeObservableSubject = new ObservableSubject();
+  public boundObservableSubject = new ObservableSubject();
   public elementIndex: number;
   public $element: JQuery;
   public startValueRunner?: null | IRunnerView = null;
@@ -198,20 +196,20 @@ class MainView {
   }
 
   private dispatchStartRunnerMove(ratio: number) {
-    this.startBoundObservableSubject.notifyObservers(ratio);
+    this.boundObservableSubject.notifyObservers({ ratio, boundType: 'start' });
   }
 
   private dispatchEndRunnerMove(ratio: number) {
-    this.endBoundObservableSubject.notifyObservers(ratio);
+    this.boundObservableSubject.notifyObservers({ ratio, boundType: 'end' });
   }
 
   private dispatchClickOnScale(value: number) {
-    this.randomValueObservableSubject.notifyObservers(value);
+    this.boundObservableSubject.notifyObservers({ value, boundType: 'either' });
   }
 
   private handleWindowResize(): void {
     this.reinitialize();
-    this.observableSubject.notifyObservers();
+    this.resizeObservableSubject.notifyObservers();
   }
 
   private addHandlers(): void {

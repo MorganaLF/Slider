@@ -9,6 +9,12 @@ export type changeValueSettings = {
   coefficient: number;
 };
 
+export type observeBoundSettings = {
+  ratio: number,
+  value: number,
+  boundType: 'start' | 'end' | 'either',
+};
+
 export interface IController {
   init(): void;
   initRangeValues(): void;
