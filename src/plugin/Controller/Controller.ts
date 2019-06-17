@@ -5,9 +5,9 @@ import { changeValueSettings } from './ControllerInterfaces';
 class Controller {
   readonly changeValueObserver = this.observeChangeValue.bind(this);
   readonly resizeObserver = this.updateView.bind(this);
-  readonly startRunnerMoveObserver = this.observeStartRunnerMove.bind(this);
-  readonly endRunnerMoveObserver = this.observeEndRunnerMove.bind(this);
-  readonly clickOnScaleObserver = this.observeClickOnScale.bind(this);
+  readonly startBoundObserver = this.observeStartBound.bind(this);
+  readonly endBoundObserver = this.observeEndBound.bind(this);
+  readonly settingRandomValueObserver = this.observeSettingRandomValue.bind(this);
 
   constructor(private view: MainView, private model: Model) {
     this.init();
@@ -16,9 +16,9 @@ class Controller {
   public init(): void {
     this.model.observableSubject.addObserver(this.changeValueObserver);
     this.view.observableSubject.addObserver(this.resizeObserver);
-    this.view.startRunnerObservableSubject.addObserver(this.startRunnerMoveObserver);
-    this.view.endRunnerObservableSubject.addObserver(this.endRunnerMoveObserver);
-    this.view.scaleObservableSubject.addObserver(this.clickOnScaleObserver);
+    this.view.startBoundObservableSubject.addObserver(this.startBoundObserver);
+    this.view.endBoundObservableSubject.addObserver(this.endBoundObserver);
+    this.view.randomValueObservableSubject.addObserver(this.settingRandomValueObserver);
     this.model.initRangeValues();
   }
 
@@ -116,11 +116,11 @@ class Controller {
     this.model.initRangeValues();
   }
 
-  private observeStartRunnerMove(ratio: number): void {
+  private observeStartBound(ratio: number): void {
     this.model.setRangeBoundByRatio(ratio, 'startValue');
   }
 
-  private observeEndRunnerMove(ratio: number): void {
+  private observeEndBound(ratio: number): void {
     this.model.setRangeBoundByRatio(ratio, 'endValue');
   }
 
@@ -152,7 +152,7 @@ class Controller {
     }
   }
 
-  private observeClickOnScale(value: number): void {
+  private observeSettingRandomValue(value: number): void {
     this.model.setBound(value);
   }
 }

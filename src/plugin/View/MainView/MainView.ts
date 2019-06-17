@@ -21,9 +21,9 @@ import Model from '../../Model/Model';
 class MainView {
   [key: string]: any;
   public observableSubject = new ObservableSubject();
-  public startRunnerObservableSubject = new ObservableSubject();
-  public endRunnerObservableSubject = new ObservableSubject();
-  public scaleObservableSubject = new ObservableSubject();
+  public startBoundObservableSubject = new ObservableSubject();
+  public endBoundObservableSubject = new ObservableSubject();
+  public randomValueObservableSubject = new ObservableSubject();
   public elementIndex: number;
   public $element: JQuery;
   public startValueRunner?: null | IRunnerView = null;

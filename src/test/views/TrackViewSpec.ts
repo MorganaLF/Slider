@@ -58,13 +58,13 @@ describe('TrackView', () => {
     });
 
     it('Устанавливает ширину дорожки, если тип слайдера single', () => {
-      trackView.animateTrack(2, 'start');
+      trackView.animateTrack(2, false);
 
       expect(trackView.$filledTrack!.css('width')).toEqual('200px');
     });
 
     it('Если коэффициент равен нулю, ширина дорожки равна нулю', () => {
-      trackView.animateTrack(0, 'start');
+      trackView.animateTrack(0, false);
 
       expect(trackView.$filledTrack!.css('width')).toEqual('0px');
     });
@@ -72,7 +72,7 @@ describe('TrackView', () => {
     it('Устанавливает высоту дорожки, если слайдер имеет вертикальный вид', () => {
       (<any>trackView).orientation = 'vertical';
       trackView.drawTrack();
-      trackView.animateTrack(2, 'start');
+      trackView.animateTrack(2, false);
 
       expect(trackView.$filledTrack!.css('height')).toEqual('200px');
     });
@@ -83,8 +83,8 @@ describe('TrackView', () => {
 
       trackView.$filledTrack!.css('position', 'relative');
 
-      trackView.animateTrack(2, 'start');
-      trackView.animateTrack(1, 'end');
+      trackView.animateTrack(2, false);
+      trackView.animateTrack(1, true);
 
       expect(trackView.$filledTrack!.css('left')).toEqual('175px');
       expect(trackView.$filledTrack!.css('width')).toEqual('150px');
@@ -102,8 +102,8 @@ describe('TrackView', () => {
         trackView.$element!.css('height', '100%');
         trackView.$filledTrack!.css('position', 'relative');
 
-        trackView.animateTrack(2, 'start');
-        trackView.animateTrack(1, 'end');
+        trackView.animateTrack(2, false);
+        trackView.animateTrack(1, true);
 
         expect(trackView.$filledTrack!.css('top')).toEqual('175px');
         expect(trackView.$filledTrack!.css('height')).toEqual('150px');
