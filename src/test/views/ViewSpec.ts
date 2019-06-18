@@ -22,7 +22,6 @@ describe('MainView', () => {
     view = new MainView({
       model,
       $element,
-      elementIndex: 0,
       type: 'single',
       orientation: 'horizontal',
       withTip: true,

@@ -22,7 +22,6 @@ class MainView {
   [key: string]: any;
   public resizeObservableSubject = new ObservableSubject();
   public boundObservableSubject = new ObservableSubject();
-  public elementIndex: number;
   public $element: JQuery;
   public startValueRunner?: null | IRunnerView = null;
   public endValueRunner?: null | IRunnerView = null;
@@ -31,13 +30,14 @@ class MainView {
   public track?: null | ITrackView = null;
   public scale?: null | IScaleView = null;
   readonly model: Model;
+  readonly events: { [key: string]: string };
   readonly startRunnerMovePublisher = this.dispatchStartRunnerMove.bind(this);
   readonly endRunnerMovePublisher = this.dispatchEndRunnerMove.bind(this);
   readonly clickOnScalePublisher = this.dispatchClickOnScale.bind(this);
 
   constructor(options: MainViewOptions) {
     this.model = options.model;
-    this.elementIndex = options.elementIndex;
+    this.events = {};
     this.$element = options.$element;
     this.reinitialize();
   }
@@ -131,7 +131,6 @@ class MainView {
 
   private createRunner(runnerKeyName: string): void {
     this[runnerKeyName] = new RunnerView({
-      elementIndex: this.elementIndex,
       $parent: this.$element,
       orientation: this.model.getOrientation(),
       parentLeftPoint: this.getExtremePoints().left,
@@ -212,11 +211,18 @@ class MainView {
     this.resizeObservableSubject.notifyObservers();
   }
 
+  private createUniqueEventName(type: string): string {
+    return `${type}.${(Math.random() * 1000)}`;
+  }
+
   private addHandlers(): void {
     const $window = $(window);
     const handleWindowResize = this.handleWindowResize.bind(this);
+    const resize: string = this.createUniqueEventName('resize');
 
-    $window.on(`resize.CustomSlider${this.elementIndex}`, handleWindowResize);
+    this.events['resize'] = resize;
+
+    $window.on(resize, handleWindowResize);
 
     if (this.startValueRunner) {
       this.startValueRunner.observableSubject.addObserver(this.startRunnerMovePublisher);

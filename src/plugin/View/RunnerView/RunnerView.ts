@@ -10,7 +10,7 @@ class RunnerView {
   public $parent: JQuery;
   public shiftX: number = 0;
   public shiftY: number = 0;
-  readonly elementIndex: number;
+  readonly events: { [key: string]: string };
   readonly orientation: string;
   readonly parentLeftPoint: number;
   readonly parentRightPoint: number;
@@ -19,10 +19,10 @@ class RunnerView {
   private handleWindowMouseUp?: (event: JQuery.MouseUpEvent) => void;
 
   constructor(options: RunnerViewOptions) {
-    this.elementIndex = options.elementIndex;
     this.$parent = options.$parent;
     this.shiftX = 0;
     this.shiftY = 0;
+    this.events = {};
     this.orientation = options.orientation;
     this.parentLeftPoint = options.parentLeftPoint;
     this.parentRightPoint = options.parentRightPoint;
@@ -133,17 +133,29 @@ class RunnerView {
     const isDeviceSupportsTouchMove: boolean = typeof document.body.ontouchmove !== 'undefined';
 
     if (isDeviceSupportsTouchMove) {
-      (<any>$window).on(`touchmove.CustomSlider${this.elementIndex}`, handleWindowMouseMove);
+      const touchmove: string = this.createUniqueEventName('touchmove');
+      this.events['touchmove'] = touchmove;
+
+      (<any>$window).on(touchmove, handleWindowMouseMove);
     } else {
-      (<any>$window).on(`mousemove.CustomSlider${this.elementIndex}`, handleWindowMouseMove);
+      const mousemove: string = this.createUniqueEventName('mousemove');
+      this.events['mousemove'] = mousemove;
+
+      (<any>$window).on(mousemove, handleWindowMouseMove);
     }
 
     const isDeviceSupportsTouchEnd: boolean = typeof document.body.ontouchend !== 'undefined';
 
     if (isDeviceSupportsTouchEnd) {
-      (<any>$window).on(`touchend.CustomSlider${this.elementIndex}`, this.handleWindowMouseUp);
+      const touchend: string = this.createUniqueEventName('touchend');
+      this.events['touchend'] = touchend;
+
+      (<any>$window).on(touchend, this.handleWindowMouseUp);
     } else {
-      (<any>$window).on(`mouseup.CustomSlider${this.elementIndex}`, this.handleWindowMouseUp);
+      const mouseup: string = this.createUniqueEventName('mouseup');
+      this.events['touchend'] = mouseup;
+
+      (<any>$window).on(mouseup, this.handleWindowMouseUp);
     }
   }
 
@@ -151,19 +163,23 @@ class RunnerView {
     this.moveRunner(event);
   }
 
+  private createUniqueEventName(type: string): string {
+    return `${type}.${(Math.random() * 1000)}`;
+  }
+
   private addHandlers() {
     const isDeviceSupportsTouchStart: boolean = typeof document.body.ontouchstart !== 'undefined';
 
     if (isDeviceSupportsTouchStart) {
-      (<any>this.$element).on(
-        `touchstart.CustomSlider${this.elementIndex}`,
-        this.handleRunnerMouseDown.bind(this),
-      );
+      const touchstart: string = this.createUniqueEventName('touchstart');
+      this.events['touchstart'] = touchstart;
+
+      (<any>this.$element).on(touchstart, this.handleRunnerMouseDown.bind(this));
     } else {
-      (<any>this.$element).on(
-        `mousedown.CustomSlider${this.elementIndex}`,
-        this.handleRunnerMouseDown.bind(this),
-      );
+      const mousedown: string = this.createUniqueEventName('mousedown');
+      this.events['mousedown'] = mousedown;
+
+      (<any>this.$element).on(mousedown, this.handleRunnerMouseDown.bind(this));
     }
   }
 
@@ -172,17 +188,17 @@ class RunnerView {
     const isDeviceSupportsTouchMove: boolean = typeof document.body.ontouchmove !== 'undefined';
 
     if (isDeviceSupportsTouchMove) {
-      (<any>$window).off(`touchmove.CustomSlider${this.elementIndex}`, handleWindowMouseMove);
+      (<any>$window).off(this.events['touchmove'], handleWindowMouseMove);
     } else {
-      (<any>$window).off(`mousemove.CustomSlider${this.elementIndex}`, handleWindowMouseMove);
+      (<any>$window).off(this.events['mousemove'], handleWindowMouseMove);
     }
 
     const isDeviceSupportsTouchEnd: boolean = typeof document.body.ontouchend !== 'undefined';
 
     if (isDeviceSupportsTouchEnd) {
-      (<any>$window).off(`touchend.CustomSlider${this.elementIndex}`, this.handleWindowMouseUp);
+      (<any>$window).off(this.events['touchend'], this.handleWindowMouseUp);
     } else {
-      (<any>$window).off(`mouseup.CustomSlider${this.elementIndex}`, this.handleWindowMouseUp);
+      (<any>$window).off(this.events['mouseup'], this.handleWindowMouseUp);
     }
   }
 

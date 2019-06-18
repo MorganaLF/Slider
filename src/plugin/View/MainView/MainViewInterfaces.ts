@@ -33,7 +33,6 @@ export type updateSettings = {
 
 export type MainViewOptions = {
   model: Model,
-  elementIndex: number,
   $element: JQuery,
   startValueRunner?: null | IRunnerView,
   endValueRunner?: null | IRunnerView,

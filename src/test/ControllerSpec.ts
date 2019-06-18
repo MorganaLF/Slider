@@ -33,7 +33,6 @@ describe('Controller', () => {
       orientation: 'horizontal',
       withTip: true,
       withScale: true,
-      elementIndex: 0,
     });
 
     view.updateSlider();

@@ -10,7 +10,6 @@ export type dispatchMoveEventSettings = {
 
 export type RunnerViewOptions = {
   observableSubject?: IObservableSubject,
-  elementIndex: number,
   $element?: JQuery,
   $parent: JQuery,
   shiftX?: number,

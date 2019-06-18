@@ -22,12 +22,7 @@ $.fn.customSlider = function(options: ModelOptions | string, ...args) {
 
     const extendedOptions: any = $.extend(options, dataConfig);
     const model = new Model(extendedOptions);
-
-    const view = new MainView({
-      model,
-      $element: $this,
-      elementIndex: extendedOptions.elementIndex,
-    });
+    const view = new MainView({ model, $element: $this});
 
     $this.data('constructor', new Controller(view, model));
   }

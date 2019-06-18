@@ -1,27 +1,29 @@
 import '../../plugin/slider';
 
 class DemoView {
+  readonly events: { [key: string]: string };
+
   constructor() {
+    this.events = {};
     this.init();
   }
 
   public init(): void {
     const observeChangeValue = () => {
-      this._updateInputValues();
+      this.updateInputValues();
     };
 
     const $simpleSlider: JQuery = $('.js-slider_simple');
 
-    $simpleSlider.each((elementIndex, item) => {
-      $(item).customSlider({ elementIndex });
+    $simpleSlider.each((index, item) => {
+      $(item).customSlider();
       $(item).customSlider('addChangeValueObserver', observeChangeValue);
     });
 
     const $sliderWithScale: JQuery = $('.js-slider_with-scale');
 
-    $sliderWithScale.each((elementIndex, item) => {
+    $sliderWithScale.each((index, item) => {
       $(item).customSlider({
-        elementIndex,
         withTip: false,
         withScale: true,
         stepSize: 10,
@@ -32,9 +34,8 @@ class DemoView {
 
     const $intervalSlider: JQuery = $('.js-slider_interval');
 
-    $intervalSlider.each((elementIndex, item) => {
+    $intervalSlider.each((index, item) => {
       $(item).customSlider({
-        elementIndex,
         type: 'interval',
         startValue: 20,
         endValue: 80,
@@ -45,9 +46,8 @@ class DemoView {
 
     const $sliderWithStep: JQuery = $('.js-slider_with-step');
 
-    $sliderWithStep.each((elementIndex, item) => {
+    $sliderWithStep.each((index, item) => {
       $(item).customSlider({
-        elementIndex,
         type: 'single',
         minValue: 10,
         startValue: 20,
@@ -57,42 +57,48 @@ class DemoView {
       $(item).customSlider('addChangeValueObserver', observeChangeValue);
     });
 
-    this._updateInputValues();
-    this._addHandlers();
+    this.updateInputValues();
+    this.addHandlers();
   }
 
-  private _updateSlider($element: JQuery, methodName: string): void {
+  private createUniqueEventName(type: string): string {
+    return `${type}.${(Math.random() * 1000)}`;
+  }
+
+  private updateSlider($element: JQuery, methodName: string): void {
     $element
       .closest('.demo-page__row')
       .find('.slider')
       .customSlider(methodName, $element.val());
   }
 
-  private _addTextInputHandlers(inputName: string, methodName: string): void {
+  private addTextInputHandlers(inputName: string, methodName: string): void {
     const $textInput: JQuery = $(`input[name="${inputName}"]`);
-    $textInput.on('change.DemoView', this._handleTextInputChange.bind(this, methodName));
+    const textInputChange: string = this.createUniqueEventName('change');
+    this.events['textInputChange'] = textInputChange;
+
+    $textInput.on(textInputChange, this.handleTextInputChange.bind(this, methodName));
   }
 
-  private _handleTextInputChange(methodName: string, event: JQuery.TriggeredEvent): void {
+  private handleTextInputChange(methodName: string, event: JQuery.TriggeredEvent): void {
     const $currentInput: JQuery = $(event.target);
-    this._updateSlider($currentInput, methodName);
-    this._updateInputValues();
+    this.updateSlider($currentInput, methodName);
+    this.updateInputValues();
   }
 
-  private _addCheckboxHandlers(
+  private addCheckboxHandlers(
     checkboxName: string,
     onMethodName: string,
     offMethodName: string,
   ): void {
     const $checkbox: JQuery = $(`input[name="${checkboxName}"]`);
+    const checkboxChange: string = this.createUniqueEventName('change');
+    this.events['checkboxChange'] = checkboxChange;
 
-    $checkbox.on(
-      'change.DemoView',
-      this._handleCheckboxChange.bind(this, onMethodName, offMethodName),
-    );
+    $checkbox.on(checkboxChange, this.handleCheckboxChange.bind(this, onMethodName, offMethodName));
   }
 
-  private _handleCheckboxChange(
+  private handleCheckboxChange(
     onMethodName: string,
     offMethodName: string,
     event: JQuery.TriggeredEvent,
@@ -100,48 +106,48 @@ class DemoView {
     const $element: JQuery = $(event.target);
 
     if ($element.prop('checked')) {
-      this._makeSliderMethod($element, onMethodName);
+      this.makeSliderMethod($element, onMethodName);
     } else {
-      this._makeSliderMethod($element, offMethodName);
+      this.makeSliderMethod($element, offMethodName);
     }
   }
 
-  private _addHandlers(): void {
-    this._addTextInputHandlers('min-value', 'setMinValue');
-    this._addTextInputHandlers('max-value', 'setMaxValue');
-    this._addTextInputHandlers('current-value', 'setCurrentValue');
-    this._addTextInputHandlers('current-max-value', 'setCurrentEndValue');
-    this._addTextInputHandlers('step-size', 'setStepSize');
-    this._addTextInputHandlers('scale-items', 'setScaleMarksQuantity');
+  private addHandlers(): void {
+    this.addTextInputHandlers('min-value', 'setMinValue');
+    this.addTextInputHandlers('max-value', 'setMaxValue');
+    this.addTextInputHandlers('current-value', 'setCurrentValue');
+    this.addTextInputHandlers('current-max-value', 'setCurrentEndValue');
+    this.addTextInputHandlers('step-size', 'setStepSize');
+    this.addTextInputHandlers('scale-items', 'setScaleMarksQuantity');
 
-    this._addCheckboxHandlers(
+    this.addCheckboxHandlers(
       'tip',
       'showTip',
       'hideTip',
     );
 
-    this._addCheckboxHandlers(
+    this.addCheckboxHandlers(
       'scale',
       'showScale',
       'hideScale',
     );
 
-    this._addCheckboxHandlers(
+    this.addCheckboxHandlers(
       'orientation',
       'setVerticalOrientation',
       'setHorizontalOrientation',
     );
   }
 
-  private _makeSliderMethod($element: JQuery, methodName: string): number {
+  private makeSliderMethod($element: JQuery, methodName: string): number {
     return $element
                 .closest('.demo-page__row')
                 .find('.slider')
                 .customSlider(methodName);
   }
 
-  private _setInputValue(inputName: string, methodName: string, isCheckbox = false): void {
-    const makeSliderMethod: any = this._makeSliderMethod;
+  private setInputValue(inputName: string, methodName: string, isCheckbox = false): void {
+    const makeSliderMethod: any = this.makeSliderMethod;
 
     const $input: JQuery = $(`input[name="${inputName}"]`);
 
@@ -198,15 +204,15 @@ class DemoView {
     });
   }
 
-  private _updateInputValues(): void {
-    this._setInputValue('current-value', 'getCurrentValue');
-    this._setInputValue('current-max-value', 'getCurrentEndValue');
-    this._setInputValue('min-value', 'getMinValue');
-    this._setInputValue('max-value', 'getMaxValue');
-    this._setInputValue('step-size', 'getStepSize');
-    this._setInputValue('scale-items', 'getScaleMarksQuantity');
-    this._setInputValue('tip', 'isTipShown', true);
-    this._setInputValue('scale', 'isScaleShown', true);
+  private updateInputValues(): void {
+    this.setInputValue('current-value', 'getCurrentValue');
+    this.setInputValue('current-max-value', 'getCurrentEndValue');
+    this.setInputValue('min-value', 'getMinValue');
+    this.setInputValue('max-value', 'getMaxValue');
+    this.setInputValue('step-size', 'getStepSize');
+    this.setInputValue('scale-items', 'getScaleMarksQuantity');
+    this.setInputValue('tip', 'isTipShown', true);
+    this.setInputValue('scale', 'isScaleShown', true);
   }
 }
 

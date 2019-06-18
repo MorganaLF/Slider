@@ -10,11 +10,17 @@ class ScaleView {
   public $parent: JQuery;
   public orientation: string;
   public observableSubject = new ObservableSubject();
+  readonly events: { [key: string]: string };
 
   constructor(options: ScaleViewOptions) {
     this.$parent = options.$parent;
     this.orientation = options.orientation;
     this.$element = null;
+    this.events = {};
+  }
+
+  private createUniqueEventName(type: string): string {
+    return `${type}.${(Math.random() * 1000)}`;
   }
 
   public drawScale({
@@ -76,7 +82,11 @@ class ScaleView {
     }).appendTo($mark);
 
     $mark.appendTo(this.$element);
-    (<any>$mark).on('click.CustomSlider', this.handleMarkClick.bind(this));
+
+    const click: string = this.createUniqueEventName('click');
+    this.events['click'] = click;
+
+    (<any>$mark).on(click, this.handleMarkClick.bind(this));
   }
 
   private handleMarkClick(event: JQuery.ClickEvent): void {
