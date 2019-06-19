@@ -1,6 +1,11 @@
 import Model from '../Model/Model';
 import MainView from '../View/MainView/MainView';
-import { changeValueSettings, observeBoundSettings } from './ControllerInterfaces';
+import {
+  changeValueSettings,
+  changeValueCallbackSettings,
+  changeBoundCallbackSettings,
+  observeBoundSettings
+} from './ControllerInterfaces';
 
 class Controller {
   readonly changeValueObserver = this.observeChangeValue.bind(this);
@@ -103,8 +108,17 @@ class Controller {
     this.updateView();
   }
 
-  public addChangeValueObserver(func: () => void): void {
-    this.model.observableSubject.addObserver(func);
+  public addEvent(
+    name: 'changevalue' | 'changebound',
+    callback: ({}: changeValueCallbackSettings | changeBoundCallbackSettings) => void,
+    ): void {
+    if (name === 'changevalue') {
+      this.model.observableSubject.addObserver(callback);
+    }
+
+    if (name === 'changebound') {
+      this.view.boundObservableSubject.addObserver(callback);
+    }
   }
 
   private updateView(): void {

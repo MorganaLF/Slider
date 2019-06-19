@@ -9,52 +9,52 @@ class DemoView {
   }
 
   public init(): void {
-    const observeChangeValue = () => {
+    const changeValueListener = () => {
       this.updateInputValues();
     };
 
     const $simpleSlider: JQuery = $('.js-slider_simple');
 
     $simpleSlider.each((index, item) => {
-      $(item).customSlider();
-      $(item).customSlider('addChangeValueObserver', observeChangeValue);
+      const slider = $(item).customSlider();
+      slider.addEvent('changevalue', changeValueListener);
     });
 
     const $sliderWithScale: JQuery = $('.js-slider_with-scale');
 
     $sliderWithScale.each((index, item) => {
-      $(item).customSlider({
+      const slider = $(item).customSlider({
         withTip: false,
         withScale: true,
         stepSize: 10,
       });
 
-      $(item).customSlider('addChangeValueObserver', observeChangeValue);
+      slider.addEvent('changevalue', changeValueListener);
     });
 
     const $intervalSlider: JQuery = $('.js-slider_interval');
 
     $intervalSlider.each((index, item) => {
-      $(item).customSlider({
+      const slider = $(item).customSlider({
         type: 'interval',
         startValue: 20,
         endValue: 80,
       });
 
-      $(item).customSlider('addChangeValueObserver', observeChangeValue);
+      slider.addEvent('changevalue', changeValueListener);
     });
 
     const $sliderWithStep: JQuery = $('.js-slider_with-step');
 
     $sliderWithStep.each((index, item) => {
-      $(item).customSlider({
+      const slider = $(item).customSlider({
         type: 'single',
         minValue: 10,
         startValue: 20,
         stepSize: 20,
       });
 
-      $(item).customSlider('addChangeValueObserver', observeChangeValue);
+      slider.addEvent('changevalue', changeValueListener);
     });
 
     this.updateInputValues();

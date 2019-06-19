@@ -9,6 +9,22 @@ export type changeValueSettings = {
   coefficient: number;
 };
 
+export type changeValueCallbackSettings = {
+  isEndValueChanging: boolean,
+  isRangeBoundAtTheEndOfInterval: boolean,
+  isRangeBoundAtTheStartOfInterval: boolean,
+  isScaleInitialized: boolean,
+  eventType: 'changevalue',
+  value: number,
+  coefficient: number,
+}
+
+export type changeBoundCallbackSettings = {
+  ratio: number,
+  value: number,
+  boundType: 'start' | 'end' | 'either'
+}
+
 export type observeBoundSettings = {
   ratio: number,
   value: number,
