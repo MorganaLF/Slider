@@ -16,7 +16,6 @@ class RunnerView {
   readonly parentRightPoint: number;
   readonly parentTopPoint: number;
   readonly parentBottomPoint: number;
-  private handleWindowMouseUp?: (event: JQuery.MouseUpEvent) => void;
 
   constructor(options: RunnerViewOptions) {
     this.$parent = options.$parent;
@@ -125,10 +124,6 @@ class RunnerView {
     this.setRunnerShiftX(event);
     this.setRunnerShiftY(event);
 
-    const handleWindowMouseMove = this.handleWindowMouseMove.bind(this);
-
-    this.handleWindowMouseUp = this.removeEventListeners.bind(this, handleWindowMouseMove);
-
     const $window = $(window);
     const isDeviceSupportsTouchMove: boolean = typeof document.body.ontouchmove !== 'undefined';
 
@@ -136,12 +131,12 @@ class RunnerView {
       const touchmove: string = this.createUniqueEventName('touchmove');
       this.events['touchmove'] = touchmove;
 
-      (<any>$window).on(touchmove, handleWindowMouseMove);
+      (<any>$window).on(touchmove, this.bind(this.handleWindowMouseMove, this));
     } else {
       const mousemove: string = this.createUniqueEventName('mousemove');
       this.events['mousemove'] = mousemove;
 
-      (<any>$window).on(mousemove, handleWindowMouseMove);
+      (<any>$window).on(mousemove,  this.bind(this.handleWindowMouseMove, this));
     }
 
     const isDeviceSupportsTouchEnd: boolean = typeof document.body.ontouchend !== 'undefined';
@@ -150,12 +145,12 @@ class RunnerView {
       const touchend: string = this.createUniqueEventName('touchend');
       this.events['touchend'] = touchend;
 
-      (<any>$window).on(touchend, this.handleWindowMouseUp);
+      (<any>$window).on(touchend, this.bind(this.removeEventListeners, this));
     } else {
       const mouseup: string = this.createUniqueEventName('mouseup');
       this.events['touchend'] = mouseup;
 
-      (<any>$window).on(mouseup, this.handleWindowMouseUp);
+      (<any>$window).on(mouseup, this.bind(this.removeEventListeners, this));
     }
   }
 
@@ -174,31 +169,31 @@ class RunnerView {
       const touchstart: string = this.createUniqueEventName('touchstart');
       this.events['touchstart'] = touchstart;
 
-      (<any>this.$element).on(touchstart, this.handleRunnerMouseDown.bind(this));
+      (<any>this.$element).on(touchstart, this.bind(this.handleRunnerMouseDown, this));
     } else {
       const mousedown: string = this.createUniqueEventName('mousedown');
       this.events['mousedown'] = mousedown;
 
-      (<any>this.$element).on(mousedown, this.handleRunnerMouseDown.bind(this));
+      (<any>this.$element).on(mousedown, this.bind(this.handleRunnerMouseDown, this));
     }
   }
 
-  private removeEventListeners(handleWindowMouseMove: (e: JQuery.MouseMoveEvent) => void): void {
+  private removeEventListeners(): void {
     const $window = $(window);
     const isDeviceSupportsTouchMove: boolean = typeof document.body.ontouchmove !== 'undefined';
 
     if (isDeviceSupportsTouchMove) {
-      (<any>$window).off(this.events['touchmove'], handleWindowMouseMove);
+      (<any>$window).off(this.events['touchmove']);
     } else {
-      (<any>$window).off(this.events['mousemove'], handleWindowMouseMove);
+      (<any>$window).off(this.events['mousemove']);
     }
 
     const isDeviceSupportsTouchEnd: boolean = typeof document.body.ontouchend !== 'undefined';
 
     if (isDeviceSupportsTouchEnd) {
-      (<any>$window).off(this.events['touchend'], this.handleWindowMouseUp);
+      (<any>$window).off(this.events['touchend']);
     } else {
-      (<any>$window).off(this.events['mouseup'], this.handleWindowMouseUp);
+      (<any>$window).off(this.events['mouseup']);
     }
   }
 
@@ -212,6 +207,12 @@ class RunnerView {
     const newCoordinate: number = coordinate - startPoint - shift;
     const ratio: number = (endPoint - startPoint - runnerSize) / newCoordinate;
     this.observableSubject.notifyObservers(ratio);
+  }
+
+  private bind(func: any, context: any) {
+    return function() {
+      return func.apply(context, arguments);
+    };
   }
 }
 

@@ -8,18 +8,14 @@ import {
 } from './ControllerInterfaces';
 
 class Controller {
-  readonly changeValueObserver = this.observeChangeValue.bind(this);
-  readonly changeBoundObserver = this.observeBoundChanging.bind(this);
-  readonly resizeObserver = this.updateView.bind(this);
-
   constructor(private view: MainView, private model: Model) {
     this.init();
   }
 
   public init(): void {
-    this.model.observableSubject.addObserver(this.changeValueObserver);
-    this.view.resizeObservableSubject.addObserver(this.resizeObserver);
-    this.view.boundObservableSubject.addObserver(this.changeBoundObserver);
+    this.model.observableSubject.addObserver(this.bind(this.observeChangeValue, this));
+    this.view.resizeObservableSubject.addObserver(this.bind(this.updateView, this));
+    this.view.boundObservableSubject.addObserver(this.bind(this.observeBoundChanging, this));
     this.model.initRangeValues();
   }
 
@@ -153,6 +149,12 @@ class Controller {
         maxValue: this.model.getMaxValue(),
       });
     }
+  }
+
+  private bind(func: any, context: any) {
+    return function() {
+      return func.apply(context, arguments);
+    };
   }
 }
 

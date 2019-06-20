@@ -31,9 +31,6 @@ class MainView {
   public scale?: null | IScaleView = null;
   readonly model: Model;
   readonly events: { [key: string]: string };
-  readonly startRunnerMovePublisher = this.dispatchStartRunnerMove.bind(this);
-  readonly endRunnerMovePublisher = this.dispatchEndRunnerMove.bind(this);
-  readonly clickOnScalePublisher = this.dispatchClickOnScale.bind(this);
 
   constructor(options: MainViewOptions) {
     this.model = options.model;
@@ -217,38 +214,55 @@ class MainView {
 
   private addHandlers(): void {
     const $window = $(window);
-    const handleWindowResize = this.handleWindowResize.bind(this);
     const resize: string = this.createUniqueEventName('resize');
 
     this.events['resize'] = resize;
 
-    $window.on(resize, handleWindowResize);
+    $window.on(resize, this.bind(this.handleWindowResize, this));
 
     if (this.startValueRunner) {
-      this.startValueRunner.observableSubject.addObserver(this.startRunnerMovePublisher);
+      this.startValueRunner.observableSubject.addObserver(
+        this.bind(this.dispatchStartRunnerMove, this),
+      );
     }
 
     if (this.endValueRunner) {
-      this.endValueRunner.observableSubject.addObserver(this.endRunnerMovePublisher);
+      this.endValueRunner.observableSubject.addObserver(
+        this.bind(this.dispatchEndRunnerMove, this),
+      );
     }
 
     if (this.scale) {
-      this.scale.observableSubject.addObserver(this.clickOnScalePublisher);
+      this.scale.observableSubject.addObserver(
+        this.bind(this.dispatchClickOnScale, this),
+      );
     }
   }
 
   private removeObservers(): void {
     if (this.startValueRunner) {
-      this.startValueRunner.observableSubject.removeObserver(this.startRunnerMovePublisher);
+      this.startValueRunner.observableSubject.removeObserver(
+        this.bind(this.dispatchStartRunnerMove, this),
+      );
     }
 
     if (this.endValueRunner) {
-      this.endValueRunner.observableSubject.removeObserver(this.endRunnerMovePublisher);
+      this.endValueRunner.observableSubject.removeObserver(
+        this.bind(this.dispatchEndRunnerMove, this),
+      );
     }
 
     if (this.scale) {
-      this.scale.observableSubject.removeObserver(this.clickOnScalePublisher);
+      this.scale.observableSubject.removeObserver(
+        this.bind(this.dispatchClickOnScale, this),
+      );
     }
+  }
+
+  private bind(func: any, context: any) {
+    return function() {
+      return func.apply(context, arguments);
+    };
   }
 }
 
