@@ -25,7 +25,7 @@ $.fn.customSlider = function(options: ModelOptions | string, ...args) {
     const view = new MainView({ model, $element: $this});
 
     $this.data('constructor', new Controller(view, model));
-    return $this.data('constructor');
+    return $this;
   }
 
   if (typeof options === 'string') {

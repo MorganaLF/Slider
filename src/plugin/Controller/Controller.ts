@@ -108,17 +108,8 @@ class Controller {
     this.updateView();
   }
 
-  public addEvent(
-    name: 'changevalue' | 'changebound',
-    callback: ({}: changeValueCallbackSettings | changeBoundCallbackSettings) => void,
-    ): void {
-    if (name === 'changevalue') {
-      this.model.observableSubject.addObserver(callback);
-    }
-
-    if (name === 'changebound') {
-      this.view.boundObservableSubject.addObserver(callback);
-    }
+  public addChangeValueEvent(callback: ({}: changeValueCallbackSettings) => void): void {
+    this.model.observableSubject.addObserver(callback);
   }
 
   private updateView(): void {
