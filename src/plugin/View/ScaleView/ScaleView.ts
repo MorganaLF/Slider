@@ -4,6 +4,7 @@ import {
   drawMarkSettings,
   drawScaleSettings,
 } from './ScaleViewInterfaces';
+import bindDecorator from 'bind-decorator';
 
 class ScaleView {
   public $element: null | JQuery;
@@ -86,9 +87,10 @@ class ScaleView {
     const click: string = this.createUniqueEventName('click');
     this.events['click'] = click;
 
-    (<any>$mark).on(click, this.handleMarkClick.bind(this));
+    (<any>$mark).on(click, this.handleMarkClick);
   }
 
+  @bindDecorator
   private handleMarkClick(event: JQuery.ClickEvent): void {
     const markText = $(event.target)
       .closest('.slider__scale-mark')

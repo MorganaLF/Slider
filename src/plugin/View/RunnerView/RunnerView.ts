@@ -3,6 +3,7 @@ import {
   dispatchMoveEventSettings,
   RunnerViewOptions,
 } from './RunnerViewInterfaces';
+import bindDecorator from 'bind-decorator';
 
 class RunnerView {
   public observableSubject = new ObservableSubject();
@@ -118,6 +119,7 @@ class RunnerView {
     return this.parentBottomPoint - this.parentTopPoint;
   }
 
+  @bindDecorator
   private handleRunnerMouseDown(event: JQuery.MouseDownEvent): void {
     event.preventDefault();
 
@@ -131,12 +133,12 @@ class RunnerView {
       const touchmove: string = this.createUniqueEventName('touchmove');
       this.events['touchmove'] = touchmove;
 
-      (<any>$window).on(touchmove, this.bind(this.handleWindowMouseMove, this));
+      (<any>$window).on(touchmove, this.handleWindowMouseMove);
     } else {
       const mousemove: string = this.createUniqueEventName('mousemove');
       this.events['mousemove'] = mousemove;
 
-      (<any>$window).on(mousemove,  this.bind(this.handleWindowMouseMove, this));
+      (<any>$window).on(mousemove, this.handleWindowMouseMove);
     }
 
     const isDeviceSupportsTouchEnd: boolean = typeof document.body.ontouchend !== 'undefined';
@@ -145,15 +147,16 @@ class RunnerView {
       const touchend: string = this.createUniqueEventName('touchend');
       this.events['touchend'] = touchend;
 
-      (<any>$window).on(touchend, this.bind(this.removeEventListeners, this));
+      (<any>$window).on(touchend, this.removeEventListeners);
     } else {
       const mouseup: string = this.createUniqueEventName('mouseup');
       this.events['touchend'] = mouseup;
 
-      (<any>$window).on(mouseup, this.bind(this.removeEventListeners, this));
+      (<any>$window).on(mouseup, this.removeEventListeners);
     }
   }
 
+  @bindDecorator
   private handleWindowMouseMove(event: JQuery.MouseMoveEvent): void {
     this.moveRunner(event);
   }
@@ -169,15 +172,16 @@ class RunnerView {
       const touchstart: string = this.createUniqueEventName('touchstart');
       this.events['touchstart'] = touchstart;
 
-      (<any>this.$element).on(touchstart, this.bind(this.handleRunnerMouseDown, this));
+      (<any>this.$element).on(touchstart, this.handleRunnerMouseDown);
     } else {
       const mousedown: string = this.createUniqueEventName('mousedown');
       this.events['mousedown'] = mousedown;
 
-      (<any>this.$element).on(mousedown, this.bind(this.handleRunnerMouseDown, this));
+      (<any>this.$element).on(mousedown, this.handleRunnerMouseDown);
     }
   }
 
+  @bindDecorator
   private removeEventListeners(): void {
     const $window = $(window);
     const isDeviceSupportsTouchMove: boolean = typeof document.body.ontouchmove !== 'undefined';
@@ -207,12 +211,6 @@ class RunnerView {
     const newCoordinate: number = coordinate - startPoint - shift;
     const ratio: number = (endPoint - startPoint - runnerSize) / newCoordinate;
     this.observableSubject.notifyObservers(ratio);
-  }
-
-  private bind(func: any, context: any) {
-    return function() {
-      return func.apply(context, arguments);
-    };
   }
 }
 

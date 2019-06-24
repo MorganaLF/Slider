@@ -3,9 +3,9 @@ import MainView from '../View/MainView/MainView';
 import {
   changeValueSettings,
   changeValueCallbackSettings,
-  changeBoundCallbackSettings,
-  observeBoundSettings
+  observeBoundSettings,
 } from './ControllerInterfaces';
+import bindDecorator from 'bind-decorator';
 
 class Controller {
   constructor(private view: MainView, private model: Model) {
@@ -13,9 +13,9 @@ class Controller {
   }
 
   public init(): void {
-    this.model.observableSubject.addObserver(this.bind(this.observeChangeValue, this));
-    this.view.resizeObservableSubject.addObserver(this.bind(this.updateView, this));
-    this.view.boundObservableSubject.addObserver(this.bind(this.observeBoundChanging, this));
+    this.model.observableSubject.addObserver(this.observeChangeValue);
+    this.view.resizeObservableSubject.addObserver(this.updateView);
+    this.view.boundObservableSubject.addObserver(this.observeBoundChanging);
     this.model.initRangeValues();
   }
 
@@ -108,11 +108,13 @@ class Controller {
     this.model.observableSubject.addObserver(callback);
   }
 
+  @bindDecorator
   private updateView(): void {
     this.view.reinitialize();
     this.model.initRangeValues();
   }
 
+  @bindDecorator
   private observeBoundChanging({ ratio, value, boundType }: observeBoundSettings): void {
     if (boundType === 'start') {
       this.model.setRangeBoundByRatio(ratio, 'startValue');
@@ -123,6 +125,7 @@ class Controller {
     }
   }
 
+  @bindDecorator
   private observeChangeValue({
     isEndValueChanging,
     isRangeBoundAtTheEndOfInterval,
@@ -149,12 +152,6 @@ class Controller {
         maxValue: this.model.getMaxValue(),
       });
     }
-  }
-
-  private bind(func: any, context: any) {
-    return function() {
-      return func.apply(context, arguments);
-    };
   }
 }
 

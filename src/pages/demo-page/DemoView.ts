@@ -1,4 +1,5 @@
 import '../../plugin/slider';
+import bindDecorator from 'bind-decorator';
 
 class DemoView {
   readonly events: { [key: string]: string };
@@ -9,16 +10,12 @@ class DemoView {
   }
 
   public init(): void {
-    const changeValueListener = () => {
-      this.updateInputValues();
-    };
-
     const $simpleSlider: JQuery = $('.js-slider_simple');
 
     $simpleSlider.each((index, item) => {
       $(item)
         .customSlider()
-        .customSlider('addChangeValueEvent', changeValueListener);
+        .customSlider('addChangeValueEvent', this.updateInputValues);
     });
 
     const $sliderWithScale: JQuery = $('.js-slider_with-scale');
@@ -30,7 +27,7 @@ class DemoView {
           withScale: true,
           stepSize: 10,
         })
-        .customSlider('addChangeValueEvent', changeValueListener);
+        .customSlider('addChangeValueEvent', this.updateInputValues);
     });
 
     const $intervalSlider: JQuery = $('.js-slider_interval');
@@ -42,7 +39,7 @@ class DemoView {
           startValue: 20,
           endValue: 80,
         })
-        .customSlider('addChangeValueEvent', changeValueListener);
+        .customSlider('addChangeValueEvent', this.updateInputValues);
     });
 
     const $sliderWithStep: JQuery = $('.js-slider_with-step');
@@ -55,7 +52,7 @@ class DemoView {
           startValue: 20,
           stepSize: 20,
         })
-        .customSlider('addChangeValueEvent', changeValueListener);
+        .customSlider('addChangeValueEvent', this.updateInputValues);
     });
 
     this.updateInputValues();
@@ -205,6 +202,7 @@ class DemoView {
     });
   }
 
+  @bindDecorator
   private updateInputValues(): void {
     this.setInputValue('current-value', 'getCurrentValue');
     this.setInputValue('current-max-value', 'getCurrentEndValue');

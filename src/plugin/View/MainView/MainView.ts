@@ -17,6 +17,7 @@ import {
   ISize,
 } from './MainViewInterfaces';
 import Model from '../../Model/Model';
+import bindDecorator from 'bind-decorator';
 
 class MainView {
   [key: string]: any;
@@ -36,14 +37,14 @@ class MainView {
     this.model = options.model;
     this.events = {};
     this.$element = options.$element;
+    this.addHandlers();
     this.reinitialize();
   }
 
   public reinitialize(): void {
-    this.removeObservers();
     this.$element.html('');
     this.drawSlider();
-    this.addHandlers();
+    this.addObservers();
   }
 
   public update({
@@ -191,18 +192,22 @@ class MainView {
     }
   }
 
+  @bindDecorator
   private dispatchStartRunnerMove(ratio: number) {
     this.boundObservableSubject.notifyObservers({ ratio, boundType: 'start' });
   }
 
+  @bindDecorator
   private dispatchEndRunnerMove(ratio: number) {
     this.boundObservableSubject.notifyObservers({ ratio, boundType: 'end' });
   }
 
+  @bindDecorator
   private dispatchClickOnScale(value: number) {
     this.boundObservableSubject.notifyObservers({ value, boundType: 'either' });
   }
 
+  @bindDecorator
   private handleWindowResize(): void {
     this.reinitialize();
     this.resizeObservableSubject.notifyObservers();
@@ -218,51 +223,19 @@ class MainView {
 
     this.events['resize'] = resize;
 
-    $window.on(resize, this.bind(this.handleWindowResize, this));
+    $window.on(resize, this.handleWindowResize);
+  }
 
+  private addObservers(): void {
     if (this.startValueRunner) {
-      this.startValueRunner.observableSubject.addObserver(
-        this.bind(this.dispatchStartRunnerMove, this),
-      );
+      this.startValueRunner.observableSubject.addObserver(this.dispatchStartRunnerMove);
     }
 
     if (this.endValueRunner) {
-      this.endValueRunner.observableSubject.addObserver(
-        this.bind(this.dispatchEndRunnerMove, this),
-      );
+      this.endValueRunner.observableSubject.addObserver(this.dispatchEndRunnerMove);
     }
 
-    if (this.scale) {
-      this.scale.observableSubject.addObserver(
-        this.bind(this.dispatchClickOnScale, this),
-      );
-    }
-  }
-
-  private removeObservers(): void {
-    if (this.startValueRunner) {
-      this.startValueRunner.observableSubject.removeObserver(
-        this.bind(this.dispatchStartRunnerMove, this),
-      );
-    }
-
-    if (this.endValueRunner) {
-      this.endValueRunner.observableSubject.removeObserver(
-        this.bind(this.dispatchEndRunnerMove, this),
-      );
-    }
-
-    if (this.scale) {
-      this.scale.observableSubject.removeObserver(
-        this.bind(this.dispatchClickOnScale, this),
-      );
-    }
-  }
-
-  private bind(func: any, context: any) {
-    return function() {
-      return func.apply(context, arguments);
-    };
+    if (this.scale) this.scale.observableSubject.addObserver(this.dispatchClickOnScale);
   }
 }
 
