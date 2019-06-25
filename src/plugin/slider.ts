@@ -2,6 +2,7 @@ import Model from './Model/Model';
 import { ModelOptions } from './Model/ModelInterfaces';
 import MainView from './View/MainView/MainView';
 import Controller from './Controller/Controller';
+import { changeValueCallbackSettings } from './Controller/ControllerInterfaces';
 
 $.fn.customSlider = function(options: ModelOptions | string, ...args) {
   const $this = $(this);
@@ -25,8 +26,15 @@ $.fn.customSlider = function(options: ModelOptions | string, ...args) {
     const view = new MainView({ model, $element: $this });
     const controller =  new Controller(view, model);
 
+    function triggerChangeValueEvent(options: changeValueCallbackSettings) {
+      const changeValueEvent = $.Event('changevalue', { detail: options });
+      $this.trigger(changeValueEvent);
+    }
+
+    controller.observableSubject.addObserver(triggerChangeValueEvent);
+
     if (typeof options !== 'string' && options.onChangeValue !== undefined) {
-      controller.addChangeValueEvent(options.onChangeValue);
+      $this.on('changevalue.customSlider', options.onChangeValue);
     }
 
     $this.data('constructor', controller);

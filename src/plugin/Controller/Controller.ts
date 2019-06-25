@@ -1,13 +1,14 @@
 import Model from '../Model/Model';
 import MainView from '../View/MainView/MainView';
+import ObservableSubject from '../ObservableSubject/ObservableSubject';
 import {
   changeValueSettings,
-  changeValueCallbackSettings,
   observeBoundSettings,
 } from './ControllerInterfaces';
 import bindDecorator from 'bind-decorator';
 
 class Controller {
+  public observableSubject = new ObservableSubject();
   constructor(private view: MainView, private model: Model) {
     this.init();
   }
@@ -104,10 +105,6 @@ class Controller {
     this.updateView();
   }
 
-  public addChangeValueEvent(callback: ({}: changeValueCallbackSettings) => void): void {
-    this.model.observableSubject.addObserver(callback);
-  }
-
   @bindDecorator
   private updateView(): void {
     this.view.reinitialize();
@@ -135,6 +132,12 @@ class Controller {
     value,
     coefficient,
   }: changeValueSettings): void {
+    this.observableSubject.notifyObservers({
+      isEndValueChanging,
+      value,
+      coefficient,
+    });
+
     if (eventType === 'changevalue') {
       this.view.update({
         isEndValueChanging,
