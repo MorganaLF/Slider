@@ -16,6 +16,7 @@ export type ModelOptions = {
   withTip?: boolean,
   withScale?: boolean,
   orientation?: 'horizontal' | 'vertical',
+  onChangeValue?: () => void,
 };
 
 export type ModelConfig = {

@@ -13,9 +13,7 @@ class DemoView {
     const $simpleSlider: JQuery = $('.js-slider_simple');
 
     $simpleSlider.each((index, item) => {
-      $(item)
-        .customSlider()
-        .customSlider('addChangeValueEvent', this.updateInputValues);
+      $(item).customSlider({ onChangeValue: this.updateInputValues });
     });
 
     const $sliderWithScale: JQuery = $('.js-slider_with-scale');
@@ -26,8 +24,8 @@ class DemoView {
           withTip: false,
           withScale: true,
           stepSize: 10,
-        })
-        .customSlider('addChangeValueEvent', this.updateInputValues);
+          onChangeValue: this.updateInputValues,
+        });
     });
 
     const $intervalSlider: JQuery = $('.js-slider_interval');
@@ -38,8 +36,8 @@ class DemoView {
           type: 'interval',
           startValue: 20,
           endValue: 80,
-        })
-        .customSlider('addChangeValueEvent', this.updateInputValues);
+          onChangeValue: this.updateInputValues,
+        });
     });
 
     const $sliderWithStep: JQuery = $('.js-slider_with-step');
@@ -51,8 +49,8 @@ class DemoView {
           minValue: 10,
           startValue: 20,
           stepSize: 20,
-        })
-        .customSlider('addChangeValueEvent', this.updateInputValues);
+          onChangeValue: this.updateInputValues,
+        });
     });
 
     this.updateInputValues();
@@ -104,9 +102,9 @@ class DemoView {
     const $element: JQuery = $(event.target);
 
     if ($element.prop('checked')) {
-      this.makeSliderMethod($element, onMethodName);
+      this.callSliderMethod($element, onMethodName);
     } else {
-      this.makeSliderMethod($element, offMethodName);
+      this.callSliderMethod($element, offMethodName);
     }
   }
 
@@ -137,7 +135,7 @@ class DemoView {
     );
   }
 
-  private makeSliderMethod($element: JQuery, methodName: string): number {
+  private callSliderMethod($element: JQuery, methodName: string): any {
     return $element
                 .closest('.demo-page__row')
                 .find('.slider')
@@ -145,13 +143,13 @@ class DemoView {
   }
 
   private setInputValue(inputName: string, methodName: string, isCheckbox = false): void {
-    const makeSliderMethod: any = this.makeSliderMethod;
+    const callSliderMethod = this.callSliderMethod;
 
     const $input: JQuery = $(`input[name="${inputName}"]`);
 
     $input.each(function() {
       const $this: JQuery = $(this);
-      const currentValue: number = makeSliderMethod($this, methodName);
+      const currentValue: number = callSliderMethod($this, methodName);
 
       if (isCheckbox) {
         $this.prop('checked', currentValue);
@@ -161,31 +159,31 @@ class DemoView {
         const isSliderValueInput: boolean = !isStepInput && !isScaleItemsInput;
 
         const stepSize: number = isSliderValueInput
-          ? makeSliderMethod($this, 'getStepSize') || 1
+          ? callSliderMethod($this, 'getStepSize') || 1
           : 0;
 
         if (inputName === 'min-value') {
           $this.attr({
             min: 0,
-            max: makeSliderMethod($this, 'getMaxValue') - stepSize,
+            max: callSliderMethod($this, 'getMaxValue') - stepSize,
           });
         } else if (inputName === 'max-value') {
           $this.attr({
-            min: makeSliderMethod($this, 'getMinValue') + stepSize,
+            min: callSliderMethod($this, 'getMinValue') + stepSize,
           });
         } else if (inputName === 'current-value') {
-          const max = makeSliderMethod($this, 'getSliderType') === 'interval'
-            ? makeSliderMethod($this, 'getCurrentEndValue')
-            : makeSliderMethod($this, 'getMaxValue');
+          const max = callSliderMethod($this, 'getSliderType') === 'interval'
+            ? callSliderMethod($this, 'getCurrentEndValue')
+            : callSliderMethod($this, 'getMaxValue');
 
           $this.attr({
             max,
-            min: makeSliderMethod($this, 'getMinValue'),
+            min: callSliderMethod($this, 'getMinValue'),
           });
         } else if (inputName === 'current-max-value') {
           $this.attr({
-            min: makeSliderMethod($this, 'getCurrentValue'),
-            max: makeSliderMethod($this, 'getMaxValue'),
+            min: callSliderMethod($this, 'getCurrentValue'),
+            max: callSliderMethod($this, 'getMaxValue'),
           });
         } else {
           $this.attr({

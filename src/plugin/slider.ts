@@ -22,9 +22,14 @@ $.fn.customSlider = function(options: ModelOptions | string, ...args) {
 
     const extendedOptions: any = $.extend(options, dataConfig);
     const model = new Model(extendedOptions);
-    const view = new MainView({ model, $element: $this});
+    const view = new MainView({ model, $element: $this });
+    const controller =  new Controller(view, model);
 
-    $this.data('constructor', new Controller(view, model));
+    if (typeof options !== 'string' && options.onChangeValue !== undefined) {
+      controller.addChangeValueEvent(options.onChangeValue);
+    }
+
+    $this.data('constructor', controller);
     return $this;
   }
 
