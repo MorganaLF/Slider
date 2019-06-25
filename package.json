@@ -61,7 +61,8 @@
     "dev": "webpack-dev-server --mode development --open",
     "build": "webpack --mode production",
     "karma": "karma start",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "tslint": "tslint --project tsconfig.json"
   },
   "author": "",
   "license": "ISC"
