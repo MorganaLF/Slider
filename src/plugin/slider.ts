@@ -26,14 +26,14 @@ $.fn.customSlider = function(options: ModelOptions | string, ...args) {
     const view = new MainView({ model, $element: $this });
     const controller =  new Controller(view, model);
 
-    function triggerChangeValueEvent(options: changeValueCallbackSettings) {
+    const triggerChangeValueEvent = function(options: changeValueCallbackSettings) {
       const changeValueEvent = $.Event('changevalue', { detail: options });
       $this.trigger(changeValueEvent);
-    }
+    };
 
     controller.observableSubject.addObserver(triggerChangeValueEvent);
 
-    if (typeof options !== 'string' && options.onChangeValue !== undefined) {
+    if (typeof options === 'object' && options.onChangeValue !== undefined) {
       $this.on('changevalue.customSlider', options.onChangeValue);
     }
 

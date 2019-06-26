@@ -1,18 +1,10 @@
-import Model from '../plugin/Model/Model';
+import Model from '../../plugin/Model/Model';
 
 describe('Model', () => {
-  const $body: JQuery = $('body');
   let model: Model;
 
   beforeEach(() => {
-    model = new Model({
-      startValue: 0,
-      endValue: 100,
-      minValue: 0,
-      maxValue: 100,
-      stepSize: 0,
-      type: 'single',
-    });
+    model = new Model({});
   });
 
   it('Создает экземпляр класса', () => {
@@ -26,7 +18,6 @@ describe('Model', () => {
       startValue: 'asgwet',
       endValue: 'safan',
       stepSize: 'sah',
-      type: 'single',
     });
 
     expect(model.getMinValue()).toEqual(0);
@@ -49,6 +40,8 @@ describe('Model', () => {
       minValue: 150,
       maxValue: 100,
     });
+
+    model.normalizeConstructorOptions();
 
     expect(model.getMinValue()).toEqual(99);
   });
@@ -104,18 +97,7 @@ describe('Model', () => {
       minValue: 10,
     });
 
-    expect(model.getMaxValue()).toEqual(10);
-  });
-
-  it('Если установлен размер шага, минимальное и максимальное значение кратны этому шагу', () => {
-    model = new Model({
-      minValue: 16,
-      maxValue: 46,
-      stepSize: 30,
-    });
-
-    expect(model.getMinValue()).toEqual(30);
-    expect(model.getMaxValue()).toEqual(60);
+    expect(model.getMaxValue()).toEqual(100);
   });
 
   it('Если установлен размер шага, начальное и конечное значение кратны этому шагу', () => {
@@ -127,6 +109,39 @@ describe('Model', () => {
 
     expect(model.getCurrentRoundedValue()).toEqual(25);
     expect(model.getCurrentRoundedEndValue()).toEqual(50);
+  });
+
+  describe('Метод initRangeValues', () => {
+    it('Уведомляет подписчиков об установленных значениях', () => {
+      model = new Model({
+        type: 'interval',
+      });
+
+      const spy = spyOn(model.observableSubject, 'notifyObservers');
+      model.initRangeValues();
+
+      const options = {
+        isEndValueChanging: false,
+        isRangeBoundAtTheEndOfInterval: false,
+        isRangeBoundAtTheStartOfInterval: false,
+        isScaleInitialized: false,
+        eventType: 'changevalue',
+        value: 0,
+        coefficient: Infinity,
+      };
+
+      expect(spy).toHaveBeenCalledWith(options);
+    });
+  });
+
+  describe('Геттер getType', () => {
+    it('Возвращает тип модели', () => {
+      model = new Model({
+        type: 'interval',
+      });
+
+      expect(model.getType()).toEqual('interval');
+    });
   });
 
   describe('Геттер getCurrentRoundedValue', () => {
@@ -142,6 +157,25 @@ describe('Model', () => {
       model.setMaxValue(56.95627);
 
       expect(model.getCurrentRoundedEndValue()).toEqual(57);
+    });
+  });
+
+  describe('Метод setBound', () => {
+    it('Устанавливает значение той границы, ближе к которой оно находится', () => {
+      model = new Model({
+        startValue: 0,
+        endValue: 100,
+        minValue: 0,
+        maxValue: 100,
+        stepSize: 0,
+        type: 'interval',
+      });
+
+      model.setBound(10);
+      model.setBound(90);
+
+      expect(model.getCurrentRoundedValue()).toEqual(10);
+      expect(model.getCurrentRoundedEndValue()).toEqual(90);
     });
   });
 
@@ -233,6 +267,68 @@ describe('Model', () => {
     });
   });
 
+  describe('Метод getOrientation', () => {
+    it('Показывает ориентацию слайдера', () => {
+      expect(model.getOrientation()).toEqual('horizontal');
+    });
+  });
+
+  describe('Метод setVerticalOrientation', () => {
+    it('Устанавливает вертикальную ориентацию слайдера', () => {
+      model.setVerticalOrientation();
+
+      expect(model.getOrientation()).toEqual('vertical');
+    });
+  });
+
+  describe('Метод setHorizontalOrientation', () => {
+    it('Устанавливает горизонтальную ориентацию слайдера', () => {
+      model.setHorizontalOrientation();
+
+      expect(model.getOrientation()).toEqual('horizontal');
+    });
+  });
+
+  describe('Метод isTipShown', () => {
+    it('Возвращает, показывается ли подсказка', () => {
+      expect(model.isTipShown()).toEqual(true);
+    });
+  });
+
+  describe('Метод hideTip', () => {
+    it('Скрывает подсказку', () => {
+      model.hideTip();
+      expect(model.isTipShown()).toEqual(false);
+    });
+  });
+
+  describe('Метод showTip', () => {
+    it('Показывает подсказку', () => {
+      model.showTip();
+      expect(model.isTipShown()).toEqual(true);
+    });
+  });
+
+  describe('Метод isScaleShown', () => {
+    it('Возвращает, показывается ли шкала', () => {
+      expect(model.isScaleShown()).toEqual(false);
+    });
+  });
+
+  describe('Метод showScale', () => {
+    it('Показывает шкалу', () => {
+      model.showScale();
+      expect(model.isScaleShown()).toEqual(true);
+    });
+  });
+
+  describe('Метод hideScale', () => {
+    it('Скрывает шкалу', () => {
+      model.hideScale();
+      expect(model.isScaleShown()).toEqual(false);
+    });
+  });
+
   describe('Метод setCurrentValueByRatio', () => {
     it('Считает текущее значение слайдера в зависимости от позиции курсора', () => {
       model.setRangeBoundByRatio(2, 'startValue');
@@ -263,13 +359,6 @@ describe('Model', () => {
       model.setRangeBoundByRatio(2, 'startValue');
 
       expect(model.getCurrentRoundedValue()).toEqual(30);
-    });
-
-    it('Позволяет посчитать текущее значение с учетом размера шага', () => {
-      model.setStepSize(20);
-      model.setRangeBoundByRatio(2, 'startValue');
-
-      expect(model.getCurrentRoundedValue()).toEqual(60);
     });
   });
 });

@@ -15,13 +15,25 @@ describe('Функция customSlider', () => {
     expect($element.data('constructor') instanceof Controller).toBeTruthy();
   });
 
+  it('Позволяет передать в параметры коллбек для события changevalue', () => {
+    const callback = jasmine.createSpy();
+
+    $element.customSlider({
+      onChangeValue: callback,
+    });
+
+    $element.trigger('changevalue');
+
+    expect(callback).toHaveBeenCalled();
+  });
+
   it('Поддерживает data-аттрибуты', () => {
     setFixtures('<div class="slider" data-start-value="33"></div>');
 
     $element = $('.slider');
     $element.customSlider();
 
-    expect($element.data('constructor').startValue).toEqual(33);
+    expect($element.customSlider('getCurrentValue')).toEqual(33);
   });
 
   it('При вызове с аргументами вызывает соответствующий метод Controller', () => {

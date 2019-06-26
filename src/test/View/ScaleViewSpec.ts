@@ -29,7 +29,7 @@ describe('ScaleView', () => {
     it('Не создает вложенные элементы, если корневой элемент неопределен', () => {
       (<any>scaleView).$element = null;
 
-      expect((<any>scaleView)._drawMark({
+      expect((<any>scaleView).drawMark({
         markText: 1,
         markIndent: 10,
       })).toEqual(false);
@@ -53,7 +53,7 @@ describe('ScaleView', () => {
       expect($scaleItem).toExist();
     });
 
-    it('Количество элементов slider__scale-item можно установить', () => {
+    it('Устанавливает количество меток в зависимости от размера шага', () => {
       expect($scaleItem.length).toEqual(5);
     });
 
@@ -61,6 +61,28 @@ describe('ScaleView', () => {
       expect($scaleItem.eq(0).text()).toEqual('5');
       expect($scaleItem.eq(1).text()).toEqual('10');
       expect($scaleItem.eq(2).text()).toEqual('15');
+
+      $('.slider').html('');
+
+      scaleView = new ScaleView({
+        $parent: $('.slider'),
+        orientation: 'horizontal',
+      });
+
+      scaleView.drawScale({ stepSize: 5, minValue: 0, maxValue: 9 });
+
+      $scaleItem = $('.slider .slider__scale .slider__scale-mark');
+
+      expect($scaleItem.eq(0).text()).toEqual('0');
+      expect($scaleItem.eq(1).text()).toEqual('5');
+      expect($scaleItem.eq(2).text()).toEqual('9');
+    });
+
+    it('При клике на метку шкалы уведомляет подписчиков о ее значении', () => {
+      const spy = spyOn(scaleView.observableSubject, 'notifyObservers');
+      $scaleItem.eq(0).click();
+
+      expect(spy).toHaveBeenCalledWith(5);
     });
   });
 });

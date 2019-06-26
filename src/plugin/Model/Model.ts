@@ -187,19 +187,19 @@ class Model {
   public normalizeConstructorOptions(): void {
     const normalizedToNumberStartBound = this.normalizeToNumber(
       this.startValue,
-      this.config.startValue,
+      modelConfig.startValue,
     );
 
-    const normalizedToNumberEndBound = this.normalizeToNumber(this.endValue, this.config.endValue);
-    const normalizedToNumberMinValue = this.normalizeToNumber(this.minValue, this.config.minValue);
-    const normalizedToNumberMaxValue = this.normalizeToNumber(this.maxValue, this.config.maxValue);
+    const normalizedToNumberEndBound = this.normalizeToNumber(this.endValue, modelConfig.endValue);
+    const normalizedToNumberMinValue = this.normalizeToNumber(this.minValue, modelConfig.minValue);
+    const normalizedToNumberMaxValue = this.normalizeToNumber(this.maxValue, modelConfig.maxValue);
 
-    this.stepSize = this.normalizeToNumber(this.stepSize, this.config.stepSize);
-
-    this.setRightOrderOfExtremeValues();
+    this.stepSize = this.normalizeToNumber(this.stepSize, modelConfig.stepSize);
 
     this.minValue = this.normalizeToPositiveNumber(normalizedToNumberMinValue);
     this.maxValue = this.normalizeToPositiveNumber(normalizedToNumberMaxValue);
+
+    this.setRightOrderOfExtremeValues();
 
     const alignedToStepStartBound = this.alignToStep(normalizedToNumberStartBound);
     const alignedToStepEndBound = this.alignToStep(normalizedToNumberEndBound);
